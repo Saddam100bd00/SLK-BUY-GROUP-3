@@ -304,6 +304,10 @@ class AppRepository(private val dao: AppDao) {
         return dao.insertGroup(group)
     }
 
+    suspend fun updateGroup(group: TelegramGroup) {
+        dao.updateGroup(group)
+    }
+
     suspend fun deleteGroup(group: TelegramGroup) {
         dao.deleteGroup(group)
     }

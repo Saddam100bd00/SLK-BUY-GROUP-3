@@ -19,6 +19,7 @@ data class TelegramGroup(
     val samplePostTitle: String = "Latest Ultra 4K Release & Daily Packs",
     val samplePostDuration: String = "2h 45m • 1080p / 4K",
     val inviteLink: String = "https://t.me/+slk_vip_premium_invite",
+    val screenshotUrl: String = "",
     val isHot: Boolean = false
 )
 

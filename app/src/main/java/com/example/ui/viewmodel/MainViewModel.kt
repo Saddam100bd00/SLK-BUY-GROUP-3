@@ -87,8 +87,51 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _isAdminUnlocked = MutableStateFlow(false)
     val isAdminUnlocked: StateFlow<Boolean> = _isAdminUnlocked.asStateFlow()
 
+    // App Preferences
+    private val _isDarkMode = MutableStateFlow(true)
+    val isDarkMode: StateFlow<Boolean> = _isDarkMode.asStateFlow()
+
+    private val _isEnglish = MutableStateFlow(false)
+    val isEnglish: StateFlow<Boolean> = _isEnglish.asStateFlow()
+
+    private val _demoGroupScreenshot = MutableStateFlow<Pair<String, String>?>(null) // Pair(Title, ScreenshotUrl)
+    val demoGroupScreenshot: StateFlow<Pair<String, String>?> = _demoGroupScreenshot.asStateFlow()
+
+    private val _showNoticeDialog = MutableStateFlow(false)
+    val showNoticeDialog: StateFlow<Boolean> = _showNoticeDialog.asStateFlow()
+
+    private val _isLoadingSplash = MutableStateFlow(true)
+    val isLoadingSplash: StateFlow<Boolean> = _isLoadingSplash.asStateFlow()
+
     private val _toastMessage = MutableSharedFlow<String>()
     val toastMessage: SharedFlow<String> = _toastMessage.asSharedFlow()
+
+    init {
+        viewModelScope.launch {
+            kotlinx.coroutines.delay(1800) // smooth circular splash display
+            _isLoadingSplash.value = false
+        }
+    }
+
+    fun toggleDarkMode() {
+        _isDarkMode.value = !_isDarkMode.value
+    }
+
+    fun toggleLanguage() {
+        _isEnglish.value = !_isEnglish.value
+    }
+
+    fun openDemoScreenshot(group: TelegramGroup) {
+        _demoGroupScreenshot.value = Pair(group.title, group.screenshotUrl)
+    }
+
+    fun closeDemoScreenshot() {
+        _demoGroupScreenshot.value = null
+    }
+
+    fun toggleNoticeDialog() {
+        _showNoticeDialog.value = !_showNoticeDialog.value
+    }
 
     fun navigateTo(screen: AppScreen) {
         _currentScreen.value = screen
@@ -316,7 +359,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         price: Int,
         originalPrice: Int,
         inviteLink: String,
-        badge: String
+        badge: String,
+        screenshotUrl: String = ""
     ) {
         viewModelScope.launch {
             if (title.isBlank() || price <= 0) {
@@ -332,10 +376,32 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 originalPrice = if (originalPrice <= 0) price + 200 else originalPrice,
                 inviteLink = if (inviteLink.isBlank()) "https://t.me/+slk_new_vip_group" else inviteLink,
                 badge = if (badge.isBlank()) "NEW VIP" else badge,
+                screenshotUrl = screenshotUrl.trim(),
                 previewGradientKey = "CYAN_INDIGO"
             )
             repository.addNewGroup(newGroup)
             _toastMessage.emit("নতুন প্রিমিয়াম গ্রুপ সফলভাবে যুক্ত হয়েছে!")
+        }
+    }
+
+    fun adminUpdateGroup(group: TelegramGroup) {
+        viewModelScope.launch {
+            repository.updateGroup(group)
+            _toastMessage.emit("গ্রুপ '${group.title}' আপডেট হয়েছে!")
+        }
+    }
+
+    fun adminDeleteGroup(group: TelegramGroup) {
+        viewModelScope.launch {
+            repository.deleteGroup(group)
+            _toastMessage.emit("গ্রুপ সফলভাবে রিমুভ করা হয়েছে!")
+        }
+    }
+
+    fun adminUpdateConfig(key: String, value: String) {
+        viewModelScope.launch {
+            repository.updateConfig(key, value.trim())
+            _toastMessage.emit("কনফিগারেশন আপডেট সম্পন্ন!")
         }
     }
 

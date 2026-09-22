@@ -34,6 +34,9 @@ interface AppDao {
     @Delete
     suspend fun deleteGroup(group: TelegramGroup)
 
+    @Update
+    suspend fun updateGroup(group: TelegramGroup)
+
     // === Group Orders ===
     @Query("SELECT * FROM group_orders ORDER BY timestamp DESC")
     fun getAllOrders(): Flow<List<GroupOrder>>

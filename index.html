@@ -165,9 +165,117 @@
       box-shadow: 0 0 20px rgba(6, 182, 212, 0.35);
     }
 
-    /* Button Click Micro Bounce */
+    /* Button Click Micro Bounce with Haptic Sensation */
+    .btn-bounce {
+      transition: transform 0.16s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+    }
     .btn-bounce:active {
-      transform: scale(0.96);
+      transform: scale(0.94);
+    }
+
+    /* Bottom Navigation 5 Options - Lift, Expand & Color-Coded Glow */
+    .nav-btn {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 1px 4px 1px;
+      border-radius: 16px;
+      transition: all 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+      color: #94a3b8;
+    }
+    .nav-btn:active {
+      transform: scale(0.88);
+    }
+    .nav-btn.active {
+      transform: translateY(-4px);
+    }
+    .nav-btn .nav-icon {
+      transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .nav-btn.active .nav-icon {
+      transform: scale(1.18);
+    }
+    .nav-btn .nav-indicator {
+      width: 0px;
+      height: 3px;
+      border-radius: 999px;
+      transition: all 0.32s ease;
+      opacity: 0;
+      margin-bottom: 2px;
+    }
+
+    /* Color-Coded Active Lighting per Tab */
+    .nav-btn[data-nav="home"].active {
+      color: #fbbf24 !important;
+      text-shadow: 0 0 14px rgba(251, 191, 36, 0.6);
+    }
+    .nav-btn[data-nav="home"].active .nav-indicator {
+      width: 16px;
+      opacity: 1;
+      background: #fbbf24;
+      box-shadow: 0 0 10px #f59e0b, 0 0 18px rgba(245, 158, 11, 0.7);
+    }
+
+    .nav-btn[data-nav="groups"].active {
+      color: #c084fc !important;
+      text-shadow: 0 0 14px rgba(192, 132, 252, 0.6);
+    }
+    .nav-btn[data-nav="groups"].active .nav-indicator {
+      width: 16px;
+      opacity: 1;
+      background: #c084fc;
+      box-shadow: 0 0 10px #a855f7, 0 0 18px rgba(168, 85, 247, 0.7);
+    }
+
+    .nav-btn[data-nav="referral"].active {
+      color: #34d399 !important;
+      text-shadow: 0 0 14px rgba(52, 211, 153, 0.6);
+    }
+    .nav-btn[data-nav="referral"].active .nav-indicator {
+      width: 16px;
+      opacity: 1;
+      background: #34d399;
+      box-shadow: 0 0 10px #10b981, 0 0 18px rgba(16, 185, 129, 0.7);
+    }
+
+    .nav-btn[data-nav="sell"].active {
+      color: #fb7185 !important;
+      text-shadow: 0 0 14px rgba(251, 113, 133, 0.6);
+    }
+    .nav-btn[data-nav="sell"].active .nav-indicator {
+      width: 16px;
+      opacity: 1;
+      background: #fb7185;
+      box-shadow: 0 0 10px #f43f5e, 0 0 18px rgba(244, 63, 94, 0.7);
+    }
+
+    .nav-btn[data-nav="profile"].active {
+      color: #38bdf8 !important;
+      text-shadow: 0 0 14px rgba(56, 189, 248, 0.6);
+    }
+    .nav-btn[data-nav="profile"].active .nav-indicator {
+      width: 16px;
+      opacity: 1;
+      background: #38bdf8;
+      box-shadow: 0 0 10px #0284c7, 0 0 18px rgba(2, 132, 199, 0.7);
+    }
+
+    /* Page Entrance Animations */
+    @keyframes tabFadeUp {
+      0% {
+        opacity: 0;
+        transform: translateY(12px) scale(0.985);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0px) scale(1);
+      }
+    }
+    .tab-enter-active {
+      animation: tabFadeUp 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     /* Smooth Custom Scrollbar */
@@ -242,49 +350,61 @@
   </script>
 
   <!-- ================= TOP BAR ================= -->
-  <header class="sticky top-0 z-40 backdrop-blur-xl bg-midnight-card/90 border-b border-midnight-border px-3 py-2.5">
-    <div class="max-w-md mx-auto flex items-center justify-between">
+  <header class="sticky top-0 z-40 backdrop-blur-xl bg-midnight-card/95 border-b border-midnight-border/80 px-3.5 py-2.5 shadow-md">
+    <div class="max-w-md mx-auto flex items-center justify-between gap-2">
+      
       <!-- Brand & Circular Logo -->
-      <div class="flex items-center gap-2 cursor-pointer btn-bounce" onclick="switchTab('home')">
-        <div class="w-10 h-10 rounded-full border-2 border-luxury-gold/70 p-0.5 shadow-md bg-midnight-dark overflow-hidden flex-shrink-0">
-          <img id="headerLogo" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100&auto=format&fit=crop&q=80" class="w-full h-full object-cover rounded-full" />
+      <div class="flex items-center gap-2.5 cursor-pointer min-w-0 flex-shrink" onclick="switchTab('home')">
+        <div class="relative w-10 h-10 rounded-full p-0.5 bg-gradient-to-tr from-amber-400 via-yellow-300 to-amber-600 shadow-md shadow-amber-500/20 flex-shrink-0">
+          <img id="headerLogo" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100&auto=format&fit=crop&q=80" class="w-full h-full object-cover rounded-full bg-midnight-dark" alt="Logo" />
+          <span class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-midnight-card flex items-center justify-center">
+            <i data-lucide="check" class="w-2 h-2 text-white"></i>
+          </span>
         </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <span id="headerAppName" class="font-extrabold text-base tracking-wide bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-200 bg-clip-text text-transparent glow-appname">
+        <div class="truncate">
+          <div class="flex items-center gap-1.5">
+            <span id="headerAppName" class="font-black text-sm tracking-wide bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-300 bg-clip-text text-transparent glow-appname truncate">
               SLK BUY GROUP
             </span>
-            <!-- Fake Online Users Count -->
-            <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/15 px-1.5 py-0.5 rounded-full border border-emerald-500/30 flex items-center gap-1">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-              <span id="dispOnlineUsers">1,428</span> অনলাইন
-            </span>
           </div>
-          <div class="flex items-center gap-1 text-[11px] text-slate-400">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-            <span id="headerVerifiedText">100% ভেরিফাইড গ্রুপ শপ</span>
+          <div class="flex items-center gap-1.5 text-[10px] text-slate-400 leading-none mt-0.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span id="headerVerifiedText" class="text-slate-300 font-medium truncate">100% ভেরিফাইড গ্রুপ মার্কেট</span>
           </div>
         </div>
       </div>
 
-      <!-- Action Icons: Animated Telegram, Bell with Ringing & Counter, Settings -->
-      <div class="flex items-center gap-1.5">
-        <!-- Animated Lively Telegram Icon Button -->
-        <a id="headerChannelBtn" href="https://t.me/ItsSaddam9" target="_blank" class="w-8 h-8 rounded-full bg-gradient-to-tr from-sky-500 to-telegram text-white flex items-center justify-center shadow-lg shadow-sky-500/30 animate-tg hover:scale-110 transition btn-bounce" title="অফিসিয়াল টেলিগ্রাম">
-          <i data-lucide="send" class="w-4 h-4"></i>
+      <!-- Action Items: Online Counter + Telegram + Notice Bell + Settings -->
+      <div class="flex items-center gap-1.5 flex-shrink-0">
+        <!-- Live Auto-Fluctuating Online Counter Pill -->
+        <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-950/40 border border-emerald-500/30 text-[10px] text-emerald-300 font-bold shadow-inner" title="বর্তমানে সক্রিয় ইউজার">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+          <span id="dispOnlineUsers" class="font-mono">১,৪২৮</span>
+          <span class="text-[9px] text-emerald-400/80 font-normal hidden xs:inline">অনলাইন</span>
+        </div>
+
+        <!-- Official Telegram Button (Settable Link from Admin) -->
+        <a id="headerChannelBtn" href="https://t.me/ItsSaddam9" target="_blank" class="w-8 h-8 rounded-full bg-gradient-to-tr from-sky-400 to-[#0088cc] text-white flex items-center justify-center shadow-md shadow-sky-500/30 animate-tg hover:scale-105 active:scale-95 transition" title="অফিসিয়াল টেলিগ্রাম চ্যানেল">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .37z"/>
+          </svg>
         </a>
 
         <!-- Notification Bell with Ringing Animation & Unread Badge -->
-        <button id="headerBellBtn" onclick="openNoticeModal()" class="relative p-2 rounded-xl bg-midnight-surface text-slate-200 border border-midnight-border hover:border-luxury-gold/50 transition btn-bounce" title="নোটিশ">
+        <button id="headerBellBtn" onclick="openNoticeModal()" class="relative w-8 h-8 rounded-full bg-midnight-surface text-slate-200 border border-midnight-border hover:border-amber-400/50 transition flex items-center justify-center btn-bounce" title="নোটিশ">
           <i id="bellIcon" data-lucide="bell" class="w-4 h-4 animate-bell text-amber-400"></i>
-          <span id="noticeBadge" class="absolute -top-1 -right-1 w-3.5 h-3.5 bg-rose-500 text-[9px] font-bold text-white rounded-full flex items-center justify-center ring-2 ring-midnight-dark">1</span>
+          <span id="noticeBadge" class="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-rose-500 text-[9px] font-bold text-white rounded-full flex items-center justify-center ring-2 ring-midnight-dark">1</span>
         </button>
 
         <!-- Settings Dropdown Trigger -->
-        <button onclick="toggleSettingsModal()" class="p-2 rounded-xl bg-midnight-surface text-slate-200 border border-midnight-border hover:border-slate-500 transition btn-bounce" title="সেটিংস">
+        <button onclick="toggleSettingsModal()" class="w-8 h-8 rounded-full bg-midnight-surface text-slate-300 border border-midnight-border hover:border-slate-500 transition flex items-center justify-center btn-bounce" title="সেটিংস">
           <i data-lucide="settings" class="w-4 h-4"></i>
         </button>
       </div>
+
     </div>
   </header>
 
@@ -307,14 +427,14 @@
     <section id="tab-home" class="space-y-4">
       
       <!-- Referral Bonus Card: 20 Referrals = 1 Mega Free Group -->
-      <div onclick="openReferralModal()" class="cursor-pointer p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/20 via-yellow-500/10 to-amber-500/5 border border-luxury-gold/50 flex items-center justify-between shadow-xl btn-bounce">
+      <div onclick="switchTab('referral')" class="cursor-pointer p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/20 via-yellow-500/10 to-amber-500/5 border border-luxury-gold/50 flex items-center justify-between shadow-xl btn-bounce">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-400 to-yellow-500 text-midnight-dark flex items-center justify-center font-black shadow-md shadow-amber-500/30 flex-shrink-0">
             <i data-lucide="gift" class="w-5 h-5 animate-pulse"></i>
           </div>
           <div>
             <div class="flex items-center gap-1.5">
-              <h4 class="text-xs font-black text-white">রেফারেল বোনাস</h4>
+              <h4 class="text-xs font-black text-white">রেফারেল রিওয়ার্ড প্রোগ্রাম</h4>
               <span class="bg-luxury-gold/25 text-luxury-gold text-[10px] px-1.5 py-0.5 rounded-full font-bold border border-luxury-gold/30">১০০% ফ্রি গ্রুপ</span>
             </div>
             <p class="text-[11px] text-amber-200/90 mt-0.5">২০ জনকে রেফার করলেই ১টি মেগা ভিআইপি গ্রুপ ফ্রি!</p>
@@ -334,8 +454,8 @@
             <p class="text-xs text-slate-400 font-medium" id="lblUserBalance">আপনার বর্তমান ব্যালেন্স</p>
             <div class="flex items-baseline gap-1 mt-1">
               <span class="text-2xl font-black text-white">৳</span>
-              <span id="homeWalletBalance" class="text-3xl font-black text-amber-400 tracking-tight">100</span>
-              <span class="text-[11px] text-emerald-400 font-semibold ml-1 bg-emerald-500/15 px-2 py-0.5 rounded-full border border-emerald-500/30" id="lblBonusActive">বোনাস যুক্ত</span>
+              <span id="homeWalletBalance" class="text-3xl font-black text-amber-400 tracking-tight">0</span>
+              <span class="text-[11px] text-emerald-400 font-semibold ml-1 bg-emerald-500/15 px-2 py-0.5 rounded-full border border-emerald-500/30" id="lblBonusActive">অ্যাক্টিভ</span>
             </div>
           </div>
           <button onclick="switchTab('wallet')" class="btn-bounce px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-xs font-bold shadow-lg shadow-emerald-500/25 flex items-center gap-1.5 border border-emerald-400/40">
@@ -355,53 +475,66 @@
         </div>
 
         <div class="grid grid-cols-2 gap-3">
-          <!-- Button 1: Group Market -->
-          <button id="mainBtnGroupMarket" onclick="playSound('click'); switchTab('groups')" class="btn-bounce relative p-4 rounded-2xl bg-gradient-to-br from-midnight-card via-slate-900 to-midnight-card border border-amber-500/30 hover:border-luxury-gold/80 transition-all text-left shadow-lg overflow-hidden group">
-            <div class="absolute top-0 right-0 w-16 h-16 bg-luxury-gold/10 rounded-full blur-xl group-hover:bg-luxury-gold/25 transition"></div>
+          <!-- Button 1: Group Market with Telegram Logo -->
+          <button id="mainBtnGroupMarket" onclick="playSound('click'); switchTab('groups')" class="btn-bounce relative p-4 rounded-2xl bg-gradient-to-br from-midnight-card via-slate-900 to-midnight-card border border-sky-500/30 hover:border-sky-400/80 transition-all text-left shadow-lg overflow-hidden group">
+            <div class="absolute top-0 right-0 w-16 h-16 bg-sky-500/10 rounded-full blur-xl group-hover:bg-sky-500/25 transition"></div>
             <div class="flex items-center justify-between mb-2">
-              <div id="iconBox1" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-400 text-midnight-dark flex items-center justify-center font-black shadow-md shadow-amber-500/30 overflow-hidden">
-                <i data-lucide="layers" class="w-5 h-5"></i>
+              <div id="iconBox1" class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-sky-500 to-[#0088cc] text-white flex items-center justify-center font-black shadow-md shadow-sky-500/30 overflow-hidden p-2">
+                <svg class="w-full h-full fill-current" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .37z"/>
+                </svg>
               </div>
-              <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full font-bold border border-amber-500/30">VIP</span>
+              <span id="badgeBtn1" class="text-[10px] bg-sky-500/20 text-sky-300 px-2 py-0.5 rounded-full font-bold border border-sky-500/30">VIP শপ</span>
             </div>
-            <h3 id="btnTitle1" class="font-extrabold text-sm text-slate-100 group-hover:text-amber-300 transition">গ্রুপ মার্কেট</h3>
+            <h3 id="btnTitle1" class="font-extrabold text-sm text-slate-100 group-hover:text-sky-300 transition">গ্রুপ মার্কেট</h3>
             <p id="btnSub1" class="text-[11px] text-slate-400 mt-0.5">টেলিগ্রাম প্রিমিয়াম গ্রুপ</p>
           </button>
 
-          <!-- Button 2: Sell Gmail -->
+          <!-- Button 2: Sell Gmail with Official Gmail Logo -->
           <button id="mainBtnSellGmail" onclick="playSound('click'); openSellTab('GMAIL')" class="btn-bounce relative p-4 rounded-2xl bg-gradient-to-br from-midnight-card via-slate-900 to-midnight-card border border-rose-500/30 hover:border-rose-400/80 transition-all text-left shadow-lg overflow-hidden group">
             <div class="absolute top-0 right-0 w-16 h-16 bg-rose-500/10 rounded-full blur-xl group-hover:bg-rose-500/25 transition"></div>
             <div class="flex items-center justify-between mb-2">
-              <div id="iconBox2" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-500 to-pink-500 text-white flex items-center justify-center font-black shadow-md shadow-rose-500/30 overflow-hidden">
-                <i data-lucide="mail" class="w-5 h-5"></i>
+              <div id="iconBox2" class="w-11 h-11 rounded-2xl bg-white text-white flex items-center justify-center font-black shadow-md shadow-rose-500/20 overflow-hidden p-2">
+                <svg class="w-full h-full" viewBox="0 0 24 24">
+                  <path fill="#4285F4" d="M22 6c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v.01l10 6.49 10-6.49V6z"/>
+                  <path fill="#34A853" d="M2 18c0 .55.45 1 1 1h4v-7.24L2 8.24V18z"/>
+                  <path fill="#EA4335" d="M22 8.24l-5 3.52V19h4c.55 0 1-.45 1-1V8.24z"/>
+                  <path fill="#FBBC04" d="M7 19h10v-7.24l-5 3.52-5-3.52V19z"/>
+                </svg>
               </div>
-              <span id="badgeGmailRate" class="text-[10px] bg-rose-500/20 text-rose-300 px-2 py-0.5 rounded-full font-bold border border-rose-500/30">৳১৫-৪০</span>
+              <span id="badgeGmailRate" class="text-[10px] bg-rose-500/20 text-rose-300 px-2 py-0.5 rounded-full font-bold border border-rose-500/30">১৫-২০৳</span>
             </div>
             <h3 id="btnTitle2" class="font-extrabold text-sm text-slate-100 group-hover:text-rose-300 transition">জিমেইল বিক্রি</h3>
             <p id="btnSub2" class="text-[11px] text-slate-400 mt-0.5">ইনস্ট্যান্ট ক্যাশ পেমেন্ট</p>
           </button>
 
-          <!-- Button 3: Sell Facebook -->
+          <!-- Button 3: Sell Facebook with Official Facebook Logo -->
           <button id="mainBtnSellFacebook" onclick="playSound('click'); openSellTab('FACEBOOK')" class="btn-bounce relative p-4 rounded-2xl bg-gradient-to-br from-midnight-card via-slate-900 to-midnight-card border border-blue-500/30 hover:border-blue-400/80 transition-all text-left shadow-lg overflow-hidden group">
             <div class="absolute top-0 right-0 w-16 h-16 bg-blue-500/10 rounded-full blur-xl group-hover:bg-blue-500/25 transition"></div>
             <div class="flex items-center justify-between mb-2">
-              <div id="iconBox3" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-sky-500 text-white flex items-center justify-center font-black shadow-md shadow-blue-500/30 overflow-hidden">
-                <i data-lucide="facebook" class="w-5 h-5"></i>
+              <div id="iconBox3" class="w-11 h-11 rounded-2xl bg-[#1877F2] text-white flex items-center justify-center font-black shadow-md shadow-blue-500/30 overflow-hidden p-2">
+                <svg class="w-full h-full fill-white" viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
               </div>
-              <span id="badgeFbRate" class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full font-bold border border-blue-500/30">৳২০-১১০</span>
+              <span id="badgeFbRate" class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full font-bold border border-blue-500/30">৫০-৭০৳</span>
             </div>
             <h3 id="btnTitle3" class="font-extrabold text-sm text-slate-100 group-hover:text-sky-300 transition">ফেসবুক আইডি</h3>
             <p id="btnSub3" class="text-[11px] text-slate-400 mt-0.5">পুরাতন আইডি বিক্রি</p>
           </button>
 
-          <!-- Button 4: Instant Withdraw -->
+          <!-- Button 4: Instant Withdraw with Cash Wallet Logo -->
           <button id="mainBtnWithdraw" onclick="playSound('click'); switchTab('wallet')" class="btn-bounce relative p-4 rounded-2xl bg-gradient-to-br from-midnight-card via-slate-900 to-midnight-card border border-emerald-500/30 hover:border-emerald-400/80 transition-all text-left shadow-lg overflow-hidden group">
             <div class="absolute top-0 right-0 w-16 h-16 bg-emerald-500/10 rounded-full blur-xl group-hover:bg-emerald-500/25 transition"></div>
             <div class="flex items-center justify-between mb-2">
-              <div id="iconBox4" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 text-midnight-dark flex items-center justify-center font-black shadow-md shadow-emerald-500/30 overflow-hidden">
-                <i data-lucide="wallet" class="w-5 h-5"></i>
+              <div id="iconBox4" class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-400 to-amber-300 text-midnight-dark flex items-center justify-center font-black shadow-md shadow-emerald-500/30 overflow-hidden p-2">
+                <svg class="w-full h-full text-midnight-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/>
+                  <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/>
+                  <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>
+                </svg>
               </div>
-              <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-bold border border-emerald-500/30">বিকাশ/নগদ</span>
+              <span id="badgeBtn4" class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-bold border border-emerald-500/30">বিকাশ/নগদ</span>
             </div>
             <h3 id="btnTitle4" class="font-extrabold text-sm text-slate-100 group-hover:text-emerald-300 transition">ইনস্ট্যান্ট উইথড্র</h3>
             <p id="btnSub4" class="text-[11px] text-slate-400 mt-0.5">মিনিমাম ৳১০০ থেকে</p>
@@ -446,6 +579,89 @@
       <!-- Groups List Container -->
       <div id="allGroupsList" class="space-y-3">
         <!-- Rendered by JS with Screenshot & Demo View -->
+      </div>
+    </section>
+
+    <!-- TAB: REFERRAL PROGRAM (5 TABS REQUIREMENT) -->
+    <section id="tab-referral" class="space-y-4 hidden">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-lg font-black text-white" id="titleReferral">রেফারেল রিওয়ার্ড হাব</h2>
+          <p class="text-xs text-slate-400">বন্ধুদের আমন্ত্রণ জানিয়ে আনলিমিটেড ফ্রি ভিআইপি গ্রুপ জিতে নিন</p>
+        </div>
+        <span class="text-xs bg-emerald-500/20 text-emerald-300 px-2.5 py-1 rounded-full font-bold border border-emerald-500/30">২০ রেফার = ১ গ্রুপ ফ্রি</span>
+      </div>
+
+      <!-- Hero Referral Banner -->
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-500/25 via-emerald-900/20 to-midnight-card border border-luxury-gold/50 p-5 shadow-2xl space-y-3">
+        <div class="absolute -right-8 -top-8 w-32 h-32 bg-luxury-gold/15 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="flex items-center gap-3.5">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-400 to-yellow-500 text-midnight-dark flex items-center justify-center font-black shadow-lg shadow-amber-500/30 flex-shrink-0">
+            <i data-lucide="gift" class="w-6 h-6 animate-pulse"></i>
+          </div>
+          <div>
+            <span class="text-[10px] font-black tracking-wider uppercase text-luxury-gold bg-luxury-gold/15 px-2 py-0.5 rounded-full border border-luxury-gold/30">মেগা অফার</span>
+            <h3 class="text-sm font-extrabold text-white mt-0.5">১০০% ফ্রি ভিআইপি মেম্বারশিপ</h3>
+          </div>
+        </div>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          আপনার রেফারেল লিংক বন্ধুদের মাঝে শেয়ার করুন। ২০ জন বন্ধু এই বট/অ্যাপসে যুক্ত হলে আপনি যেকোনো একটি পছন্দের মেগা ভিআইপি টেলিগ্রাম গ্রুপ সম্পূর্ণ ফ্রিতে উপহার পাবেন!
+        </p>
+
+        <!-- Progress Counter -->
+        <div class="p-3 bg-midnight-dark/80 rounded-2xl border border-white/10 space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-slate-300 font-semibold">আপনার মোট সফল রেফারেল:</span>
+            <span class="font-extrabold text-amber-400" id="dispRefCountTextTab">০ / ২০ জন</span>
+          </div>
+          <div class="w-full h-3 bg-slate-800/90 rounded-full overflow-hidden p-0.5 border border-white/5">
+            <div id="barRefProgressTab" class="h-full bg-gradient-to-r from-amber-400 via-yellow-400 to-emerald-400 rounded-full w-0 transition-all duration-500"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Referral Link Box with Direct Copy & Telegram Share -->
+      <div class="p-4 rounded-2xl bg-midnight-card border border-midnight-border space-y-3">
+        <label class="text-xs font-bold text-slate-200 block">আপনার পার্সোনাল রেফারেল লিংক</label>
+        <div class="flex items-center gap-2">
+          <input id="inUserRefLinkTab" type="text" readonly value="https://t.me/ItsSaddam9_bot?start=ref" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3.5 py-2.5 text-amber-300 font-mono text-xs focus:outline-none select-all" />
+          <button onclick="copyReferralLinkTab()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark font-black text-xs btn-bounce shadow flex-shrink-0">
+            কপি
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 pt-1">
+          <button onclick="shareReferralToTg()" class="py-2.5 rounded-xl bg-gradient-to-r from-telegram to-sky-500 text-white font-bold text-xs shadow-md flex items-center justify-center gap-2 btn-bounce">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .37z"/></svg>
+            <span>টেলিগ্রামে পাঠান</span>
+          </button>
+          <button onclick="copyReferralLinkTab()" class="py-2.5 rounded-xl bg-midnight-surface border border-slate-700 hover:border-slate-500 text-slate-200 font-bold text-xs flex items-center justify-center gap-1.5 btn-bounce">
+            <i data-lucide="copy" class="w-4 h-4 text-amber-400"></i>
+            <span>লিংক কপি করুন</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- How it works guide -->
+      <div class="p-4 rounded-2xl bg-midnight-card border border-midnight-border space-y-2.5 text-xs">
+        <h4 class="font-bold text-white flex items-center gap-2">
+          <i data-lucide="help-circle" class="w-4 h-4 text-emerald-400"></i>
+          <span>নিয়মাবলী ও নির্দেশিকা</span>
+        </h4>
+        <div class="space-y-2 text-slate-300 text-[11px] leading-relaxed">
+          <div class="flex items-start gap-2">
+            <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center text-[10px] flex-shrink-0 mt-0.5">১</span>
+            <p>আপনার রেফারেল লিংকটি কপি করে বন্ধুদের টেলিগ্রাম ইনবক্স বা বিভিন্ন গ্রুপে শেয়ার করুন।</p>
+          </div>
+          <div class="flex items-start gap-2">
+            <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center text-[10px] flex-shrink-0 mt-0.5">২</span>
+            <p>তারা যখন আপনার লিংক দিয়ে বট চালু করবে, আপনার রেফারেল সংখ্যা স্বয়ংক্রিয়ভাবে বৃদ্ধি পাবে।</p>
+          </div>
+          <div class="flex items-start gap-2">
+            <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center text-[10px] flex-shrink-0 mt-0.5">৩</span>
+            <p>২০ জন পূর্ণ হওয়ার সাথে সাথে আপনার স্ক্রিনে রিওয়ার্ড ক্লেইম বাটন আনলক হবে এবং যেকোনো ১টি মেগা ভিআইপি গ্রুপ ফ্রিতে পাবেন।</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -1019,52 +1235,158 @@
           </button>
         </div>
 
-        <!-- The 4 Buttons Name & Title Customization -->
-        <div class="p-4 rounded-2xl bg-midnight-card border border-midnight-border space-y-3">
-          <h3 class="text-xs font-bold text-amber-400">প্রধান ৪টি বাটনের নাম ও লোগো পরিবর্তন</h3>
+        <!-- The 4 Main Service Buttons: Name, Subtitle, Corner Badge & Custom Logo -->
+        <div class="p-4 rounded-2xl bg-midnight-card border border-luxury-gold/30 space-y-3 shadow-xl">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+              <i data-lucide="layout-grid" class="w-4 h-4"></i>
+              <span>হোম পেজের ৪টি সার্ভিসের বাটন কাস্টমাইজেশন</span>
+            </h3>
+            <span class="text-[10px] text-luxury-gold bg-luxury-gold/15 px-2 py-0.5 rounded font-bold">এডমিন কন্ট্রোল</span>
+          </div>
+          <p class="text-[11px] text-slate-400 leading-relaxed">
+            এখানে হোম পেজের প্রতিটি বাটনের নাম, সাবটাইটেল, কোনায় প্রদর্শিত ব্যাজ (যেমন: ১৫-২০৳) এবং কাস্টম লোগো পরিবর্তন করতে পারবেন। ফাঁকা রাখলে অফিসিয়াল লোগো ব্যবহৃত হবে।
+          </p>
           
           <!-- 1: Group Market Button -->
-          <div class="p-2.5 rounded-xl bg-midnight-dark border border-midnight-border space-y-2">
-            <span class="text-[11px] font-bold text-amber-300">বাটন ১: গ্রুপ মার্কেট</span>
-            <input id="adminInBtnTitle1" type="text" placeholder="বাটন ১ টাইটেল" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
-            <input id="adminInBtnSub1" type="text" placeholder="বাটন ১ সাবটাইটেল" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+          <div class="p-3 rounded-xl bg-midnight-dark border border-telegram/40 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-bold text-sky-400 flex items-center gap-1.5">
+                <i data-lucide="send" class="w-3.5 h-3.5"></i> বাটন ১: গ্রুপ মার্কেট (টেলিগ্রাম)
+              </span>
+              <span class="text-[9px] text-sky-300 bg-sky-500/10 px-1.5 py-0.5 rounded">Group Market</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="text-[10px] text-slate-400 block mb-0.5">টাইটেল *</label>
+                <input id="adminInBtnTitle1" type="text" placeholder="যেমন: গ্রুপ মার্কেট" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+              </div>
+              <div>
+                <label class="text-[10px] text-slate-400 block mb-0.5">কোনায় ব্যাজ লেখা</label>
+                <input id="adminInBtnBadge1" type="text" placeholder="যেমন: VIP শপ" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+              </div>
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-400 block mb-0.5">সাবটাইটেল</label>
+              <input id="adminInBtnSub1" type="text" placeholder="যেমন: টেলিগ্রাম প্রিমিয়াম গ্রুপ" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-400 block mb-0.5">কাস্টম লোগো ইমেজ URL (ফাঁকা রাখলে টেলিগ্রাম লোগো)</label>
+              <input id="adminInBtnLogo1" type="text" placeholder="https://... (ইমেজ লিংক)" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+            </div>
           </div>
 
           <!-- 2: Sell Gmail Button -->
-          <div class="p-2.5 rounded-xl bg-midnight-dark border border-midnight-border space-y-2">
-            <span class="text-[11px] font-bold text-rose-300">বাটন ২: জিমেইল বিক্রি</span>
-            <input id="adminInBtnTitle2" type="text" placeholder="বাটন ২ টাইটেল" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
-            <input id="adminInBtnSub2" type="text" placeholder="বাটন ২ সাবটাইটেল" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+          <div class="p-3 rounded-xl bg-midnight-dark border border-gmail/40 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-bold text-rose-400 flex items-center gap-1.5">
+                <i data-lucide="mail" class="w-3.5 h-3.5"></i> বাটন ২: জিমেইল বিক্রি (Gmail)
+              </span>
+              <span class="text-[9px] text-rose-300 bg-rose-500/10 px-1.5 py-0.5 rounded">Gmail Sell</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="text-[10px] text-slate-400 block mb-0.5">টাইটেল *</label>
+                <input id="adminInBtnTitle2" type="text" placeholder="যেমন: জিমেইল বিক্রি" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+              </div>
+              <div>
+                <label class="text-[10px] text-slate-400 block mb-0.5">কোনায় ব্যাজ লেখা (১৫-২০৳)</label>
+                <input id="adminInBtnBadge2" type="text" placeholder="যেমন: ১৫-২০৳" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+              </div>
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-400 block mb-0.5">সাবটাইটেল</label>
+              <input id="adminInBtnSub2" type="text" placeholder="যেমন: ইনস্ট্যান্ট ক্যাশ পেমেন্ট" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-400 block mb-0.5">কাস্টম লোগো ইমেজ URL (ফাঁকা রাখলে জিমেইল লোগো)</label>
+              <input id="adminInBtnLogo2" type="text" placeholder="https://... (ইমেজ লিংক)" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+            </div>
           </div>
 
           <!-- 3: Sell Facebook Button -->
-          <div class="p-2.5 rounded-xl bg-midnight-dark border border-midnight-border space-y-2">
-            <span class="text-[11px] font-bold text-blue-300">বাটন ৩: ফেসবুক আইডি</span>
-            <input id="adminInBtnTitle3" type="text" placeholder="বাটন ৩ টাইটেল" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
-            <input id="adminInBtnSub3" type="text" placeholder="বাটন ৩ সাবটাইটেল" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+          <div class="p-3 rounded-xl bg-midnight-dark border border-facebook/40 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-bold text-blue-400 flex items-center gap-1.5">
+                <i data-lucide="facebook" class="w-3.5 h-3.5"></i> বাটন ৩: ফেসবুক আইডি (Facebook)
+              </span>
+              <span class="text-[9px] text-blue-300 bg-blue-500/10 px-1.5 py-0.5 rounded">Facebook Sell</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="text-[10px] text-slate-400 block mb-0.5">টাইটেল *</label>
+                <input id="adminInBtnTitle3" type="text" placeholder="যেমন: ফেসবুক আইডি" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+              </div>
+              <div>
+                <label class="text-[10px] text-slate-400 block mb-0.5">কোনায় ব্যাজ লেখা (৫০-৭০৳)</label>
+                <input id="adminInBtnBadge3" type="text" placeholder="যেমন: ৫০-৭০৳" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+              </div>
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-400 block mb-0.5">সাবটাইটেল</label>
+              <input id="adminInBtnSub3" type="text" placeholder="যেমন: পুরাতন আইডি বিক্রি" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-400 block mb-0.5">কাস্টম লোগো ইমেজ URL (ফাঁকা রাখলে ফেসবুক লোগো)</label>
+              <input id="adminInBtnLogo3" type="text" placeholder="https://... (ইমেজ লিংক)" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+            </div>
           </div>
 
-          <button onclick="adminSaveButtonsConfig()" class="px-4 py-2 rounded-xl bg-luxury-gold text-midnight-dark font-bold text-xs btn-bounce">
-            বাটন সেটিংস সেভ করুন
+          <!-- 4: Withdraw Button -->
+          <div class="p-3 rounded-xl bg-midnight-dark border border-emerald-500/40 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-bold text-emerald-400 flex items-center gap-1.5">
+                <i data-lucide="wallet" class="w-3.5 h-3.5"></i> বাটন ৪: ইনস্ট্যান্ট উইথড্র (Withdraw)
+              </span>
+              <span class="text-[9px] text-emerald-300 bg-emerald-500/10 px-1.5 py-0.5 rounded">Withdraw Cash</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="text-[10px] text-slate-400 block mb-0.5">টাইটেল *</label>
+                <input id="adminInBtnTitle4" type="text" placeholder="যেমন: ইনস্ট্যান্ট উইথড্র" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+              </div>
+              <div>
+                <label class="text-[10px] text-slate-400 block mb-0.5">কোনায় ব্যাজ লেখা</label>
+                <input id="adminInBtnBadge4" type="text" placeholder="যেমন: বিকাশ/নগদ" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+              </div>
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-400 block mb-0.5">সাবটাইটেল</label>
+              <input id="adminInBtnSub4" type="text" placeholder="যেমন: মিনিমাম ৳১০০ থেকে" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-400 block mb-0.5">কাস্টম লোগো ইমেজ URL (ফাঁকা রাখলে উইথড্র আইকন)</label>
+              <input id="adminInBtnLogo4" type="text" placeholder="https://... (ইমেজ লিংক)" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+            </div>
+          </div>
+
+          <button onclick="adminSaveButtonsConfig()" class="w-full py-3 rounded-xl bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark font-black text-xs shadow-lg btn-bounce">
+            হোম পেজের ৪টি বাটন সেটিংস সংরক্ষণ করুন
           </button>
         </div>
 
         <!-- Official Channel & Support Links -->
         <div class="p-4 rounded-2xl bg-midnight-card border border-midnight-border space-y-3">
-          <h3 class="text-xs font-bold text-amber-400">অফিসিয়াল চ্যানেল ও সাপোর্ট লিংক পরিবর্তন</h3>
+          <h3 class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+            <i data-lucide="link-2" class="w-4 h-4"></i>
+            <span>অফিসিয়াল চ্যানেল ও অনলাইন কাউন্টারের পাশের টেলিগ্রাম লিংক</span>
+          </h3>
+          <p class="text-[11px] text-slate-400">
+            টপ বারে অনলাইন ইউজারের পাশের টেলিগ্রাম আইকন এবং প্রোফাইলের চ্যানেল বাটনে এই লিংকটি সেট হবে।
+          </p>
           <div>
-            <label class="text-[11px] text-slate-300 block mb-0.5">চ্যানেলের নাম</label>
-            <input id="adminInChannelName" type="text" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-xs text-white" />
+            <label class="text-[11px] text-slate-300 block mb-0.5">টপ বার টেলিগ্রাম লিংক * (কাউন্টারের পাশের বাটনের লিংক)</label>
+            <input id="adminInChannelLink" type="text" placeholder="https://t.me/ItsSaddam9" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-xs text-white" />
           </div>
           <div>
-            <label class="text-[11px] text-slate-300 block mb-0.5">চ্যানেলের টেলিগ্রাম লিংক</label>
-            <input id="adminInChannelLink" type="text" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-xs text-white" />
+            <label class="text-[11px] text-slate-300 block mb-0.5">চ্যানেলের নাম</label>
+            <input id="adminInChannelName" type="text" placeholder="SLK BUY GROUP OFFICIAL" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-xs text-white" />
           </div>
           <div>
             <label class="text-[11px] text-slate-300 block mb-0.5">সাপোর্ট টেলিগ্রাম লিংক (ভাসমান বাটনের লিংক)</label>
-            <input id="adminInSupportLink" type="text" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-xs text-white" />
+            <input id="adminInSupportLink" type="text" placeholder="https://t.me/ItsSaddam9" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-xs text-white" />
           </div>
-          <button onclick="adminSaveChannelConfig()" class="px-4 py-2 rounded-xl bg-luxury-gold text-midnight-dark font-bold text-xs btn-bounce">
+          <button onclick="adminSaveChannelConfig()" class="px-4 py-2.5 rounded-xl bg-luxury-gold text-midnight-dark font-bold text-xs btn-bounce">
             লিংকসমূহ সেভ করুন
           </button>
         </div>
@@ -1136,33 +1458,49 @@
     </a>
   </aside>
 
-  <!-- ================= BOTTOM NAVIGATION BAR ================= -->
-  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-midnight-card/90 backdrop-blur-xl border-t border-midnight-border py-2 px-2">
-    <div class="max-w-md mx-auto grid grid-cols-4 gap-1 text-center text-[10px]" id="bottomNavContainer">
+  <!-- ================= BOTTOM NAVIGATION BAR (5 PRIMARY TABS) ================= -->
+  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-midnight-card/95 backdrop-blur-xl border-t border-midnight-border/80 py-1.5 px-1.5 shadow-2xl">
+    <div class="max-w-md mx-auto grid grid-cols-5 gap-1 text-center text-[10px]" id="bottomNavContainer">
       
-      <button onclick="switchTab('home')" class="nav-btn active flex flex-col items-center py-1 text-luxury-gold font-bold transition" data-nav="home">
-        <i data-lucide="home" class="w-5 h-5 mb-0.5"></i>
+      <!-- Tab 1: Home -->
+      <button onclick="switchTab('home')" class="nav-btn active" data-nav="home">
+        <div class="nav-indicator"></div>
+        <i data-lucide="home" class="w-5 h-5 nav-icon mb-0.5"></i>
         <span id="navHome">হোম</span>
       </button>
 
-      <button onclick="switchTab('groups')" class="nav-btn flex flex-col items-center py-1 text-slate-400 hover:text-slate-200 transition" data-nav="groups">
-        <i data-lucide="layers" class="w-5 h-5 mb-0.5"></i>
+      <!-- Tab 2: Group Shop -->
+      <button onclick="switchTab('groups')" class="nav-btn" data-nav="groups">
+        <div class="nav-indicator"></div>
+        <i data-lucide="layers" class="w-5 h-5 nav-icon mb-0.5"></i>
         <span id="navGroups">গ্রুপ শপ</span>
       </button>
 
-      <button onclick="switchTab('sell')" class="nav-btn flex flex-col items-center py-1 text-slate-400 hover:text-slate-200 transition" data-nav="sell">
-        <i data-lucide="badge-dollar-sign" class="w-5 h-5 mb-0.5"></i>
+      <!-- Tab 3: Referral -->
+      <button onclick="switchTab('referral')" class="nav-btn" data-nav="referral">
+        <div class="nav-indicator"></div>
+        <i data-lucide="gift" class="w-5 h-5 nav-icon mb-0.5"></i>
+        <span id="navReferral">রেফারেল</span>
+      </button>
+
+      <!-- Tab 4: Income (Account Sell) -->
+      <button onclick="switchTab('sell')" class="nav-btn" data-nav="sell">
+        <div class="nav-indicator"></div>
+        <i data-lucide="badge-dollar-sign" class="w-5 h-5 nav-icon mb-0.5"></i>
         <span id="navSell">ইনকাম</span>
       </button>
 
-      <button onclick="switchTab('profile')" class="nav-btn flex flex-col items-center py-1 text-slate-400 hover:text-slate-200 transition" data-nav="profile">
-        <i data-lucide="user" class="w-5 h-5 mb-0.5"></i>
+      <!-- Tab 5: Profile -->
+      <button onclick="switchTab('profile')" class="nav-btn" data-nav="profile">
+        <div class="nav-indicator"></div>
+        <i data-lucide="user" class="w-5 h-5 nav-icon mb-0.5"></i>
         <span id="navProfile">প্রোফাইল</span>
       </button>
 
-      <!-- Admin Tab: ONLY shown for 8701368956 / @ItsSaddam9 (Hidden by default for ordinary users) -->
-      <button id="navAdminBtn" onclick="switchTab('admin')" class="hidden nav-btn flex-col items-center py-1 text-amber-400 font-bold transition" data-nav="admin">
-        <i data-lucide="shield-check" class="w-5 h-5 mb-0.5"></i>
+      <!-- Admin Tab: ONLY shown for 8701368956 / @ItsSaddam9 -->
+      <button id="navAdminBtn" onclick="switchTab('admin')" class="hidden nav-btn" data-nav="admin">
+        <div class="nav-indicator"></div>
+        <i data-lucide="shield-check" class="w-5 h-5 nav-icon mb-0.5"></i>
         <span>এডমিন</span>
       </button>
     </div>
@@ -1685,14 +2023,24 @@
       fbRate: 60,
       minWithdraw: 100,
       
-      // 4 Main buttons customization
+      // 4 Main buttons customization (Admin controllable)
       buttons: {
         btn1Title: 'গ্রুপ মার্কেট',
         btn1Sub: 'টেলিগ্রাম প্রিমিয়াম গ্রুপ',
+        btn1Badge: 'VIP শপ',
+        btn1Logo: '',
         btn2Title: 'জিমেইল বিক্রি',
         btn2Sub: 'ইনস্ট্যান্ট ক্যাশ পেমেন্ট',
+        btn2Badge: '১৫-২০৳',
+        btn2Logo: '',
         btn3Title: 'ফেসবুক আইডি',
-        btn3Sub: 'পুরাতন আইডি বিক্রি'
+        btn3Sub: 'পুরাতন আইডি বিক্রি',
+        btn3Badge: '৫০-৭০৳',
+        btn3Logo: '',
+        btn4Title: 'ইনস্ট্যান্ট উইথড্র',
+        btn4Sub: 'মিনিমাম ৳১০০ থেকে',
+        btn4Badge: 'বিকাশ/নগদ',
+        btn4Logo: ''
       },
 
       // User Wallet (Clean 0 start for all members)
@@ -2304,7 +2652,7 @@
             profileAdminBtn.classList.remove('hidden');
             profileAdminBtn.classList.add('flex');
           }
-          if (bottomNav) bottomNav.className = "max-w-md mx-auto grid grid-cols-5 gap-1 text-center text-[10px]";
+          if (bottomNav) bottomNav.className = "max-w-md mx-auto grid grid-cols-6 gap-1 text-center text-[10px]";
         } else {
           if (navAdmin) {
             navAdmin.classList.add('hidden');
@@ -2315,7 +2663,7 @@
             profileAdminBtn.classList.add('hidden');
             profileAdminBtn.classList.remove('flex');
           }
-          if (bottomNav) bottomNav.className = "max-w-md mx-auto grid grid-cols-4 gap-1 text-center text-[10px]";
+          if (bottomNav) bottomNav.className = "max-w-md mx-auto grid grid-cols-5 gap-1 text-center text-[10px]";
         }
       } catch (e) {
         console.warn("updateAdminVisibility:", e);
@@ -2410,6 +2758,29 @@
       alert("এডমিন প্যানেল লক করা হয়েছে।");
     }
 
+    // --- Button Logo Renderer (SVG or Admin Custom Image URL) ---
+    function renderButtonLogo(boxId, customLogoUrl, defaultType) {
+      const box = document.getElementById(boxId);
+      if (!box) return;
+      if (customLogoUrl && customLogoUrl.trim().startsWith('http')) {
+        box.innerHTML = `<img src="${customLogoUrl.trim()}" class="w-full h-full object-cover rounded-xl" onerror="this.remove()" />`;
+        return;
+      }
+      if (defaultType === 'telegram') {
+        box.className = "w-11 h-11 rounded-2xl bg-gradient-to-tr from-sky-500 to-[#0088cc] text-white flex items-center justify-center font-black shadow-md shadow-sky-500/30 overflow-hidden p-2";
+        box.innerHTML = `<svg class="w-full h-full fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .37z"/></svg>`;
+      } else if (defaultType === 'gmail') {
+        box.className = "w-11 h-11 rounded-2xl bg-white text-white flex items-center justify-center font-black shadow-md shadow-rose-500/20 overflow-hidden p-2";
+        box.innerHTML = `<svg class="w-full h-full" viewBox="0 0 24 24"><path fill="#4285F4" d="M22 6c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v.01l10 6.49 10-6.49V6z"/><path fill="#34A853" d="M2 18c0 .55.45 1 1 1h4v-7.24L2 8.24V18z"/><path fill="#EA4335" d="M22 8.24l-5 3.52V19h4c.55 0 1-.45 1-1V8.24z"/><path fill="#FBBC04" d="M7 19h10v-7.24l-5 3.52-5-3.52V19z"/></svg>`;
+      } else if (defaultType === 'facebook') {
+        box.className = "w-11 h-11 rounded-2xl bg-[#1877F2] text-white flex items-center justify-center font-black shadow-md shadow-blue-500/30 overflow-hidden p-2";
+        box.innerHTML = `<svg class="w-full h-full fill-white" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>`;
+      } else if (defaultType === 'withdraw') {
+        box.className = "w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-400 to-amber-300 text-midnight-dark flex items-center justify-center font-black shadow-md shadow-emerald-500/30 overflow-hidden p-2";
+        box.innerHTML = `<svg class="w-full h-full text-midnight-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>`;
+      }
+    }
+
     // --- Dynamic UI Rendering ---
     function renderApp() {
       try {
@@ -2419,31 +2790,50 @@
         safeSetSrc('headerLogo', appState.appLogo);
         safeSetSrc('splashLogoImg', appState.appLogo);
 
-        // Channels & Support
-        safeSetHref('headerChannelBtn', appState.officialChannelLink);
-        safeSetHref('profileChannelLink', appState.officialChannelLink);
-        safeSetHref('profileSupportLink', appState.supportLink);
-        safeSetHref('floatingSupportBtn', appState.supportLink);
-        safeSetText('profileChannelName', appState.officialChannelName);
+        // Channels & Support (Top Bar & Floating)
+        safeSetHref('headerChannelBtn', appState.officialChannelLink || 'https://t.me/ItsSaddam9');
+        safeSetHref('profileChannelLink', appState.officialChannelLink || 'https://t.me/ItsSaddam9');
+        safeSetHref('profileSupportLink', appState.supportLink || 'https://t.me/ItsSaddam9');
+        safeSetHref('floatingSupportBtn', appState.supportLink || 'https://t.me/ItsSaddam9');
+        safeSetText('profileChannelName', appState.officialChannelName || 'অফিসিয়াল টেলিগ্রাম চ্যানেল');
 
         // Notice
         safeSetText('marqueeNoticeText', appState.noticeText);
         safeSetText('noticeModalBody', appState.noticeText);
 
         // Rates
-        safeSetText('badgeGmailRate', `৳${appState.gmailRate}/টি`);
-        safeSetText('badgeFbRate', `৳${appState.fbRate}/টি`);
         safeSetText('btnSubmitGmailRate', `৳${appState.gmailRate}`);
         safeSetText('btnSubmitFbRate', `৳${appState.fbRate}`);
         safeSetText('lblMinWithdrawText', `৳${appState.minWithdraw}`);
 
-        // 4 Main Buttons
-        safeSetText('btnTitle1', appState.buttons.btn1Title);
-        safeSetText('btnSub1', appState.buttons.btn1Sub);
-        safeSetText('btnTitle2', appState.buttons.btn2Title);
-        safeSetText('btnSub2', appState.buttons.btn2Sub);
-        safeSetText('btnTitle3', appState.buttons.btn3Title);
-        safeSetText('btnSub3', appState.buttons.btn3Sub);
+        // 4 Main Buttons (Title, Subtitle, Corner Badge & Custom Logo)
+        if (!appState.buttons) {
+          appState.buttons = { ...defaultInitialState.buttons };
+        }
+        
+        // Button 1: Group Market
+        safeSetText('btnTitle1', appState.buttons.btn1Title || 'গ্রুপ মার্কেট');
+        safeSetText('btnSub1', appState.buttons.btn1Sub || 'টেলিগ্রাম প্রিমিয়াম গ্রুপ');
+        safeSetText('badgeBtn1', appState.buttons.btn1Badge || 'VIP শপ');
+        renderButtonLogo('iconBox1', appState.buttons.btn1Logo, 'telegram');
+
+        // Button 2: Sell Gmail
+        safeSetText('btnTitle2', appState.buttons.btn2Title || 'জিমেইল বিক্রি');
+        safeSetText('btnSub2', appState.buttons.btn2Sub || 'ইনস্ট্যান্ট ক্যাশ পেমেন্ট');
+        safeSetText('badgeGmailRate', appState.buttons.btn2Badge || '১৫-২০৳');
+        renderButtonLogo('iconBox2', appState.buttons.btn2Logo, 'gmail');
+
+        // Button 3: Sell Facebook
+        safeSetText('btnTitle3', appState.buttons.btn3Title || 'ফেসবুক আইডি');
+        safeSetText('btnSub3', appState.buttons.btn3Sub || 'পুরাতন আইডি বিক্রি');
+        safeSetText('badgeFbRate', appState.buttons.btn3Badge || '৫০-৭০৳');
+        renderButtonLogo('iconBox3', appState.buttons.btn3Logo, 'facebook');
+
+        // Button 4: Instant Withdraw
+        safeSetText('btnTitle4', appState.buttons.btn4Title || 'ইনস্ট্যান্ট উইথড্র');
+        safeSetText('btnSub4', appState.buttons.btn4Sub || 'মিনিমাম ৳১০০ থেকে');
+        safeSetText('badgeBtn4', appState.buttons.btn4Badge || 'বিকাশ/নগদ');
+        renderButtonLogo('iconBox4', appState.buttons.btn4Logo, 'withdraw');
 
         // Wallet
         safeSetText('homeWalletBalance', appState.wallet.balance);
@@ -2850,7 +3240,14 @@
     }
 
     function copyReferralLink() {
-      const link = document.getElementById('inUserRefLink').value;
+      const link = document.getElementById('inUserRefLink')?.value || `https://t.me/ItsSaddam9_bot?start=ref_${tgUser.id || 'member'}`;
+      navigator.clipboard.writeText(link);
+      playSound('chime');
+      alert(`রেফারেল লিংক কপি হয়েছে!\n${link}\n\nবন্ধুদের শেয়ার করুন। ২০ জন জয়েন করলেই ফ্রি গ্রুপ!`);
+    }
+
+    function copyReferralLinkTab() {
+      const link = document.getElementById('inUserRefLinkTab')?.value || `https://t.me/ItsSaddam9_bot?start=ref_${tgUser.id || 'member'}`;
       navigator.clipboard.writeText(link);
       playSound('chime');
       alert(`রেফারেল লিংক কপি হয়েছে!\n${link}\n\nবন্ধুদের শেয়ার করুন। ২০ জন জয়েন করলেই ফ্রি গ্রুপ!`);
@@ -2858,7 +3255,15 @@
 
     function shareReferralToTg() {
       playSound('click');
-      const link = document.getElementById('inUserRefLink').value;
+      const link = document.getElementById('inUserRefLink')?.value || `https://t.me/ItsSaddam9_bot?start=ref_${tgUser.id || 'member'}`;
+      const text = `🔥 SLK BUY GROUP - সেরা টেলিগ্রাম প্রিমিয়াম গ্রুপ ও একাউন্ট ক্রয়-বিক্রয় মার্কেটপ্লেস! এখনই ফ্রিতে যুক্ত হন এবং প্রিমিয়াম গ্রুপ উপভোগ করুন:`;
+      const tgUrl = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`;
+      window.open(tgUrl, '_blank');
+    }
+
+    function shareReferralToTgTab() {
+      playSound('click');
+      const link = document.getElementById('inUserRefLinkTab')?.value || `https://t.me/ItsSaddam9_bot?start=ref_${tgUser.id || 'member'}`;
       const text = `🔥 SLK BUY GROUP - সেরা টেলিগ্রাম প্রিমিয়াম গ্রুপ ও একাউন্ট ক্রয়-বিক্রয় মার্কেটপ্লেস! এখনই ফ্রিতে যুক্ত হন এবং প্রিমিয়াম গ্রুপ উপভোগ করুন:`;
       const tgUrl = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`;
       window.open(tgUrl, '_blank');
@@ -2870,15 +3275,31 @@
       const remaining = Math.max(0, target - count);
       const pct = Math.min(100, Math.round((count / target) * 100));
 
+      const uid = tgUser.id || 'member';
+      const refLink = `https://t.me/ItsSaddam9_bot?start=ref_${uid}`;
+      const inUserRefLink = document.getElementById('inUserRefLink');
+      if (inUserRefLink) inUserRefLink.value = refLink;
+      const inUserRefLinkTab = document.getElementById('inUserRefLinkTab');
+      if (inUserRefLinkTab) inUserRefLinkTab.value = refLink;
+
+      // Update Modal
       const countText = document.getElementById('dispRefCountText');
       if (countText) countText.innerText = `${count} / ${target} জন`;
-
       const bar = document.getElementById('barRefProgress');
       if (bar) bar.style.width = `${pct}%`;
-
       const remText = document.getElementById('dispRefRemaining');
       if (remText) {
         remText.innerText = remaining === 0 ? "🎉 অভিনন্দন! ২০ জন পূর্ণ হয়েছে!" : `আর ${remaining} জন রেফার প্রয়োজন`;
+      }
+
+      // Update Dedicated Referral Tab (tab-referral)
+      const countTextTab = document.getElementById('dispRefCountTextTab');
+      if (countTextTab) countTextTab.innerText = `${count} / ${target} জন`;
+      const barTab = document.getElementById('barRefProgressTab');
+      if (barTab) barTab.style.width = `${pct}%`;
+      const remTextTab = document.getElementById('dispRefRemainingTab');
+      if (remTextTab) {
+        remTextTab.innerText = remaining === 0 ? "🎉 অভিনন্দন! ২০ জন পূর্ণ হয়েছে!" : `আর মাত্র ${remaining} জন সফল রেফার প্রয়োজন`;
       }
 
       const claimBtn = document.getElementById('btnClaimFreeGroup');
@@ -2891,6 +3312,19 @@
           claimBtn.disabled = true;
           claimBtn.className = "w-full py-2.5 rounded-xl bg-slate-800 text-slate-500 font-bold text-xs cursor-not-allowed";
           claimBtn.innerText = `🎁 ফ্রি গ্রুপ আনলক করুন (${remaining} জন বাকি)`;
+        }
+      }
+
+      const claimBtnTab = document.getElementById('btnClaimFreeGroupTab');
+      if (claimBtnTab) {
+        if (count >= 20) {
+          claimBtnTab.disabled = false;
+          claimBtnTab.className = "w-full py-3 rounded-2xl bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark font-black text-sm shadow-xl btn-bounce cursor-pointer flex items-center justify-center gap-2";
+          claimBtnTab.innerHTML = `<i data-lucide="gift" class="w-5 h-5"></i> <span>ফ্রি গ্রুপ এখনই ক্লেইম করুন!</span>`;
+        } else {
+          claimBtnTab.disabled = true;
+          claimBtnTab.className = "w-full py-3 rounded-2xl bg-slate-800/80 text-slate-500 font-bold text-xs cursor-not-allowed flex items-center justify-center gap-2 border border-white/5";
+          claimBtnTab.innerHTML = `<i data-lucide="lock" class="w-4 h-4"></i> <span>ফ্রি গ্রুপ আনলক করুন (${remaining} জন বাকি)</span>`;
         }
       }
 
@@ -3349,13 +3783,27 @@
       document.getElementById('adminInAppName').value = appState.appName;
       document.getElementById('adminInAppLogo').value = appState.appLogo;
 
-      // 4 Buttons
-      document.getElementById('adminInBtnTitle1').value = appState.buttons.btn1Title;
-      document.getElementById('adminInBtnSub1').value = appState.buttons.btn1Sub;
-      document.getElementById('adminInBtnTitle2').value = appState.buttons.btn2Title;
-      document.getElementById('adminInBtnSub2').value = appState.buttons.btn2Sub;
-      document.getElementById('adminInBtnTitle3').value = appState.buttons.btn3Title;
-      document.getElementById('adminInBtnSub3').value = appState.buttons.btn3Sub;
+      // 4 Buttons (Title, Subtitle, Badge, Custom Logo)
+      const btns = appState.buttons || defaultInitialState.buttons;
+      safeSetValue('adminInBtnTitle1', btns.btn1Title || 'গ্রুপ মার্কেট');
+      safeSetValue('adminInBtnSub1', btns.btn1Sub || 'টেলিগ্রাম প্রিমিয়াম গ্রুপ');
+      safeSetValue('adminInBtnBadge1', btns.btn1Badge || 'VIP শপ');
+      safeSetValue('adminInBtnLogo1', btns.btn1Logo || '');
+
+      safeSetValue('adminInBtnTitle2', btns.btn2Title || 'জিমেইল বিক্রি');
+      safeSetValue('adminInBtnSub2', btns.btn2Sub || 'ইনস্ট্যান্ট ক্যাশ পেমেন্ট');
+      safeSetValue('adminInBtnBadge2', btns.btn2Badge || '১৫-২০৳');
+      safeSetValue('adminInBtnLogo2', btns.btn2Logo || '');
+
+      safeSetValue('adminInBtnTitle3', btns.btn3Title || 'ফেসবুক আইডি');
+      safeSetValue('adminInBtnSub3', btns.btn3Sub || 'পুরাতন আইডি বিক্রি');
+      safeSetValue('adminInBtnBadge3', btns.btn3Badge || '৫০-৭০৳');
+      safeSetValue('adminInBtnLogo3', btns.btn3Logo || '');
+
+      safeSetValue('adminInBtnTitle4', btns.btn4Title || 'ইনস্ট্যান্ট উইথড্র');
+      safeSetValue('adminInBtnSub4', btns.btn4Sub || 'মিনিমাম ৳১০০ থেকে');
+      safeSetValue('adminInBtnBadge4', btns.btn4Badge || 'বিকাশ/নগদ');
+      safeSetValue('adminInBtnLogo4', btns.btn4Logo || '');
 
       // Channels
       document.getElementById('adminInChannelName').value = appState.officialChannelName;
@@ -3878,15 +4326,36 @@
 
     function adminSaveButtonsConfig() {
       playSound('click');
-      appState.buttons.btn1Title = document.getElementById('adminInBtnTitle1').value.trim() || 'গ্রুপ মার্কেট';
-      appState.buttons.btn1Sub = document.getElementById('adminInBtnSub1').value.trim() || 'টেলিগ্রাম প্রিমিয়াম গ্রুপ';
-      appState.buttons.btn2Title = document.getElementById('adminInBtnTitle2').value.trim() || 'জিমেইল বিক্রি';
-      appState.buttons.btn2Sub = document.getElementById('adminInBtnSub2').value.trim() || 'ইনস্ট্যান্ট ক্যাশ পেমেন্ট';
-      appState.buttons.btn3Title = document.getElementById('adminInBtnTitle3').value.trim() || 'ফেসবুক আইডি';
-      appState.buttons.btn3Sub = document.getElementById('adminInBtnSub3').value.trim() || 'পুরাতন আইডি বিক্রি';
+      if (!appState.buttons) appState.buttons = {};
+      
+      // Button 1: Group Market
+      appState.buttons.btn1Title = document.getElementById('adminInBtnTitle1')?.value.trim() || 'গ্রুপ মার্কেট';
+      appState.buttons.btn1Sub = document.getElementById('adminInBtnSub1')?.value.trim() || 'টেলিগ্রাম প্রিমিয়াম গ্রুপ';
+      appState.buttons.btn1Badge = document.getElementById('adminInBtnBadge1')?.value.trim() || 'VIP শপ';
+      appState.buttons.btn1Logo = document.getElementById('adminInBtnLogo1')?.value.trim() || '';
+
+      // Button 2: Sell Gmail
+      appState.buttons.btn2Title = document.getElementById('adminInBtnTitle2')?.value.trim() || 'জিমেইল বিক্রি';
+      appState.buttons.btn2Sub = document.getElementById('adminInBtnSub2')?.value.trim() || 'ইনস্ট্যান্ট ক্যাশ পেমেন্ট';
+      appState.buttons.btn2Badge = document.getElementById('adminInBtnBadge2')?.value.trim() || '১৫-২০৳';
+      appState.buttons.btn2Logo = document.getElementById('adminInBtnLogo2')?.value.trim() || '';
+
+      // Button 3: Sell Facebook
+      appState.buttons.btn3Title = document.getElementById('adminInBtnTitle3')?.value.trim() || 'ফেসবুক আইডি';
+      appState.buttons.btn3Sub = document.getElementById('adminInBtnSub3')?.value.trim() || 'পুরাতন আইডি বিক্রি';
+      appState.buttons.btn3Badge = document.getElementById('adminInBtnBadge3')?.value.trim() || '৫০-৭০৳';
+      appState.buttons.btn3Logo = document.getElementById('adminInBtnLogo3')?.value.trim() || '';
+
+      // Button 4: Instant Withdraw
+      appState.buttons.btn4Title = document.getElementById('adminInBtnTitle4')?.value.trim() || 'ইনস্ট্যান্ট উইথড্র';
+      appState.buttons.btn4Sub = document.getElementById('adminInBtnSub4')?.value.trim() || 'মিনিমাম ৳১০০ থেকে';
+      appState.buttons.btn4Badge = document.getElementById('adminInBtnBadge4')?.value.trim() || 'বিকাশ/নগদ';
+      appState.buttons.btn4Logo = document.getElementById('adminInBtnLogo4')?.value.trim() || '';
+
       saveState();
       renderApp();
-      alert("বাটনের নামসমূহ সফলভাবে সেভ হয়েছে!");
+      playSound('chime');
+      alert("হোম পেজের ৪টি বাটন সেটিংস সফলভাবে সেভ হয়েছে!");
     }
 
     function adminSaveChannelConfig() {
@@ -4041,24 +4510,34 @@
         return;
       }
 
-      const tabs = ['home', 'groups', 'sell', 'wallet', 'profile', 'admin'];
+      const tabs = ['home', 'groups', 'referral', 'sell', 'wallet', 'profile', 'admin'];
       tabs.forEach(t => {
         const el = document.getElementById(`tab-${t}`);
         if (el) {
-          if (t === tab) el.classList.remove('hidden');
-          else el.classList.add('hidden');
+          if (t === tab) {
+            el.classList.remove('hidden');
+            el.classList.remove('tab-enter-active');
+            void el.offsetWidth; // Trigger reflow for smooth animation
+            el.classList.add('tab-enter-active');
+          } else {
+            el.classList.add('hidden');
+          }
         }
       });
 
       document.querySelectorAll('.nav-btn').forEach(btn => {
         if (btn.getAttribute('data-nav') === tab) {
-          btn.classList.add('text-luxury-gold', 'font-bold');
+          btn.classList.add('text-luxury-gold', 'font-bold', 'active');
           btn.classList.remove('text-slate-400');
         } else {
-          btn.classList.remove('text-luxury-gold', 'font-bold');
+          btn.classList.remove('text-luxury-gold', 'font-bold', 'active');
           btn.classList.add('text-slate-400');
         }
       });
+
+      if (tab === 'referral') {
+        renderReferralUI();
+      }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
       lucide.createIcons();
@@ -4147,6 +4626,18 @@
       }
     }
 
+    // --- Live Online Users Realtime Fluctuation ---
+    function startOnlineFluctuation() {
+      const el = document.getElementById('liveOnlineCount');
+      if (!el) return;
+      setInterval(() => {
+        const base = 1240;
+        const delta = Math.floor(Math.random() * 45) - 20;
+        const count = Math.max(1180, base + delta);
+        el.innerText = count.toLocaleString('en-US');
+      }, 4000);
+    }
+
     // --- Onload Initialization ---
     window.addEventListener('DOMContentLoaded', () => {
       try {
@@ -4166,6 +4657,10 @@
       } catch (e) {
         console.error("renderApp error:", e);
       }
+
+      try {
+        startOnlineFluctuation();
+      } catch(e) {}
 
       // Smoothly dismiss splash screen after branding display
       setTimeout(dismissSplashScreen, 900);

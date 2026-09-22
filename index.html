@@ -57,6 +57,36 @@
       user-select: none;
       transition: background-color 0.3s, color 0.3s;
     }
+
+    /* Light Mode Overrides */
+    html.light body {
+      background-color: #f8fafc !important;
+      color: #0f172a !important;
+    }
+    html.light .bg-midnight-dark {
+      background-color: #f1f5f9 !important;
+    }
+    html.light .bg-midnight-card {
+      background-color: #ffffff !important;
+      border-color: #e2e8f0 !important;
+      box-shadow: 0 4px 14px 0 rgba(0,0,0,0.06) !important;
+    }
+    html.light .bg-midnight-surface {
+      background-color: #e2e8f0 !important;
+      color: #0f172a !important;
+    }
+    html.light .text-white {
+      color: #0f172a !important;
+    }
+    html.light .text-slate-100, html.light .text-slate-200, html.light .text-slate-300 {
+      color: #1e293b !important;
+    }
+    html.light .text-slate-400 {
+      color: #64748b !important;
+    }
+    html.light .border-midnight-border {
+      border-color: #e2e8f0 !important;
+    }
     
     /* Luxury Floating Animation */
     @keyframes floatingSupport {
@@ -71,6 +101,55 @@
     }
     .animate-floating {
       animation: floatingSupport 2.5s ease-in-out infinite;
+    }
+
+    /* Bell Ringing Animation */
+    @keyframes bellRing {
+      0% { transform: rotate(0); }
+      15% { transform: rotate(16deg); }
+      30% { transform: rotate(-16deg); }
+      45% { transform: rotate(12deg); }
+      60% { transform: rotate(-12deg); }
+      75% { transform: rotate(6deg); }
+      85% { transform: rotate(-6deg); }
+      100% { transform: rotate(0); }
+    }
+    .animate-bell {
+      display: inline-block;
+      transform-origin: top center;
+      animation: bellRing 1.8s ease-in-out infinite;
+    }
+
+    /* Telegram Lively Pulsing */
+    @keyframes tgLively {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      20% { transform: scale(1.15) rotate(-10deg); filter: drop-shadow(0 0 8px rgba(34, 158, 217, 0.8)); }
+      40% { transform: scale(1.05) rotate(8deg); }
+      60% { transform: scale(1.12) rotate(-6deg); }
+      80% { transform: scale(1) rotate(0deg); }
+    }
+    .animate-tg {
+      display: inline-block;
+      animation: tgLively 2.8s ease-in-out infinite;
+    }
+
+    /* Continuous Smooth Marquee */
+    @keyframes marqueeScroll {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+    .animate-marquee {
+      display: inline-block;
+      white-space: nowrap;
+      animation: marqueeScroll 16s linear infinite;
+    }
+    .animate-marquee:hover {
+      animation-play-state: paused;
+    }
+
+    /* Glowing App Name */
+    .glow-appname {
+      text-shadow: 0 0 12px rgba(251, 191, 36, 0.75), 0 0 24px rgba(245, 158, 11, 0.5);
     }
 
     /* Pulse Glow */
@@ -124,48 +203,63 @@
   </div>
 
   <!-- ================= TOP BAR ================= -->
-  <header class="sticky top-0 z-40 backdrop-blur-xl bg-midnight-card/85 border-b border-midnight-border px-4 py-3">
+  <header class="sticky top-0 z-40 backdrop-blur-xl bg-midnight-card/90 border-b border-midnight-border px-3 py-2.5">
     <div class="max-w-md mx-auto flex items-center justify-between">
       <!-- Brand & Circular Logo -->
-      <div class="flex items-center gap-2.5 cursor-pointer btn-bounce" onclick="switchTab('home')">
+      <div class="flex items-center gap-2 cursor-pointer btn-bounce" onclick="switchTab('home')">
         <div class="w-10 h-10 rounded-full border-2 border-luxury-gold/70 p-0.5 shadow-md bg-midnight-dark overflow-hidden flex-shrink-0">
           <img id="headerLogo" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100&auto=format&fit=crop&q=80" class="w-full h-full object-cover rounded-full" />
         </div>
         <div>
-          <div class="flex items-center gap-1.5">
-            <span id="headerAppName" class="font-extrabold text-base tracking-wide bg-gradient-to-r from-amber-300 to-yellow-400 bg-clip-text text-transparent">
+          <div class="flex items-center gap-2">
+            <span id="headerAppName" class="font-extrabold text-base tracking-wide bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-200 bg-clip-text text-transparent glow-appname">
               SLK BUY GROUP
             </span>
-            <span class="text-[10px] bg-luxury-gold/20 text-luxury-gold px-1.5 py-0.5 rounded font-bold border border-luxury-gold/30">VIP</span>
+            <!-- Fake Online Users Count -->
+            <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/15 px-1.5 py-0.5 rounded-full border border-emerald-500/30 flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+              <span id="dispOnlineUsers">1,428</span> অনলাইন
+            </span>
           </div>
           <div class="flex items-center gap-1 text-[11px] text-slate-400">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
             <span id="headerVerifiedText">100% ভেরিফাইড গ্রুপ শপ</span>
           </div>
         </div>
       </div>
 
-      <!-- Action Icons: Official Channel, Notification Bell, Settings -->
+      <!-- Action Icons: Animated Telegram, Bell with Ringing & Counter, Settings -->
       <div class="flex items-center gap-1.5">
-        <!-- Official Channel Button -->
-        <a id="headerChannelBtn" href="https://t.me/ItsSaddam9" target="_blank" class="p-2 rounded-xl bg-telegram/15 text-telegram border border-telegram/30 hover:bg-telegram/25 transition btn-bounce flex items-center gap-1 text-xs font-semibold" title="Official Telegram Channel">
+        <!-- Animated Lively Telegram Icon Button -->
+        <a id="headerChannelBtn" href="https://t.me/ItsSaddam9" target="_blank" class="w-8 h-8 rounded-full bg-gradient-to-tr from-sky-500 to-telegram text-white flex items-center justify-center shadow-lg shadow-sky-500/30 animate-tg hover:scale-110 transition btn-bounce" title="অফিসিয়াল টেলিগ্রাম">
           <i data-lucide="send" class="w-4 h-4"></i>
-          <span class="hidden sm:inline" id="channelBtnText">চ্যানেল</span>
         </a>
 
-        <!-- Notification Bell with Counter -->
-        <button onclick="openNoticeModal()" class="relative p-2 rounded-xl bg-midnight-surface text-slate-200 border border-midnight-border hover:border-luxury-gold/50 transition btn-bounce" title="নোটিশ">
-          <i data-lucide="bell" class="w-5 h-5"></i>
-          <span id="noticeBadge" class="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-[10px] font-bold text-white rounded-full flex items-center justify-center ring-2 ring-midnight-dark">1</span>
+        <!-- Notification Bell with Ringing Animation & Unread Badge -->
+        <button id="headerBellBtn" onclick="openNoticeModal()" class="relative p-2 rounded-xl bg-midnight-surface text-slate-200 border border-midnight-border hover:border-luxury-gold/50 transition btn-bounce" title="নোটিশ">
+          <i id="bellIcon" data-lucide="bell" class="w-4 h-4 animate-bell text-amber-400"></i>
+          <span id="noticeBadge" class="absolute -top-1 -right-1 w-3.5 h-3.5 bg-rose-500 text-[9px] font-bold text-white rounded-full flex items-center justify-center ring-2 ring-midnight-dark">1</span>
         </button>
 
         <!-- Settings Dropdown Trigger -->
         <button onclick="toggleSettingsModal()" class="p-2 rounded-xl bg-midnight-surface text-slate-200 border border-midnight-border hover:border-slate-500 transition btn-bounce" title="সেটিংস">
-          <i data-lucide="settings" class="w-5 h-5"></i>
+          <i data-lucide="settings" class="w-4 h-4"></i>
         </button>
       </div>
     </div>
   </header>
+
+  <!-- ================= SMOOTH CONTINUOUS MARQUEE RUNNING TICKER ================= -->
+  <div onclick="openNoticeModal()" class="cursor-pointer bg-gradient-to-r from-amber-500/20 via-yellow-500/15 to-amber-500/20 border-b border-luxury-gold/30 py-1.5 px-3 flex items-center gap-2 overflow-hidden shadow-sm btn-bounce">
+    <div class="flex items-center gap-1 text-[11px] font-bold text-luxury-gold bg-luxury-gold/20 px-2 py-0.5 rounded-md flex-shrink-0 border border-luxury-gold/30">
+      <i data-lucide="megaphone" class="w-3.5 h-3.5 animate-bounce"></i> <span>নোটিশ:</span>
+    </div>
+    <div class="relative w-full overflow-hidden whitespace-nowrap">
+      <div id="marqueeNoticeText" class="animate-marquee inline-block text-xs font-semibold text-amber-200">
+        📢 স্বাগতম SLK BUY GROUP এ! টেলিগ্রাম প্রিমিয়াম গ্রুপ কিনুন এবং জিমেইল ও ফেসবুক বিক্রি করে প্রতিদিন আনলিমিটেড টাকা আয় করুন...
+      </div>
+    </div>
+  </div>
 
   <!-- ================= MAIN CONTAINER ================= -->
   <main class="max-w-md mx-auto px-4 pt-3 space-y-4">
@@ -173,11 +267,23 @@
     <!-- TAB 1: HOME -->
     <section id="tab-home" class="space-y-4">
       
-      <!-- Live Notice Ticker -->
-      <div onclick="openNoticeModal()" class="cursor-pointer bg-gradient-to-r from-amber-500/15 via-yellow-500/10 to-transparent border-l-4 border-luxury-gold p-3 rounded-xl flex items-center gap-2.5 backdrop-blur-sm shadow-sm hover:border-luxury-gold/90 transition btn-bounce">
-        <i data-lucide="volume-2" class="w-5 h-5 text-luxury-gold flex-shrink-0 animate-bounce"></i>
-        <div class="overflow-hidden whitespace-nowrap text-xs text-amber-200/90 font-medium">
-          <span id="marqueeNoticeText">📢 স্বাগতম SLK BUY GROUP এ! টেলিগ্রাম প্রিমিয়াম গ্রুপ কিনুন এবং জিমেইল ও ফেসবুক বিক্রি করে প্রতিদিন আনলিমিটেড টাকা আয় করুন...</span>
+      <!-- Referral Bonus Card: 20 Referrals = 1 Mega Free Group -->
+      <div onclick="openReferralModal()" class="cursor-pointer p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/20 via-yellow-500/10 to-amber-500/5 border border-luxury-gold/50 flex items-center justify-between shadow-xl btn-bounce">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-400 to-yellow-500 text-midnight-dark flex items-center justify-center font-black shadow-md shadow-amber-500/30 flex-shrink-0">
+            <i data-lucide="gift" class="w-5 h-5 animate-pulse"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <h4 class="text-xs font-black text-white">রেফারেল বোনাস</h4>
+              <span class="bg-luxury-gold/25 text-luxury-gold text-[10px] px-1.5 py-0.5 rounded-full font-bold border border-luxury-gold/30">১০০% ফ্রি গ্রুপ</span>
+            </div>
+            <p class="text-[11px] text-amber-200/90 mt-0.5">২০ জনকে রেফার করলেই ১টি মেগা ভিআইপি গ্রুপ ফ্রি!</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-1 text-xs font-bold text-luxury-gold flex-shrink-0 bg-luxury-gold/10 px-2.5 py-1 rounded-lg border border-luxury-gold/30">
+          <span>রেফার</span>
+          <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
         </div>
       </div>
 
@@ -214,7 +320,7 @@
           <button id="mainBtnGroupMarket" onclick="playSound('click'); switchTab('groups')" class="btn-bounce relative p-4 rounded-2xl bg-gradient-to-br from-midnight-card via-slate-900 to-midnight-card border border-amber-500/30 hover:border-luxury-gold/80 transition-all text-left shadow-lg overflow-hidden group">
             <div class="absolute top-0 right-0 w-16 h-16 bg-luxury-gold/10 rounded-full blur-xl group-hover:bg-luxury-gold/25 transition"></div>
             <div class="flex items-center justify-between mb-2">
-              <div id="iconBox1" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-400 text-midnight-dark flex items-center justify-center font-black shadow-md shadow-amber-500/30">
+              <div id="iconBox1" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-400 text-midnight-dark flex items-center justify-center font-black shadow-md shadow-amber-500/30 overflow-hidden">
                 <i data-lucide="layers" class="w-5 h-5"></i>
               </div>
               <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full font-bold border border-amber-500/30">VIP</span>
@@ -227,10 +333,10 @@
           <button id="mainBtnSellGmail" onclick="playSound('click'); openSellTab('GMAIL')" class="btn-bounce relative p-4 rounded-2xl bg-gradient-to-br from-midnight-card via-slate-900 to-midnight-card border border-rose-500/30 hover:border-rose-400/80 transition-all text-left shadow-lg overflow-hidden group">
             <div class="absolute top-0 right-0 w-16 h-16 bg-rose-500/10 rounded-full blur-xl group-hover:bg-rose-500/25 transition"></div>
             <div class="flex items-center justify-between mb-2">
-              <div id="iconBox2" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-500 to-pink-500 text-white flex items-center justify-center font-black shadow-md shadow-rose-500/30">
+              <div id="iconBox2" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-500 to-pink-500 text-white flex items-center justify-center font-black shadow-md shadow-rose-500/30 overflow-hidden">
                 <i data-lucide="mail" class="w-5 h-5"></i>
               </div>
-              <span id="badgeGmailRate" class="text-[10px] bg-rose-500/20 text-rose-300 px-2 py-0.5 rounded-full font-bold border border-rose-500/30">৳১৫/টি</span>
+              <span id="badgeGmailRate" class="text-[10px] bg-rose-500/20 text-rose-300 px-2 py-0.5 rounded-full font-bold border border-rose-500/30">৳১৫-৪০</span>
             </div>
             <h3 id="btnTitle2" class="font-extrabold text-sm text-slate-100 group-hover:text-rose-300 transition">জিমেইল বিক্রি</h3>
             <p id="btnSub2" class="text-[11px] text-slate-400 mt-0.5">ইনস্ট্যান্ট ক্যাশ পেমেন্ট</p>
@@ -240,10 +346,10 @@
           <button id="mainBtnSellFacebook" onclick="playSound('click'); openSellTab('FACEBOOK')" class="btn-bounce relative p-4 rounded-2xl bg-gradient-to-br from-midnight-card via-slate-900 to-midnight-card border border-blue-500/30 hover:border-blue-400/80 transition-all text-left shadow-lg overflow-hidden group">
             <div class="absolute top-0 right-0 w-16 h-16 bg-blue-500/10 rounded-full blur-xl group-hover:bg-blue-500/25 transition"></div>
             <div class="flex items-center justify-between mb-2">
-              <div id="iconBox3" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-sky-500 text-white flex items-center justify-center font-black shadow-md shadow-blue-500/30">
+              <div id="iconBox3" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-sky-500 text-white flex items-center justify-center font-black shadow-md shadow-blue-500/30 overflow-hidden">
                 <i data-lucide="facebook" class="w-5 h-5"></i>
               </div>
-              <span id="badgeFbRate" class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full font-bold border border-blue-500/30">৳৬০/টি</span>
+              <span id="badgeFbRate" class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full font-bold border border-blue-500/30">৳২০-১১০</span>
             </div>
             <h3 id="btnTitle3" class="font-extrabold text-sm text-slate-100 group-hover:text-sky-300 transition">ফেসবুক আইডি</h3>
             <p id="btnSub3" class="text-[11px] text-slate-400 mt-0.5">পুরাতন আইডি বিক্রি</p>
@@ -253,7 +359,7 @@
           <button id="mainBtnWithdraw" onclick="playSound('click'); switchTab('wallet')" class="btn-bounce relative p-4 rounded-2xl bg-gradient-to-br from-midnight-card via-slate-900 to-midnight-card border border-emerald-500/30 hover:border-emerald-400/80 transition-all text-left shadow-lg overflow-hidden group">
             <div class="absolute top-0 right-0 w-16 h-16 bg-emerald-500/10 rounded-full blur-xl group-hover:bg-emerald-500/25 transition"></div>
             <div class="flex items-center justify-between mb-2">
-              <div id="iconBox4" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 text-midnight-dark flex items-center justify-center font-black shadow-md shadow-emerald-500/30">
+              <div id="iconBox4" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 text-midnight-dark flex items-center justify-center font-black shadow-md shadow-emerald-500/30 overflow-hidden">
                 <i data-lucide="wallet" class="w-5 h-5"></i>
               </div>
               <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-bold border border-emerald-500/30">বিকাশ/নগদ</span>
@@ -324,11 +430,42 @@
       </div>
 
       <!-- Gmail Sell Form -->
-      <div id="formSellGmail" class="space-y-3 bg-midnight-card p-4 rounded-2xl border border-midnight-border">
-        <div class="flex items-center justify-between pb-2 border-b border-midnight-border">
-          <span class="text-xs font-bold text-rose-400">প্রতি জিমেইল রেট</span>
-          <span id="dispGmailRate" class="text-sm font-black text-white bg-rose-500/20 px-2.5 py-0.5 rounded-full border border-rose-500/30">৳১৫</span>
+      <div id="formSellGmail" class="space-y-3.5 bg-midnight-card p-4 rounded-2xl border border-midnight-border">
+        <!-- Detailed Instructions in Bengali -->
+        <div class="p-3 bg-rose-500/10 border border-rose-500/20 rounded-xl space-y-1.5 text-xs text-rose-200">
+          <div class="font-bold flex items-center gap-1.5 text-rose-300">
+            <i data-lucide="info" class="w-4 h-4"></i>
+            <span>জিমেইল বিক্রি করার নিয়মাবলী:</span>
+          </div>
+          <ul class="list-disc list-inside space-y-0.5 text-[11px] text-slate-300">
+            <li>জিমেইলটি অবশ্যই সচল ও সক্রিয় হতে হবে।</li>
+            <li>পাসওয়ার্ড সঠিক হতে হবে, প্রয়োজনে রিকভারি ইমেইল যোগ রাখুন।</li>
+            <li>এডমিন ১-২ ঘন্টার মধ্যে চেক করে আপনার ওয়ালেটে সরাসরি টাকা দিয়ে দেবে।</li>
+          </ul>
         </div>
+
+        <!-- Gmail Quality / Age Tier Selection -->
+        <div>
+          <label class="text-xs font-bold text-slate-300 block mb-1.5">জিমেইলের ধরন নির্বাচন করুন *</label>
+          <div class="grid grid-cols-3 gap-2">
+            <label class="cursor-pointer border border-rose-500/40 bg-midnight-dark rounded-xl p-2 text-center flex flex-col items-center justify-between has-[:checked]:border-rose-500 has-[:checked]:bg-rose-500/15">
+              <input type="radio" name="gmailTier" value="NEW" checked onchange="updateGmailSellRate()" class="hidden" />
+              <span class="text-[11px] font-bold text-slate-200">নতুন জিমেইল</span>
+              <span class="text-xs font-black text-rose-400 mt-1" id="rateTierGmailNew">৳১৫</span>
+            </label>
+            <label class="cursor-pointer border border-midnight-border bg-midnight-dark rounded-xl p-2 text-center flex flex-col items-center justify-between has-[:checked]:border-rose-500 has-[:checked]:bg-rose-500/15">
+              <input type="radio" name="gmailTier" value="OLD" onchange="updateGmailSellRate()" class="hidden" />
+              <span class="text-[11px] font-bold text-slate-200">পুরাতন (৩+ মাস)</span>
+              <span class="text-xs font-black text-rose-400 mt-1" id="rateTierGmailOld">৳২৫</span>
+            </label>
+            <label class="cursor-pointer border border-midnight-border bg-midnight-dark rounded-xl p-2 text-center flex flex-col items-center justify-between has-[:checked]:border-rose-500 has-[:checked]:bg-rose-500/15">
+              <input type="radio" name="gmailTier" value="AGED" onchange="updateGmailSellRate()" class="hidden" />
+              <span class="text-[11px] font-bold text-slate-200">অনেক পুরাতন (১+ বছর)</span>
+              <span class="text-xs font-black text-rose-400 mt-1" id="rateTierGmailAged">৳৪০</span>
+            </label>
+          </div>
+        </div>
+
         <div>
           <label class="text-xs font-medium text-slate-300 block mb-1">জিমেইল এড্রেস *</label>
           <input id="inGmailAddress" type="email" placeholder="example@gmail.com" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-rose-500 text-white" />
@@ -339,23 +476,55 @@
         </div>
         <div>
           <label class="text-xs font-medium text-slate-300 block mb-1">রিকভারি ইমেইল (যদি থাকে)</label>
-          <input id="inGmailRecovery" type="email" placeholder="ঐচ্ছিক" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-rose-500 text-white" />
+          <input id="inGmailRecovery" type="email" placeholder="ঐচ্ছিক (রিকভারি ইমেইল)" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-rose-500 text-white" />
         </div>
         <div>
           <label class="text-xs font-medium text-slate-300 block mb-1">আপনার টেলিগ্রাম ইউজারনেম *</label>
           <input id="inGmailTg" type="text" placeholder="@your_username" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-rose-500 text-white" />
         </div>
-        <button onclick="submitSellGmail()" class="w-full py-3 rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 text-white font-bold text-sm shadow-lg shadow-rose-500/25 btn-bounce">
-          জিমেইল সাবমিট করুন (৳১৫)
+        <button onclick="submitSellGmail()" class="w-full py-3 rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 text-white font-bold text-sm shadow-lg shadow-rose-500/25 btn-bounce flex items-center justify-center gap-2">
+          <span>জিমেইল সাবমিট করুন</span>
+          <span id="btnSubmitGmailRate" class="bg-white/20 px-2 py-0.5 rounded text-xs">৳১৫</span>
         </button>
       </div>
 
       <!-- Facebook Sell Form -->
-      <div id="formSellFb" class="space-y-3 bg-midnight-card p-4 rounded-2xl border border-midnight-border hidden">
-        <div class="flex items-center justify-between pb-2 border-b border-midnight-border">
-          <span class="text-xs font-bold text-blue-400">প্রতি পুরাতন ফেসবুক আইডি রেট</span>
-          <span id="dispFbRate" class="text-sm font-black text-white bg-blue-500/20 px-2.5 py-0.5 rounded-full border border-blue-500/30">৳৬০</span>
+      <div id="formSellFb" class="space-y-3.5 bg-midnight-card p-4 rounded-2xl border border-midnight-border hidden">
+        <!-- Detailed Instructions in Bengali -->
+        <div class="p-3 bg-blue-500/10 border border-blue-500/20 rounded-xl space-y-1.5 text-xs text-blue-200">
+          <div class="font-bold flex items-center gap-1.5 text-blue-300">
+            <i data-lucide="info" class="w-4 h-4"></i>
+            <span>ফেসবুক আইডি বিক্রি করার নিয়মাবলী:</span>
+          </div>
+          <ul class="list-disc list-inside space-y-0.5 text-[11px] text-slate-300">
+            <li>ফেসবুক আইডি অবশ্যই আসল ও অ্যাক্টিভ ফ্রেন্ডস থাকতে হবে।</li>
+            <li>টু-ফ্যাক্টর 2FA ব্যাকআপ কোড দিলে দ্রুত ভেরিফাই হবে এবং সর্বোচ্চ রেট পাবেন।</li>
+            <li>এডমিন লগইন চেক করে সফল হলে ওয়ালেটে ইনস্ট্যান্ট টাকা যোগ হবে।</li>
+          </ul>
         </div>
+
+        <!-- FB Quality / Age Tier Selection -->
+        <div>
+          <label class="text-xs font-bold text-slate-300 block mb-1.5">আইডির ক্যাটাগরি ও বয়স *</label>
+          <div class="grid grid-cols-3 gap-2">
+            <label class="cursor-pointer border border-midnight-border bg-midnight-dark rounded-xl p-2 text-center flex flex-col items-center justify-between has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/15">
+              <input type="radio" name="fbTier" value="NEW" onchange="updateFbSellRate()" class="hidden" />
+              <span class="text-[11px] font-bold text-slate-200">নতুন আইডি</span>
+              <span class="text-xs font-black text-blue-400 mt-1" id="rateTierFbNew">৳২০</span>
+            </label>
+            <label class="cursor-pointer border border-blue-500/40 bg-midnight-dark rounded-xl p-2 text-center flex flex-col items-center justify-between has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/15">
+              <input type="radio" name="fbTier" value="OLD" checked onchange="updateFbSellRate()" class="hidden" />
+              <span class="text-[11px] font-bold text-slate-200">পুরাতন (১-২ বছর)</span>
+              <span class="text-xs font-black text-blue-400 mt-1" id="rateTierFbOld">৳৬০</span>
+            </label>
+            <label class="cursor-pointer border border-midnight-border bg-midnight-dark rounded-xl p-2 text-center flex flex-col items-center justify-between has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/15">
+              <input type="radio" name="fbTier" value="AGED" onchange="updateFbSellRate()" class="hidden" />
+              <span class="text-[11px] font-bold text-slate-200">অনেক পুরাতন / 2FA</span>
+              <span class="text-xs font-black text-blue-400 mt-1" id="rateTierFbAged">৳১১০</span>
+            </label>
+          </div>
+        </div>
+
         <div>
           <label class="text-xs font-medium text-slate-300 block mb-1">প্রোফাইল লিংক বা UID *</label>
           <input id="inFbUid" type="text" placeholder="https://facebook.com/profile... অথবা UID" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-blue-500 text-white" />
@@ -370,14 +539,15 @@
         </div>
         <div>
           <label class="text-xs font-medium text-slate-300 block mb-1">টু-ফ্যাক্টর 2FA ব্যাকআপ কোড</label>
-          <input id="inFb2FA" type="text" placeholder="2FA চালু থাকলে কোড দিন" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-blue-500 text-white" />
+          <input id="inFb2FA" type="text" placeholder="2FA চালু থাকলে ব্যাকআপ কোড দিন" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-blue-500 text-white" />
         </div>
         <div>
           <label class="text-xs font-medium text-slate-300 block mb-1">আপনার টেলিগ্রাম ইউজারনেম *</label>
           <input id="inFbTg" type="text" placeholder="@your_username" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-blue-500 text-white" />
         </div>
-        <button onclick="submitSellFb()" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-sky-600 text-white font-bold text-sm shadow-lg shadow-blue-500/25 btn-bounce">
-          ফেসবুক আইডি সাবমিট করুন (৳৬০)
+        <button onclick="submitSellFb()" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-sky-600 text-white font-bold text-sm shadow-lg shadow-blue-500/25 btn-bounce flex items-center justify-center gap-2">
+          <span>ফেসবুক আইডি সাবমিট করুন</span>
+          <span id="btnSubmitFbRate" class="bg-white/20 px-2 py-0.5 rounded text-xs">৳৬০</span>
         </button>
       </div>
 
@@ -414,11 +584,25 @@
       </div>
 
       <!-- Withdraw Form -->
-      <div class="p-4 rounded-2xl bg-midnight-card border border-midnight-border space-y-3">
+      <div class="p-4 rounded-2xl bg-midnight-card border border-midnight-border space-y-3.5">
         <h3 class="text-sm font-bold text-white flex items-center justify-between">
           <span id="lblRequestWithdraw">টাকা উত্তোলনের রিকোয়েস্ট</span>
           <span class="text-[11px] text-amber-400 font-normal">মিনিমাম <strong id="lblMinWithdrawText">৳১০০</strong></span>
         </h3>
+
+        <!-- Detailed Withdrawal Guidelines in Bengali -->
+        <div class="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl space-y-1.5 text-xs text-emerald-200">
+          <div class="font-bold flex items-center gap-1.5 text-emerald-300">
+            <i data-lucide="shield-alert" class="w-4 h-4"></i>
+            <span>টাকা উত্তোলনের নিয়মাবলী ও সময়সীমা:</span>
+          </div>
+          <ul class="list-disc list-inside space-y-0.5 text-[11px] text-slate-300">
+            <li>সর্বনিম্ন উত্তোলন সীমা ৳১০০ টাকা।</li>
+            <li>বিকাশ, নগদ ও রকেটে প্রতিদিন সকাল ৯টা থেকে রাত ১২টা পর্যন্ত পেমেন্ট পাঠানো হয়।</li>
+            <li>উইথড্র রিকোয়েস্ট দেওয়ার ১৫ থেকে ৩০ মিনিটের মধ্যে আপনার একাউন্টে টাকা যুক্ত হবে।</li>
+            <li>ভুল নাম্বার দিলে টাকা উদ্ধার সম্ভব নাও হতে পারে, সাবধানে নাম্বার দিন।</li>
+          </ul>
+        </div>
 
         <!-- Payment Method -->
         <div>
@@ -500,6 +684,34 @@
           <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
         </a>
 
+        <!-- My Purchased Groups -->
+        <button onclick="toggleMyPurchasesModal()" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-midnight-surface transition btn-bounce">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
+              <i data-lucide="check-circle" class="w-5 h-5"></i>
+            </div>
+            <div class="text-left">
+              <p class="text-xs font-bold text-white">আমার কেনা গ্রুপসমূহ</p>
+              <p class="text-[11px] text-slate-400">অনুমোদিত গ্রুপ লিংক ও জয়েন বাটন</p>
+            </div>
+          </div>
+          <span id="badgeMyPurchasesCount" class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded">০টি গ্রুপ</span>
+        </button>
+
+        <!-- Referral Link & History -->
+        <button onclick="openReferralModal()" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-midnight-surface transition btn-bounce">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+              <i data-lucide="gift" class="w-5 h-5"></i>
+            </div>
+            <div class="text-left">
+              <p class="text-xs font-bold text-white">রেফারেল লিংক ও হিস্টরি</p>
+              <p class="text-[11px] text-slate-400">২০ জনকে রেফার করলেই ১টি মেগা গ্রুপ ফ্রি</p>
+            </div>
+          </div>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
+        </button>
+
         <!-- Language Switcher in Profile -->
         <button onclick="toggleLanguage()" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-midnight-surface transition btn-bounce">
           <div class="flex items-center gap-3">
@@ -528,6 +740,20 @@
           <i data-lucide="key-round" class="w-4 h-4 text-slate-500"></i>
         </button>
       </div>
+
+      <!-- My Purchases Accordion / Card Container -->
+      <div id="boxMyPurchases" class="p-4 rounded-2xl bg-midnight-card border border-midnight-border space-y-2.5">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+            <i data-lucide="sparkles" class="w-4 h-4 text-emerald-400"></i>
+            <span>আমার আনলক করা গ্রুপসমূহ</span>
+          </h3>
+          <span class="text-[10px] text-slate-400">লাইফটাইম এক্সেস</span>
+        </div>
+        <div id="myPurchasedGroupsList" class="space-y-2">
+          <!-- Populated by JS -->
+        </div>
+      </div>
     </section>
 
     <!-- TAB 6: ADMIN PANEL (SUPER PRIVACY: ONLY FOR 8701368956 / @ItsSaddam9) -->
@@ -546,6 +772,7 @@
       <!-- Admin Sub Tabs -->
       <div class="flex items-center gap-1.5 overflow-x-auto pb-1 custom-scrollbar text-xs">
         <button onclick="switchAdminTab('groups')" class="admin-tab-btn active px-3 py-1.5 rounded-xl font-bold bg-luxury-gold text-midnight-dark whitespace-nowrap" data-tab="groups">গ্রুপ ম্যানেজ</button>
+        <button onclick="switchAdminTab('payment-settings')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="payment-settings">পেমেন্ট গেটওয়ে সেটিংস</button>
         <button onclick="switchAdminTab('app-settings')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="app-settings">অ্যাপ ও বাটন সেটিংস</button>
         <button onclick="switchAdminTab('orders')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="orders">অর্ডার অনুমোদন</button>
         <button onclick="switchAdminTab('sell-req')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="sell-req">জিমেইল/এফবি চেক</button>
@@ -628,6 +855,104 @@
           <div id="adminGroupEditList" class="space-y-2">
             <!-- Rendered by JS -->
           </div>
+        </div>
+      </div>
+
+      <!-- Admin Sub Tab: Payment Gateway Settings (Dynamic Mobile Banking & Global Config) -->
+      <div id="admin-view-payment-settings" class="space-y-4 hidden">
+        <div class="p-4 rounded-2xl bg-midnight-card border border-luxury-gold/40 space-y-3">
+          <div class="flex items-center gap-2 text-amber-300">
+            <i data-lucide="wallet-cards" class="w-4 h-4"></i>
+            <h3 class="text-xs font-bold">পেমেন্ট গেটওয়ে সেটিংস (বিকাশ, নগদ, রকেট ও বাইনান্স)</h3>
+          </div>
+          <p class="text-[11px] text-slate-400 leading-relaxed">
+            এখানে আপনার ব্যক্তিগত বিকাশ, নগদ, রকেট ও বাইনান্স একাউন্ট নাম্বার, লোগো এবং পেমেন্ট নির্দেশিকা বাংলায় পরিবর্তন করতে পারবেন।
+          </p>
+
+          <!-- 1: bKash Settings -->
+          <div class="p-3 rounded-xl bg-midnight-dark border border-bkash/30 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-pink-400">Bkash Personal সেটিংস</span>
+              <span class="text-[10px] text-pink-300 bg-pink-500/10 px-2 py-0.5 rounded">Mobile Banking</span>
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-300 block mb-0.5">বিকাশ পার্সোনাল নাম্বার *</label>
+              <input id="adminInBkashNum" type="text" placeholder="017XXXXXXXX" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-300 block mb-0.5">বিকাশ লোগো ইমেজ URL (বিকল্প)</label>
+              <input id="adminInBkashLogo" type="text" placeholder="https://..." class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-300 block mb-0.5">বিকাশ পেমেন্ট নিয়ম / নির্দেশাবলী (বাংলায়)</label>
+              <textarea id="adminInBkashRules" rows="2" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white"></textarea>
+            </div>
+          </div>
+
+          <!-- 2: Nagad Settings -->
+          <div class="p-3 rounded-xl bg-midnight-dark border border-nagad/30 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-amber-400">Nagad Personal সেটিংস</span>
+              <span class="text-[10px] text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded">Mobile Banking</span>
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-300 block mb-0.5">নগদ পার্সোনাল নাম্বার *</label>
+              <input id="adminInNagadNum" type="text" placeholder="018XXXXXXXX" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-300 block mb-0.5">নগদ লোগো ইমেজ URL (বিকল্প)</label>
+              <input id="adminInNagadLogo" type="text" placeholder="https://..." class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-300 block mb-0.5">নগদ পেমেন্ট নিয়ম / নির্দেশাবলী (বাংলায়)</label>
+              <textarea id="adminInNagadRules" rows="2" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white"></textarea>
+            </div>
+          </div>
+
+          <!-- 3: Rocket Settings -->
+          <div class="p-3 rounded-xl bg-midnight-dark border border-rocket/30 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-purple-400">Rocket Personal সেটিংস</span>
+              <span class="text-[10px] text-purple-300 bg-purple-500/10 px-2 py-0.5 rounded">Mobile Banking</span>
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-300 block mb-0.5">রকেট পার্সোনাল নাম্বার *</label>
+              <input id="adminInRocketNum" type="text" placeholder="019XXXXXXXXX" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-300 block mb-0.5">রকেট লোগো ইমেজ URL (বিকল্প)</label>
+              <input id="adminInRocketLogo" type="text" placeholder="https://..." class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-300 block mb-0.5">রকেট পেমেন্ট নিয়ম / নির্দেশাবলী (বাংলায়)</label>
+              <textarea id="adminInRocketRules" rows="2" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white"></textarea>
+            </div>
+          </div>
+
+          <!-- 4: Binance Settings (Global) -->
+          <div class="p-3 rounded-xl bg-midnight-dark border border-amber-500/30 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-amber-400">Binance Personal সেটিংস</span>
+              <span class="text-[10px] text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded">Global</span>
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-300 block mb-0.5">বাইনান্স পে আইডি (Pay ID) বা USDT এড্রেস *</label>
+              <input id="adminInBinanceId" type="text" placeholder="8701368956 অথবা USDT BEP20 Address" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white font-mono" />
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-300 block mb-0.5">বাইনান্স লোগো ইমেজ URL (বিকল্প)</label>
+              <input id="adminInBinanceLogo" type="text" placeholder="https://..." class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-300 block mb-0.5">বাইনান্স পেমেন্ট নিয়ম / নির্দেশাবলী (বাংলায়)</label>
+              <textarea id="adminInBinanceRules" rows="2" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white"></textarea>
+            </div>
+          </div>
+
+          <!-- Save Button -->
+          <button onclick="adminSavePaymentGatewayConfig()" class="w-full py-3 rounded-xl bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark font-black text-xs shadow-lg btn-bounce">
+            পেমেন্ট গেটওয়ে সেটিংস সংরক্ষণ করুন
+          </button>
         </div>
       </div>
 
@@ -851,64 +1176,282 @@
     </div>
   </div>
 
-  <!-- ================= MODAL 3: CHECKOUT MODAL ================= -->
-  <div id="checkoutModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
-    <div class="w-full max-w-md bg-midnight-card border border-luxury-gold/40 rounded-2xl p-5 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto custom-scrollbar">
-      <div class="flex items-center justify-between">
-        <div>
-          <h3 class="text-sm font-black text-white" id="checkoutGroupTitle">গ্রুপ নাম</h3>
-          <p class="text-xs text-luxury-gold font-bold" id="checkoutGroupPrice">মূল্য: ৳৩৫০</p>
+  <!-- ================= MODAL 3: ULTRA-PREMIUM PAYMENT GATEWAY MODAL (AS REQUESTED) ================= -->
+  <div id="checkoutModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-3">
+    <div class="w-full max-w-md bg-midnight-card border border-luxury-gold/50 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[95vh]">
+      
+      <!-- Top Navigation Header -->
+      <div class="px-4 py-3 border-b border-midnight-border flex items-center justify-between bg-midnight-dark">
+        <button onclick="closeCheckoutModal()" class="p-1.5 rounded-xl bg-midnight-surface text-slate-300 hover:text-white btn-bounce flex items-center justify-center" title="Back">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        </button>
+        <h3 class="text-sm font-extrabold text-white tracking-wide">Payment Gateway</h3>
+        <button onclick="closeCheckoutModal()" class="p-1.5 rounded-xl bg-midnight-surface text-slate-300 hover:text-white btn-bounce flex items-center justify-center" title="Close">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Scrollable Body -->
+      <div class="p-4 overflow-y-auto custom-scrollbar space-y-4">
+        
+        <!-- App Circular Logo, Glowing Name & 3 Action Icons -->
+        <div class="text-center pt-1">
+          <!-- Circular App Logo (Never Square) -->
+          <div class="w-14 h-14 rounded-full border-2 border-luxury-gold p-0.5 shadow-xl bg-midnight-dark overflow-hidden mx-auto">
+            <img id="pgAppLogo" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=120&auto=format&fit=crop&q=80" class="w-full h-full object-cover rounded-full" />
+          </div>
+          <!-- Glowing App Name -->
+          <h4 id="pgAppName" class="mt-2 text-sm font-black text-amber-300 tracking-wider glow-appname">
+            SLK BUY GROUP
+          </h4>
+          <p id="pgGroupSummary" class="text-[11px] text-slate-400 mt-0.5">অর্ডার প্রিভিউ: <strong id="pgSummaryGroupTitle" class="text-slate-200">মুভি ভিআইপি গ্রুপ</strong></p>
+
+          <!-- The 3 Circular Action Icons -->
+          <div class="flex items-center justify-center gap-3 mt-2.5">
+            <!-- 1: Support -->
+            <a id="pgSupportLink" href="https://t.me/ItsSaddam9" target="_blank" class="w-7 h-7 rounded-full bg-midnight-surface border border-slate-700 text-slate-300 flex items-center justify-center hover:border-luxury-gold hover:text-luxury-gold transition btn-bounce" title="সাপোর্ট">
+              <i data-lucide="headset" class="w-3.5 h-3.5"></i>
+            </a>
+            <!-- 2: Help (?) -->
+            <button onclick="showPgHelpModal()" class="w-7 h-7 rounded-full bg-midnight-surface border border-slate-700 text-slate-300 flex items-center justify-center hover:border-luxury-gold hover:text-luxury-gold transition btn-bounce" title="সাহায্য">
+              <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
+            </button>
+            <!-- 3: Info (i) -->
+            <button onclick="showPgInfoModal()" class="w-7 h-7 rounded-full bg-midnight-surface border border-slate-700 text-slate-300 flex items-center justify-center hover:border-luxury-gold hover:text-luxury-gold transition btn-bounce" title="তথ্য">
+              <i data-lucide="info" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
         </div>
-        <button onclick="closeCheckoutModal()" class="p-1 text-slate-400 hover:text-white btn-bounce">
+
+        <!-- Segmented 2 Tabs: MOBILE BANKING and GLOBAL -->
+        <div class="grid grid-cols-2 p-1 bg-midnight-dark rounded-2xl border border-midnight-border">
+          <button id="pgTabMobileBtn" onclick="switchPgCategory('MOBILE')" class="py-2 rounded-xl text-xs font-black tracking-wide transition flex items-center justify-center gap-1.5 bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark shadow-md">
+            <span>MOBILE BANKING</span>
+          </button>
+          <button id="pgTabGlobalBtn" onclick="switchPgCategory('GLOBAL')" class="py-2 rounded-xl text-xs font-black tracking-wide transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-white">
+            <span>GLOBAL</span>
+          </button>
+        </div>
+
+        <!-- Method Option Cards: In MOBILE BANKING (bKash, Nagad, Rocket) -->
+        <div id="pgMobileCardsGrid" class="grid grid-cols-3 gap-2">
+          
+          <!-- bKash Card -->
+          <div onclick="selectPgMethod('bkash')" id="cardPgBkash" class="cursor-pointer p-2.5 rounded-2xl border-2 border-bkash bg-bkash/15 hover:bg-bkash/25 transition text-center flex flex-col items-center justify-between btn-bounce shadow-md">
+            <div class="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shadow-sm overflow-hidden mb-1">
+              <img id="imgPgLogoBkash" src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80&auto=format&fit=crop&q=80" alt="bKash" class="w-full h-full object-contain" />
+            </div>
+            <span class="text-[11px] font-black text-pink-400 leading-tight">Bkash<br>Personal</span>
+          </div>
+
+          <!-- Nagad Card -->
+          <div onclick="selectPgMethod('nagad')" id="cardPgNagad" class="cursor-pointer p-2.5 rounded-2xl border-2 border-midnight-border bg-midnight-dark hover:border-nagad/60 transition text-center flex flex-col items-center justify-between btn-bounce shadow-md">
+            <div class="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shadow-sm overflow-hidden mb-1">
+              <img id="imgPgLogoNagad" src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80&auto=format&fit=crop&q=80" alt="Nagad" class="w-full h-full object-contain" />
+            </div>
+            <span class="text-[11px] font-black text-amber-400 leading-tight">Nagad<br>Personal</span>
+          </div>
+
+          <!-- Rocket Card -->
+          <div onclick="selectPgMethod('rocket')" id="cardPgRocket" class="cursor-pointer p-2.5 rounded-2xl border-2 border-midnight-border bg-midnight-dark hover:border-rocket/60 transition text-center flex flex-col items-center justify-between btn-bounce shadow-md">
+            <div class="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shadow-sm overflow-hidden mb-1">
+              <img id="imgPgLogoRocket" src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80&auto=format&fit=crop&q=80" alt="Rocket" class="w-full h-full object-contain" />
+            </div>
+            <span class="text-[11px] font-black text-purple-400 leading-tight">Rocket<br>Personal</span>
+          </div>
+        </div>
+
+        <!-- Method Option Cards: In GLOBAL (Binance) -->
+        <div id="pgGlobalCardsGrid" class="grid grid-cols-1 gap-2 hidden">
+          <!-- Binance Card -->
+          <div onclick="selectPgMethod('binance')" id="cardPgBinance" class="cursor-pointer p-3 rounded-2xl border-2 border-amber-500 bg-amber-500/15 hover:bg-amber-500/25 transition flex items-center gap-3 btn-bounce shadow-md">
+            <div class="w-11 h-11 rounded-xl bg-white p-1 flex items-center justify-center shadow-sm overflow-hidden flex-shrink-0">
+              <img id="imgPgLogoBinance" src="https://images.unsplash.com/photo-1622979135225-d2ba269bc1df?w=80&auto=format&fit=crop&q=80" alt="Binance" class="w-full h-full object-contain" />
+            </div>
+            <div>
+              <span class="text-xs font-black text-amber-400">Binance Personal</span>
+              <p class="text-[11px] text-slate-300">Binance Pay / USDT (BEP20)</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Payment Container (Background changes according to selected method) -->
+        <div id="pgDynamicContainer" class="rounded-2xl p-4 transition-all duration-300 border space-y-3 bg-gradient-to-br from-pink-950/60 to-midnight-card border-pink-500/40">
+          
+          <!-- Method Header & Amount -->
+          <div class="flex items-center justify-between pb-2 border-b border-white/10">
+            <span id="pgActiveMethodBadge" class="text-xs font-black text-pink-300 bg-pink-500/20 px-2.5 py-1 rounded-lg border border-pink-500/30">
+              Bkash Personal
+            </span>
+            <div class="text-right">
+              <span class="text-[10px] text-slate-400 block">মোট প্রদেয় টাকা:</span>
+              <strong id="pgDisplayAmount" class="text-base font-black text-white">৳৩৫০ BDT</strong>
+            </div>
+          </div>
+
+          <!-- Send Money Number & Copy -->
+          <div class="p-3 bg-black/40 rounded-xl border border-white/10 space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] text-slate-300" id="pgNumberLabel">সেন্ড মানি নাম্বার (Personal):</span>
+              <button type="button" onclick="copyPgNumber()" class="text-xs font-bold text-amber-400 bg-amber-400/15 hover:bg-amber-400/30 px-2.5 py-0.5 rounded-md flex items-center gap-1 border border-amber-400/30 btn-bounce">
+                <i data-lucide="copy" class="w-3 h-3"></i>
+                <span id="pgCopyBtnText">কপি</span>
+              </button>
+            </div>
+            <p id="pgActiveNumber" class="text-base font-mono font-black text-white tracking-wider">01789-567890</p>
+          </div>
+
+          <!-- Step-by-Step Instructions in Bengali -->
+          <div class="text-xs text-slate-200 space-y-1 bg-black/20 p-2.5 rounded-xl border border-white/5">
+            <div class="font-bold flex items-center gap-1.5 text-amber-300">
+              <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
+              <span>কিভাবে পেমেন্ট করবেন:</span>
+            </div>
+            <p id="pgDynamicInstructions" class="text-[11px] leading-relaxed text-slate-300">
+              ১. আপনার বিকাশ অ্যাপ ওপেন করে Send Money অপশনে যান।<br>
+              ২. উপরের নাম্বারে ঠিক ৳<span id="pgInstructionAmount">৩৫০</span> টাকা সেন্ড মানি করুন।<br>
+              ৩. সফল পেমেন্টের পর মেসেজ বা অ্যাপ থেকে TrxID কপি করে নিচের ঘরে বসান।
+            </p>
+          </div>
+
+          <!-- Form Inputs -->
+          <div class="space-y-2 text-xs pt-1">
+            <div>
+              <label class="text-slate-300 font-medium block mb-1">প্রেরকের একাউন্ট / নাম্বার (Sender) *</label>
+              <input id="pgSenderInput" type="text" placeholder="যে নাম্বার থেকে টাকা দিয়েছেন" class="w-full bg-midnight-dark/90 border border-white/20 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-amber-400" />
+            </div>
+
+            <div>
+              <label class="text-slate-300 font-medium block mb-1">ট্রানজেকশন আইডি (TrxID / Order ID) *</label>
+              <input id="pgTrxInput" type="text" placeholder="যেমন: 9J76ABCD12" class="w-full bg-midnight-dark/90 border border-white/20 rounded-xl px-3 py-2 text-white text-xs uppercase font-mono focus:outline-none focus:border-amber-400" />
+            </div>
+
+            <div>
+              <label class="text-slate-300 font-medium block mb-1">আপনার টেলিগ্রাম ইউজারনেম *</label>
+              <input id="pgTgInput" type="text" placeholder="@your_username বা আইডি" class="w-full bg-midnight-dark/90 border border-white/20 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-amber-400" />
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button id="pgSubmitBtn" onclick="submitPgOrder()" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-midnight-dark font-black text-xs tracking-wider uppercase shadow-xl btn-bounce flex items-center justify-center gap-1.5">
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
+            <span>VERIFY ও সাবমিট করুন</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: REFERRAL SYSTEM (20 REFS = 1 FREE GROUP) ================= -->
+  <div id="referralModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-midnight-card border border-luxury-gold/50 rounded-3xl p-5 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto custom-scrollbar">
+      
+      <div class="flex items-center justify-between pb-2 border-b border-midnight-border">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-luxury-gold text-midnight-dark flex items-center justify-center font-bold">
+            <i data-lucide="gift" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-black text-white">রেফারেল রিওয়ার্ড প্রোগ্রাম</h3>
+            <p class="text-[10px] text-amber-300 font-bold">২০ রেফার = ১টি প্রিমিয়াম গ্রুপ ফ্রি</p>
+          </div>
+        </div>
+        <button onclick="closeReferralModal()" class="p-1 rounded-lg text-slate-400 hover:text-white btn-bounce">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
 
-      <!-- Payment Instructions -->
-      <div class="p-3 bg-midnight-dark rounded-xl border border-midnight-border space-y-2 text-xs">
-        <p class="text-slate-300 font-medium">নিচের নাম্বারে বিকাশ, নগদ বা রকেটে <strong>সেন্ড মানি</strong> করুন:</p>
-        <div class="space-y-1 font-mono text-[11px]">
-          <div class="flex items-center justify-between bg-bkash/10 px-2.5 py-1.5 rounded text-pink-300 border border-bkash/20">
-            <span>bKash (Personal): <strong>01789-567890</strong></span>
-            <button onclick="copyText('01789567890')" class="text-white hover:underline text-[10px]">কপি</button>
+      <!-- Referral Two Tabs -->
+      <div class="grid grid-cols-2 p-1 bg-midnight-dark rounded-xl border border-midnight-border text-xs font-bold">
+        <button id="tabRefLinkBtn" onclick="switchRefSubTab('LINK')" class="py-2 rounded-lg bg-luxury-gold text-midnight-dark shadow-sm">
+          আমার রেফারেল লিংক
+        </button>
+        <button id="tabRefHistoryBtn" onclick="switchRefSubTab('HISTORY')" class="py-2 rounded-lg text-slate-400 hover:text-white">
+          রেফারেল হিস্টরি
+        </button>
+      </div>
+
+      <!-- Tab 1: My Referral Link View -->
+      <div id="refSubViewLink" class="space-y-3 text-xs">
+        <div class="p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/15 to-yellow-500/10 border border-luxury-gold/30 space-y-2">
+          <h4 class="font-bold text-white flex items-center gap-1.5 text-xs">
+            <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i> বন্ধুদের আমন্ত্রণ জানান
+          </h4>
+          <p class="text-[11px] text-slate-300 leading-relaxed">
+            আপনার রেফারেল লিংক ব্যবহার করে যেকোনো ২০ জন বন্ধু এই অ্যাপসে যুক্ত হলে আপনি যেকোনো ১টি মেগা ভিআইপি টেলিগ্রাম গ্রুপ ১০০% ফ্রিতে পাবেন!
+          </p>
+        </div>
+
+        <div>
+          <label class="text-slate-300 font-medium block mb-1">আপনার নিজস্ব রেফারেল লিংক:</label>
+          <div class="flex items-center gap-2">
+            <input id="inUserRefLink" type="text" readonly value="https://t.me/ItsSaddam9_bot?start=ref_8701368956" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-amber-300 font-mono text-xs focus:outline-none" />
+            <button onclick="copyReferralLink()" class="px-3.5 py-2 rounded-xl bg-luxury-gold text-midnight-dark font-bold text-xs btn-bounce flex-shrink-0">
+              কপি
+            </button>
           </div>
-          <div class="flex items-center justify-between bg-nagad/10 px-2.5 py-1.5 rounded text-amber-300 border border-nagad/20">
-            <span>Nagad (Personal): <strong>01812-345678</strong></span>
-            <button onclick="copyText('01812345678')" class="text-white hover:underline text-[10px]">কপি</button>
+        </div>
+
+        <button onclick="shareReferralToTg()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-telegram to-sky-500 text-white font-bold text-xs shadow-lg shadow-sky-500/25 flex items-center justify-center gap-2 btn-bounce">
+          <i data-lucide="send" class="w-4 h-4"></i>
+          <span>টেলিগ্রামে বন্ধুদের সাথে শেয়ার করুন</span>
+        </button>
+      </div>
+
+      <!-- Tab 2: Referral History View -->
+      <div id="refSubViewHistory" class="space-y-3 text-xs hidden">
+        <!-- Progress Bar (Target: 20) -->
+        <div class="p-3 bg-midnight-dark rounded-xl border border-midnight-border space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-slate-300 font-medium">ফ্রি গ্রুপ পাওয়ার অগ্রগতি:</span>
+            <span class="font-bold text-amber-400" id="dispRefCountText">০ / ২০ জন</span>
           </div>
-          <div class="flex items-center justify-between bg-rocket/10 px-2.5 py-1.5 rounded text-purple-300 border border-rocket/20">
-            <span>Rocket (Personal): <strong>01934-567891</strong></span>
-            <button onclick="copyText('01934567891')" class="text-white hover:underline text-[10px]">কপি</button>
+          <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+            <div id="barRefProgress" class="h-full bg-gradient-to-r from-amber-400 to-yellow-500 rounded-full w-0 transition-all duration-500"></div>
+          </div>
+          <p class="text-[10px] text-slate-400 text-right" id="dispRefRemaining">আর ২০ জন রেফার প্রয়োজন</p>
+        </div>
+
+        <!-- Claim Free Group Action -->
+        <button id="btnClaimFreeGroup" onclick="claimFreeGroup()" disabled class="w-full py-2.5 rounded-xl bg-slate-800 text-slate-500 font-bold text-xs cursor-not-allowed">
+          🎁 ফ্রি গ্রুপ আনলক করুন (২০ জন পূর্ণ হলে সক্রিয় হবে)
+        </button>
+
+        <!-- List of Referred Users -->
+        <div class="space-y-1.5 pt-1">
+          <h5 class="text-[11px] font-bold text-slate-300">রেফার করা সদস্যদের তালিকা:</h5>
+          <div id="refUsersList" class="space-y-1 max-h-40 overflow-y-auto custom-scrollbar">
+            <!-- Populated by JS -->
           </div>
         </div>
       </div>
 
-      <!-- Inputs -->
-      <div class="space-y-2.5 text-xs">
-        <div>
-          <label class="text-slate-300 block mb-1">পেমেন্ট মেথড</label>
-          <select id="checkoutPaymentMethod" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-white">
-            <option value="bKash">bKash (বিকাশ)</option>
-            <option value="Nagad">Nagad (নগদ)</option>
-            <option value="Rocket">Rocket (রকেট)</option>
-          </select>
-        </div>
-        <div>
-          <label class="text-slate-300 block mb-1">প্রেরকের নাম্বার (যে নাম্বার থেকে টাকা পাঠিয়েছেন) *</label>
-          <input id="checkoutSenderNumber" type="tel" placeholder="01XXXXXXXXX" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-white" />
-        </div>
-        <div>
-          <label class="text-slate-300 block mb-1">ট্রানজেকশন আইডি (TrxID) *</label>
-          <input id="checkoutTrxId" type="text" placeholder="যেমন: 9J76ABCD12" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-white uppercase" />
-        </div>
-        <div>
-          <label class="text-slate-300 block mb-1">আপনার টেলিগ্রাম ইউজারনেম *</label>
-          <input id="checkoutUserTg" type="text" placeholder="@your_username" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-white" />
-        </div>
-      </div>
+      <button onclick="closeReferralModal()" class="w-full py-2.5 rounded-xl bg-midnight-surface text-slate-300 text-xs font-bold btn-bounce">
+        বন্ধ করুন
+      </button>
+    </div>
+  </div>
 
-      <button onclick="submitGroupOrder()" class="w-full py-3 rounded-xl bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark font-black text-sm shadow-lg btn-bounce">
-        পেমেন্ট নিশ্চিত করুন
+  <!-- ================= MODAL: PAYMENT GATEWAY HELP / INFO POPUP ================= -->
+  <div id="pgInfoModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-sm bg-midnight-card border border-luxury-gold/40 rounded-2xl p-5 shadow-2xl space-y-3">
+      <div class="flex items-center justify-between">
+        <h4 class="text-xs font-bold text-white flex items-center gap-1.5" id="pgInfoModalTitle">
+          <i data-lucide="info" class="w-4 h-4 text-luxury-gold"></i>
+          <span>পেমেন্ট গেটওয়ে সহায়তা</span>
+        </h4>
+        <button onclick="closePgInfoModal()" class="p-1 text-slate-400 hover:text-white btn-bounce">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <div class="p-3 bg-midnight-dark rounded-xl border border-midnight-border text-xs text-slate-300 space-y-2 leading-relaxed" id="pgInfoModalBody">
+        <p>১. শুধুমাত্র সেন্ড মানি (Send Money) করবেন, ক্যাশ ইন করবেন না।</p>
+        <p>২. ট্রানজেকশন আইডি (TrxID) সাবমিট করার পর এডমিন চেক করে আপনাকে টেলিগ্রামে গ্রুপের সরাসরি ইনভাইট লিংক পাঠাবে।</p>
+        <p>৩. যে কোনো সমস্যায় সরাসরি সাপোর্ট বাটনে ক্লিক করে কথা বলুন।</p>
+      </div>
+      <button onclick="closePgInfoModal()" class="w-full py-2 rounded-xl bg-luxury-gold text-midnight-dark font-bold text-xs btn-bounce">
+        বুঝেছি
       </button>
     </div>
   </div>
@@ -954,6 +1497,34 @@
     </div>
   </div>
 
+  <!-- ================= MODAL: MY PURCHASES ================= -->
+  <div id="myPurchasesModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-midnight-card border border-emerald-500/50 rounded-3xl p-5 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto custom-scrollbar">
+      <div class="flex items-center justify-between pb-2 border-b border-midnight-border">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-black text-white">আমার কেনা গ্রুপসমূহ</h3>
+            <p class="text-[10px] text-emerald-300 font-bold">অনুমোদিত গ্রুপ ও ইনভাইট লিংক</p>
+          </div>
+        </div>
+        <button onclick="toggleMyPurchasesModal()" class="p-1 rounded-lg text-slate-400 hover:text-white btn-bounce">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div id="myPurchasesList" class="space-y-3">
+        <!-- Rendered by JS -->
+      </div>
+
+      <button onclick="toggleMyPurchasesModal()" class="w-full py-2.5 rounded-xl bg-midnight-surface border border-midnight-border text-slate-300 text-xs font-bold btn-bounce">
+        বন্ধ করুন
+      </button>
+    </div>
+  </div>
+
   <!-- ================= JAVASCRIPT LOGIC ================= -->
   <script>
     // --- Audio Synthesis via Web Audio API (Smooth & Offline) ---
@@ -988,6 +1559,13 @@
       } catch (e) {
         // Audio policy ignore
       }
+    }
+
+    function copyText(text) {
+      if (!text) return;
+      navigator.clipboard.writeText(text);
+      playSound('chime');
+      alert("লিংক সফলভাবে কপি হয়েছে:\n" + text);
     }
 
     // --- State & App Storage ---
@@ -1089,6 +1667,56 @@
       submissions: [],
       withdrawals: [],
 
+      // Dynamic Payment Gateways Config (Mobile Banking & Global)
+      paymentGateways: {
+        bkash: {
+          name: 'Bkash Personal',
+          number: '01789-567890',
+          logo: '',
+          rules: '১. আপনার বিকাশ অ্যাপে Send Money অপশনে যান।\n২. উপরে দেওয়া নাম্বারে ঠিক নির্ধারিত টাকা সেন্ড মানি করুন।\n৩. সফল ট্রানজেকশনের পর TrxID কপি করে নিচের বক্সে দিন।'
+        },
+        nagad: {
+          name: 'Nagad Personal',
+          number: '01812-345678',
+          logo: '',
+          rules: '১. আপনার নগদ অ্যাপ বা *167# ডায়াল করে Send Money করুন।\n২. উপরে দেওয়া নগদ পার্সোনাল নাম্বারে টাকা পাঠান।\n৩. ট্রানজেকশন আইডি (TrxID) নিচে লিখে সাবমিট করুন।'
+        },
+        rocket: {
+          name: 'Rocket Personal',
+          number: '01934-567891',
+          logo: '',
+          rules: '১. রকেট অ্যাপের Send Money অপশন ব্যবহার করুন।\n২. উপরে উল্লেখিত ১২ ডিজিটের রকেট নাম্বারে টাকা সেন্ড করুন।\n৩. TrxID টি সঠিকভাবে নিচের ঘরে লিখুন।'
+        },
+        binance: {
+          name: 'Binance Personal',
+          number: '8701368956 (Pay ID) / USDT (BEP20)',
+          logo: '',
+          rules: '১. আপনার Binance অ্যাপ ওপেন করে Binance Pay অপশনে যান।\n২. উপরের Pay ID বা USDT এড্রেসে সমমূল্যের ডলার/USDT সেন্ড করুন।\n৩. পেমেন্টের Order ID / Internal TrxID সাবমিট করুন।'
+        }
+      },
+
+      // Dynamic Sell Account Rates for Tiers
+      gmailRates: {
+        new: 15,
+        old: 25,
+        aged: 40
+      },
+      fbRates: {
+        new: 20,
+        old: 60,
+        aged: 110
+      },
+
+      // Referral Program State (20 Refs = 1 Free VIP Group)
+      referralCount: 4,
+      referredUsers: [
+        { name: '@tarek_vip', date: 'আজ ০১:২০ PM', status: 'ভেরিফাইড' },
+        { name: '@sakib_hasan', date: 'আজ ১১:০৫ AM', status: 'ভেরিফাইড' },
+        { name: '@arif_bd9', date: 'গতকাল ১০:১৫ PM', status: 'ভেরিফাইড' },
+        { name: '@munna_pro', date: 'গতকাল ০৪:৩০ PM', status: 'ভেরিফাইড' }
+      ],
+      claimedFreeGroups: [],
+
       // Admin access state
       adminUnlocked: false
     };
@@ -1096,7 +1724,18 @@
     function loadState() {
       try {
         const data = localStorage.getItem(STORAGE_KEY);
-        if (data) return { ...defaultInitialState, ...JSON.parse(data) };
+        if (data) {
+          const parsed = JSON.parse(data);
+          return {
+            ...defaultInitialState,
+            ...parsed,
+            paymentGateways: { ...defaultInitialState.paymentGateways, ...(parsed.paymentGateways || {}) },
+            gmailRates: { ...defaultInitialState.gmailRates, ...(parsed.gmailRates || {}) },
+            fbRates: { ...defaultInitialState.fbRates, ...(parsed.fbRates || {}) },
+            buttons: { ...defaultInitialState.buttons, ...(parsed.buttons || {}) },
+            wallet: { ...defaultInitialState.wallet, ...(parsed.wallet || {}) }
+          };
+        }
       } catch (e) {}
       return defaultInitialState;
     }
@@ -1225,6 +1864,14 @@
       renderWithdrawHistory();
       renderAdminData();
 
+      // My Purchases & Referral Sync
+      const userPurchases = appState.orders || [];
+      const badgeMyPurchases = document.getElementById('badgeMyPurchasesCount');
+      if (badgeMyPurchases) badgeMyPurchases.innerText = `${userPurchases.length}টি গ্রুপ`;
+      renderReferralUI();
+      updateGmailSellRate();
+      updateFbSellRate();
+
       // Refresh Lucide Icons
       lucide.createIcons();
     }
@@ -1317,30 +1964,172 @@
       document.getElementById('noticeModal').classList.add('hidden');
     }
 
-    // --- Modal Functions: Checkout ---
+    // --- Modal Functions: Two-Tab Payment Gateway (MOBILE BANKING & GLOBAL) ---
+    let activePgCategory = 'MOBILE';
+    let activePgMethod = 'bkash';
+
     function openCheckout(groupId) {
       playSound('click');
       const group = appState.groups.find(g => g.id === groupId);
       if (!group) return;
       selectedGroupForCheckout = group;
+
+      // Group Details Header
       document.getElementById('checkoutGroupTitle').innerText = group.title;
-      document.getElementById('checkoutGroupPrice').innerText = `অফার মূল্য: ৳${group.price}`;
+      document.getElementById('checkoutGroupPrice').innerText = `৳${group.price}`;
+      document.getElementById('checkoutGroupCategory').innerText = group.category;
+      document.getElementById('checkoutGroupMembers').innerText = `${group.membersCount} মেম্বার`;
+
+      // Clear Inputs
+      document.getElementById('pgSenderInput').value = '';
+      document.getElementById('pgTrxInput').value = '';
+      const userTg = document.getElementById('profileUsername')?.innerText;
+      document.getElementById('pgTgInput').value = userTg && userTg !== '@guest_user' ? userTg : '';
+
+      // Default to Mobile Banking & bKash
+      switchPgCategory('MOBILE');
+      selectPgMethod('bkash');
+
       document.getElementById('checkoutModal').classList.remove('hidden');
+      lucide.createIcons();
     }
 
     function closeCheckoutModal() {
       document.getElementById('checkoutModal').classList.add('hidden');
     }
 
-    function submitGroupOrder() {
+    function switchPgCategory(cat) {
       playSound('click');
-      const method = document.getElementById('checkoutPaymentMethod').value;
-      const sender = document.getElementById('checkoutSenderNumber').value.trim();
-      const trx = document.getElementById('checkoutTrxId').value.trim();
-      const tg = document.getElementById('checkoutUserTg').value.trim();
+      activePgCategory = cat;
+      const tabMob = document.getElementById('tabPgMobileBtn');
+      const tabGlob = document.getElementById('tabPgGlobalBtn');
+      const gridMob = document.getElementById('pgMobileCardsGrid');
+      const gridGlob = document.getElementById('pgGlobalCardsGrid');
+
+      if (cat === 'MOBILE') {
+        tabMob.className = "py-2.5 rounded-xl font-black transition flex items-center justify-center gap-1.5 bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark shadow-md";
+        tabGlob.className = "py-2.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-white";
+        gridMob.classList.remove('hidden');
+        gridGlob.classList.add('hidden');
+        selectPgMethod('bkash');
+      } else {
+        tabGlob.className = "py-2.5 rounded-xl font-black transition flex items-center justify-center gap-1.5 bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark shadow-md";
+        tabMob.className = "py-2.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-white";
+        gridGlob.classList.remove('hidden');
+        gridMob.classList.add('hidden');
+        selectPgMethod('binance');
+      }
+      lucide.createIcons();
+    }
+
+    function selectPgMethod(methodKey) {
+      playSound('click');
+      activePgMethod = methodKey;
+
+      const cardBkash = document.getElementById('pgCardBkash');
+      const cardNagad = document.getElementById('pgCardNagad');
+      const cardRocket = document.getElementById('pgCardRocket');
+      const cardBinance = document.getElementById('pgCardBinance');
+      const detailsCard = document.getElementById('pgDetailsCard');
+      const activeName = document.getElementById('pgActiveMethodName');
+      const activeBadge = document.getElementById('pgActiveMethodBadge');
+      const activeNumber = document.getElementById('pgActiveNumber');
+      const dynamicRules = document.getElementById('pgDynamicInstructions');
+      const amountSpan = document.getElementById('pgInstructionAmount');
+
+      const currentPrice = selectedGroupForCheckout ? selectedGroupForCheckout.price : 350;
+      if (amountSpan) amountSpan.innerText = currentPrice;
+
+      // Reset card borders
+      [cardBkash, cardNagad, cardRocket, cardBinance].forEach(c => {
+        if (!c) return;
+        c.classList.remove('border-pink-500', 'bg-pink-500/15', 'border-amber-500', 'bg-amber-500/15', 'border-purple-500', 'bg-purple-500/15', 'ring-2');
+        c.classList.add('border-midnight-border', 'bg-midnight-dark');
+      });
+
+      const conf = appState.paymentGateways[methodKey] || {};
+
+      if (methodKey === 'bkash') {
+        cardBkash.classList.remove('border-midnight-border', 'bg-midnight-dark');
+        cardBkash.classList.add('border-pink-500', 'bg-pink-500/15', 'ring-2', 'ring-pink-500/50');
+        detailsCard.className = "p-3.5 rounded-2xl bg-gradient-to-b from-pink-950/40 via-midnight-dark to-midnight-card border border-pink-500/40 space-y-3";
+        activeName.innerText = conf.name || 'Bkash Personal';
+        activeName.className = "font-black text-white text-xs";
+        activeBadge.innerText = "বিকাশ পার্সোনাল • Send Money";
+        activeBadge.className = "text-[10px] text-pink-400 font-bold";
+        activeNumber.innerText = conf.number || '01789-567890';
+        dynamicRules.innerHTML = (conf.rules || '১. বিকাশ অ্যাপে Send Money অপশনে যান।<br>২. উপরে উল্লেখিত নাম্বারে নির্ধারিত টাকা সেন্ড মানি করুন।<br>৩. TrxID নিচে লিখে সাবমিট করুন।').replace(/\n/g, '<br>');
+      } else if (methodKey === 'nagad') {
+        cardNagad.classList.remove('border-midnight-border', 'bg-midnight-dark');
+        cardNagad.classList.add('border-amber-500', 'bg-amber-500/15', 'ring-2', 'ring-amber-500/50');
+        detailsCard.className = "p-3.5 rounded-2xl bg-gradient-to-b from-amber-950/40 via-midnight-dark to-midnight-card border border-amber-500/40 space-y-3";
+        activeName.innerText = conf.name || 'Nagad Personal';
+        activeName.className = "font-black text-white text-xs";
+        activeBadge.innerText = "নগদ পার্সোনাল • Send Money";
+        activeBadge.className = "text-[10px] text-amber-400 font-bold";
+        activeNumber.innerText = conf.number || '01812-345678';
+        dynamicRules.innerHTML = (conf.rules || '১. নগদ অ্যাপ বা *167# ডায়াল করে Send Money করুন।<br>২. উপরে দেওয়া নাম্বারে সঠিক টাকা পাঠান।<br>৩. ট্রানজেকশন আইডি (TrxID) নিচে লিখে সাবমিট করুন।').replace(/\n/g, '<br>');
+      } else if (methodKey === 'rocket') {
+        cardRocket.classList.remove('border-midnight-border', 'bg-midnight-dark');
+        cardRocket.classList.add('border-purple-500', 'bg-purple-500/15', 'ring-2', 'ring-purple-500/50');
+        detailsCard.className = "p-3.5 rounded-2xl bg-gradient-to-b from-purple-950/40 via-midnight-dark to-midnight-card border border-purple-500/40 space-y-3";
+        activeName.innerText = conf.name || 'Rocket Personal';
+        activeName.className = "font-black text-white text-xs";
+        activeBadge.innerText = "রকেট পার্সোনাল • Send Money";
+        activeBadge.className = "text-[10px] text-purple-400 font-bold";
+        activeNumber.innerText = conf.number || '01934-567891';
+        dynamicRules.innerHTML = (conf.rules || '১. রকেট অ্যাপ ওপেন করে Send Money সিলেক্ট করুন।<br>২. ১২ ডিজিটের রকেট নাম্বারে টাকা সেন্ড করুন।<br>৩. প্রাপ্ত TrxID নিচের ঘরে লিখুন।').replace(/\n/g, '<br>');
+      } else if (methodKey === 'binance') {
+        cardBinance.classList.remove('border-midnight-border', 'bg-midnight-dark');
+        cardBinance.classList.add('border-yellow-500', 'bg-yellow-500/15', 'ring-2', 'ring-yellow-500/50');
+        detailsCard.className = "p-3.5 rounded-2xl bg-gradient-to-b from-yellow-950/40 via-midnight-dark to-midnight-card border border-yellow-500/40 space-y-3";
+        activeName.innerText = conf.name || 'Binance Personal';
+        activeName.className = "font-black text-white text-xs";
+        activeBadge.innerText = "Binance Pay ID / USDT (BEP20)";
+        activeBadge.className = "text-[10px] text-yellow-400 font-bold";
+        activeNumber.innerText = conf.number || '8701368956 (Pay ID)';
+        dynamicRules.innerHTML = (conf.rules || '১. আপনার Binance অ্যাপে Binance Pay অপশনে যান।<br>২. উপরের Pay ID বা USDT এড্রেসে সমমূল্যের ডলার সেন্ড করুন।<br>৩. পেমেন্টের Order ID / Internal TrxID সাবমিট করুন।').replace(/\n/g, '<br>');
+      }
+
+      lucide.createIcons();
+    }
+
+    function copyPgNumber() {
+      const num = document.getElementById('pgActiveNumber').innerText.trim();
+      navigator.clipboard.writeText(num);
+      playSound('chime');
+      alert(`পেমেন্ট নাম্বার কপি হয়েছে: ${num}\nটাকা পাঠানোর পর TrxID সাবমিট করুন।`);
+    }
+
+    function showPgHelpModal() {
+      playSound('click');
+      document.getElementById('pgInfoModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function showPgInfoModal(methodName) {
+      playSound('click');
+      document.getElementById('pgInfoModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closePgInfoModal() {
+      document.getElementById('pgInfoModal').classList.add('hidden');
+    }
+
+    function submitPgOrder() {
+      playSound('click');
+      const sender = document.getElementById('pgSenderInput').value.trim();
+      const trx = document.getElementById('pgTrxInput').value.trim();
+      const tg = document.getElementById('pgTgInput').value.trim();
 
       if (!sender || !trx || !tg) {
-        alert("দয়া করে প্রেরকের নাম্বার, TrxID এবং টেলিগ্রাম ইউজারনেম দিন!");
+        alert("দয়া করে প্রেরকের নাম্বার/আইডি, ট্রানজেকশন TrxID এবং টেলিগ্রাম ইউজারনেম দিন!");
+        return;
+      }
+
+      if (!selectedGroupForCheckout) {
+        alert("কোনো গ্রুপ নির্বাচন করা হয়নি!");
         return;
       }
 
@@ -1349,20 +2138,250 @@
         groupId: selectedGroupForCheckout.id,
         groupTitle: selectedGroupForCheckout.title,
         amount: selectedGroupForCheckout.price,
-        method: method,
+        method: activePgMethod.toUpperCase(),
         senderNumber: sender,
         trxId: trx,
         userTelegram: tg,
         status: 'PENDING',
-        time: new Date().toLocaleTimeString()
+        time: new Date().toLocaleTimeString(),
+        screenshotUrl: selectedGroupForCheckout.screenshotUrl,
+        inviteLink: selectedGroupForCheckout.inviteLink
       };
 
       appState.orders.unshift(order);
       saveState();
       closeCheckoutModal();
       playSound('chime');
-      alert(`ধন্যবাদ! আপনার অর্ডারটি সফলভাবে জমা হয়েছে (TrxID: ${trx})। এডমিন ভেরিফাই করে ইনভাইট লিংক পাঠিয়ে দেবে।`);
+
+      alert(`🎉 ধন্যবাদ! আপনার অর্ডারটি সফলভাবে জমা হয়েছে!\n\nগ্রুপ: ${order.groupTitle}\nপেমেন্ট মেথড: ${order.method}\nTrxID: ${trx}\nটেলিগ্রাম: ${tg}\n\nএডমিন ভেরিফাই করে সরাসরি আপনার টেলিগ্রামে ইনভাইট লিংক পাঠাবে। 'আমার কেনা গ্রুপসমূহ' তেও দেখতে পারবেন।`);
       renderApp();
+    }
+
+    // --- Referral System Logic (20 Referrals = 1 Free Premium Group) ---
+    function openReferralModal() {
+      playSound('click');
+      const tg = window.Telegram?.WebApp;
+      const uid = tg?.initDataUnsafe?.user?.id || '8701368956';
+      const refLink = `https://t.me/ItsSaddam9_bot?start=ref_${uid}`;
+      document.getElementById('inUserRefLink').value = refLink;
+
+      switchRefSubTab('LINK');
+      renderReferralUI();
+
+      document.getElementById('referralModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeReferralModal() {
+      document.getElementById('referralModal').classList.add('hidden');
+    }
+
+    function switchRefSubTab(subTab) {
+      playSound('click');
+      const btnLink = document.getElementById('tabRefLinkBtn');
+      const btnHist = document.getElementById('tabRefHistoryBtn');
+      const viewLink = document.getElementById('refSubViewLink');
+      const viewHist = document.getElementById('refSubViewHistory');
+
+      if (subTab === 'LINK') {
+        btnLink.className = "py-2 rounded-lg bg-luxury-gold text-midnight-dark shadow-sm font-bold";
+        btnHist.className = "py-2 rounded-lg text-slate-400 hover:text-white font-bold";
+        viewLink.classList.remove('hidden');
+        viewHist.classList.add('hidden');
+      } else {
+        btnHist.className = "py-2 rounded-lg bg-luxury-gold text-midnight-dark shadow-sm font-bold";
+        btnLink.className = "py-2 rounded-lg text-slate-400 hover:text-white font-bold";
+        viewHist.classList.remove('hidden');
+        viewLink.classList.add('hidden');
+      }
+      lucide.createIcons();
+    }
+
+    function copyReferralLink() {
+      const link = document.getElementById('inUserRefLink').value;
+      navigator.clipboard.writeText(link);
+      playSound('chime');
+      alert(`রেফারেল লিংক কপি হয়েছে!\n${link}\n\nবন্ধুদের শেয়ার করুন। ২০ জন জয়েন করলেই ফ্রি গ্রুপ!`);
+    }
+
+    function shareReferralToTg() {
+      playSound('click');
+      const link = document.getElementById('inUserRefLink').value;
+      const text = `🔥 SLK BUY GROUP - সেরা টেলিগ্রাম প্রিমিয়াম গ্রুপ ও একাউন্ট ক্রয়-বিক্রয় মার্কেটপ্লেস! এখনই ফ্রিতে যুক্ত হন এবং প্রিমিয়াম গ্রুপ উপভোগ করুন:`;
+      const tgUrl = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`;
+      window.open(tgUrl, '_blank');
+    }
+
+    function renderReferralUI() {
+      const count = appState.referralCount || 0;
+      const target = 20;
+      const remaining = Math.max(0, target - count);
+      const pct = Math.min(100, Math.round((count / target) * 100));
+
+      const countText = document.getElementById('dispRefCountText');
+      if (countText) countText.innerText = `${count} / ${target} জন`;
+
+      const bar = document.getElementById('barRefProgress');
+      if (bar) bar.style.width = `${pct}%`;
+
+      const remText = document.getElementById('dispRefRemaining');
+      if (remText) {
+        remText.innerText = remaining === 0 ? "🎉 অভিনন্দন! ২০ জন পূর্ণ হয়েছে!" : `আর ${remaining} জন রেফার প্রয়োজন`;
+      }
+
+      const claimBtn = document.getElementById('btnClaimFreeGroup');
+      if (claimBtn) {
+        if (count >= 20) {
+          claimBtn.disabled = false;
+          claimBtn.className = "w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 text-midnight-dark font-black text-xs shadow-lg btn-bounce cursor-pointer";
+          claimBtn.innerText = "🎁 ফ্রি গ্রুপ আনলক করুন (এখনই ক্লেইম করুন)";
+        } else {
+          claimBtn.disabled = true;
+          claimBtn.className = "w-full py-2.5 rounded-xl bg-slate-800 text-slate-500 font-bold text-xs cursor-not-allowed";
+          claimBtn.innerText = `🎁 ফ্রি গ্রুপ আনলক করুন (${remaining} জন বাকি)`;
+        }
+      }
+
+      // Render referred members list
+      const listContainer = document.getElementById('refUsersList');
+      if (listContainer) {
+        if (!appState.referredUsers || appState.referredUsers.length === 0) {
+          listContainer.innerHTML = `<p class="text-[11px] text-slate-500 py-2">এখনও কোনো রেফারেল জমা হয়নি। আপনার লিংক শেয়ার করুন!</p>`;
+        } else {
+          listContainer.innerHTML = appState.referredUsers.map(u => `
+            <div class="p-2 rounded-lg bg-midnight-surface border border-midnight-border flex items-center justify-between text-[11px]">
+              <div class="flex items-center gap-1.5">
+                <i data-lucide="user-check" class="w-3.5 h-3.5 text-emerald-400"></i>
+                <span class="font-bold text-white">${u.name}</span>
+                <span class="text-slate-400 text-[10px]">(${u.date})</span>
+              </div>
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">${u.status}</span>
+            </div>
+          `).join('');
+        }
+      }
+      lucide.createIcons();
+    }
+
+    function claimFreeGroup() {
+      if ((appState.referralCount || 0) < 20) {
+        alert("ফ্রি গ্রুপ পেতে কমপক্ষে ২০ জন মেম্বার রেফার করতে হবে!");
+        return;
+      }
+      playSound('chime');
+      const freeGroup = appState.groups[0];
+      const order = {
+        id: Date.now(),
+        groupId: freeGroup.id,
+        groupTitle: `[FREE REFERRAL REWARD] ${freeGroup.title}`,
+        amount: 0,
+        method: 'REFERRAL_REWARD',
+        senderNumber: '20_REFS_COMPLETED',
+        trxId: 'REF-FREE-' + Date.now().toString().slice(-6),
+        userTelegram: document.getElementById('profileUsername')?.innerText || '@user',
+        status: 'APPROVED',
+        time: new Date().toLocaleTimeString(),
+        screenshotUrl: freeGroup.screenshotUrl,
+        inviteLink: freeGroup.inviteLink
+      };
+      appState.orders.unshift(order);
+      appState.referralCount = Math.max(0, appState.referralCount - 20);
+      saveState();
+      renderApp();
+      closeReferralModal();
+      alert(`🎉 অভিনন্দন! আপনি সফলভাবে ${freeGroup.title} সম্পূর্ণ ফ্রিতে আনলক করেছেন!\n\nইনভাইট লিংক: ${freeGroup.inviteLink}\nএখনই জয়েন করতে পারেন।`);
+      toggleMyPurchasesModal();
+    }
+
+    // --- User Dashboard: My Purchased Groups ---
+    function toggleMyPurchasesModal() {
+      playSound('click');
+      const modal = document.getElementById('myPurchasesModal');
+      modal.classList.toggle('hidden');
+      if (!modal.classList.contains('hidden')) {
+        renderMyPurchases();
+      }
+    }
+
+    function renderMyPurchases() {
+      const container = document.getElementById('myPurchasesList');
+      const countBadge = document.getElementById('badgeMyPurchasesCount');
+      if (!container) return;
+
+      const userOrders = appState.orders || [];
+      if (countBadge) countBadge.innerText = `${userOrders.length}টি গ্রুপ`;
+
+      if (userOrders.length === 0) {
+        container.innerHTML = `
+          <div class="p-6 text-center space-y-2 rounded-2xl bg-midnight-dark border border-midnight-border">
+            <i data-lucide="package-open" class="w-8 h-8 text-slate-500 mx-auto"></i>
+            <p class="text-xs text-slate-400">আপনি এখনও কোনো গ্রুপ কেনেননি।</p>
+            <button onclick="toggleMyPurchasesModal(); switchTab('groups');" class="px-3 py-1.5 rounded-xl bg-luxury-gold text-midnight-dark font-bold text-xs btn-bounce">
+              গ্রুপ মার্কেট দেখুন
+            </button>
+          </div>
+        `;
+      } else {
+        container.innerHTML = userOrders.map(o => `
+          <div class="p-3.5 rounded-2xl bg-midnight-dark border ${o.status === 'APPROVED' ? 'border-emerald-500/50 bg-emerald-950/15' : 'border-midnight-border'} space-y-2 text-xs">
+            <div class="flex items-center justify-between">
+              <span class="font-black text-white text-xs">${o.groupTitle}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded font-bold ${o.status === 'APPROVED' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'}">
+                ${o.status === 'APPROVED' ? '✓ অনুমোদিত' : '⏳ যাচাই চলছে'}
+              </span>
+            </div>
+
+            <div class="text-[11px] text-slate-400 space-y-0.5">
+              <p>মূল্য: <span class="text-amber-300 font-bold">৳${o.amount}</span> • মেথড: <span class="text-white font-medium">${o.method}</span></p>
+              <p>TrxID: <span class="font-mono text-slate-300">${o.trxId}</span> • সময়: ${o.time}</p>
+            </div>
+
+            ${o.status === 'APPROVED' ? `
+              <div class="pt-1 flex items-center gap-2">
+                <a href="${o.inviteLink || '#'}" target="_blank" class="flex-1 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-midnight-dark font-black text-xs text-center shadow-md btn-bounce flex items-center justify-center gap-1.5">
+                  <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                  <span>গ্রুপে সরাসরি প্রবেশ করুন</span>
+                </a>
+                <button onclick="copyText('${o.inviteLink || ''}')" class="px-3 py-2 rounded-xl bg-midnight-surface border border-slate-700 text-slate-300 hover:text-white text-xs font-bold btn-bounce">
+                  কপি
+                </button>
+              </div>
+            ` : `
+              <p class="text-[10px] text-amber-300/80 bg-amber-500/10 p-2 rounded-lg border border-amber-500/20">
+                এডমিন TrxID ভেরিফাই করলেই এখানে সরাসরি ইনভাইট লিংক দেখতে পারবেন এবং টেলিগ্রামেও পেয়ে যাবেন।
+              </p>
+            `}
+          </div>
+        `).join('');
+      }
+      lucide.createIcons();
+    }
+
+    // --- Dynamic Rates for Account Selling ---
+    function updateGmailSellRate() {
+      const type = document.getElementById('inGmailType')?.value || 'NEW';
+      const rates = appState.gmailRates || { new: 15, old: 25, aged: 40 };
+      let rate = rates.new;
+      if (type === 'OLD') rate = rates.old;
+      if (type === 'AGED') rate = rates.aged;
+      
+      const rateDisp = document.getElementById('dispGmailCalculatedRate');
+      if (rateDisp) rateDisp.innerText = `৳${rate}`;
+      const badge = document.getElementById('badgeGmailRate');
+      if (badge) badge.innerText = `৳${rate}/টি`;
+    }
+
+    function updateFbSellRate() {
+      const tier = document.getElementById('inFbTier')?.value || 'OLD';
+      const rates = appState.fbRates || { new: 20, old: 60, aged: 110 };
+      let rate = rates.old;
+      if (tier === 'NEW') rate = rates.new;
+      if (tier === 'AGED') rate = rates.aged;
+
+      const rateDisp = document.getElementById('dispFbCalculatedRate');
+      if (rateDisp) rateDisp.innerText = `৳${rate}`;
+      const badge = document.getElementById('badgeFbRate');
+      if (badge) badge.innerText = `৳${rate}/টি`;
     }
 
     // --- Filter Groups ---
@@ -1402,6 +2421,7 @@
 
     function submitSellGmail() {
       playSound('click');
+      const type = document.getElementById('inGmailType')?.value || 'NEW';
       const gmail = document.getElementById('inGmailAddress').value.trim();
       const pass = document.getElementById('inGmailPassword').value.trim();
       const recovery = document.getElementById('inGmailRecovery').value.trim();
@@ -1412,21 +2432,25 @@
         return;
       }
 
+      const rates = appState.gmailRates || { new: 15, old: 25, aged: 40 };
+      const reward = type === 'AGED' ? rates.aged : (type === 'OLD' ? rates.old : rates.new);
+      const typeLabel = type === 'AGED' ? 'অরিজিনাল পুরাতন (Aged)' : (type === 'OLD' ? 'পুরাতন (Old)' : 'নতুন ফ্রেশ (New)');
+
       appState.submissions.unshift({
         id: Date.now(),
-        type: 'GMAIL',
+        type: `GMAIL [${typeLabel}]`,
         account: gmail,
         password: pass,
         extra: recovery,
         userTelegram: tg,
-        reward: appState.gmailRate,
+        reward: reward,
         status: 'PENDING',
         time: new Date().toLocaleTimeString()
       });
 
       saveState();
       playSound('chime');
-      alert(`জিমেইল সফলভাবে জমা হয়েছে! এডমিন চেক করে আপনার ওয়ালেটে ৳${appState.gmailRate} যোগ করে দেবে।`);
+      alert(`জিমেইল সফলভাবে জমা হয়েছে!\nধরন: ${typeLabel}\nপ্রত্যাশিত আয়: ৳${reward}\nএডমিন যাচাই করে আপনার ওয়ালেটে ৳${reward} যোগ করে দেবে।`);
       document.getElementById('inGmailAddress').value = '';
       document.getElementById('inGmailPassword').value = '';
       renderSellHistory();
@@ -1434,6 +2458,7 @@
 
     function submitSellFb() {
       playSound('click');
+      const tier = document.getElementById('inFbTier')?.value || 'OLD';
       const uid = document.getElementById('inFbUid').value.trim();
       const login = document.getElementById('inFbLogin').value.trim();
       const pass = document.getElementById('inFbPassword').value.trim();
@@ -1445,23 +2470,28 @@
         return;
       }
 
+      const rates = appState.fbRates || { new: 20, old: 60, aged: 110 };
+      const reward = tier === 'AGED' ? rates.aged : (tier === 'NEW' ? rates.new : rates.old);
+      const tierLabel = tier === 'AGED' ? '২০১৮-২০২০ পুরাতন' : (tier === 'NEW' ? 'নতুন ১-৬ মাস' : '২০২১-২০২৩ মিডিয়াম');
+
       appState.submissions.unshift({
         id: Date.now(),
-        type: 'FACEBOOK',
-        account: `${login} (${uid})`,
+        type: `FACEBOOK [${tierLabel}]`,
+        account: `${login} (${uid || 'No UID'})`,
         password: pass,
         extra: twoFA,
         userTelegram: tg,
-        reward: appState.fbRate,
+        reward: reward,
         status: 'PENDING',
         time: new Date().toLocaleTimeString()
       });
 
       saveState();
       playSound('chime');
-      alert(`ফেসবুক আইডি জমা হয়েছে! এডমিন যাচাই করে আপনার একাউন্টে ৳${appState.fbRate} যুক্ত করবে।`);
+      alert(`ফেসবুক আইডি সফলভাবে জমা হয়েছে!\nক্যাটাগরি: ${tierLabel}\nপ্রত্যাশিত আয়: ৳${reward}\nএডমিন যাচাই করে একাউন্টে ৳${reward} যোগ করবে।`);
       document.getElementById('inFbLogin').value = '';
       document.getElementById('inFbPassword').value = '';
+      document.getElementById('inFb2FA').value = '';
       renderSellHistory();
     }
 
@@ -1572,6 +2602,26 @@
       document.getElementById('adminInMinWithdraw').value = appState.minWithdraw;
       document.getElementById('adminInNotice').value = appState.noticeText;
 
+      // Payment Gateways Settings Inputs
+      if (appState.paymentGateways) {
+        const pg = appState.paymentGateways;
+        if (document.getElementById('adminInBkashNum')) document.getElementById('adminInBkashNum').value = pg.bkash?.number || '';
+        if (document.getElementById('adminInBkashLogo')) document.getElementById('adminInBkashLogo').value = pg.bkash?.logo || '';
+        if (document.getElementById('adminInBkashRules')) document.getElementById('adminInBkashRules').value = pg.bkash?.rules || '';
+
+        if (document.getElementById('adminInNagadNum')) document.getElementById('adminInNagadNum').value = pg.nagad?.number || '';
+        if (document.getElementById('adminInNagadLogo')) document.getElementById('adminInNagadLogo').value = pg.nagad?.logo || '';
+        if (document.getElementById('adminInNagadRules')) document.getElementById('adminInNagadRules').value = pg.nagad?.rules || '';
+
+        if (document.getElementById('adminInRocketNum')) document.getElementById('adminInRocketNum').value = pg.rocket?.number || '';
+        if (document.getElementById('adminInRocketLogo')) document.getElementById('adminInRocketLogo').value = pg.rocket?.logo || '';
+        if (document.getElementById('adminInRocketRules')) document.getElementById('adminInRocketRules').value = pg.rocket?.rules || '';
+
+        if (document.getElementById('adminInBinanceId')) document.getElementById('adminInBinanceId').value = pg.binance?.number || '';
+        if (document.getElementById('adminInBinanceLogo')) document.getElementById('adminInBinanceLogo').value = pg.binance?.logo || '';
+        if (document.getElementById('adminInBinanceRules')) document.getElementById('adminInBinanceRules').value = pg.binance?.rules || '';
+      }
+
       // Admin group list
       const groupContainer = document.getElementById('adminGroupEditList');
       groupContainer.innerHTML = appState.groups.map(g => `
@@ -1665,13 +2715,49 @@
       event.target.classList.remove('bg-midnight-card', 'text-slate-300');
       event.target.classList.add('bg-luxury-gold', 'text-midnight-dark');
 
-      const views = ['groups', 'app-settings', 'orders', 'sell-req', 'withdrawals'];
+      const views = ['groups', 'payment-settings', 'app-settings', 'orders', 'sell-req', 'withdrawals'];
       views.forEach(v => {
         const el = document.getElementById(`admin-view-${v}`);
-        if (v === tab) el.classList.remove('hidden');
-        else el.classList.add('hidden');
+        if (el) {
+          if (v === tab) el.classList.remove('hidden');
+          else el.classList.add('hidden');
+        }
       });
       lucide.createIcons();
+    }
+
+    function adminSavePaymentGatewayConfig() {
+      playSound('click');
+      appState.paymentGateways = {
+        bkash: {
+          name: 'Bkash Personal',
+          number: document.getElementById('adminInBkashNum').value.trim() || '01789-567890',
+          logo: document.getElementById('adminInBkashLogo').value.trim(),
+          rules: document.getElementById('adminInBkashRules').value.trim()
+        },
+        nagad: {
+          name: 'Nagad Personal',
+          number: document.getElementById('adminInNagadNum').value.trim() || '01812-345678',
+          logo: document.getElementById('adminInNagadLogo').value.trim(),
+          rules: document.getElementById('adminInNagadRules').value.trim()
+        },
+        rocket: {
+          name: 'Rocket Personal',
+          number: document.getElementById('adminInRocketNum').value.trim() || '01934-567891',
+          logo: document.getElementById('adminInRocketLogo').value.trim(),
+          rules: document.getElementById('adminInRocketRules').value.trim()
+        },
+        binance: {
+          name: 'Binance Personal',
+          number: document.getElementById('adminInBinanceId').value.trim() || '8701368956 (Pay ID)',
+          logo: document.getElementById('adminInBinanceLogo').value.trim(),
+          rules: document.getElementById('adminInBinanceRules').value.trim()
+        }
+      };
+      saveState();
+      renderApp();
+      playSound('chime');
+      alert("পেমেন্ট গেটওয়ে সেটিংস সফলভাবে সংরক্ষিত হয়েছে!");
     }
 
     function adminSaveGroup() {

@@ -1568,6 +1568,28 @@
       alert("লিংক সফলভাবে কপি হয়েছে:\n" + text);
     }
 
+    // --- Safe DOM Helpers to Prevent Any TypeError Crash ---
+    function safeSetText(id, val) {
+      const el = document.getElementById(id);
+      if (el) el.innerText = (val !== undefined && val !== null) ? val : '';
+    }
+    function safeSetHtml(id, val) {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = (val !== undefined && val !== null) ? val : '';
+    }
+    function safeSetSrc(id, val) {
+      const el = document.getElementById(id);
+      if (el && val) el.src = val;
+    }
+    function safeSetHref(id, val) {
+      const el = document.getElementById(id);
+      if (el && val) el.href = val;
+    }
+    function safeSetValue(id, val) {
+      const el = document.getElementById(id);
+      if (el) el.value = (val !== undefined && val !== null) ? val : '';
+    }
+
     // --- State & App Storage ---
     const STORAGE_KEY = 'slk_buy_group_v3_state';
 
@@ -1753,38 +1775,50 @@
 
     // --- Check Telegram User & Super Admin Auto-Detection ---
     function initTelegramUser() {
-      const tg = window.Telegram?.WebApp;
-      if (tg) {
-        tg.ready();
-        tg.expand();
-        const user = tg.initDataUnsafe?.user;
-        if (user) {
-          document.getElementById('profileUsername').innerText = '@' + (user.username || user.first_name || 'member');
-          // Check if Saddam Bhai (8701368956 / ItsSaddam9)
-          if (String(user.id) === '8701368956' || (user.username && user.username.toLowerCase() === 'itssaddam9')) {
-            appState.adminUnlocked = true;
-            saveState();
+      try {
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+          tg.ready();
+          tg.expand();
+          const user = tg.initDataUnsafe?.user;
+          if (user) {
+            safeSetText('profileUsername', '@' + (user.username || user.first_name || 'member'));
+            // Check if Saddam Bhai (8701368956 / ItsSaddam9)
+            if (String(user.id) === '8701368956' || (user.username && user.username.toLowerCase() === 'itssaddam9')) {
+              appState.adminUnlocked = true;
+              saveState();
+            }
           }
         }
+      } catch (e) {
+        console.warn("Telegram WebApp init:", e);
       }
       updateAdminVisibility();
     }
 
     function updateAdminVisibility() {
-      const navAdmin = document.getElementById('navAdminBtn');
-      const indBadge = document.getElementById('adminIndicatorBadge');
-      const bottomNav = document.getElementById('bottomNavContainer');
+      try {
+        const navAdmin = document.getElementById('navAdminBtn');
+        const indBadge = document.getElementById('adminIndicatorBadge');
+        const bottomNav = document.getElementById('bottomNavContainer');
 
-      if (appState.adminUnlocked) {
-        navAdmin.classList.remove('hidden');
-        navAdmin.classList.add('flex');
-        indBadge.classList.remove('hidden');
-        bottomNav.className = "max-w-md mx-auto grid grid-cols-5 gap-1 text-center text-[10px]";
-      } else {
-        navAdmin.classList.add('hidden');
-        navAdmin.classList.remove('flex');
-        indBadge.classList.add('hidden');
-        bottomNav.className = "max-w-md mx-auto grid grid-cols-4 gap-1 text-center text-[10px]";
+        if (appState.adminUnlocked) {
+          if (navAdmin) {
+            navAdmin.classList.remove('hidden');
+            navAdmin.classList.add('flex');
+          }
+          if (indBadge) indBadge.classList.remove('hidden');
+          if (bottomNav) bottomNav.className = "max-w-md mx-auto grid grid-cols-5 gap-1 text-center text-[10px]";
+        } else {
+          if (navAdmin) {
+            navAdmin.classList.add('hidden');
+            navAdmin.classList.remove('flex');
+          }
+          if (indBadge) indBadge.classList.add('hidden');
+          if (bottomNav) bottomNav.className = "max-w-md mx-auto grid grid-cols-4 gap-1 text-center text-[10px]";
+        }
+      } catch (e) {
+        console.warn("updateAdminVisibility:", e);
       }
     }
 
@@ -1819,61 +1853,64 @@
 
     // --- Dynamic UI Rendering ---
     function renderApp() {
-      // Identity & Logos
-      document.getElementById('headerAppName').innerText = appState.appName;
-      document.getElementById('splashAppName').innerText = appState.appName;
-      document.getElementById('headerLogo').src = appState.appLogo;
-      document.getElementById('splashLogoImg').src = appState.appLogo;
+      try {
+        // Identity & Logos
+        safeSetText('headerAppName', appState.appName);
+        safeSetText('splashAppName', appState.appName);
+        safeSetSrc('headerLogo', appState.appLogo);
+        safeSetSrc('splashLogoImg', appState.appLogo);
 
-      // Channels & Support
-      document.getElementById('headerChannelBtn').href = appState.officialChannelLink;
-      document.getElementById('profileChannelLink').href = appState.officialChannelLink;
-      document.getElementById('profileSupportLink').href = appState.supportLink;
-      document.getElementById('floatingSupportBtn').href = appState.supportLink;
-      document.getElementById('profileChannelName').innerText = appState.officialChannelName;
+        // Channels & Support
+        safeSetHref('headerChannelBtn', appState.officialChannelLink);
+        safeSetHref('profileChannelLink', appState.officialChannelLink);
+        safeSetHref('profileSupportLink', appState.supportLink);
+        safeSetHref('floatingSupportBtn', appState.supportLink);
+        safeSetText('profileChannelName', appState.officialChannelName);
 
-      // Notice
-      document.getElementById('marqueeNoticeText').innerText = appState.noticeText;
-      document.getElementById('noticeModalBody').innerText = appState.noticeText;
+        // Notice
+        safeSetText('marqueeNoticeText', appState.noticeText);
+        safeSetText('noticeModalBody', appState.noticeText);
 
-      // Rates
-      document.getElementById('badgeGmailRate').innerText = `৳${appState.gmailRate}/টি`;
-      document.getElementById('badgeFbRate').innerText = `৳${appState.fbRate}/টি`;
-      document.getElementById('dispGmailRate').innerText = `৳${appState.gmailRate}`;
-      document.getElementById('dispFbRate').innerText = `৳${appState.fbRate}`;
-      document.getElementById('lblMinWithdrawText').innerText = `৳${appState.minWithdraw}`;
+        // Rates
+        safeSetText('badgeGmailRate', `৳${appState.gmailRate}/টি`);
+        safeSetText('badgeFbRate', `৳${appState.fbRate}/টি`);
+        safeSetText('btnSubmitGmailRate', `৳${appState.gmailRate}`);
+        safeSetText('btnSubmitFbRate', `৳${appState.fbRate}`);
+        safeSetText('lblMinWithdrawText', `৳${appState.minWithdraw}`);
 
-      // 4 Main Buttons
-      document.getElementById('btnTitle1').innerText = appState.buttons.btn1Title;
-      document.getElementById('btnSub1').innerText = appState.buttons.btn1Sub;
-      document.getElementById('btnTitle2').innerText = appState.buttons.btn2Title;
-      document.getElementById('btnSub2').innerText = appState.buttons.btn2Sub;
-      document.getElementById('btnTitle3').innerText = appState.buttons.btn3Title;
-      document.getElementById('btnSub3').innerText = appState.buttons.btn3Sub;
+        // 4 Main Buttons
+        safeSetText('btnTitle1', appState.buttons.btn1Title);
+        safeSetText('btnSub1', appState.buttons.btn1Sub);
+        safeSetText('btnTitle2', appState.buttons.btn2Title);
+        safeSetText('btnSub2', appState.buttons.btn2Sub);
+        safeSetText('btnTitle3', appState.buttons.btn3Title);
+        safeSetText('btnSub3', appState.buttons.btn3Sub);
 
-      // Wallet
-      document.getElementById('homeWalletBalance').innerText = appState.wallet.balance;
-      document.getElementById('dispWalletBalance').innerText = appState.wallet.balance;
-      document.getElementById('dispTotalEarned').innerText = `৳${appState.wallet.totalEarned}`;
-      document.getElementById('dispTotalWithdrawn').innerText = `৳${appState.wallet.totalWithdrawn}`;
+        // Wallet
+        safeSetText('homeWalletBalance', appState.wallet.balance);
+        safeSetText('dispWalletBalance', appState.wallet.balance);
+        safeSetText('dispTotalEarned', `৳${appState.wallet.totalEarned}`);
+        safeSetText('dispTotalWithdrawn', `৳${appState.wallet.totalWithdrawn}`);
 
-      // Render Lists
-      renderHomeGroups();
-      renderAllGroups();
-      renderSellHistory();
-      renderWithdrawHistory();
-      renderAdminData();
+        // Render Lists
+        renderHomeGroups();
+        renderAllGroups();
+        renderSellHistory();
+        renderWithdrawHistory();
+        renderAdminData();
 
-      // My Purchases & Referral Sync
-      const userPurchases = appState.orders || [];
-      const badgeMyPurchases = document.getElementById('badgeMyPurchasesCount');
-      if (badgeMyPurchases) badgeMyPurchases.innerText = `${userPurchases.length}টি গ্রুপ`;
-      renderReferralUI();
-      updateGmailSellRate();
-      updateFbSellRate();
+        // My Purchases & Referral Sync
+        const userPurchases = appState.orders || [];
+        safeSetText('badgeMyPurchasesCount', `${userPurchases.length}টি গ্রুপ`);
+        renderReferralUI();
+        updateGmailSellRate();
+        updateFbSellRate();
 
-      // Refresh Lucide Icons
-      lucide.createIcons();
+        // Refresh Lucide Icons
+        lucide.createIcons();
+      } catch (err) {
+        console.error("Error in renderApp:", err);
+      }
     }
 
     // --- Render Groups with Screenshot & View Demo Button ---
@@ -1975,48 +2012,49 @@
       selectedGroupForCheckout = group;
 
       // Group Details Header
-      document.getElementById('checkoutGroupTitle').innerText = group.title;
-      document.getElementById('checkoutGroupPrice').innerText = `৳${group.price}`;
-      document.getElementById('checkoutGroupCategory').innerText = group.category;
-      document.getElementById('checkoutGroupMembers').innerText = `${group.membersCount} মেম্বার`;
+      safeSetText('pgSummaryGroupTitle', group.title);
+      safeSetText('pgDisplayAmount', `৳${group.price} BDT`);
+      safeSetText('pgInstructionAmount', group.price);
 
       // Clear Inputs
-      document.getElementById('pgSenderInput').value = '';
-      document.getElementById('pgTrxInput').value = '';
+      safeSetValue('pgSenderInput', '');
+      safeSetValue('pgTrxInput', '');
       const userTg = document.getElementById('profileUsername')?.innerText;
-      document.getElementById('pgTgInput').value = userTg && userTg !== '@guest_user' ? userTg : '';
+      safeSetValue('pgTgInput', userTg && userTg !== '@guest_user' ? userTg : '');
 
       // Default to Mobile Banking & bKash
       switchPgCategory('MOBILE');
       selectPgMethod('bkash');
 
-      document.getElementById('checkoutModal').classList.remove('hidden');
+      const modal = document.getElementById('checkoutModal');
+      if (modal) modal.classList.remove('hidden');
       lucide.createIcons();
     }
 
     function closeCheckoutModal() {
-      document.getElementById('checkoutModal').classList.add('hidden');
+      const modal = document.getElementById('checkoutModal');
+      if (modal) modal.classList.add('hidden');
     }
 
     function switchPgCategory(cat) {
       playSound('click');
       activePgCategory = cat;
-      const tabMob = document.getElementById('tabPgMobileBtn');
-      const tabGlob = document.getElementById('tabPgGlobalBtn');
+      const tabMob = document.getElementById('pgTabMobileBtn');
+      const tabGlob = document.getElementById('pgTabGlobalBtn');
       const gridMob = document.getElementById('pgMobileCardsGrid');
       const gridGlob = document.getElementById('pgGlobalCardsGrid');
 
       if (cat === 'MOBILE') {
-        tabMob.className = "py-2.5 rounded-xl font-black transition flex items-center justify-center gap-1.5 bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark shadow-md";
-        tabGlob.className = "py-2.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-white";
-        gridMob.classList.remove('hidden');
-        gridGlob.classList.add('hidden');
+        if (tabMob) tabMob.className = "py-2 rounded-xl text-xs font-black tracking-wide transition flex items-center justify-center gap-1.5 bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark shadow-md";
+        if (tabGlob) tabGlob.className = "py-2 rounded-xl text-xs font-black tracking-wide transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-white";
+        if (gridMob) gridMob.classList.remove('hidden');
+        if (gridGlob) gridGlob.classList.add('hidden');
         selectPgMethod('bkash');
       } else {
-        tabGlob.className = "py-2.5 rounded-xl font-black transition flex items-center justify-center gap-1.5 bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark shadow-md";
-        tabMob.className = "py-2.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-white";
-        gridGlob.classList.remove('hidden');
-        gridMob.classList.add('hidden');
+        if (tabGlob) tabGlob.className = "py-2 rounded-xl text-xs font-black tracking-wide transition flex items-center justify-center gap-1.5 bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark shadow-md";
+        if (tabMob) tabMob.className = "py-2 rounded-xl text-xs font-black tracking-wide transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-white";
+        if (gridGlob) gridGlob.classList.remove('hidden');
+        if (gridMob) gridMob.classList.add('hidden');
         selectPgMethod('binance');
       }
       lucide.createIcons();
@@ -2026,13 +2064,12 @@
       playSound('click');
       activePgMethod = methodKey;
 
-      const cardBkash = document.getElementById('pgCardBkash');
-      const cardNagad = document.getElementById('pgCardNagad');
-      const cardRocket = document.getElementById('pgCardRocket');
-      const cardBinance = document.getElementById('pgCardBinance');
-      const detailsCard = document.getElementById('pgDetailsCard');
-      const activeName = document.getElementById('pgActiveMethodName');
-      const activeBadge = document.getElementById('pgActiveMethodBadge');
+      const cardBkash = document.getElementById('cardPgBkash');
+      const cardNagad = document.getElementById('cardPgNagad');
+      const cardRocket = document.getElementById('cardPgRocket');
+      const cardBinance = document.getElementById('cardPgBinance');
+      const container = document.getElementById('pgDynamicContainer');
+      const badge = document.getElementById('pgActiveMethodBadge');
       const activeNumber = document.getElementById('pgActiveNumber');
       const dynamicRules = document.getElementById('pgDynamicInstructions');
       const amountSpan = document.getElementById('pgInstructionAmount');
@@ -2041,54 +2078,52 @@
       if (amountSpan) amountSpan.innerText = currentPrice;
 
       // Reset card borders
-      [cardBkash, cardNagad, cardRocket, cardBinance].forEach(c => {
+      [cardBkash, cardNagad, cardRocket].forEach(c => {
         if (!c) return;
-        c.classList.remove('border-pink-500', 'bg-pink-500/15', 'border-amber-500', 'bg-amber-500/15', 'border-purple-500', 'bg-purple-500/15', 'ring-2');
-        c.classList.add('border-midnight-border', 'bg-midnight-dark');
+        c.className = "cursor-pointer p-2.5 rounded-2xl border-2 border-midnight-border bg-midnight-dark hover:border-slate-600 transition text-center flex flex-col items-center justify-between btn-bounce shadow-md";
       });
+      if (cardBinance) {
+        cardBinance.className = "cursor-pointer p-3 rounded-2xl border-2 border-midnight-border bg-midnight-dark hover:border-slate-600 transition flex items-center gap-3 btn-bounce shadow-md";
+      }
 
-      const conf = appState.paymentGateways[methodKey] || {};
+      const conf = (appState.paymentGateways && appState.paymentGateways[methodKey]) || {};
 
       if (methodKey === 'bkash') {
-        cardBkash.classList.remove('border-midnight-border', 'bg-midnight-dark');
-        cardBkash.classList.add('border-pink-500', 'bg-pink-500/15', 'ring-2', 'ring-pink-500/50');
-        detailsCard.className = "p-3.5 rounded-2xl bg-gradient-to-b from-pink-950/40 via-midnight-dark to-midnight-card border border-pink-500/40 space-y-3";
-        activeName.innerText = conf.name || 'Bkash Personal';
-        activeName.className = "font-black text-white text-xs";
-        activeBadge.innerText = "বিকাশ পার্সোনাল • Send Money";
-        activeBadge.className = "text-[10px] text-pink-400 font-bold";
-        activeNumber.innerText = conf.number || '01789-567890';
-        dynamicRules.innerHTML = (conf.rules || '১. বিকাশ অ্যাপে Send Money অপশনে যান।<br>২. উপরে উল্লেখিত নাম্বারে নির্ধারিত টাকা সেন্ড মানি করুন।<br>৩. TrxID নিচে লিখে সাবমিট করুন।').replace(/\n/g, '<br>');
+        if (cardBkash) cardBkash.className = "cursor-pointer p-2.5 rounded-2xl border-2 border-bkash bg-bkash/20 ring-2 ring-pink-500/50 transition text-center flex flex-col items-center justify-between btn-bounce shadow-md";
+        if (container) container.className = "rounded-2xl p-4 transition-all duration-300 border space-y-3 bg-gradient-to-br from-pink-950/60 to-midnight-card border-pink-500/50";
+        if (badge) {
+          badge.innerText = conf.name || "Bkash Personal";
+          badge.className = "text-xs font-black text-pink-300 bg-pink-500/20 px-2.5 py-1 rounded-lg border border-pink-500/30";
+        }
+        if (activeNumber) activeNumber.innerText = conf.number || '01789-567890';
+        if (dynamicRules) dynamicRules.innerHTML = (conf.rules || '১. বিকাশ অ্যাপে Send Money অপশনে যান।<br>২. উপরে দেওয়া নাম্বারে সঠিক টাকা পাঠান।<br>৩. TrxID নিচে সাবমিট করুন।').replace(/\n/g, '<br>');
       } else if (methodKey === 'nagad') {
-        cardNagad.classList.remove('border-midnight-border', 'bg-midnight-dark');
-        cardNagad.classList.add('border-amber-500', 'bg-amber-500/15', 'ring-2', 'ring-amber-500/50');
-        detailsCard.className = "p-3.5 rounded-2xl bg-gradient-to-b from-amber-950/40 via-midnight-dark to-midnight-card border border-amber-500/40 space-y-3";
-        activeName.innerText = conf.name || 'Nagad Personal';
-        activeName.className = "font-black text-white text-xs";
-        activeBadge.innerText = "নগদ পার্সোনাল • Send Money";
-        activeBadge.className = "text-[10px] text-amber-400 font-bold";
-        activeNumber.innerText = conf.number || '01812-345678';
-        dynamicRules.innerHTML = (conf.rules || '১. নগদ অ্যাপ বা *167# ডায়াল করে Send Money করুন।<br>২. উপরে দেওয়া নাম্বারে সঠিক টাকা পাঠান।<br>৩. ট্রানজেকশন আইডি (TrxID) নিচে লিখে সাবমিট করুন।').replace(/\n/g, '<br>');
+        if (cardNagad) cardNagad.className = "cursor-pointer p-2.5 rounded-2xl border-2 border-nagad bg-amber-500/20 ring-2 ring-amber-500/50 transition text-center flex flex-col items-center justify-between btn-bounce shadow-md";
+        if (container) container.className = "rounded-2xl p-4 transition-all duration-300 border space-y-3 bg-gradient-to-br from-amber-950/60 to-midnight-card border-amber-500/50";
+        if (badge) {
+          badge.innerText = conf.name || "Nagad Personal";
+          badge.className = "text-xs font-black text-amber-300 bg-amber-500/20 px-2.5 py-1 rounded-lg border border-amber-500/30";
+        }
+        if (activeNumber) activeNumber.innerText = conf.number || '01812-345678';
+        if (dynamicRules) dynamicRules.innerHTML = (conf.rules || '১. নগদ অ্যাপ বা *167# দিয়ে Send Money করুন।<br>২. উপরে দেওয়া নাম্বারে টাকা পাঠান।<br>৩. TrxID নিচে সাবমিট করুন।').replace(/\n/g, '<br>');
       } else if (methodKey === 'rocket') {
-        cardRocket.classList.remove('border-midnight-border', 'bg-midnight-dark');
-        cardRocket.classList.add('border-purple-500', 'bg-purple-500/15', 'ring-2', 'ring-purple-500/50');
-        detailsCard.className = "p-3.5 rounded-2xl bg-gradient-to-b from-purple-950/40 via-midnight-dark to-midnight-card border border-purple-500/40 space-y-3";
-        activeName.innerText = conf.name || 'Rocket Personal';
-        activeName.className = "font-black text-white text-xs";
-        activeBadge.innerText = "রকেট পার্সোনাল • Send Money";
-        activeBadge.className = "text-[10px] text-purple-400 font-bold";
-        activeNumber.innerText = conf.number || '01934-567891';
-        dynamicRules.innerHTML = (conf.rules || '১. রকেট অ্যাপ ওপেন করে Send Money সিলেক্ট করুন।<br>২. ১২ ডিজিটের রকেট নাম্বারে টাকা সেন্ড করুন।<br>৩. প্রাপ্ত TrxID নিচের ঘরে লিখুন।').replace(/\n/g, '<br>');
+        if (cardRocket) cardRocket.className = "cursor-pointer p-2.5 rounded-2xl border-2 border-rocket bg-purple-500/20 ring-2 ring-purple-500/50 transition text-center flex flex-col items-center justify-between btn-bounce shadow-md";
+        if (container) container.className = "rounded-2xl p-4 transition-all duration-300 border space-y-3 bg-gradient-to-br from-purple-950/60 to-midnight-card border-purple-500/50";
+        if (badge) {
+          badge.innerText = conf.name || "Rocket Personal";
+          badge.className = "text-xs font-black text-purple-300 bg-purple-500/20 px-2.5 py-1 rounded-lg border border-purple-500/30";
+        }
+        if (activeNumber) activeNumber.innerText = conf.number || '01934-567891';
+        if (dynamicRules) dynamicRules.innerHTML = (conf.rules || '১. রকেট অ্যাপের Send Money অপশনে যান।<br>২. ১২ ডিজিটের রকেট নাম্বারে টাকা পাঠান।<br>৩. TrxID লিখে সাবমিট করুন।').replace(/\n/g, '<br>');
       } else if (methodKey === 'binance') {
-        cardBinance.classList.remove('border-midnight-border', 'bg-midnight-dark');
-        cardBinance.classList.add('border-yellow-500', 'bg-yellow-500/15', 'ring-2', 'ring-yellow-500/50');
-        detailsCard.className = "p-3.5 rounded-2xl bg-gradient-to-b from-yellow-950/40 via-midnight-dark to-midnight-card border border-yellow-500/40 space-y-3";
-        activeName.innerText = conf.name || 'Binance Personal';
-        activeName.className = "font-black text-white text-xs";
-        activeBadge.innerText = "Binance Pay ID / USDT (BEP20)";
-        activeBadge.className = "text-[10px] text-yellow-400 font-bold";
-        activeNumber.innerText = conf.number || '8701368956 (Pay ID)';
-        dynamicRules.innerHTML = (conf.rules || '১. আপনার Binance অ্যাপে Binance Pay অপশনে যান।<br>২. উপরের Pay ID বা USDT এড্রেসে সমমূল্যের ডলার সেন্ড করুন।<br>৩. পেমেন্টের Order ID / Internal TrxID সাবমিট করুন।').replace(/\n/g, '<br>');
+        if (cardBinance) cardBinance.className = "cursor-pointer p-3 rounded-2xl border-2 border-amber-400 bg-amber-500/20 ring-2 ring-amber-400/50 transition flex items-center gap-3 btn-bounce shadow-md";
+        if (container) container.className = "rounded-2xl p-4 transition-all duration-300 border space-y-3 bg-gradient-to-br from-yellow-950/60 to-midnight-card border-yellow-500/50";
+        if (badge) {
+          badge.innerText = conf.name || "Binance Personal";
+          badge.className = "text-xs font-black text-yellow-300 bg-yellow-500/20 px-2.5 py-1 rounded-lg border border-yellow-500/30";
+        }
+        if (activeNumber) activeNumber.innerText = conf.number || '8701368956 (Pay ID)';
+        if (dynamicRules) dynamicRules.innerHTML = (conf.rules || '১. আপনার Binance অ্যাপে Binance Pay তে যান।<br>২. Pay ID বা USDT এড্রেসে পেমেন্ট পাঠান।<br>৩. Order ID / TrxID লিখে সাবমিট করুন।').replace(/\n/g, '<br>');
       }
 
       lucide.createIcons();
@@ -2359,29 +2394,33 @@
 
     // --- Dynamic Rates for Account Selling ---
     function updateGmailSellRate() {
-      const type = document.getElementById('inGmailType')?.value || 'NEW';
+      const checkedRadio = document.querySelector('input[name="gmailTier"]:checked');
+      const type = checkedRadio ? checkedRadio.value : 'NEW';
       const rates = appState.gmailRates || { new: 15, old: 25, aged: 40 };
       let rate = rates.new;
       if (type === 'OLD') rate = rates.old;
       if (type === 'AGED') rate = rates.aged;
       
-      const rateDisp = document.getElementById('dispGmailCalculatedRate');
-      if (rateDisp) rateDisp.innerText = `৳${rate}`;
-      const badge = document.getElementById('badgeGmailRate');
-      if (badge) badge.innerText = `৳${rate}/টি`;
+      safeSetText('btnSubmitGmailRate', `৳${rate}`);
+      safeSetText('badgeGmailRate', `৳${rate}/টি`);
+      safeSetText('rateTierGmailNew', `৳${rates.new}`);
+      safeSetText('rateTierGmailOld', `৳${rates.old}`);
+      safeSetText('rateTierGmailAged', `৳${rates.aged}`);
     }
 
     function updateFbSellRate() {
-      const tier = document.getElementById('inFbTier')?.value || 'OLD';
+      const checkedRadio = document.querySelector('input[name="fbTier"]:checked');
+      const tier = checkedRadio ? checkedRadio.value : 'OLD';
       const rates = appState.fbRates || { new: 20, old: 60, aged: 110 };
       let rate = rates.old;
       if (tier === 'NEW') rate = rates.new;
       if (tier === 'AGED') rate = rates.aged;
 
-      const rateDisp = document.getElementById('dispFbCalculatedRate');
-      if (rateDisp) rateDisp.innerText = `৳${rate}`;
-      const badge = document.getElementById('badgeFbRate');
-      if (badge) badge.innerText = `৳${rate}/টি`;
+      safeSetText('btnSubmitFbRate', `৳${rate}`);
+      safeSetText('badgeFbRate', `৳${rate}/টি`);
+      safeSetText('rateTierFbNew', `৳${rates.new}`);
+      safeSetText('rateTierFbOld', `৳${rates.old}`);
+      safeSetText('rateTierFbAged', `৳${rates.aged}`);
     }
 
     // --- Filter Groups ---
@@ -2421,11 +2460,12 @@
 
     function submitSellGmail() {
       playSound('click');
-      const type = document.getElementById('inGmailType')?.value || 'NEW';
-      const gmail = document.getElementById('inGmailAddress').value.trim();
-      const pass = document.getElementById('inGmailPassword').value.trim();
-      const recovery = document.getElementById('inGmailRecovery').value.trim();
-      const tg = document.getElementById('inGmailTg').value.trim();
+      const checkedRadio = document.querySelector('input[name="gmailTier"]:checked');
+      const type = checkedRadio ? checkedRadio.value : 'NEW';
+      const gmail = (document.getElementById('inGmailAddress')?.value || '').trim();
+      const pass = (document.getElementById('inGmailPassword')?.value || '').trim();
+      const recovery = (document.getElementById('inGmailRecovery')?.value || '').trim();
+      const tg = (document.getElementById('inGmailTg')?.value || '').trim();
 
       if (!gmail || !pass || !tg) {
         alert("জিমেইল এড্রেস, পাসওয়ার্ড এবং টেলিগ্রাম দিন!");
@@ -2451,19 +2491,20 @@
       saveState();
       playSound('chime');
       alert(`জিমেইল সফলভাবে জমা হয়েছে!\nধরন: ${typeLabel}\nপ্রত্যাশিত আয়: ৳${reward}\nএডমিন যাচাই করে আপনার ওয়ালেটে ৳${reward} যোগ করে দেবে।`);
-      document.getElementById('inGmailAddress').value = '';
-      document.getElementById('inGmailPassword').value = '';
+      safeSetValue('inGmailAddress', '');
+      safeSetValue('inGmailPassword', '');
       renderSellHistory();
     }
 
     function submitSellFb() {
       playSound('click');
-      const tier = document.getElementById('inFbTier')?.value || 'OLD';
-      const uid = document.getElementById('inFbUid').value.trim();
-      const login = document.getElementById('inFbLogin').value.trim();
-      const pass = document.getElementById('inFbPassword').value.trim();
-      const twoFA = document.getElementById('inFb2FA').value.trim();
-      const tg = document.getElementById('inFbTg').value.trim();
+      const checkedRadio = document.querySelector('input[name="fbTier"]:checked');
+      const tier = checkedRadio ? checkedRadio.value : 'OLD';
+      const uid = (document.getElementById('inFbUid')?.value || '').trim();
+      const login = (document.getElementById('inFbLogin')?.value || '').trim();
+      const pass = (document.getElementById('inFbPassword')?.value || '').trim();
+      const twoFA = (document.getElementById('inFb2FA')?.value || '').trim();
+      const tg = (document.getElementById('inFbTg')?.value || '').trim();
 
       if (!login || !pass || !tg) {
         alert("ফেসবুক লগইন ও পাসওয়ার্ড সঠিকভাবে দিন!");
@@ -3014,72 +3055,88 @@
     function toggleLanguage() {
       playSound('click');
       currentLang = currentLang === 'BN' ? 'EN' : 'BN';
-      document.getElementById('currentLangLabel').innerText = currentLang === 'BN' ? 'বাংলা (BN)' : 'English (EN)';
-      document.getElementById('langStatusText').innerText = currentLang === 'BN' ? 'বাংলা (Bangla)' : 'English (EN)';
+      safeSetText('currentLangLabel', currentLang === 'BN' ? 'বাংলা (BN)' : 'English (EN)');
+      safeSetText('langStatusText', currentLang === 'BN' ? 'বাংলা (Bangla)' : 'English (EN)');
 
       if (currentLang === 'EN') {
-        document.getElementById('channelBtnText').innerText = "Channel";
-        document.getElementById('headerVerifiedText').innerText = "100% Verified Group Shop";
-        document.getElementById('lblUserBalance').innerText = "Your Current Balance";
-        document.getElementById('btnWithdrawHome').innerText = "Withdraw";
-        document.getElementById('lblQuickServices').innerText = "Core Services";
-        document.getElementById('lblInstantAuto').innerText = "Instant Service";
-        document.getElementById('lblTrendingGroups').innerHTML = `<i data-lucide="flame" class="w-4 h-4 text-amber-500"></i> Hot Trending Groups`;
-        document.getElementById('btnSeeAll').innerText = "View All";
-        document.getElementById('titleGroupMarket').innerText = "Premium Group Marketplace";
-        document.getElementById('subGroupMarket').innerText = "Review screenshots & buy directly";
-        document.getElementById('titleSellEarn').innerText = "Sell Accounts & Earn Cash";
-        document.getElementById('subSellEarn').innerText = "Sell Gmail or Facebook for instant payout";
-        document.getElementById('titleWallet').innerText = "My Wallet & Payouts";
-        document.getElementById('subWallet').innerText = "Withdraw directly to bKash, Nagad or Rocket";
-        document.getElementById('floatingSupportText').innerText = "Support";
-        document.getElementById('navHome').innerText = "Home";
-        document.getElementById('navGroups').innerText = "Groups";
-        document.getElementById('navSell').innerText = "Earn";
-        document.getElementById('navProfile').innerText = "Profile";
+        safeSetText('channelBtnText', "Channel");
+        safeSetText('headerVerifiedText', "100% Verified Group Shop");
+        safeSetText('lblUserBalance', "Your Current Balance");
+        safeSetText('btnWithdrawHome', "Withdraw");
+        safeSetText('lblQuickServices', "Core Services");
+        safeSetText('lblInstantAuto', "Instant Service");
+        safeSetHtml('lblTrendingGroups', `<i data-lucide="flame" class="w-4 h-4 text-amber-500"></i> Hot Trending Groups`);
+        safeSetText('btnSeeAll', "View All");
+        safeSetText('titleGroupMarket', "Premium Group Marketplace");
+        safeSetText('subGroupMarket', "Review screenshots & buy directly");
+        safeSetText('titleSellEarn', "Sell Accounts & Earn Cash");
+        safeSetText('subSellEarn', "Sell Gmail or Facebook for instant payout");
+        safeSetText('titleWallet', "My Wallet & Payouts");
+        safeSetText('subWallet', "Withdraw directly to bKash, Nagad or Rocket");
+        safeSetText('floatingSupportText', "Support");
+        safeSetText('navHome', "Home");
+        safeSetText('navGroups', "Groups");
+        safeSetText('navSell', "Earn");
+        safeSetText('navProfile', "Profile");
       } else {
-        document.getElementById('channelBtnText').innerText = "চ্যানেল";
-        document.getElementById('headerVerifiedText').innerText = "100% ভেরিফাইড গ্রুপ শপ";
-        document.getElementById('lblUserBalance').innerText = "আপনার বর্তমান ব্যালেন্স";
-        document.getElementById('btnWithdrawHome').innerText = "উইথড্র";
-        document.getElementById('lblQuickServices').innerText = "প্রধান সার্ভিসসমূহ";
-        document.getElementById('lblInstantAuto').innerText = "ইনস্ট্যান্ট সেবা";
-        document.getElementById('lblTrendingGroups').innerHTML = `<i data-lucide="flame" class="w-4 h-4 text-amber-500"></i> হট ট্রেন্ডিং গ্রুপসমূহ`;
-        document.getElementById('btnSeeAll').innerText = "সবগুলো দেখুন";
-        document.getElementById('titleGroupMarket').innerText = "প্রিমিয়াম গ্রুপ মার্কেটপ্লেস";
-        document.getElementById('subGroupMarket').innerText = "স্ক্রিনশট দেখে যাচাই করে সরাসরি কিনুন";
-        document.getElementById('titleSellEarn').innerText = "অ্যাকাউন্ট বিক্রি ও ইনকাম";
-        document.getElementById('subSellEarn').innerText = "জিমেইল বা ফেসবুক বিক্রি করে সরাসরি টাকা আয় করুন";
-        document.getElementById('titleWallet').innerText = "মাই ওয়ালেট ও পেমেন্ট";
-        document.getElementById('subWallet').innerText = "বিকাশ, নগদ বা রকেটে সরাসরি টাকা তুলুন";
-        document.getElementById('floatingSupportText').innerText = "সাপোর্ট";
-        document.getElementById('navHome').innerText = "হোম";
-        document.getElementById('navGroups').innerText = "গ্রুপ শপ";
-        document.getElementById('navSell').innerText = "ইনকাম";
-        document.getElementById('navProfile').innerText = "প্রোফাইল";
+        safeSetText('channelBtnText', "চ্যানেল");
+        safeSetText('headerVerifiedText', "100% ভেরিফাইড গ্রুপ শপ");
+        safeSetText('lblUserBalance', "আপনার বর্তমান ব্যালেন্স");
+        safeSetText('btnWithdrawHome', "উইথড্র");
+        safeSetText('lblQuickServices', "প্রধান সার্ভিসসমূহ");
+        safeSetText('lblInstantAuto', "ইনস্ট্যান্ট সেবা");
+        safeSetHtml('lblTrendingGroups', `<i data-lucide="flame" class="w-4 h-4 text-amber-500"></i> হট ট্রেন্ডিং গ্রুপসমূহ`);
+        safeSetText('btnSeeAll', "সবগুলো দেখুন");
+        safeSetText('titleGroupMarket', "প্রিমিয়াম গ্রুপ মার্কেটপ্লেস");
+        safeSetText('subGroupMarket', "স্ক্রিনশট দেখে যাচাই করে সরাসরি কিনুন");
+        safeSetText('titleSellEarn', "অ্যাকাউন্ট বিক্রি ও ইনকাম");
+        safeSetText('subSellEarn', "জিমেইল বা ফেসবুক বিক্রি করে সরাসরি টাকা আয় করুন");
+        safeSetText('titleWallet', "মাই ওয়ালেট ও পেমেন্ট");
+        safeSetText('subWallet', "বিকাশ, নগদ বা রকেটে সরাসরি টাকা তুলুন");
+        safeSetText('floatingSupportText', "সাপোর্ট");
+        safeSetText('navHome', "হোম");
+        safeSetText('navGroups', "গ্রুপ শপ");
+        safeSetText('navSell', "ইনকাম");
+        safeSetText('navProfile', "প্রোফাইল");
       }
       lucide.createIcons();
     }
 
-    function copyText(str) {
-      navigator.clipboard.writeText(str);
-      playSound('click');
-      alert(`কপি হয়েছে: ${str}`);
+    // --- Dismiss Splash Screen Safely ---
+    function dismissSplashScreen() {
+      const splash = document.getElementById('splashScreen');
+      if (splash && splash.style.display !== 'none') {
+        splash.style.transition = 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+        splash.style.opacity = '0';
+        splash.style.pointerEvents = 'none';
+        setTimeout(() => {
+          if (splash && splash.parentNode) splash.remove();
+        }, 650);
+      }
     }
 
     // --- Onload Initialization ---
     window.addEventListener('DOMContentLoaded', () => {
-      initTelegramUser();
-      renderApp();
+      try {
+        initTelegramUser();
+      } catch (e) {
+        console.error("initTelegramUser error:", e);
+      }
 
-      // Dismiss circular splash screen smoothly after 1.5s
-      setTimeout(() => {
-        const splash = document.getElementById('splashScreen');
-        if (splash) {
-          splash.style.opacity = '0';
-          setTimeout(() => splash.remove(), 700);
-        }
-      }, 1500);
+      try {
+        renderApp();
+      } catch (e) {
+        console.error("renderApp error:", e);
+      }
+
+      // Smoothly dismiss splash screen after branding display
+      setTimeout(dismissSplashScreen, 900);
+      // Failsafe backup
+      setTimeout(dismissSplashScreen, 2000);
+    });
+
+    window.addEventListener('load', () => {
+      setTimeout(dismissSplashScreen, 500);
     });
   </script>
 </body>

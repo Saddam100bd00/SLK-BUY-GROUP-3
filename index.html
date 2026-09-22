@@ -1,0 +1,1696 @@
+<!DOCTYPE html>
+<html lang="bn" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SLK BUY GROUP - Telegram Group Marketplace & Earn</title>
+  
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <!-- Tailwind CSS CDN with custom config -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            midnight: {
+              dark: '#0B0F19',
+              card: '#121826',
+              cardHover: '#1A2234',
+              surface: '#1F293D',
+              border: '#2A364F'
+            },
+            luxury: {
+              gold: '#F59E0B',
+              goldLight: '#FBBF24',
+              goldDark: '#B45309'
+            },
+            electric: {
+              cyan: '#06B6D4',
+              cyanDark: '#0891B2'
+            },
+            telegram: '#229ED9',
+            bkash: '#E2136E',
+            nagad: '#F7931A',
+            rocket: '#8C30F5',
+            status: {
+              success: '#10B981',
+              danger: '#EF4444',
+              warning: '#F59E0B'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google Fonts (Hind Siliguri for Bengali & Inter for Latin/Numbers) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Hind Siliguri', 'Inter', sans-serif;
+      background-color: #0B0F19;
+      color: #F8FAFC;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #2A364F;
+      border-radius: 4px;
+    }
+    /* Pulse glow */
+    .glow-gold {
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.25);
+    }
+    .glow-cyan {
+      box-shadow: 0 0 15px rgba(6, 182, 212, 0.25);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-midnight-dark text-slate-100 flex flex-col justify-between pb-24">
+
+  <!-- ================= TOP NAVIGATION BAR ================= -->
+  <header class="sticky top-0 z-40 bg-midnight-card/90 backdrop-blur-md border-b border-midnight-border px-4 py-3">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+      <!-- Brand & Telegram Tag -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-luxury-gold to-luxury-goldDark flex items-center justify-center font-black text-midnight-dark shadow-md">
+          SLK
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <h1 class="text-sm font-bold tracking-wide text-white">SLK BUY GROUP</h1>
+            <span class="bg-luxury-gold/20 text-luxury-gold border border-luxury-gold/30 text-[10px] font-bold px-1.5 py-0.5 rounded">VERIFIED</span>
+          </div>
+          <p class="text-[11px] text-slate-400">Official Telegram Hub</p>
+        </div>
+      </div>
+
+      <!-- Action Pill: Balance, Support & Admin -->
+      <div class="flex items-center gap-2">
+        <!-- Balance Badge (Clickable to Wallet) -->
+        <button onclick="switchTab('wallet')" class="flex items-center gap-1.5 bg-midnight-surface hover:bg-midnight-cardHover border border-electric-cyanDark/40 px-3 py-1.5 rounded-full transition">
+          <i data-lucide="wallet" class="w-3.5 h-3.5 text-electric-cyan"></i>
+          <span class="text-xs font-bold text-electric-cyan">৳<span id="topBarBalance">0</span></span>
+        </button>
+
+        <!-- Live Telegram Support -->
+        <a id="topSupportBtn" href="https://t.me/ItsSaddam9" target="_blank" class="w-8 h-8 rounded-full bg-telegram/20 border border-telegram/40 flex items-center justify-center text-telegram hover:bg-telegram hover:text-white transition">
+          <i data-lucide="send" class="w-3.5 h-3.5"></i>
+        </a>
+
+        <!-- Admin Quick Button (If Unlocked) -->
+        <button id="topAdminBtn" onclick="switchTab('admin')" class="hidden w-8 h-8 rounded-full bg-luxury-gold/20 border border-luxury-gold/40 flex items-center justify-center text-luxury-gold hover:bg-luxury-gold hover:text-midnight-dark transition">
+          <i data-lucide="shield" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= NOTICE TICKER ================= -->
+  <div id="noticeBanner" class="bg-gradient-to-r from-luxury-goldDark/30 via-luxury-gold/20 to-luxury-goldDark/30 border-b border-luxury-gold/30 py-1.5 px-4 text-xs text-luxury-gold flex items-center justify-between">
+    <div class="max-w-4xl mx-auto w-full flex items-center gap-2 overflow-hidden">
+      <i data-lucide="bell" class="w-3.5 h-3.5 shrink-0 text-luxury-gold animate-bounce"></i>
+      <div class="truncate font-medium" id="noticeText">
+        🔥 মেগা অফার: প্রতিটি প্রিমিয়াম টেলিগ্রাম গ্রুপে ৫০% পর্যন্ত বিশাল ডিসকাউন্ট চলছে! যেকোনো প্রয়োজনে সরাসরি নক দিন: @ItsSaddam9
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MAIN CONTAINER ================= -->
+  <main class="max-w-4xl mx-auto w-full p-4 flex-1">
+
+    <!-- ================= SCREEN 1: HOME ================= -->
+    <section id="screen-home" class="space-y-5">
+      <!-- Hero Banner -->
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-midnight-card via-midnight-surface to-midnight-card border border-luxury-gold/30 p-5 glow-gold">
+        <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-luxury-gold/10 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-2">
+            <span class="inline-flex items-center gap-1 bg-luxury-gold/20 text-luxury-gold text-[11px] font-bold px-2 py-0.5 rounded-full border border-luxury-gold/30">
+              <i data-lucide="sparkles" class="w-3 h-3"></i> 100% ট্রাস্টেড ও অটো সার্ভিস
+            </span>
+            <h2 class="text-xl md:text-2xl font-black text-white leading-tight">
+              টেলিগ্রাম প্রিমিয়াম ভিডিও গ্রুপ মার্কেটপ্লেস ও আয়
+            </h2>
+            <p class="text-xs text-slate-300 max-w-md">
+              সরাসরি ৪K ও ফুল এইচডি মুভি, ওয়েব সিরিজ ও ভিআইপি চ্যানেল কিনুন বিকাশ, নগদ বা রকেটে। নিজের জিমেইল ও ফেসবুক আইডি বিক্রি করে প্রতিদিন আয় করুন!
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="switchTab('groups')" class="bg-gradient-to-r from-luxury-gold to-luxury-goldLight text-midnight-dark font-bold text-xs px-4 py-2.5 rounded-xl shadow-lg hover:brightness-110 transition flex items-center gap-1.5">
+              <i data-lucide="shopping-bag" class="w-4 h-4"></i> গ্রুপগুলো দেখুন
+            </button>
+            <button onclick="switchTab('sell')" class="bg-midnight-surface border border-electric-cyan text-electric-cyan font-bold text-xs px-3.5 py-2.5 rounded-xl hover:bg-electric-cyan hover:text-midnight-dark transition flex items-center gap-1.5">
+              <i data-lucide="dollar-sign" class="w-4 h-4"></i> আয় করুন
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Badges -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <button onclick="switchTab('groups')" class="bg-midnight-card hover:bg-midnight-cardHover border border-midnight-border p-3.5 rounded-xl text-left transition flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-electric-cyan/10 border border-electric-cyan/30 flex items-center justify-center text-electric-cyan">
+            <i data-lucide="layers" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-white">গ্রুপ মার্কেট</div>
+            <div class="text-[10px] text-slate-400">লাইফটাইম এক্সেস</div>
+          </div>
+        </button>
+
+        <button onclick="switchTab('sell', 'gmail')" class="bg-midnight-card hover:bg-midnight-cardHover border border-midnight-border p-3.5 rounded-xl text-left transition flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-luxury-gold/10 border border-luxury-gold/30 flex items-center justify-center text-luxury-gold">
+            <i data-lucide="mail" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-white">জিমেইল বিক্রি</div>
+            <div class="text-[10px] text-slate-400">প্রতিটি ৳১৫-৳৫০</div>
+          </div>
+        </button>
+
+        <button onclick="switchTab('sell', 'facebook')" class="bg-midnight-card hover:bg-midnight-cardHover border border-midnight-border p-3.5 rounded-xl text-left transition flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-telegram/10 border border-telegram/30 flex items-center justify-center text-telegram">
+            <i data-lucide="facebook" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-white">ফেসবুক আইডি</div>
+            <div class="text-[10px] text-slate-400">প্রতিটি ৳৪০-৳১২০</div>
+          </div>
+        </button>
+
+        <button onclick="switchTab('wallet')" class="bg-midnight-card hover:bg-midnight-cardHover border border-midnight-border p-3.5 rounded-xl text-left transition flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-status-success/10 border border-status-success/30 flex items-center justify-center text-status-success">
+            <i data-lucide="credit-card" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-white">ইনস্ট্যান্ট উইথড্র</div>
+            <div class="text-[10px] text-slate-400">বিকাশ / নগদ / রকেট</div>
+          </div>
+        </button>
+      </div>
+
+      <!-- Featured Groups Header -->
+      <div class="flex items-center justify-between pt-2">
+        <div class="flex items-center gap-2">
+          <i data-lucide="flame" class="w-5 h-5 text-luxury-gold"></i>
+          <h3 class="text-base font-bold text-white">জনপ্রিয় টেলিগ্রাম প্রিমিয়াম চ্যানেল</h3>
+        </div>
+        <button onclick="switchTab('groups')" class="text-xs text-electric-cyan hover:underline font-medium">সব দেখুন &rarr;</button>
+      </div>
+
+      <!-- Featured Grid -->
+      <div id="homeFeaturedGroups" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Rendered via JS -->
+      </div>
+
+      <!-- Trust Badges -->
+      <div class="bg-midnight-card border border-midnight-border rounded-xl p-4 flex flex-wrap items-center justify-around gap-4 text-center">
+        <div class="flex items-center gap-2">
+          <i data-lucide="check-circle" class="w-5 h-5 text-status-success"></i>
+          <span class="text-xs font-medium text-slate-300">১০০% ভেরিফাইড লিংক</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <i data-lucide="shield-check" class="w-5 h-5 text-electric-cyan"></i>
+          <span class="text-xs font-medium text-slate-300">নিরাপদ পেমেন্ট ট্র্যাকিং</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <i data-lucide="headset" class="w-5 h-5 text-luxury-gold"></i>
+          <span class="text-xs font-medium text-slate-300">২৪/৭ এডমিন সাপোর্ট</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SCREEN 2: GROUPS MARKETPLACE ================= -->
+    <section id="screen-groups" class="hidden space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <i data-lucide="shopping-bag" class="w-5 h-5 text-luxury-gold"></i>
+            টেলিগ্রাম প্রিমিয়াম ভিডিও গ্রুপ মার্কেটপ্লেস
+          </h2>
+          <p class="text-xs text-slate-400">পছন্দের গ্রুপ বেছে নিয়ে সরাসরি এক ক্লিকে অর্ডার সম্পন্ন করুন</p>
+        </div>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="flex items-center gap-2 overflow-x-auto custom-scrollbar pb-1 text-xs">
+        <button onclick="filterGroups('ALL')" class="group-filter-btn active bg-luxury-gold text-midnight-dark font-bold px-3 py-1.5 rounded-full border border-luxury-gold whitespace-nowrap transition" data-cat="ALL">সব গ্রুপ</button>
+        <button onclick="filterGroups('Movies & Web Series')" class="group-filter-btn bg-midnight-card text-slate-300 font-medium px-3 py-1.5 rounded-full border border-midnight-border whitespace-nowrap hover:border-luxury-gold transition" data-cat="Movies & Web Series">Movies & Web Series</button>
+        <button onclick="filterGroups('VIP Exclusive')" class="group-filter-btn bg-midnight-card text-slate-300 font-medium px-3 py-1.5 rounded-full border border-midnight-border whitespace-nowrap hover:border-luxury-gold transition" data-cat="VIP Exclusive">VIP Exclusive</button>
+        <button onclick="filterGroups('OTT & Streaming')" class="group-filter-btn bg-midnight-card text-slate-300 font-medium px-3 py-1.5 rounded-full border border-midnight-border whitespace-nowrap hover:border-luxury-gold transition" data-cat="OTT & Streaming">OTT & Streaming</button>
+        <button onclick="filterGroups('Tech & Mod Tools')" class="group-filter-btn bg-midnight-card text-slate-300 font-medium px-3 py-1.5 rounded-full border border-midnight-border whitespace-nowrap hover:border-luxury-gold transition" data-cat="Tech & Mod Tools">Tech & Mod Tools</button>
+      </div>
+
+      <!-- Groups List Container -->
+      <div id="groupsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+
+    <!-- ================= SCREEN 3: SELL & EARN ================= -->
+    <section id="screen-sell" class="hidden space-y-4">
+      <div class="bg-midnight-card border border-midnight-border rounded-xl p-4">
+        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+          <i data-lucide="dollar-sign" class="w-5 h-5 text-status-success"></i>
+          আইডি ও একাউন্ট বিক্রি করে আয় করুন
+        </h2>
+        <p class="text-xs text-slate-400 mt-0.5">আপনার পুরাতন বা অব্যবহৃত জিমেইল ও ফেসবুক আইডি আমাদের কাছে বিক্রি করুন এবং ইনস্ট্যান্ট টাকা নিন</p>
+      </div>
+
+      <!-- Tabs Switcher -->
+      <div class="grid grid-cols-2 gap-2 bg-midnight-card p-1 rounded-xl border border-midnight-border">
+        <button id="sellTabGmail" onclick="switchSellSubTab('gmail')" class="py-2 rounded-lg text-xs font-bold text-midnight-dark bg-luxury-gold transition flex items-center justify-center gap-2">
+          <i data-lucide="mail" class="w-4 h-4"></i> জিমেইল বিক্রি
+        </button>
+        <button id="sellTabFb" onclick="switchSellSubTab('facebook')" class="py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center justify-center gap-2">
+          <i data-lucide="facebook" class="w-4 h-4"></i> ফেসবুক বিক্রি
+        </button>
+      </div>
+
+      <!-- 1. GMAIL FORM SECTION -->
+      <div id="sellSectionGmail" class="space-y-4">
+        <!-- Rates & Rules Card -->
+        <div class="bg-midnight-card border border-luxury-gold/30 rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-luxury-gold flex items-center gap-1.5">
+              <i data-lucide="badge-dollar-sign" class="w-4 h-4"></i> জিমেইল বিক্রির রেট চার্ট
+            </span>
+            <span class="text-[10px] bg-status-success/20 text-status-success border border-status-success/30 px-2 py-0.5 rounded-full font-bold">ইনস্ট্যান্ট পেমেন্ট</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2 text-center text-xs">
+            <div class="bg-midnight-surface p-2.5 rounded-lg border border-midnight-border">
+              <div class="text-[11px] text-slate-400">নতুন / ফ্রেশ</div>
+              <div class="text-sm font-bold text-luxury-gold mt-1">৳১৫ / আইডি</div>
+            </div>
+            <div class="bg-midnight-surface p-2.5 rounded-lg border border-midnight-border">
+              <div class="text-[11px] text-slate-400">৬ মাসের পুরাতন</div>
+              <div class="text-sm font-bold text-luxury-gold mt-1">৳৩০ / আইডি</div>
+            </div>
+            <div class="bg-midnight-surface p-2.5 rounded-lg border border-midnight-border">
+              <div class="text-[11px] text-slate-400">১ বছর+ পুরাতন</div>
+              <div class="text-sm font-bold text-luxury-gold mt-1">৳৫০ / আইডি</div>
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-300 leading-relaxed bg-midnight-surface/50 p-2.5 rounded-lg border border-midnight-border">
+            ⚠️ <b>নোট:</b> জিমেইলে অবশ্যই <b>2-Step Verification বন্ধ</b> থাকতে হবে এবং রিকভারি হিসেবে আমাদের সাপোর্ট বা আপনার ব্যাকআপ তথ্য দিতে হবে। এডমিন চেক করার সাথে সাথে আপনার ওয়ালেটে টাকা জমা হবে।
+          </p>
+        </div>
+
+        <!-- Submission Form -->
+        <form onsubmit="handleGmailSubmit(event)" class="bg-midnight-card border border-midnight-border rounded-xl p-4 space-y-3">
+          <h3 class="text-xs font-bold text-white uppercase tracking-wider">জিমেইল সাবমিট ফর্ম</h3>
+
+          <div>
+            <label class="block text-xs text-slate-300 mb-1 font-medium">আপনার টেলিগ্রাম ইউজারনেম (যোগাযোগের জন্য)</label>
+            <input type="text" id="gmailUserTg" placeholder="@username" required class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-luxury-gold">
+          </div>
+
+          <div>
+            <label class="block text-xs text-slate-300 mb-1 font-medium">জিমেইল এড্রেস</label>
+            <input type="email" id="gmailAddress" placeholder="example@gmail.com" required class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-luxury-gold">
+          </div>
+
+          <div>
+            <label class="block text-xs text-slate-300 mb-1 font-medium">পাসওয়ার্ড</label>
+            <input type="text" id="gmailPassword" placeholder="Gmail Password" required class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-luxury-gold">
+          </div>
+
+          <div>
+            <label class="block text-xs text-slate-300 mb-1 font-medium">রিকভারি ইমেইল (যদি থাকে)</label>
+            <input type="email" id="gmailRecovery" placeholder="recovery@example.com (ঐচ্ছিক)" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-luxury-gold">
+          </div>
+
+          <div>
+            <label class="block text-xs text-slate-300 mb-1 font-medium">জিমেইলের বয়স ও টাইপ</label>
+            <select id="gmailTypeSelect" onchange="updateGmailRewardPreview()" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-luxury-gold">
+              <option value="FRESH" data-price="15">ফ্রেশ নতুন জিমেইল (৳১৫)</option>
+              <option value="OLD_6M" data-price="30">৬ মাসের পুরাতন জিমেইল (৳৩০)</option>
+              <option value="OLD_1Y" data-price="50">১ বছর+ পুরাতন ওল্ড জিমেইল (৳৫০)</option>
+            </select>
+          </div>
+
+          <div class="bg-midnight-surface p-3 rounded-lg border border-luxury-gold/30 flex items-center justify-between">
+            <span class="text-xs text-slate-300">আপনি পাবেন:</span>
+            <span class="text-sm font-bold text-luxury-gold">৳<span id="gmailRewardPreview">15</span></span>
+          </div>
+
+          <button type="submit" class="w-full bg-luxury-gold hover:bg-luxury-goldLight text-midnight-dark font-bold text-xs py-2.5 rounded-lg transition shadow-md flex items-center justify-center gap-1.5">
+            <i data-lucide="check" class="w-4 h-4"></i> জিমেইল সাবমিট করুন
+          </button>
+        </form>
+      </div>
+
+      <!-- 2. FACEBOOK FORM SECTION -->
+      <div id="sellSectionFb" class="hidden space-y-4">
+        <!-- Rates & Rules Card -->
+        <div class="bg-midnight-card border border-telegram/30 rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-telegram flex items-center gap-1.5">
+              <i data-lucide="facebook" class="w-4 h-4"></i> ফেসবুক আইডি বিক্রির রেট চার্ট
+            </span>
+            <span class="text-[10px] bg-status-success/20 text-status-success border border-status-success/30 px-2 py-0.5 rounded-full font-bold">ভেরিফাইড আইডি</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2 text-center text-xs">
+            <div class="bg-midnight-surface p-2.5 rounded-lg border border-midnight-border">
+              <div class="text-[11px] text-slate-400">২০২২-২০২৬ নরমাল</div>
+              <div class="text-sm font-bold text-telegram mt-1">৳৪০ / আইডি</div>
+            </div>
+            <div class="bg-midnight-surface p-2.5 rounded-lg border border-midnight-border">
+              <div class="text-[11px] text-slate-400">২০১৮-২০২২ ওল্ড</div>
+              <div class="text-sm font-bold text-telegram mt-1">৳৭০ / আইডি</div>
+            </div>
+            <div class="bg-midnight-surface p-2.5 rounded-lg border border-midnight-border">
+              <div class="text-[11px] text-slate-400">রিয়েল ফ্রেন্ডস ওল্ড</div>
+              <div class="text-sm font-bold text-telegram mt-1">৳১২০ / আইডি</div>
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-300 leading-relaxed bg-midnight-surface/50 p-2.5 rounded-lg border border-midnight-border">
+            ⚠️ <b>নোট:</b> আইডি অবশ্যই লগইনযোগ্য হতে হবে এবং পাসওয়ার্ড পরিবর্তনের পর এডমিন এপ্রুভ করবেন। 2FA অন থাকলে ব্যাকআপ কোড বক্সে দিন।
+          </p>
+        </div>
+
+        <!-- Submission Form -->
+        <form onsubmit="handleFbSubmit(event)" class="bg-midnight-card border border-midnight-border rounded-xl p-4 space-y-3">
+          <h3 class="text-xs font-bold text-white uppercase tracking-wider">ফেসবুক আইডি সাবমিট ফর্ম</h3>
+
+          <div>
+            <label class="block text-xs text-slate-300 mb-1 font-medium">আপনার টেলিগ্রাম ইউজারনেম</label>
+            <input type="text" id="fbUserTg" placeholder="@username" required class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-telegram">
+          </div>
+
+          <div>
+            <label class="block text-xs text-slate-300 mb-1 font-medium">ফেসবুক লগইন ফোন নাম্বার বা ইমেইল</label>
+            <input type="text" id="fbLogin" placeholder="017... or email" required class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-telegram">
+          </div>
+
+          <div>
+            <label class="block text-xs text-slate-300 mb-1 font-medium">ফেসবুক পাসওয়ার্ড</label>
+            <input type="text" id="fbPassword" placeholder="Facebook Password" required class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-telegram">
+          </div>
+
+          <div>
+            <label class="block text-xs text-slate-300 mb-1 font-medium">প্রোফাইল লিংক বা UID (ঐচ্ছিক)</label>
+            <input type="text" id="fbUid" placeholder="https://facebook.com/... or UID" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-telegram">
+          </div>
+
+          <div>
+            <label class="block text-xs text-slate-300 mb-1 font-medium">2FA কোড / ব্যাকআপ কোড (যদি থাকে)</label>
+            <input type="text" id="fbTwoFa" placeholder="2FA Backup Code" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-telegram">
+          </div>
+
+          <div>
+            <label class="block text-xs text-slate-300 mb-1 font-medium">আইডির তৈরির সাল ও ক্যাটাগরি</label>
+            <select id="fbYearSelect" onchange="updateFbRewardPreview()" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-telegram">
+              <option value="2022-2026" data-price="40">২০২২-২০২৬ নরমাল আইডি (৳৪০)</option>
+              <option value="2018-2022" data-price="70">২০১৮-২০২২ পুরাতন আইডি (৳৭০)</option>
+              <option value="Pre-2018 Real" data-price="120">রিয়েল ফ্রেন্ডস ভেরিফাইড ওল্ড (৳১২০)</option>
+            </select>
+          </div>
+
+          <div class="bg-midnight-surface p-3 rounded-lg border border-telegram/30 flex items-center justify-between">
+            <span class="text-xs text-slate-300">আপনি পাবেন:</span>
+            <span class="text-sm font-bold text-telegram">৳<span id="fbRewardPreview">40</span></span>
+          </div>
+
+          <button type="submit" class="w-full bg-telegram hover:bg-telegram/90 text-white font-bold text-xs py-2.5 rounded-lg transition shadow-md flex items-center justify-center gap-1.5">
+            <i data-lucide="check" class="w-4 h-4"></i> ফেসবুক আইডি সাবমিট করুন
+          </button>
+        </form>
+      </div>
+
+      <!-- User Submissions History -->
+      <div class="bg-midnight-card border border-midnight-border rounded-xl p-4 space-y-3">
+        <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
+          <i data-lucide="history" class="w-4 h-4 text-electric-cyan"></i> আপনার সাবমিশন হিস্ট্রি
+        </h3>
+        <div id="userSubmissionsList" class="space-y-2 text-xs">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SCREEN 4: WALLET & WITHDRAW ================= -->
+    <section id="screen-wallet" class="hidden space-y-4">
+      <!-- Balance Card -->
+      <div class="bg-gradient-to-br from-midnight-card via-midnight-surface to-midnight-card border border-luxury-gold/30 rounded-2xl p-5 glow-gold">
+        <div class="flex items-center justify-between text-xs text-slate-300 mb-2">
+          <span>আপনার বর্তমান ব্যালেন্স</span>
+          <span class="text-[10px] bg-luxury-gold/20 text-luxury-gold px-2 py-0.5 rounded-full font-bold">SLK WALLET</span>
+        </div>
+        <div class="text-3xl font-black text-luxury-gold flex items-center gap-1">
+          ৳<span id="walletMainBalance">0</span>
+        </div>
+        <div class="grid grid-cols-3 gap-2 mt-4 pt-4 border-t border-midnight-border text-center text-xs">
+          <div>
+            <div class="text-[10px] text-slate-400">মোট আয়</div>
+            <div class="font-bold text-status-success mt-0.5">৳<span id="walletTotalEarned">0</span></div>
+          </div>
+          <div>
+            <div class="text-[10px] text-slate-400">মোট উত্তোলন</div>
+            <div class="font-bold text-electric-cyan mt-0.5">৳<span id="walletTotalWithdrawn">0</span></div>
+          </div>
+          <div>
+            <div class="text-[10px] text-slate-400">রেফারেল বোনাস</div>
+            <div class="font-bold text-luxury-gold mt-0.5">৳<span id="walletReferralBonus">0</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Withdraw Request Form -->
+      <form onsubmit="handleWithdrawSubmit(event)" class="bg-midnight-card border border-midnight-border rounded-xl p-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
+            <i data-lucide="arrow-up-right" class="w-4 h-4 text-status-success"></i> টাকা উত্তোলন করুন (উইথড্র)
+          </h3>
+          <span class="text-[10px] text-slate-400">সর্বনিম্ন ৳৫০</span>
+        </div>
+
+        <div>
+          <label class="block text-xs text-slate-300 mb-1 font-medium">পেমেন্ট মেথড বেছে নিন</label>
+          <div class="grid grid-cols-3 gap-2">
+            <label class="cursor-pointer">
+              <input type="radio" name="withdrawMethod" value="bKash" checked class="hidden peer">
+              <div class="bg-midnight-surface peer-checked:bg-bkash/20 peer-checked:border-bkash border border-midnight-border rounded-lg p-2 text-center text-xs font-bold text-white transition">
+                বিকাশ
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="withdrawMethod" value="Nagad" class="hidden peer">
+              <div class="bg-midnight-surface peer-checked:bg-nagad/20 peer-checked:border-nagad border border-midnight-border rounded-lg p-2 text-center text-xs font-bold text-white transition">
+                নগদ
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="withdrawMethod" value="Rocket" class="hidden peer">
+              <div class="bg-midnight-surface peer-checked:bg-rocket/20 peer-checked:border-rocket border border-midnight-border rounded-lg p-2 text-center text-xs font-bold text-white transition">
+                রকেট
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs text-slate-300 mb-1 font-medium">আপনার পার্সোনাল মোবাইল নাম্বার</label>
+          <input type="tel" id="withdrawNumber" placeholder="017XXXXXXXX" required class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-luxury-gold">
+        </div>
+
+        <div>
+          <label class="block text-xs text-slate-300 mb-1 font-medium">উত্তোলনের পরিমাণ (৳)</label>
+          <input type="number" id="withdrawAmount" placeholder="50" min="50" required class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-luxury-gold">
+        </div>
+
+        <button type="submit" class="w-full bg-status-success hover:bg-emerald-600 text-midnight-dark font-bold text-xs py-2.5 rounded-lg transition shadow-md flex items-center justify-center gap-1.5">
+          <i data-lucide="send" class="w-4 h-4"></i> উইথড্র রিকোয়েস্ট পাঠান
+        </button>
+      </form>
+
+      <!-- Withdrawals History -->
+      <div class="bg-midnight-card border border-midnight-border rounded-xl p-4 space-y-3">
+        <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
+          <i data-lucide="clock" class="w-4 h-4 text-luxury-gold"></i> উইথড্র হিস্ট্রি
+        </h3>
+        <div id="walletWithdrawalsList" class="space-y-2 text-xs">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SCREEN 5: PROFILE & REFERRAL ================= -->
+    <section id="screen-profile" class="hidden space-y-4">
+      <!-- Profile Info -->
+      <div class="bg-midnight-card border border-midnight-border rounded-xl p-4 flex items-center gap-3">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-luxury-gold to-electric-cyan flex items-center justify-center font-bold text-midnight-dark text-lg">
+          <i data-lucide="user" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <div class="font-bold text-sm text-white" id="profileTgName">@User</div>
+          <div class="text-[11px] text-slate-400">SLK Buy Group Member</div>
+          <div class="text-[10px] text-status-success font-medium flex items-center gap-1 mt-0.5">
+            <span class="w-2 h-2 rounded-full bg-status-success animate-pulse"></span> একাউন্ট অ্যাক্টিভ
+          </div>
+        </div>
+      </div>
+
+      <!-- Referral Share Box -->
+      <div class="bg-gradient-to-r from-midnight-card via-midnight-surface to-midnight-card border border-luxury-gold/40 rounded-xl p-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-luxury-gold flex items-center gap-1.5">
+            <i data-lucide="gift" class="w-4 h-4"></i> রেফার করুন ও প্রতি রেফারে ৳২০ বোনাস পান
+          </span>
+        </div>
+        <p class="text-[11px] text-slate-300">
+          আপনার রেফারেল লিঙ্ক দিয়ে বন্ধুকে জয়েন করান। বন্ধু প্রথম গ্রুপ কিনলে আপনি পাবেন ইনস্ট্যান্ট ৳২০ ক্যাশব্যাক এবং লাইফটাইম ৫% কমিশন!
+        </p>
+        <div class="flex items-center gap-2">
+          <input type="text" id="refLinkInput" readonly value="https://t.me/ItsSaddam9?start=ref_8701" class="w-full bg-midnight-dark border border-midnight-border rounded-lg px-3 py-2 text-xs text-luxury-gold font-mono focus:outline-none">
+          <button onclick="copyReferralLink()" class="bg-luxury-gold hover:bg-luxury-goldLight text-midnight-dark font-bold text-xs px-3.5 py-2 rounded-lg whitespace-nowrap transition flex items-center gap-1">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i> কপি
+          </button>
+        </div>
+      </div>
+
+      <!-- My Orders -->
+      <div class="bg-midnight-card border border-midnight-border rounded-xl p-4 space-y-3">
+        <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
+          <i data-lucide="package-check" class="w-4 h-4 text-electric-cyan"></i> আমার কেনা গ্রুপসমূহ
+        </h3>
+        <div id="userOrdersList" class="space-y-2 text-xs">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+      <!-- Secret Admin Login Box -->
+      <div class="bg-midnight-card border border-midnight-border rounded-xl p-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-bold text-slate-400 flex items-center gap-1.5">
+            <i data-lucide="lock" class="w-4 h-4 text-luxury-gold"></i> সিক্রেট এডমিন প্যানেল লগইন
+          </h3>
+          <span class="text-[10px] text-slate-500">Only for Owner</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <input type="password" id="adminPassInput" placeholder="Enter Admin Secret Passcode / ID" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-luxury-gold">
+          <button onclick="handleAdminLogin()" class="bg-midnight-surface hover:bg-luxury-gold hover:text-midnight-dark border border-luxury-gold text-luxury-gold font-bold text-xs px-4 py-2 rounded-lg whitespace-nowrap transition">
+            আনলক
+          </button>
+        </div>
+        <p class="text-[10px] text-slate-500">অনুমোদিত এডমিন আইডি: 8701368956 অথবা @ItsSaddam9</p>
+      </div>
+
+      <!-- App & Dev Details -->
+      <div class="text-center text-[11px] text-slate-500 py-3 space-y-1">
+        <p>SLK BUY GROUP v1.0 • Powered by Telegram Mini App & Vercel</p>
+        <p>সহায়তার জন্য টেলিগ্রাম: <a href="https://t.me/ItsSaddam9" target="_blank" class="text-telegram hover:underline">@ItsSaddam9</a></p>
+      </div>
+    </section>
+
+    <!-- ================= SCREEN 6: SECRET ADMIN PANEL ================= -->
+    <section id="screen-admin" class="hidden space-y-4">
+      <div class="bg-gradient-to-r from-luxury-goldDark/40 via-midnight-card to-midnight-card border border-luxury-gold rounded-xl p-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-luxury-gold text-midnight-dark flex items-center justify-center font-black">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-sm font-bold text-luxury-gold">SUPER ADMIN PANEL</div>
+            <div class="text-[11px] text-slate-300">Admin ID: 8701368956 (t.me/ItsSaddam9)</div>
+          </div>
+        </div>
+        <button onclick="lockAdmin()" class="bg-midnight-surface hover:bg-status-danger text-slate-300 hover:text-white p-2 rounded-lg transition" title="লক করুন">
+          <i data-lucide="lock" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Admin Stats Overview -->
+      <div class="grid grid-cols-4 gap-2 bg-midnight-card p-3 rounded-xl border border-midnight-border text-center text-xs">
+        <div>
+          <div class="text-sm font-black text-electric-cyan" id="adminStatOrders">0</div>
+          <div class="text-[10px] text-slate-400">অর্ডার</div>
+        </div>
+        <div>
+          <div class="text-sm font-black text-luxury-gold" id="adminStatGmails">0</div>
+          <div class="text-[10px] text-slate-400">জিমেইল</div>
+        </div>
+        <div>
+          <div class="text-sm font-black text-telegram" id="adminStatFbs">0</div>
+          <div class="text-[10px] text-slate-400">ফেসবুক</div>
+        </div>
+        <div>
+          <div class="text-sm font-black text-status-success" id="adminStatWithdraws">0</div>
+          <div class="text-[10px] text-slate-400">উইথড্র</div>
+        </div>
+      </div>
+
+      <!-- Admin Sub-Navigation Pills -->
+      <div class="flex items-center gap-2 overflow-x-auto custom-scrollbar pb-1 text-xs">
+        <button onclick="switchAdminTab('orders')" class="admin-tab-btn active bg-luxury-gold text-midnight-dark font-bold px-3 py-1.5 rounded-lg border border-luxury-gold whitespace-nowrap transition" data-atab="orders">পেন্ডিং অর্ডার</button>
+        <button onclick="switchAdminTab('gmails')" class="admin-tab-btn bg-midnight-card text-slate-300 font-medium px-3 py-1.5 rounded-lg border border-midnight-border whitespace-nowrap hover:border-luxury-gold transition" data-atab="gmails">জিমেইল সাবমিশন</button>
+        <button onclick="switchAdminTab('fbs')" class="admin-tab-btn bg-midnight-card text-slate-300 font-medium px-3 py-1.5 rounded-lg border border-midnight-border whitespace-nowrap hover:border-luxury-gold transition" data-atab="fbs">ফেসবুক আইডি</button>
+        <button onclick="switchAdminTab('withdrawals')" class="admin-tab-btn bg-midnight-card text-slate-300 font-medium px-3 py-1.5 rounded-lg border border-midnight-border whitespace-nowrap hover:border-luxury-gold transition" data-atab="withdrawals">উইথড্র রিকোয়েস্ট</button>
+        <button onclick="switchAdminTab('addGroup')" class="admin-tab-btn bg-midnight-card text-slate-300 font-medium px-3 py-1.5 rounded-lg border border-midnight-border whitespace-nowrap hover:border-luxury-gold transition" data-atab="addGroup">নতুন গ্রুপ যোগ</button>
+        <button onclick="switchAdminTab('gateways')" class="admin-tab-btn bg-midnight-card text-slate-300 font-medium px-3 py-1.5 rounded-lg border border-midnight-border whitespace-nowrap hover:border-luxury-gold transition" data-atab="gateways">পেমেন্ট গেটওয়ে সেটিংস</button>
+      </div>
+
+      <!-- Admin Content Sections -->
+      <div id="adminContentOrders" class="space-y-3"></div>
+      <div id="adminContentGmails" class="hidden space-y-3"></div>
+      <div id="adminContentFbs" class="hidden space-y-3"></div>
+      <div id="adminContentWithdrawals" class="hidden space-y-3"></div>
+      
+      <!-- Admin Add Group Form -->
+      <div id="adminContentAddGroup" class="hidden bg-midnight-card border border-midnight-border rounded-xl p-4 space-y-3">
+        <h3 class="text-xs font-bold text-luxury-gold uppercase tracking-wider">মার্কেটপ্লেসে নতুন টেলিগ্রাম গ্রুপ পাবলিশ করুন</h3>
+        <form onsubmit="handleAdminAddGroup(event)" class="space-y-3 text-xs">
+          <div>
+            <label class="block text-slate-300 mb-1">গ্রুপের নাম / শিরোনাম</label>
+            <input type="text" id="newGroupTitle" placeholder="e.g. 4K HDR Ultra Premium Movies" required class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-white">
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1">ক্যাটাগরি</label>
+            <select id="newGroupCategory" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-white">
+              <option value="Movies & Web Series">Movies & Web Series</option>
+              <option value="VIP Exclusive">VIP Exclusive</option>
+              <option value="OTT & Streaming">OTT & Streaming</option>
+              <option value="Tech & Mod Tools">Tech & Mod Tools</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1">বিবরণ / বিস্তারিত তথ্য</label>
+            <textarea id="newGroupDesc" rows="2" placeholder="HD/4K প্রিন্ট, ডেইলি আপডেট, সরাসরি টেলিগ্রাম চ্যানেল লিংক" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-white"></textarea>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-slate-300 mb-1">অফার মূল্য (৳)</label>
+              <input type="number" id="newGroupPrice" value="300" required class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-white">
+            </div>
+            <div>
+              <label class="block text-slate-300 mb-1">আসল মূল্য (৳)</label>
+              <input type="number" id="newGroupOrigPrice" value="500" required class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-white">
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-slate-300 mb-1">সদস্য সংখ্যা</label>
+              <input type="text" id="newGroupMembers" value="50,000+" required class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-white">
+            </div>
+            <div>
+              <label class="block text-slate-300 mb-1">ব্যাজ ট্যাগ</label>
+              <input type="text" id="newGroupBadge" value="HOT VIP" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-white">
+            </div>
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1">টেলিগ্রাম ইনভাইট লিঙ্ক (কেনার পর ইউজার পাবে)</label>
+            <input type="text" id="newGroupLink" value="https://t.me/+slk_vip_direct_link" required class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-white">
+          </div>
+          <button type="submit" class="w-full bg-luxury-gold hover:bg-luxury-goldLight text-midnight-dark font-bold py-2.5 rounded-lg transition shadow-md">
+            + গ্রুপ পাবলিশ করুন
+          </button>
+        </form>
+      </div>
+
+      <!-- Admin Gateways Config Form -->
+      <div id="adminContentGateways" class="hidden bg-midnight-card border border-midnight-border rounded-xl p-4 space-y-3 text-xs">
+        <h3 class="text-xs font-bold text-luxury-gold uppercase tracking-wider">পেমেন্ট গেটওয়ে সেটিংস (ইউজার চেকআউটে দেখতে পাবে)</h3>
+        
+        <div class="space-y-1">
+          <label class="block text-slate-300 font-medium">বিকাশ পার্সোনাল নাম্বার</label>
+          <div class="flex gap-2">
+            <input type="text" id="adminBkashInput" value="01789-567890" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-white">
+            <button onclick="saveGatewayNumber('bkash_number', 'adminBkashInput')" class="bg-bkash text-white font-bold px-3 py-2 rounded-lg">সেভ</button>
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <label class="block text-slate-300 font-medium">নগদ পার্সোনাল নাম্বার</label>
+          <div class="flex gap-2">
+            <input type="text" id="adminNagadInput" value="01812-345678" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-white">
+            <button onclick="saveGatewayNumber('nagad_number', 'adminNagadInput')" class="bg-nagad text-white font-bold px-3 py-2 rounded-lg">সেভ</button>
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <label class="block text-slate-300 font-medium">রকেট পার্সোনাল নাম্বার</label>
+          <div class="flex gap-2">
+            <input type="text" id="adminRocketInput" value="01934-567891" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-white">
+            <button onclick="saveGatewayNumber('rocket_number', 'adminRocketInput')" class="bg-rocket text-white font-bold px-3 py-2 rounded-lg">সেভ</button>
+          </div>
+        </div>
+
+        <div class="space-y-1 pt-2">
+          <label class="block text-slate-300 font-medium">টপ ব্যানার নোটিশ টেক্সট</label>
+          <div class="flex gap-2">
+            <input type="text" id="adminNoticeInput" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-white">
+            <button onclick="saveNoticeText()" class="bg-luxury-gold text-midnight-dark font-bold px-3 py-2 rounded-lg">সেভ</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= CHECKOUT MODAL ================= -->
+  <div id="checkoutModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-midnight-card border border-luxury-gold/50 rounded-2xl w-full max-w-lg p-5 space-y-4 glow-gold max-h-[90vh] overflow-y-auto custom-scrollbar">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-midnight-border pb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-luxury-gold/20 flex items-center justify-center text-luxury-gold">
+            <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-white">চেকআউট ও পেমেন্ট</h3>
+            <p class="text-[11px] text-slate-400">টেলিগ্রাম প্রিমিয়াম এক্সেস</p>
+          </div>
+        </div>
+        <button onclick="closeCheckoutModal()" class="w-8 h-8 rounded-full bg-midnight-surface text-slate-400 hover:text-white flex items-center justify-center">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Selected Group Info -->
+      <div class="bg-midnight-surface p-3.5 rounded-xl border border-midnight-border flex items-center justify-between">
+        <div>
+          <div class="text-xs font-bold text-white" id="modalGroupTitle">Group Name</div>
+          <div class="text-[10px] text-slate-400" id="modalGroupMembers">48,500+ Members</div>
+        </div>
+        <div class="text-right">
+          <div class="text-base font-black text-luxury-gold">৳<span id="modalGroupPrice">300</span></div>
+          <div class="text-[10px] text-slate-400 line-through">৳<span id="modalGroupOrigPrice">500</span></div>
+        </div>
+      </div>
+
+      <!-- Payment Method Selection -->
+      <div class="space-y-2">
+        <label class="block text-xs font-bold text-slate-300">পেমেন্ট মেথড বেছে নিন (সেন্ড মানি করুন):</label>
+        <div class="grid grid-cols-3 gap-2">
+          <button type="button" onclick="selectCheckoutMethod('bKash')" id="methodBtn-bKash" class="pay-method-btn bg-bkash/20 border-2 border-bkash rounded-xl p-2.5 text-center transition">
+            <span class="block text-xs font-bold text-white">বিকাশ</span>
+            <span class="block text-[10px] text-slate-300">Personal</span>
+          </button>
+          <button type="button" onclick="selectCheckoutMethod('Nagad')" id="methodBtn-Nagad" class="pay-method-btn bg-midnight-surface border border-midnight-border rounded-xl p-2.5 text-center transition">
+            <span class="block text-xs font-bold text-white">নগদ</span>
+            <span class="block text-[10px] text-slate-300">Personal</span>
+          </button>
+          <button type="button" onclick="selectCheckoutMethod('Rocket')" id="methodBtn-Rocket" class="pay-method-btn bg-midnight-surface border border-midnight-border rounded-xl p-2.5 text-center transition">
+            <span class="block text-xs font-bold text-white">রকেট</span>
+            <span class="block text-[10px] text-slate-300">Personal</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Payment Number Copy Box -->
+      <div class="bg-midnight-surface border border-luxury-gold/30 rounded-xl p-3.5 space-y-2">
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span>আমাদের <span id="checkoutSelectedMethodLabel" class="text-luxury-gold font-bold">বিকাশ</span> পার্সোনাল নাম্বার:</span>
+          <span class="text-[10px] text-status-success font-bold">সেন্ড মানি / ক্যাশ ইন</span>
+        </div>
+        <div class="flex items-center justify-between bg-midnight-dark p-2.5 rounded-lg border border-midnight-border">
+          <span id="checkoutPaymentNumber" class="text-sm font-mono font-bold text-white tracking-wider">01789-567890</span>
+          <button onclick="copyPaymentNumber()" class="bg-luxury-gold hover:bg-luxury-goldLight text-midnight-dark font-bold text-xs px-3 py-1 rounded transition flex items-center gap-1">
+            <i data-lucide="copy" class="w-3 h-3"></i> কপি
+          </button>
+        </div>
+        <p class="text-[11px] text-slate-300 leading-relaxed">
+          👉 উক্ত নাম্বারে <b>৳<span id="checkoutPayAmount">300</span></b> সেন্ড মানি করুন। এরপর নিচে আপনার প্রেরক নাম্বার ও TrxID দিয়ে সাবমিট করুন।
+        </p>
+      </div>
+
+      <!-- Checkout Submission Form -->
+      <form onsubmit="handleOrderSubmit(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-300 mb-1 font-medium">আপনার টেলিগ্রাম ইউজারনেম (ইনভাইট পাঠানো হবে)</label>
+          <input type="text" id="orderBuyerTg" placeholder="@username" required class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-luxury-gold">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-slate-300 mb-1 font-medium">যে নাম্বার থেকে টাকা পাঠিয়েছেন</label>
+            <input type="tel" id="orderSenderNumber" placeholder="01XXXXXXXXX" required class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-luxury-gold">
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1 font-medium">Transaction ID (TrxID)</label>
+            <input type="text" id="orderTrxId" placeholder="e.g. BK789XYZ" required class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-2 text-white font-mono uppercase focus:outline-none focus:border-luxury-gold">
+          </div>
+        </div>
+
+        <button type="submit" class="w-full bg-gradient-to-r from-luxury-gold to-luxury-goldLight text-midnight-dark font-black text-xs py-3 rounded-xl transition shadow-lg flex items-center justify-center gap-1.5">
+          <i data-lucide="check-circle" class="w-4 h-4"></i> অর্ডার নিশ্চিত করুন
+        </button>
+
+        <a href="https://t.me/ItsSaddam9" target="_blank" class="w-full bg-telegram/20 hover:bg-telegram/30 border border-telegram/40 text-telegram font-bold text-xs py-2 rounded-xl transition flex items-center justify-center gap-1.5">
+          <i data-lucide="send" class="w-3.5 h-3.5"></i> সরাসরি টেলিগ্রাম লাইভ সাপোর্ট: @ItsSaddam9
+        </a>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ================= BOTTOM NAVIGATION BAR ================= -->
+  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-midnight-card/95 backdrop-blur-md border-t border-midnight-border px-3 py-2">
+    <div class="max-w-md mx-auto grid grid-cols-5 gap-1 text-center">
+      <button onclick="switchTab('home')" class="nav-btn active flex flex-col items-center justify-center text-luxury-gold py-1" data-tab="home">
+        <i data-lucide="home" class="w-5 h-5"></i>
+        <span class="text-[10px] font-bold mt-1">হোম</span>
+      </button>
+
+      <button onclick="switchTab('groups')" class="nav-btn flex flex-col items-center justify-center text-slate-400 hover:text-slate-200 py-1" data-tab="groups">
+        <i data-lucide="layers" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">গ্রুপসমূহ</span>
+      </button>
+
+      <button onclick="switchTab('sell')" class="nav-btn flex flex-col items-center justify-center text-slate-400 hover:text-slate-200 py-1" data-tab="sell">
+        <i data-lucide="dollar-sign" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">আয় করুন</span>
+      </button>
+
+      <button onclick="switchTab('wallet')" class="nav-btn flex flex-col items-center justify-center text-slate-400 hover:text-slate-200 py-1" data-tab="wallet">
+        <i data-lucide="wallet" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">ওয়ালেট</span>
+      </button>
+
+      <button onclick="switchTab('profile')" class="nav-btn flex flex-col items-center justify-center text-slate-400 hover:text-slate-200 py-1" data-tab="profile">
+        <i data-lucide="user" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">প্রোফাইল</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ================= TOAST NOTIFICATION CONTAINER ================= -->
+  <div id="toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-midnight-card border border-luxury-gold text-white text-xs px-4 py-2.5 rounded-full shadow-2xl hidden flex items-center gap-2">
+    <i data-lucide="info" class="w-4 h-4 text-luxury-gold"></i>
+    <span id="toastMsg">বার্তা</span>
+  </div>
+
+  <!-- ================= APPLICATION JAVASCRIPT LOGIC ================= -->
+  <script>
+    // --- Initial Telegram WebApp Integration ---
+    if (window.Telegram && window.Telegram.WebApp) {
+      window.Telegram.WebApp.ready();
+      window.Telegram.WebApp.expand();
+      const tgUser = window.Telegram.WebApp.initDataUnsafe?.user;
+      if (tgUser) {
+        const username = tgUser.username ? '@' + tgUser.username : tgUser.first_name;
+        document.getElementById('profileTgName').textContent = username;
+        document.getElementById('orderBuyerTg').value = username;
+        document.getElementById('gmailUserTg').value = username;
+        document.getElementById('fbUserTg').value = username;
+      }
+    }
+
+    // --- Initial Default Data & LocalStorage Management ---
+    const DEFAULT_GROUPS = [
+      {
+        id: 1,
+        title: "SLK 4K ULTRA VIP MOVIES",
+        category: "Movies & Web Series",
+        description: "ডেইলি লেটেস্ট বলিউড, হলিউড ও সাউথ মুভি 4K HDR ও 1080p প্রিন্টে সরাসরি ডাউনলোড ও ক্লাউড স্ট্রিমিং লিঙ্ক সহ।",
+        members: "48,500+",
+        price: 300,
+        originalPrice: 500,
+        inviteLink: "https://t.me/+slk_vip_direct_link",
+        badge: "BESTSELLER",
+        rating: "4.9 ★"
+      },
+      {
+        id: 2,
+        title: "MEGA OTT WEB SERIES HUB",
+        category: "OTT & Streaming",
+        description: "Netflix, Hoichoi, Prime Video, Chorki এর আনকাট ওয়েব সিরিজ ও এক্সক্লুসিভ কালেকশন ফাস্ট সার্ভার লিংকে।",
+        members: "36,200+",
+        price: 250,
+        originalPrice: 400,
+        inviteLink: "https://t.me/+slk_ott_series",
+        badge: "HOT VIP",
+        rating: "4.8 ★"
+      },
+      {
+        id: 3,
+        title: "SLK PRIVATE CINEMA ARCHIVE",
+        category: "VIP Exclusive",
+        description: "দুর্লভ ও ক্লাসিক মুভি কালেকশন, মেগা ফাইলস, কোন অ্যাড ঝামেলা নেই, নো স্প্যাম, হাই স্পিড টেলিগ্রাম ডাউনলোড।",
+        members: "24,000+",
+        price: 350,
+        originalPrice: 600,
+        inviteLink: "https://t.me/+slk_private_archive",
+        badge: "EXCLUSIVE",
+        rating: "5.0 ★"
+      },
+      {
+        id: 4,
+        title: "ANIME DUBBED & 4K CLAN",
+        category: "Movies & Web Series",
+        description: "জনপ্রিয় সকল জাপানি এনিমে বাংলা ও হিন্দি সাব/ডাব সহ সম্পূর্ণ সিরিজ এবং ওভিএ লাইফটাইম আনলিমিটেড।",
+        members: "19,800+",
+        price: 200,
+        originalPrice: 350,
+        inviteLink: "https://t.me/+slk_anime_hub",
+        badge: "TOP RATED",
+        rating: "4.9 ★"
+      },
+      {
+        id: 5,
+        title: "VIP TECH & MOD APK VAULT",
+        category: "Tech & Mod Tools",
+        description: "প্রিমিয়াম মোড অ্যাপ্লিকেশন, ওটিটি প্রিমিয়াম ক্র্যাকড টুলস, সিক্রেট ট্রিকস এবং ডেইলি ক্রিপ্টো ও আর্নিং ট্রিকস।",
+        members: "29,400+",
+        price: 320,
+        originalPrice: 550,
+        inviteLink: "https://t.me/+slk_tech_vault",
+        badge: "POPULAR",
+        rating: "4.7 ★"
+      }
+    ];
+
+    let groups = JSON.parse(localStorage.getItem('slk_groups')) || DEFAULT_GROUPS;
+    let orders = JSON.parse(localStorage.getItem('slk_orders')) || [];
+    let gmailSubmissions = JSON.parse(localStorage.getItem('slk_gmails')) || [];
+    let fbSubmissions = JSON.parse(localStorage.getItem('slk_fbs')) || [];
+    let withdrawals = JSON.parse(localStorage.getItem('slk_withdrawals')) || [];
+    let wallet = JSON.parse(localStorage.getItem('slk_wallet')) || { balance: 0, totalEarned: 0, totalWithdrawn: 0, referralBonus: 0 };
+    let adminConfigs = JSON.parse(localStorage.getItem('slk_admin_configs')) || {
+      bkash_number: '01789-567890',
+      nagad_number: '01812-345678',
+      rocket_number: '01934-567891',
+      notice_text: '🔥 মেগা অফার: প্রতিটি প্রিমিয়াম টেলিগ্রাম গ্রুপে ৫০% পর্যন্ত বিশাল ডিসকাউন্ট চলছে! যেকোনো প্রয়োজনে সরাসরি নক দিন: @ItsSaddam9',
+      admin_telegram: 'https://t.me/ItsSaddam9'
+    };
+    let isAdminUnlocked = localStorage.getItem('slk_admin_unlocked') === 'true';
+
+    // State for modal
+    let activeGroup = null;
+    let selectedCheckoutMethod = 'bKash';
+
+    // --- Save Helpers ---
+    function saveAll() {
+      localStorage.setItem('slk_groups', JSON.stringify(groups));
+      localStorage.setItem('slk_orders', JSON.stringify(orders));
+      localStorage.setItem('slk_gmails', JSON.stringify(gmailSubmissions));
+      localStorage.setItem('slk_fbs', JSON.stringify(fbSubmissions));
+      localStorage.setItem('slk_withdrawals', JSON.stringify(withdrawals));
+      localStorage.setItem('slk_wallet', JSON.stringify(wallet));
+      localStorage.setItem('slk_admin_configs', JSON.stringify(adminConfigs));
+      updateUI();
+    }
+
+    // --- Toast Notification ---
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.textContent = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3000);
+    }
+
+    // --- Navigation Tabs ---
+    function switchTab(tabName, subOption) {
+      const screens = ['home', 'groups', 'sell', 'wallet', 'profile', 'admin'];
+      screens.forEach(s => {
+        const el = document.getElementById('screen-' + s);
+        if (el) el.classList.add('hidden');
+      });
+
+      const target = document.getElementById('screen-' + tabName);
+      if (target) target.classList.remove('hidden');
+
+      // Update Nav Buttons
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        if (btn.getAttribute('data-tab') === tabName) {
+          btn.classList.add('text-luxury-gold', 'active');
+          btn.classList.remove('text-slate-400');
+        } else {
+          btn.classList.remove('text-luxury-gold', 'active');
+          btn.classList.add('text-slate-400');
+        }
+      });
+
+      if (tabName === 'sell' && subOption) {
+        switchSellSubTab(subOption);
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function switchSellSubTab(type) {
+      const btnGmail = document.getElementById('sellTabGmail');
+      const btnFb = document.getElementById('sellTabFb');
+      const secGmail = document.getElementById('sellSectionGmail');
+      const secFb = document.getElementById('sellSectionFb');
+
+      if (type === 'gmail') {
+        btnGmail.classList.add('bg-luxury-gold', 'text-midnight-dark');
+        btnGmail.classList.remove('text-slate-300');
+        btnFb.classList.remove('bg-luxury-gold', 'text-midnight-dark');
+        btnFb.classList.add('text-slate-300');
+        secGmail.classList.remove('hidden');
+        secFb.classList.add('hidden');
+      } else {
+        btnFb.classList.add('bg-luxury-gold', 'text-midnight-dark');
+        btnFb.classList.remove('text-slate-300');
+        btnGmail.classList.remove('bg-luxury-gold', 'text-midnight-dark');
+        btnGmail.classList.add('text-slate-300');
+        secFb.classList.remove('hidden');
+        secGmail.classList.add('hidden');
+      }
+    }
+
+    // --- Render Groups ---
+    function renderGroups(containerId, list) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+      container.innerHTML = list.map(g => `
+        <div class="bg-midnight-card hover:bg-midnight-cardHover border border-midnight-border rounded-xl p-4 transition space-y-3 flex flex-col justify-between">
+          <div class="space-y-2">
+            <!-- Mock Telegram Header Bar -->
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="bg-luxury-gold/20 text-luxury-gold border border-luxury-gold/30 font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                <i data-lucide="tag" class="w-3 h-3"></i> ${g.badge}
+              </span>
+              <span class="text-luxury-gold font-bold">${g.rating}</span>
+            </div>
+
+            <!-- Group Title -->
+            <h4 class="text-sm font-bold text-white flex items-center gap-1.5">
+              <i data-lucide="tv" class="w-4 h-4 text-electric-cyan"></i> ${g.title}
+            </h4>
+            <div class="text-[11px] text-slate-400 flex items-center gap-2">
+              <span class="text-electric-cyan font-medium">${g.category}</span> • 
+              <span>${g.members} মেম্বার</span>
+            </div>
+
+            <!-- Telegram Post Screenshot Mockup -->
+            <div class="bg-midnight-dark/80 rounded-lg p-2.5 border border-midnight-border text-[11px] text-slate-300 space-y-1">
+              <div class="flex items-center gap-1.5 text-telegram font-bold text-[10px]">
+                <i data-lucide="send" class="w-3 h-3"></i> SLK VIP CHANNEL POST PREVIEW:
+              </div>
+              <p class="line-clamp-2">${g.description}</p>
+              <div class="flex items-center gap-2 text-[10px] text-slate-400 pt-1">
+                <span class="bg-midnight-surface px-1.5 py-0.5 rounded">4K HDR</span>
+                <span class="bg-midnight-surface px-1.5 py-0.5 rounded">Fast Streaming</span>
+                <span class="bg-midnight-surface px-1.5 py-0.5 rounded">Lifetime</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Price & Buy Action -->
+          <div class="flex items-center justify-between pt-2 border-t border-midnight-border">
+            <div>
+              <div class="text-base font-black text-luxury-gold">৳${g.price}</div>
+              <div class="text-[10px] text-slate-500 line-through">৳${g.originalPrice}</div>
+            </div>
+            <button onclick="openCheckoutModal(${g.id})" class="bg-gradient-to-r from-luxury-gold to-luxury-goldLight hover:brightness-110 text-midnight-dark font-bold text-xs px-4 py-2 rounded-lg transition shadow-md flex items-center gap-1.5">
+              <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i> এখনই কিনুন
+            </button>
+          </div>
+        </div>
+      `).join('');
+
+      lucide.createIcons();
+    }
+
+    function filterGroups(category) {
+      document.querySelectorAll('.group-filter-btn').forEach(btn => {
+        if (btn.getAttribute('data-cat') === category) {
+          btn.classList.add('bg-luxury-gold', 'text-midnight-dark', 'active');
+          btn.classList.remove('bg-midnight-card', 'text-slate-300');
+        } else {
+          btn.classList.remove('bg-luxury-gold', 'text-midnight-dark', 'active');
+          btn.classList.add('bg-midnight-card', 'text-slate-300');
+        }
+      });
+
+      const filtered = category === 'ALL' ? groups : groups.filter(g => g.category === category);
+      renderGroups('groupsContainer', filtered);
+    }
+
+    // --- Checkout Modal Logic ---
+    function openCheckoutModal(groupId) {
+      activeGroup = groups.find(g => g.id === groupId);
+      if (!activeGroup) return;
+
+      document.getElementById('modalGroupTitle').textContent = activeGroup.title;
+      document.getElementById('modalGroupMembers').textContent = activeGroup.members + ' মেম্বার • ' + activeGroup.category;
+      document.getElementById('modalGroupPrice').textContent = activeGroup.price;
+      document.getElementById('modalGroupOrigPrice').textContent = activeGroup.originalPrice;
+      document.getElementById('checkoutPayAmount').textContent = activeGroup.price;
+
+      selectCheckoutMethod('bKash');
+      document.getElementById('checkoutModal').classList.remove('hidden');
+    }
+
+    function closeCheckoutModal() {
+      document.getElementById('checkoutModal').classList.add('hidden');
+    }
+
+    function selectCheckoutMethod(method) {
+      selectedCheckoutMethod = method;
+      document.querySelectorAll('.pay-method-btn').forEach(btn => {
+        btn.classList.remove('border-2', 'border-bkash', 'border-nagad', 'border-rocket', 'bg-bkash/20', 'bg-nagad/20', 'bg-rocket/20');
+        btn.classList.add('border', 'border-midnight-border', 'bg-midnight-surface');
+      });
+
+      const activeBtn = document.getElementById('methodBtn-' + method);
+      if (activeBtn) {
+        activeBtn.classList.remove('border-midnight-border', 'bg-midnight-surface');
+        if (method === 'bKash') activeBtn.classList.add('border-2', 'border-bkash', 'bg-bkash/20');
+        if (method === 'Nagad') activeBtn.classList.add('border-2', 'border-nagad', 'bg-nagad/20');
+        if (method === 'Rocket') activeBtn.classList.add('border-2', 'border-rocket', 'bg-rocket/20');
+      }
+
+      document.getElementById('checkoutSelectedMethodLabel').textContent = method;
+      const num = method === 'bKash' ? adminConfigs.bkash_number : (method === 'Nagad' ? adminConfigs.nagad_number : adminConfigs.rocket_number);
+      document.getElementById('checkoutPaymentNumber').textContent = num;
+    }
+
+    function copyPaymentNumber() {
+      const num = document.getElementById('checkoutPaymentNumber').textContent;
+      navigator.clipboard.writeText(num).then(() => {
+        showToast('পেমেন্ট নাম্বার কপি হয়েছে: ' + num);
+      });
+    }
+
+    function handleOrderSubmit(e) {
+      e.preventDefault();
+      if (!activeGroup) return;
+
+      const buyerTg = document.getElementById('orderBuyerTg').value.trim();
+      const senderNum = document.getElementById('orderSenderNumber').value.trim();
+      const trxId = document.getElementById('orderTrxId').value.trim().toUpperCase();
+
+      const newOrder = {
+        id: Date.now(),
+        groupId: activeGroup.id,
+        groupTitle: activeGroup.title,
+        amount: activeGroup.price,
+        paymentMethod: selectedCheckoutMethod,
+        senderNumber: senderNum,
+        trxId: trxId,
+        userTelegram: buyerTg,
+        status: 'PENDING',
+        inviteLink: '',
+        date: new Date().toLocaleDateString('bn-BD')
+      };
+
+      orders.unshift(newOrder);
+      saveAll();
+      closeCheckoutModal();
+      showToast('অর্ডার সফলভাবে জমা হয়েছে! এডমিন ভেরিফাই করে টেলিগ্রামে লিংক দেবেন।');
+      switchTab('profile');
+    }
+
+    // --- Sell Forms & Handlers ---
+    function updateGmailRewardPreview() {
+      const sel = document.getElementById('gmailTypeSelect');
+      const opt = sel.options[sel.selectedIndex];
+      document.getElementById('gmailRewardPreview').textContent = opt.getAttribute('data-price');
+    }
+
+    function handleGmailSubmit(e) {
+      e.preventDefault();
+      const tg = document.getElementById('gmailUserTg').value.trim();
+      const mail = document.getElementById('gmailAddress').value.trim();
+      const pass = document.getElementById('gmailPassword').value.trim();
+      const rec = document.getElementById('gmailRecovery').value.trim();
+      const sel = document.getElementById('gmailTypeSelect');
+      const reward = parseInt(sel.options[sel.selectedIndex].getAttribute('data-price'));
+
+      const submission = {
+        id: Date.now(),
+        userTelegram: tg,
+        gmail: mail,
+        password: pass,
+        recoveryEmail: rec,
+        accountType: sel.value,
+        rewardAmount: reward,
+        status: 'PENDING',
+        date: new Date().toLocaleDateString('bn-BD')
+      };
+
+      gmailSubmissions.unshift(submission);
+      saveAll();
+      e.target.reset();
+      updateGmailRewardPreview();
+      showToast('জিমেইল সাবমিট হয়েছে! এডমিন পাসওয়ার্ড চেক করে ৳' + reward + ' জমা দেবেন।');
+    }
+
+    function updateFbRewardPreview() {
+      const sel = document.getElementById('fbYearSelect');
+      const opt = sel.options[sel.selectedIndex];
+      document.getElementById('fbRewardPreview').textContent = opt.getAttribute('data-price');
+    }
+
+    function handleFbSubmit(e) {
+      e.preventDefault();
+      const tg = document.getElementById('fbUserTg').value.trim();
+      const login = document.getElementById('fbLogin').value.trim();
+      const pass = document.getElementById('fbPassword').value.trim();
+      const uid = document.getElementById('fbUid').value.trim();
+      const twoFa = document.getElementById('fbTwoFa').value.trim();
+      const sel = document.getElementById('fbYearSelect');
+      const reward = parseInt(sel.options[sel.selectedIndex].getAttribute('data-price'));
+
+      const submission = {
+        id: Date.now(),
+        userTelegram: tg,
+        profileLinkOrUid: uid,
+        phoneOrEmail: login,
+        password: pass,
+        twoFactorCode: twoFa,
+        accountYear: sel.value,
+        rewardAmount: reward,
+        status: 'PENDING',
+        date: new Date().toLocaleDateString('bn-BD')
+      };
+
+      fbSubmissions.unshift(submission);
+      saveAll();
+      e.target.reset();
+      updateFbRewardPreview();
+      showToast('ফেসবুক আইডি সাবমিট হয়েছে! এডমিন চেক করে ৳' + reward + ' প্রদান করবেন।');
+    }
+
+    // --- Wallet & Withdrawals ---
+    function handleWithdrawSubmit(e) {
+      e.preventDefault();
+      const method = document.querySelector('input[name="withdrawMethod"]:checked').value;
+      const num = document.getElementById('withdrawNumber').value.trim();
+      const amount = parseInt(document.getElementById('withdrawAmount').value);
+
+      if (amount < 50) {
+        showToast('সর্বনিম্ন উত্তোলনের পরিমাণ ৳৫০!');
+        return;
+      }
+
+      if (wallet.balance < amount) {
+        showToast('আপনার ওয়ালেটে পর্যাপ্ত ব্যালেন্স নেই! ব্যালেন্স: ৳' + wallet.balance);
+        return;
+      }
+
+      wallet.balance -= amount;
+      wallet.totalWithdrawn += amount;
+
+      const newWithdrawal = {
+        id: Date.now(),
+        userTelegram: document.getElementById('profileTgName').textContent,
+        paymentMethod: method,
+        accountNumber: num,
+        amount: amount,
+        status: 'PENDING',
+        adminTrxId: '',
+        date: new Date().toLocaleDateString('bn-BD')
+      };
+
+      withdrawals.unshift(newWithdrawal);
+      saveAll();
+      e.target.reset();
+      showToast('উইথড্র রিকোয়েস্ট সফল! এডমিন শীঘ্রই আপনার নাম্বারে টাকা পাঠিয়ে দেবেন।');
+    }
+
+    function copyReferralLink() {
+      const link = document.getElementById('refLinkInput').value;
+      navigator.clipboard.writeText(link).then(() => {
+        showToast('রেফারেল লিঙ্ক কপি হয়েছে! টেলিগ্রাম ও ফেসবুকে বন্ধুদের পাঠান।');
+      });
+    }
+
+    // --- Admin Authentication & Controls ---
+    function handleAdminLogin() {
+      const val = document.getElementById('adminPassInput').value.trim();
+      if (val === '8701368956' || val.toLowerCase() === '@itssaddam9' || val.toLowerCase() === 'itssaddam9') {
+        isAdminUnlocked = true;
+        localStorage.setItem('slk_admin_unlocked', 'true');
+        document.getElementById('adminPassInput').value = '';
+        showToast('এডমিন প্যানেল আনলক হয়েছে!');
+        updateUI();
+        switchTab('admin');
+      } else {
+        showToast('ভুল এডমিন পাসকোড!');
+      }
+    }
+
+    function lockAdmin() {
+      isAdminUnlocked = false;
+      localStorage.setItem('slk_admin_unlocked', 'false');
+      showToast('এডমিন প্যানেল লক করা হয়েছে');
+      updateUI();
+      switchTab('profile');
+    }
+
+    function switchAdminTab(subTab) {
+      document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+        if (btn.getAttribute('data-atab') === subTab) {
+          btn.classList.add('bg-luxury-gold', 'text-midnight-dark', 'active');
+          btn.classList.remove('bg-midnight-card', 'text-slate-300');
+        } else {
+          btn.classList.remove('bg-luxury-gold', 'text-midnight-dark', 'active');
+          btn.classList.add('bg-midnight-card', 'text-slate-300');
+        }
+      });
+
+      const sections = ['Orders', 'Gmails', 'Fbs', 'Withdrawals', 'AddGroup', 'Gateways'];
+      sections.forEach(s => {
+        const sec = document.getElementById('adminContent' + s);
+        if (sec) sec.classList.add('hidden');
+      });
+
+      const target = document.getElementById('adminContent' + subTab.charAt(0).toUpperCase() + subTab.slice(1));
+      if (target) target.classList.remove('hidden');
+    }
+
+    function adminApproveOrder(id) {
+      const invite = prompt('ইউজারের জন্য টেলিগ্রাম ইনভাইট লিঙ্ক দিন:', 'https://t.me/+slk_vip_direct_link');
+      if (invite) {
+        const order = orders.find(o => o.id === id);
+        if (order) {
+          order.status = 'APPROVED';
+          order.inviteLink = invite;
+          saveAll();
+          showToast('অর্ডার এপ্রুভ ও লিঙ্ক সংযুক্ত করা হয়েছে');
+        }
+      }
+    }
+
+    function adminRejectOrder(id) {
+      if (confirm('অর্ডারটি বাতিল করতে চান?')) {
+        const order = orders.find(o => o.id === id);
+        if (order) {
+          order.status = 'REJECTED';
+          saveAll();
+          showToast('অর্ডার বাতিল করা হয়েছে');
+        }
+      }
+    }
+
+    function adminApproveGmail(id) {
+      const sub = gmailSubmissions.find(s => s.id === id);
+      if (sub && sub.status === 'PENDING') {
+        sub.status = 'APPROVED';
+        wallet.balance += sub.rewardAmount;
+        wallet.totalEarned += sub.rewardAmount;
+        saveAll();
+        showToast('জিমেইল এপ্রুভ হয়েছে এবং ইউজারের ওয়ালেটে ৳' + sub.rewardAmount + ' ক্রেডিট করা হয়েছে!');
+      }
+    }
+
+    function adminRejectGmail(id) {
+      const sub = gmailSubmissions.find(s => s.id === id);
+      if (sub) {
+        sub.status = 'REJECTED';
+        saveAll();
+        showToast('জিমেইল বাতিল করা হয়েছে');
+      }
+    }
+
+    function adminApproveFb(id) {
+      const sub = fbSubmissions.find(s => s.id === id);
+      if (sub && sub.status === 'PENDING') {
+        sub.status = 'APPROVED';
+        wallet.balance += sub.rewardAmount;
+        wallet.totalEarned += sub.rewardAmount;
+        saveAll();
+        showToast('ফেসবুক আইডি এপ্রুভ হয়েছে এবং ইউজারের ওয়ালেটে ৳' + sub.rewardAmount + ' ক্রেডিট করা হয়েছে!');
+      }
+    }
+
+    function adminRejectFb(id) {
+      const sub = fbSubmissions.find(s => s.id === id);
+      if (sub) {
+        sub.status = 'REJECTED';
+        saveAll();
+        showToast('ফেসবুক সাবমিশন বাতিল করা হয়েছে');
+      }
+    }
+
+    function adminApproveWithdrawal(id) {
+      const trx = prompt('টাকা পাঠানোর TrxID দিন:', 'BK' + Math.floor(Math.random() * 1000000));
+      if (trx) {
+        const item = withdrawals.find(w => w.id === id);
+        if (item) {
+          item.status = 'APPROVED';
+          item.adminTrxId = trx;
+          saveAll();
+          showToast('উইথড্র পেইড মার্ক করা হয়েছে!');
+        }
+      }
+    }
+
+    function adminRejectWithdrawal(id) {
+      if (confirm('উইথড্র বাতিল করে ইউজারের ব্যালেন্স রিফান্ড করবেন?')) {
+        const item = withdrawals.find(w => w.id === id);
+        if (item && item.status === 'PENDING') {
+          item.status = 'REJECTED';
+          wallet.balance += item.amount;
+          wallet.totalWithdrawn -= item.amount;
+          saveAll();
+          showToast('উইথড্র বাতিল ও টাকা রিফান্ড করা হয়েছে');
+        }
+      }
+    }
+
+    function handleAdminAddGroup(e) {
+      e.preventDefault();
+      const title = document.getElementById('newGroupTitle').value.trim();
+      const cat = document.getElementById('newGroupCategory').value;
+      const desc = document.getElementById('newGroupDesc').value.trim();
+      const price = parseInt(document.getElementById('newGroupPrice').value);
+      const origPrice = parseInt(document.getElementById('newGroupOrigPrice').value);
+      const mem = document.getElementById('newGroupMembers').value.trim();
+      const badge = document.getElementById('newGroupBadge').value.trim();
+      const link = document.getElementById('newGroupLink').value.trim();
+
+      const newG = {
+        id: Date.now(),
+        title: title,
+        category: cat,
+        description: desc,
+        members: mem,
+        price: price,
+        originalPrice: origPrice,
+        inviteLink: link,
+        badge: badge,
+        rating: '5.0 ★'
+      };
+
+      groups.unshift(newG);
+      saveAll();
+      e.target.reset();
+      showToast('মার্কেটপ্লেসে নতুন গ্রুপ সফলভাবে যুক্ত হয়েছে!');
+      switchAdminTab('orders');
+    }
+
+    function saveGatewayNumber(key, inputId) {
+      const val = document.getElementById(inputId).value.trim();
+      adminConfigs[key] = val;
+      saveAll();
+      showToast('পেমেন্ট নাম্বার সফলভাবে আপডেট হয়েছে!');
+    }
+
+    function saveNoticeText() {
+      const val = document.getElementById('adminNoticeInput').value.trim();
+      adminConfigs.notice_text = val;
+      saveAll();
+      showToast('নোটিশ টেক্সট আপডেট হয়েছে!');
+    }
+
+    // --- Main UI Sync Update ---
+    function updateUI() {
+      // Top bar & Notice
+      document.getElementById('topBarBalance').textContent = wallet.balance;
+      document.getElementById('walletMainBalance').textContent = wallet.balance;
+      document.getElementById('walletTotalEarned').textContent = wallet.totalEarned;
+      document.getElementById('walletTotalWithdrawn').textContent = wallet.totalWithdrawn;
+      document.getElementById('walletReferralBonus').textContent = wallet.referralBonus;
+      document.getElementById('noticeText').textContent = adminConfigs.notice_text;
+
+      // Admin button visibility
+      const topAdminBtn = document.getElementById('topAdminBtn');
+      if (isAdminUnlocked) {
+        topAdminBtn.classList.remove('hidden');
+      } else {
+        topAdminBtn.classList.add('hidden');
+      }
+
+      // Render home featured groups (first 4)
+      renderGroups('homeFeaturedGroups', groups.slice(0, 4));
+
+      // Render all groups in marketplace
+      renderGroups('groupsContainer', groups);
+
+      // Render Submissions History
+      const userSubContainer = document.getElementById('userSubmissionsList');
+      const allSubs = [
+        ...gmailSubmissions.map(g => ({ ...g, type: 'GMAIL' })),
+        ...fbSubmissions.map(f => ({ ...f, type: 'FACEBOOK' }))
+      ];
+
+      if (allSubs.length === 0) {
+        userSubContainer.innerHTML = '<div class="text-slate-500 py-2">এখনও কোনো সাবমিশন নেই</div>';
+      } else {
+        userSubContainer.innerHTML = allSubs.slice(0, 5).map(s => `
+          <div class="bg-midnight-surface p-2.5 rounded-lg border border-midnight-border flex items-center justify-between">
+            <div>
+              <div class="font-bold text-white">${s.type === 'GMAIL' ? s.gmail : s.phoneOrEmail}</div>
+              <div class="text-[10px] text-slate-400">${s.type} • ৳${s.rewardAmount} • ${s.date}</div>
+            </div>
+            <span class="text-[10px] px-2 py-0.5 rounded font-bold ${s.status === 'APPROVED' ? 'bg-status-success/20 text-status-success' : (s.status === 'REJECTED' ? 'bg-status-danger/20 text-status-danger' : 'bg-status-warning/20 text-status-warning')}">
+              ${s.status === 'APPROVED' ? 'অনুমোদিত' : (s.status === 'REJECTED' ? 'বাতিল' : 'যাচাই চলছে')}
+            </span>
+          </div>
+        `).join('');
+      }
+
+      // Render Withdrawals History
+      const wList = document.getElementById('walletWithdrawalsList');
+      if (withdrawals.length === 0) {
+        wList.innerHTML = '<div class="text-slate-500 py-2">কোনো উইথড্র রিকোয়েস্ট নেই</div>';
+      } else {
+        wList.innerHTML = withdrawals.map(w => `
+          <div class="bg-midnight-surface p-2.5 rounded-lg border border-midnight-border flex items-center justify-between">
+            <div>
+              <div class="font-bold text-white">৳${w.amount} (${w.paymentMethod})</div>
+              <div class="text-[10px] text-slate-400">${w.accountNumber} • ${w.date}</div>
+              ${w.adminTrxId ? `<div class="text-[10px] text-status-success">TrxID: ${w.adminTrxId}</div>` : ''}
+            </div>
+            <span class="text-[10px] px-2 py-0.5 rounded font-bold ${w.status === 'APPROVED' ? 'bg-status-success/20 text-status-success' : (w.status === 'REJECTED' ? 'bg-status-danger/20 text-status-danger' : 'bg-status-warning/20 text-status-warning')}">
+              ${w.status === 'APPROVED' ? 'পেইড' : (w.status === 'REJECTED' ? 'বাতিল' : 'পেন্ডিং')}
+            </span>
+          </div>
+        `).join('');
+      }
+
+      // Render User Orders
+      const orderList = document.getElementById('userOrdersList');
+      if (orders.length === 0) {
+        orderList.innerHTML = '<div class="text-slate-500 py-2">এখনও কোনো গ্রুপ অর্ডার করেননি</div>';
+      } else {
+        orderList.innerHTML = orders.map(o => `
+          <div class="bg-midnight-surface p-3 rounded-lg border border-midnight-border space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-white">${o.groupTitle}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded font-bold ${o.status === 'APPROVED' ? 'bg-status-success/20 text-status-success' : (o.status === 'REJECTED' ? 'bg-status-danger/20 text-status-danger' : 'bg-status-warning/20 text-status-warning')}">
+                ${o.status === 'APPROVED' ? 'অনুমোদিত' : (o.status === 'REJECTED' ? 'বাতিল' : 'পেন্ডিং')}
+              </span>
+            </div>
+            <div class="text-[11px] text-slate-400">
+              মূল্য: ৳${o.amount} • TrxID: ${o.trxId} • ${o.paymentMethod}
+            </div>
+            ${o.status === 'APPROVED' && o.inviteLink ? `
+              <a href="${o.inviteLink}" target="_blank" class="block w-full bg-telegram text-white text-center py-1.5 rounded-md font-bold text-xs hover:brightness-110">
+                🚀 টেলিগ্রাম গ্রুপে জয়েন করুন
+              </a>
+            ` : ''}
+          </div>
+        `).join('');
+      }
+
+      // Admin Stats & Lists
+      document.getElementById('adminStatOrders').textContent = orders.filter(o => o.status === 'PENDING').length;
+      document.getElementById('adminStatGmails').textContent = gmailSubmissions.filter(g => g.status === 'PENDING').length;
+      document.getElementById('adminStatFbs').textContent = fbSubmissions.filter(f => f.status === 'PENDING').length;
+      document.getElementById('adminStatWithdraws').textContent = withdrawals.filter(w => w.status === 'PENDING').length;
+
+      // Admin Orders
+      const admOrders = document.getElementById('adminContentOrders');
+      if (orders.length === 0) {
+        admOrders.innerHTML = '<div class="text-slate-500 p-4 text-center">কোনো অর্ডার নেই</div>';
+      } else {
+        admOrders.innerHTML = orders.map(o => `
+          <div class="bg-midnight-card border border-midnight-border rounded-xl p-3 space-y-2 text-xs">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-white">${o.groupTitle}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded font-bold ${o.status === 'APPROVED' ? 'bg-status-success/20 text-status-success' : 'bg-status-warning/20 text-status-warning'}">${o.status}</span>
+            </div>
+            <div class="text-electric-cyan font-bold">ইউজার: ${o.userTelegram} • মূল্য: ৳${o.amount}</div>
+            <div class="text-slate-300">প্রেরক: ${o.senderNumber} (${o.paymentMethod}) • TrxID: <span class="text-luxury-gold font-mono">${o.trxId}</span></div>
+            ${o.status === 'PENDING' ? `
+              <div class="flex gap-2 pt-1">
+                <button onclick="adminApproveOrder(${o.id})" class="flex-1 bg-status-success text-midnight-dark font-bold py-1.5 rounded">এপ্রুভ করুন</button>
+                <button onclick="adminRejectOrder(${o.id})" class="flex-1 bg-status-danger text-white font-bold py-1.5 rounded">বাতিল</button>
+              </div>
+            ` : ''}
+          </div>
+        `).join('');
+      }
+
+      // Admin Gmails
+      const admGmails = document.getElementById('adminContentGmails');
+      if (gmailSubmissions.length === 0) {
+        admGmails.innerHTML = '<div class="text-slate-500 p-4 text-center">কোনো জিমেইল সাবমিশন নেই</div>';
+      } else {
+        admGmails.innerHTML = gmailSubmissions.map(g => `
+          <div class="bg-midnight-card border border-midnight-border rounded-xl p-3 space-y-1.5 text-xs">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-white">${g.gmail}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded font-bold ${g.status === 'APPROVED' ? 'bg-status-success/20 text-status-success' : 'bg-status-warning/20 text-status-warning'}">${g.status}</span>
+            </div>
+            <div class="text-slate-300">পাসওয়ার্ড: <span class="text-electric-cyan font-mono">${g.password}</span> ${g.recoveryEmail ? `• রিকভারি: ${g.recoveryEmail}` : ''}</div>
+            <div class="text-slate-400">ইউজার: ${g.userTelegram} • টাইপ: ${g.accountType} • রেট: ৳${g.rewardAmount}</div>
+            ${g.status === 'PENDING' ? `
+              <div class="flex gap-2 pt-1">
+                <button onclick="adminApproveGmail(${g.id})" class="flex-1 bg-status-success text-midnight-dark font-bold py-1.5 rounded">এপ্রুভ (+৳${g.rewardAmount})</button>
+                <button onclick="adminRejectGmail(${g.id})" class="flex-1 bg-status-danger text-white font-bold py-1.5 rounded">বাতিল</button>
+              </div>
+            ` : ''}
+          </div>
+        `).join('');
+      }
+
+      // Admin Facebooks
+      const admFbs = document.getElementById('adminContentFbs');
+      if (fbSubmissions.length === 0) {
+        admFbs.innerHTML = '<div class="text-slate-500 p-4 text-center">কোনো ফেসবুক সাবমিশন নেই</div>';
+      } else {
+        admFbs.innerHTML = fbSubmissions.map(f => `
+          <div class="bg-midnight-card border border-midnight-border rounded-xl p-3 space-y-1.5 text-xs">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-white">${f.phoneOrEmail}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded font-bold ${f.status === 'APPROVED' ? 'bg-status-success/20 text-status-success' : 'bg-status-warning/20 text-status-warning'}">${f.status}</span>
+            </div>
+            <div class="text-slate-300">পাসওয়ার্ড: <span class="text-electric-cyan font-mono">${f.password}</span></div>
+            ${f.twoFactorCode ? `<div class="text-status-warning">2FA Code: ${f.twoFactorCode}</div>` : ''}
+            <div class="text-slate-400">ইউজার: ${f.userTelegram} • বয়স: ${f.accountYear} • রেট: ৳${f.rewardAmount}</div>
+            ${f.status === 'PENDING' ? `
+              <div class="flex gap-2 pt-1">
+                <button onclick="adminApproveFb(${f.id})" class="flex-1 bg-status-success text-midnight-dark font-bold py-1.5 rounded">এপ্রুভ (+৳${f.rewardAmount})</button>
+                <button onclick="adminRejectFb(${f.id})" class="flex-1 bg-status-danger text-white font-bold py-1.5 rounded">বাতিল</button>
+              </div>
+            ` : ''}
+          </div>
+        `).join('');
+      }
+
+      // Admin Withdrawals
+      const admWith = document.getElementById('adminContentWithdrawals');
+      if (withdrawals.length === 0) {
+        admWith.innerHTML = '<div class="text-slate-500 p-4 text-center">কোনো উইথড্র রিকোয়েস্ট নেই</div>';
+      } else {
+        admWith.innerHTML = withdrawals.map(w => `
+          <div class="bg-midnight-card border border-midnight-border rounded-xl p-3 space-y-1.5 text-xs">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-luxury-gold">৳${w.amount} (${w.paymentMethod})</span>
+              <span class="text-[10px] px-2 py-0.5 rounded font-bold ${w.status === 'APPROVED' ? 'bg-status-success/20 text-status-success' : 'bg-status-warning/20 text-status-warning'}">${w.status}</span>
+            </div>
+            <div class="text-white font-bold">নাম্বার: ${w.accountNumber} • ইউজার: ${w.userTelegram}</div>
+            ${w.adminTrxId ? `<div class="text-status-success">প্রেরিত TrxID: ${w.adminTrxId}</div>` : ''}
+            ${w.status === 'PENDING' ? `
+              <div class="flex gap-2 pt-1">
+                <button onclick="adminApproveWithdrawal(${w.id})" class="flex-1 bg-status-success text-midnight-dark font-bold py-1.5 rounded">পেইড মার্ক করুন</button>
+                <button onclick="adminRejectWithdrawal(${w.id})" class="flex-1 bg-status-danger text-white font-bold py-1.5 rounded">বাতিল ও রিফান্ড</button>
+              </div>
+            ` : ''}
+          </div>
+        `).join('');
+      }
+
+      // Input defaults in Admin Settings
+      document.getElementById('adminBkashInput').value = adminConfigs.bkash_number;
+      document.getElementById('adminNagadInput').value = adminConfigs.nagad_number;
+      document.getElementById('adminRocketInput').value = adminConfigs.rocket_number;
+      document.getElementById('adminNoticeInput').value = adminConfigs.notice_text;
+
+      lucide.createIcons();
+    }
+
+    // --- First Run Initialization ---
+    document.addEventListener('DOMContentLoaded', () => {
+      updateUI();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "name": "SLK BUY GROUP",
+  "description": "Telegram Premium video group marketplace, Gmail & Facebook account selling, wallet system with bKash, Nagad & Rocket, and secret admin panel.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

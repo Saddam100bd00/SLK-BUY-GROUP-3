@@ -183,25 +183,46 @@
 <body class="bg-midnight-dark text-slate-100 min-h-screen pb-24 transition-colors duration-300 antialiased">
 
   <!-- ================= CIRCULAR SPLASH LOADING SCREEN ================= -->
-  <div id="splashScreen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-midnight-dark transition-opacity duration-700">
-    <div class="relative flex flex-col items-center">
-      <!-- Glow Aura -->
-      <div class="absolute -inset-4 bg-gradient-to-r from-luxury-gold to-electric-cyan rounded-full blur-2xl opacity-40 animate-pulse"></div>
-      
-      <!-- Circular Logo (Never Square) -->
-      <div class="relative w-28 h-28 rounded-full border-4 border-luxury-gold/80 p-1.5 shadow-2xl bg-midnight-card flex items-center justify-center overflow-hidden">
-        <img id="splashLogoImg" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&auto=format&fit=crop&q=80" alt="App Logo" class="w-full h-full object-cover rounded-full" />
+  <div id="splashScreen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-midnight-dark transition-all duration-700 select-none overflow-hidden">
+    <!-- Ambient Backdrop Effects -->
+    <div class="absolute w-80 h-80 bg-luxury-gold/15 rounded-full blur-3xl -top-10 -left-10 pointer-events-none animate-pulse"></div>
+    <div class="absolute w-80 h-80 bg-electric-cyan/15 rounded-full blur-3xl -bottom-10 -right-10 pointer-events-none animate-pulse" style="animation-delay: 1.2s;"></div>
+    
+    <div class="relative flex flex-col items-center z-10">
+      <!-- Outer Rotating Luxury Glow Rings -->
+      <div class="relative flex items-center justify-center">
+        <div class="absolute w-36 h-36 rounded-full border-2 border-dashed border-luxury-gold/40 animate-[spin_10s_linear_infinite]"></div>
+        <div class="absolute w-32 h-32 rounded-full border border-electric-cyan/30 animate-[spin_6s_linear_infinite_reverse]"></div>
+        
+        <!-- Glow Aura Behind Logo -->
+        <div class="absolute inset-0 bg-gradient-to-r from-luxury-gold via-amber-400 to-electric-cyan rounded-full blur-xl opacity-50 animate-pulse"></div>
+        
+        <!-- Circular Logo (Never Square) -->
+        <div class="relative w-28 h-28 rounded-full border-4 border-luxury-gold p-1 shadow-2xl bg-midnight-card flex items-center justify-center overflow-hidden ring-4 ring-black/60">
+          <img id="splashLogoImg" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&auto=format&fit=crop&q=80" alt="App Logo" class="w-full h-full object-cover rounded-full transition-transform duration-700 hover:scale-105" />
+        </div>
       </div>
 
-      <!-- App Name -->
-      <h1 id="splashAppName" class="mt-5 text-2xl font-black tracking-wider bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-200 bg-clip-text text-transparent">
+      <!-- App Name with Luxury Gradient & Shadow -->
+      <h1 id="splashAppName" class="mt-6 text-2xl font-black tracking-wider bg-gradient-to-r from-amber-200 via-luxury-gold to-yellow-400 bg-clip-text text-transparent drop-shadow-md glow-appname">
         SLK BUY GROUP
       </h1>
-      <p id="splashTagline" class="text-xs text-slate-400 mt-1 font-medium">Official Telegram Group Marketplace</p>
+      
+      <!-- Verified Badge -->
+      <div class="mt-1 flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-midnight-card/80 border border-luxury-gold/30 text-[10px] text-amber-300 font-bold shadow-inner">
+        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-luxury-gold"></i>
+        <span id="splashTagline">Official Telegram Marketplace</span>
+      </div>
 
-      <!-- Smooth Progress Bar -->
-      <div class="w-48 h-1.5 bg-slate-800 rounded-full mt-6 overflow-hidden relative">
-        <div class="h-full bg-gradient-to-r from-luxury-gold via-electric-cyan to-telegram rounded-full animate-[pulse_1s_infinite] w-full"></div>
+      <!-- Modern Cyber Loading Indicator -->
+      <div class="mt-7 flex flex-col items-center gap-2">
+        <div class="w-52 h-1.5 bg-slate-800/80 rounded-full overflow-hidden relative p-0.5 border border-white/10">
+          <div class="h-full bg-gradient-to-r from-luxury-gold via-yellow-400 to-emerald-400 rounded-full animate-[pulse_1s_infinite] w-full shadow-sm shadow-amber-400"></div>
+        </div>
+        <div class="flex items-center gap-2 text-[11px] text-slate-400 font-medium">
+          <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          <span>ডাটাবেজ লোড হচ্ছে...</span>
+        </div>
       </div>
     </div>
   </div>
@@ -735,8 +756,8 @@
           <span class="text-xs font-bold text-indigo-400 bg-indigo-500/10 px-2 py-1 rounded">পরিবর্তন</span>
         </button>
 
-        <!-- Secret Admin Entrance (Only opens modal if clicked) -->
-        <button onclick="promptAdminLogin()" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-midnight-surface transition btn-bounce border-t border-midnight-border/60">
+        <!-- Secret Admin Entrance (Strictly hidden for ordinary users, only visible for Saddam 8701368956) -->
+        <button id="profileAdminAccessBtn" onclick="promptAdminLogin()" class="hidden w-full flex items-center justify-between p-3 rounded-xl hover:bg-midnight-surface transition btn-bounce border-t border-midnight-border/60">
           <div class="flex items-center gap-3">
             <div class="w-9 h-9 rounded-lg bg-slate-800 text-slate-400 flex items-center justify-center font-bold">
               <i data-lucide="lock" class="w-5 h-5"></i>
@@ -1528,6 +1549,51 @@
     </div>
   </div>
 
+  <!-- ================= MODAL: ORDER APPROVED POPUP NOTIFICATION ================= -->
+  <div id="orderApprovedModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-sm bg-midnight-card border-2 border-emerald-500/80 rounded-3xl p-5 shadow-2xl space-y-4 text-center relative overflow-hidden">
+      <!-- Glowing background accent -->
+      <div class="absolute -top-12 -right-12 w-36 h-36 bg-emerald-500/25 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-12 -left-12 w-36 h-36 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="w-16 h-16 mx-auto rounded-full bg-emerald-500/20 border-2 border-emerald-400 text-emerald-300 flex items-center justify-center shadow-lg shadow-emerald-500/30 animate-bounce">
+        <i data-lucide="party-popper" class="w-8 h-8 text-emerald-400"></i>
+      </div>
+
+      <div>
+        <span class="text-[11px] font-black text-emerald-400 bg-emerald-500/15 px-3 py-0.5 rounded-full border border-emerald-500/30">অর্ডার ভেরিফাইড ও এপ্রুভড</span>
+        <h3 class="text-base font-black text-white mt-1.5" id="approvedModalTitle">অভিনন্দন! আপনার গ্রুপ প্রস্তুত</h3>
+        <p class="text-xs text-slate-300 mt-1 leading-relaxed" id="approvedModalDesc">
+          এডমিন আপনার পেমেন্ট ভেরিফাই করেছেন এবং ভিআইপি লিংক প্রদান করেছেন। নিচের বাটনে ক্লিক করে সরাসরি গ্রুপে জয়েন করুন!
+        </p>
+      </div>
+
+      <!-- Group Info badge -->
+      <div class="p-3 bg-midnight-dark/90 rounded-2xl border border-white/10 text-left flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center flex-shrink-0">
+          <i data-lucide="folder-check" class="w-5 h-5"></i>
+        </div>
+        <div class="truncate">
+          <h4 class="text-xs font-bold text-white truncate" id="approvedModalGroupName">গ্রুপের নাম</h4>
+          <span class="text-[10px] text-emerald-400 font-bold flex items-center gap-1">
+            <i data-lucide="check" class="w-3 h-3"></i> লাইফটাইম ভিআইপি মেম্বারশিপ
+          </span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="space-y-2 pt-1">
+        <a id="approvedModalJoinBtn" href="#" target="_blank" onclick="dismissApprovedModal()" class="w-full py-3 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-400 text-midnight-dark font-black text-sm flex items-center justify-center gap-2 shadow-xl shadow-emerald-500/40 ring-2 ring-emerald-400/50 btn-bounce">
+          <i data-lucide="sparkles" class="w-4 h-4"></i>
+          <span>এখনই গ্রুপে জয়েন করুন</span>
+        </a>
+        <button onclick="dismissApprovedModal()" class="w-full py-2 rounded-xl text-slate-400 hover:text-white text-xs font-bold btn-bounce">
+          পরে জয়েন করব
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ================= JAVASCRIPT LOGIC ================= -->
   <script>
     // --- Audio Synthesis via Web Audio API (Smooth & Offline) ---
@@ -1617,10 +1683,10 @@
         btn3Sub: 'পুরাতন আইডি বিক্রি'
       },
 
-      // User Wallet
+      // User Wallet (Clean 0 start for all members)
       wallet: {
-        balance: 100,
-        totalEarned: 100,
+        balance: 0,
+        totalEarned: 0,
         totalWithdrawn: 0
       },
 
@@ -1776,12 +1842,12 @@
     let isDarkTheme = true;
     let selectedGroupForCheckout = null;
 
-    // --- Current Telegram User Model ---
+    // --- Current Telegram User Model (Isolated per User) ---
     let tgUser = {
-      id: '8701368956',
-      first_name: 'Saddam',
+      id: '',
+      first_name: 'টেলিগ্রাম মেম্বার',
       last_name: '',
-      username: 'ItsSaddam9',
+      username: '',
       photo_url: ''
     };
 
@@ -1798,6 +1864,7 @@
 
     let fbApp = null;
     let fbDb = null;
+    let userWalletUnsubscribe = null;
 
     function initFirebase() {
       try {
@@ -1821,6 +1888,7 @@
               appState.orders = cloudOrders;
               saveState();
               renderApp();
+              checkAndShowApprovedNotice();
             }
           }, (err) => console.warn("Firestore orders listener:", err));
 
@@ -1891,39 +1959,147 @@
       }
     }
 
+    // Add balance to specific user in Firestore
+    function fbAddBalanceToUser(userId, amount) {
+      if (!fbDb || !userId) return;
+      const userRef = fbDb.collection("users").doc(String(userId));
+      userRef.get().then(doc => {
+        const cur = doc.exists ? doc.data() : {};
+        const curBal = Number(cur.balance || 0);
+        const curEarned = Number(cur.totalEarned || 0);
+        userRef.set({
+          balance: curBal + Number(amount),
+          totalEarned: curEarned + Number(amount),
+          updatedAt: Date.now()
+        }, { merge: true }).catch(err => console.warn(err));
+      }).catch(err => console.warn(err));
+    }
+
+    // Refund withdrawal back to specific user in Firestore
+    function fbRefundWithdrawToUser(userId, amount) {
+      if (!fbDb || !userId) return;
+      const userRef = fbDb.collection("users").doc(String(userId));
+      userRef.get().then(doc => {
+        const cur = doc.exists ? doc.data() : {};
+        const curBal = Number(cur.balance || 0);
+        const curWithdrawn = Number(cur.totalWithdrawn || 0);
+        userRef.set({
+          balance: curBal + Number(amount),
+          totalWithdrawn: Math.max(0, curWithdrawn - Number(amount)),
+          updatedAt: Date.now()
+        }, { merge: true }).catch(err => console.warn(err));
+      }).catch(err => console.warn(err));
+    }
+
+    // Listen to user's personal wallet in Firestore
+    function listenUserWallet(userId) {
+      if (!fbDb || !userId) return;
+      if (userWalletUnsubscribe) {
+        try { userWalletUnsubscribe(); } catch(e) {}
+      }
+
+      // Load locally stored user wallet if any
+      try {
+        const localSaved = localStorage.getItem(`slk_wallet_${userId}`);
+        if (localSaved) {
+          const parsed = JSON.parse(localSaved);
+          appState.wallet.balance = Number(parsed.balance || 0);
+          appState.wallet.totalEarned = Number(parsed.totalEarned || 0);
+          appState.wallet.totalWithdrawn = Number(parsed.totalWithdrawn || 0);
+          updateWalletDisplay();
+        }
+      } catch(e) {}
+
+      const userDocRef = fbDb.collection("users").doc(String(userId));
+      userWalletUnsubscribe = userDocRef.onSnapshot((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          appState.wallet.balance = Number(data.balance || 0);
+          appState.wallet.totalEarned = Number(data.totalEarned || 0);
+          appState.wallet.totalWithdrawn = Number(data.totalWithdrawn || 0);
+          updateWalletDisplay();
+          try {
+            localStorage.setItem(`slk_wallet_${userId}`, JSON.stringify(appState.wallet));
+          } catch(e) {}
+        } else {
+          // Initialize fresh new user document in Firestore with 0 balance
+          const newUser = {
+            userId: String(userId),
+            userName: `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim() || 'টেলিগ্রাম মেম্বার',
+            userHandle: tgUser.username ? `@${tgUser.username}` : (tgUser.id ? `ID:${tgUser.id}` : '@user'),
+            userPhoto: tgUser.photo_url || '',
+            balance: 0,
+            totalEarned: 0,
+            totalWithdrawn: 0,
+            createdAt: Date.now()
+          };
+          userDocRef.set(newUser).catch(e => console.warn(e));
+          appState.wallet.balance = 0;
+          appState.wallet.totalEarned = 0;
+          appState.wallet.totalWithdrawn = 0;
+          updateWalletDisplay();
+          try {
+            localStorage.setItem(`slk_wallet_${userId}`, JSON.stringify(appState.wallet));
+          } catch(e) {}
+        }
+      }, (err) => console.warn("Wallet listener error:", err));
+    }
+
+    function updateWalletDisplay() {
+      safeSetText('homeWalletBalance', appState.wallet.balance);
+      safeSetText('dispWalletBalance', appState.wallet.balance);
+      safeSetText('dispTotalEarned', `৳${appState.wallet.totalEarned}`);
+      safeSetText('dispTotalWithdrawn', `৳${appState.wallet.totalWithdrawn}`);
+    }
+
     // --- Check Telegram User & Super Admin Auto-Detection ---
     function initTelegramUser() {
       try {
         const tg = window.Telegram?.WebApp;
-        if (tg) {
+        let detectedUser = null;
+        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) {
+          detectedUser = tg.initDataUnsafe.user;
           tg.ready();
           tg.expand();
-          const user = tg.initDataUnsafe?.user;
-          if (user) {
-            tgUser.id = user.id ? String(user.id) : tgUser.id;
-            tgUser.first_name = user.first_name || tgUser.first_name;
-            tgUser.last_name = user.last_name || '';
-            tgUser.username = user.username || tgUser.username;
-            tgUser.photo_url = user.photo_url || '';
-            
-            try {
-              localStorage.setItem('slk_tg_user', JSON.stringify(tgUser));
-            } catch (e) {}
-          }
+        }
+
+        if (detectedUser) {
+          tgUser.id = String(detectedUser.id);
+          tgUser.first_name = detectedUser.first_name || 'টেলিগ্রাম মেম্বার';
+          tgUser.last_name = detectedUser.last_name || '';
+          tgUser.username = detectedUser.username || '';
+          tgUser.photo_url = detectedUser.photo_url || '';
+          try { localStorage.setItem('slk_user_profile_v2', JSON.stringify(tgUser)); } catch (e) {}
         } else {
-          const cached = localStorage.getItem('slk_tg_user');
-          if (cached) {
-            try { tgUser = Object.assign(tgUser, JSON.parse(cached)); } catch(e) {}
+          // Check saved profile or create unique isolated ID per device
+          let saved = null;
+          try {
+            const s = localStorage.getItem('slk_user_profile_v2');
+            if (s) saved = JSON.parse(s);
+          } catch(e) {}
+
+          if (saved && saved.id) {
+            tgUser = Object.assign(tgUser, saved);
+          } else {
+            // Generate an individual unique Telegram member ID for this device/browser
+            let randomId = localStorage.getItem('slk_device_user_id_v2');
+            if (!randomId) {
+              randomId = String(Math.floor(100000000 + Math.random() * 900000000));
+              localStorage.setItem('slk_device_user_id_v2', randomId);
+            }
+            tgUser.id = randomId;
+            tgUser.first_name = 'টেলিগ্রাম মেম্বার';
+            tgUser.last_name = '';
+            tgUser.username = '';
+            tgUser.photo_url = 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80';
+            try { localStorage.setItem('slk_user_profile_v2', JSON.stringify(tgUser)); } catch (e) {}
           }
         }
 
         // Strictly verify if Saddam Bhai (8701368956 / ItsSaddam9)
-        const isSaddam = String(tgUser.id) === '8701368956' || (tgUser.username && tgUser.username.toLowerCase() === 'itssaddam9');
-        if (isSaddam) {
-          appState.adminUnlocked = true;
-        } else {
-          appState.adminUnlocked = false;
-        }
+        const isSaddam = (String(tgUser.id) === '8701368956') || 
+                         (tgUser.username && tgUser.username.toLowerCase() === 'itssaddam9');
+        appState.adminUnlocked = isSaddam;
         saveState();
 
         // Update Profile Header with Telegram Photo & Details
@@ -1934,6 +2110,12 @@
         safeSetText('profileFullName', fullName);
         safeSetText('profileUsername', tgUser.username ? '@' + tgUser.username : (tgUser.id ? 'ID: ' + tgUser.id : '@member'));
         safeSetText('profileUserId', tgUser.id ? 'ID: ' + tgUser.id : '');
+
+        // Listen to this user's isolated wallet from Firestore
+        listenUserWallet(tgUser.id);
+
+        // Check if any order was approved while the user was away
+        setTimeout(checkAndShowApprovedNotice, 1000);
 
       } catch (e) {
         console.warn("Telegram WebApp init:", e);
@@ -1946,6 +2128,7 @@
         const navAdmin = document.getElementById('navAdminBtn');
         const indBadge = document.getElementById('adminIndicatorBadge');
         const bottomNav = document.getElementById('bottomNavContainer');
+        const profileAdminBtn = document.getElementById('profileAdminAccessBtn');
 
         if (appState.adminUnlocked) {
           if (navAdmin) {
@@ -1953,6 +2136,10 @@
             navAdmin.classList.add('flex');
           }
           if (indBadge) indBadge.classList.remove('hidden');
+          if (profileAdminBtn) {
+            profileAdminBtn.classList.remove('hidden');
+            profileAdminBtn.classList.add('flex');
+          }
           if (bottomNav) bottomNav.className = "max-w-md mx-auto grid grid-cols-5 gap-1 text-center text-[10px]";
         } else {
           if (navAdmin) {
@@ -1960,11 +2147,74 @@
             navAdmin.classList.remove('flex');
           }
           if (indBadge) indBadge.classList.add('hidden');
+          if (profileAdminBtn) {
+            profileAdminBtn.classList.add('hidden');
+            profileAdminBtn.classList.remove('flex');
+          }
           if (bottomNav) bottomNav.className = "max-w-md mx-auto grid grid-cols-4 gap-1 text-center text-[10px]";
         }
       } catch (e) {
         console.warn("updateAdminVisibility:", e);
       }
+    }
+
+    // --- Realtime Order Approval Notice Popup Logic ---
+    let activeNoticeOrderId = null;
+    function checkAndShowApprovedNotice() {
+      if (!tgUser.id) return;
+
+      let seen = [];
+      try {
+        const s = localStorage.getItem('slk_seen_approved_orders');
+        if (s) seen = JSON.parse(s);
+      } catch(e) {}
+
+      const myApprovedOrders = (appState.orders || []).filter(o => {
+        const isMe = String(o.userId || '') === String(tgUser.id) || 
+                     (tgUser.username && (o.userHandle || o.userTelegram || '').toLowerCase() === `@${tgUser.username.toLowerCase()}`);
+        return isMe && o.status === 'APPROVED' && o.inviteLink;
+      });
+
+      // Find first unseen approved order
+      const unseenOrder = myApprovedOrders.find(o => !seen.includes(String(o.id)));
+      if (unseenOrder) {
+        showApprovedOrderModal(unseenOrder);
+      }
+    }
+
+    function showApprovedOrderModal(order) {
+      activeNoticeOrderId = String(order.id);
+      safeSetText('approvedModalGroupName', order.groupTitle || 'প্রিমিয়াম টেলিগ্রাম গ্রুপ');
+      
+      const joinBtn = document.getElementById('approvedModalJoinBtn');
+      if (joinBtn) {
+        joinBtn.href = order.inviteLink || '#';
+      }
+
+      const modal = document.getElementById('orderApprovedModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        playSound('chime');
+        lucide.createIcons();
+      }
+    }
+
+    function dismissApprovedModal() {
+      if (activeNoticeOrderId) {
+        let seen = [];
+        try {
+          const s = localStorage.getItem('slk_seen_approved_orders');
+          if (s) seen = JSON.parse(s);
+        } catch(e) {}
+        if (!seen.includes(activeNoticeOrderId)) {
+          seen.push(activeNoticeOrderId);
+          try { localStorage.setItem('slk_seen_approved_orders', JSON.stringify(seen)); } catch(e) {}
+        }
+        fbUpdateOrder(activeNoticeOrderId, { notified: true });
+      }
+
+      const modal = document.getElementById('orderApprovedModal');
+      if (modal) modal.classList.add('hidden');
     }
 
     function promptAdminLogin() {
@@ -2683,34 +2933,55 @@
       const gmail = (document.getElementById('inGmailAddress')?.value || '').trim();
       const pass = (document.getElementById('inGmailPassword')?.value || '').trim();
       const recovery = (document.getElementById('inGmailRecovery')?.value || '').trim();
-      const tg = (document.getElementById('inGmailTg')?.value || '').trim();
+      let tg = (document.getElementById('inGmailTg')?.value || '').trim();
 
-      if (!gmail || !pass || !tg) {
-        alert("জিমেইল এড্রেস, পাসওয়ার্ড এবং টেলিগ্রাম দিন!");
+      if (!tg) {
+        tg = tgUser.username ? `@${tgUser.username}` : (tgUser.id ? `ID:${tgUser.id}` : '@user');
+      }
+
+      if (!gmail || !pass) {
+        alert("জিমেইল এড্রেস এবং পাসওয়ার্ড সঠিকভাবে দিন!");
         return;
       }
 
       const rates = appState.gmailRates || { new: 15, old: 25, aged: 40 };
       const reward = type === 'AGED' ? rates.aged : (type === 'OLD' ? rates.old : rates.new);
       const typeLabel = type === 'AGED' ? 'অরিজিনাল পুরাতন (Aged)' : (type === 'OLD' ? 'পুরাতন (Old)' : 'নতুন ফ্রেশ (New)');
+      const fullName = `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim() || 'টেলিগ্রাম মেম্বার';
+      const userHandle = tgUser.username ? `@${tgUser.username}` : (tgUser.id ? `ID:${tgUser.id}` : tg);
 
-      appState.submissions.unshift({
+      const sub = {
         id: Date.now(),
+        category: 'GMAIL',
         type: `GMAIL [${typeLabel}]`,
+        tierLabel: typeLabel,
+        rawTier: type,
         account: gmail,
+        email: gmail,
         password: pass,
-        extra: recovery,
-        userTelegram: tg,
+        recovery: recovery || 'দেওয়া হয়নি',
+        extra: recovery || '',
+        price: reward,
         reward: reward,
+        userId: String(tgUser.id || 'N/A'),
+        userName: fullName,
+        userHandle: userHandle,
+        userPhoto: tgUser.photo_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80',
+        userTelegram: tg,
         status: 'PENDING',
-        time: new Date().toLocaleTimeString()
-      });
+        time: new Date().toLocaleString('bn-BD', { dateStyle: 'short', timeStyle: 'short' }),
+        timestamp: Date.now()
+      };
 
+      appState.submissions.unshift(sub);
       saveState();
+      fbSaveSubmission(sub);
+
       playSound('chime');
-      alert(`জিমেইল সফলভাবে জমা হয়েছে!\nধরন: ${typeLabel}\nপ্রত্যাশিত আয়: ৳${reward}\nএডমিন যাচাই করে আপনার ওয়ালেটে ৳${reward} যোগ করে দেবে।`);
+      alert(`🎉 জিমেইল সফলভাবে জমা হয়েছে!\nধরন: ${typeLabel}\nপ্রত্যাশিত আয়: ৳${reward}\n\nসুপার এডমিন যাচাই করে আপনার ওয়ালেটে ৳${reward} যোগ করে দেবে।`);
       safeSetValue('inGmailAddress', '');
       safeSetValue('inGmailPassword', '');
+      safeSetValue('inGmailRecovery', '');
       renderSellHistory();
     }
 
@@ -2722,51 +2993,85 @@
       const login = (document.getElementById('inFbLogin')?.value || '').trim();
       const pass = (document.getElementById('inFbPassword')?.value || '').trim();
       const twoFA = (document.getElementById('inFb2FA')?.value || '').trim();
-      const tg = (document.getElementById('inFbTg')?.value || '').trim();
+      let tg = (document.getElementById('inFbTg')?.value || '').trim();
 
-      if (!login || !pass || !tg) {
-        alert("ফেসবুক লগইন ও পাসওয়ার্ড সঠিকভাবে দিন!");
+      if (!tg) {
+        tg = tgUser.username ? `@${tgUser.username}` : (tgUser.id ? `ID:${tgUser.id}` : '@user');
+      }
+
+      if (!login || !pass) {
+        alert("ফেসবুক লগইন আইডি ও পাসওয়ার্ড সঠিকভাবে দিন!");
         return;
       }
 
       const rates = appState.fbRates || { new: 20, old: 60, aged: 110 };
       const reward = tier === 'AGED' ? rates.aged : (tier === 'NEW' ? rates.new : rates.old);
-      const tierLabel = tier === 'AGED' ? '২০১৮-২০২০ পুরাতন' : (tier === 'NEW' ? 'নতুন ১-৬ মাস' : '২০২১-২০২৩ মিডিয়াম');
+      const tierLabel = tier === 'AGED' ? '২০১৮-২০২০ পুরাতন (Aged)' : (tier === 'NEW' ? 'নতুন ১-৬ মাস (New)' : '২০২১-২০২৩ মিডিয়াম (Old)');
+      const fullName = `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim() || 'টেলিগ্রাম মেম্বার';
+      const userHandle = tgUser.username ? `@${tgUser.username}` : (tgUser.id ? `ID:${tgUser.id}` : tg);
 
-      appState.submissions.unshift({
+      const sub = {
         id: Date.now(),
+        category: 'FACEBOOK',
         type: `FACEBOOK [${tierLabel}]`,
-        account: `${login} (${uid || 'No UID'})`,
+        tierLabel: tierLabel,
+        rawTier: tier,
+        account: `${login} (UID: ${uid || 'N/A'})`,
+        login: login,
+        uid: uid || 'N/A',
         password: pass,
-        extra: twoFA,
-        userTelegram: tg,
+        twoFA: twoFA || 'দেওয়া হয়নি',
+        extra: twoFA || '',
+        price: reward,
         reward: reward,
+        userId: String(tgUser.id || 'N/A'),
+        userName: fullName,
+        userHandle: userHandle,
+        userPhoto: tgUser.photo_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80',
+        userTelegram: tg,
         status: 'PENDING',
-        time: new Date().toLocaleTimeString()
-      });
+        time: new Date().toLocaleString('bn-BD', { dateStyle: 'short', timeStyle: 'short' }),
+        timestamp: Date.now()
+      };
 
+      appState.submissions.unshift(sub);
       saveState();
+      fbSaveSubmission(sub);
+
       playSound('chime');
-      alert(`ফেসবুক আইডি সফলভাবে জমা হয়েছে!\nক্যাটাগরি: ${tierLabel}\nপ্রত্যাশিত আয়: ৳${reward}\nএডমিন যাচাই করে একাউন্টে ৳${reward} যোগ করবে।`);
-      document.getElementById('inFbLogin').value = '';
-      document.getElementById('inFbPassword').value = '';
-      document.getElementById('inFb2FA').value = '';
+      alert(`🎉 ফেসবুক আইডি সফলভাবে জমা হয়েছে!\nক্যাটাগরি: ${tierLabel}\nপ্রত্যাশিত আয়: ৳${reward}\n\nসুপার এডমিন লগইন যাচাই করে ওয়ালেটে ৳${reward} যোগ করে দেবে।`);
+      safeSetValue('inFbUid', '');
+      safeSetValue('inFbLogin', '');
+      safeSetValue('inFbPassword', '');
+      safeSetValue('inFb2FA', '');
       renderSellHistory();
     }
 
     function renderSellHistory() {
       const container = document.getElementById('sellHistoryList');
-      if (appState.submissions.length === 0) {
-        container.innerHTML = `<p class="text-xs text-slate-500 py-2">এখনও কোনো অ্যাকাউন্ট বিক্রি করা হয়নি।</p>`;
+      if (!container) return;
+      const currentUid = String(tgUser.id || '');
+      const currentHandle = tgUser.username ? `@${tgUser.username.toLowerCase()}` : '';
+
+      const userSubs = (appState.submissions || []).filter(s => {
+        const sUid = String(s.userId || '');
+        const sHandle = (s.userHandle || s.userTelegram || '').toLowerCase();
+        return (currentUid && sUid === currentUid) || (currentHandle && sHandle === currentHandle);
+      });
+
+      if (userSubs.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-500 py-2">এখনও কোনো অ্যাকাউন্ট বিক্রির রিকোয়েস্ট জমা দেননি।</p>`;
         return;
       }
-      container.innerHTML = appState.submissions.slice(0, 5).map(sub => `
-        <div class="p-2.5 rounded-xl bg-midnight-card border border-midnight-border flex items-center justify-between text-xs">
-          <div>
-            <span class="font-bold text-white">${sub.account}</span>
-            <span class="text-[10px] text-slate-400 block">${sub.type} • ৳${sub.reward} • ${sub.time}</span>
+      container.innerHTML = userSubs.slice(0, 10).map(sub => `
+        <div class="p-3 rounded-2xl bg-midnight-card border border-midnight-border flex items-center justify-between text-xs shadow-sm">
+          <div class="space-y-0.5">
+            <span class="font-bold text-white block truncate max-w-[200px]">${sub.account}</span>
+            <span class="text-[10px] text-slate-400 block">${sub.type || sub.tierLabel} • <strong class="text-emerald-400">৳${sub.reward || sub.price}</strong> • ${sub.time}</span>
           </div>
-          <span class="text-[10px] px-2 py-0.5 rounded font-bold ${sub.status === 'APPROVED' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'}">${sub.status}</span>
+          <span class="text-[10px] px-2.5 py-1 rounded-full font-bold ${sub.status === 'APPROVED' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : sub.status === 'REJECTED' ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'}">
+            ${sub.status === 'APPROVED' ? '✓ এপ্রুভড' : sub.status === 'REJECTED' ? '✕ বাতিল' : '⏳ পেন্ডিং'}
+          </span>
         </div>
       `).join('');
     }
@@ -2801,19 +3106,39 @@
         return;
       }
 
-      appState.wallet.balance -= amount;
-      appState.withdrawals.unshift({
+      const fullName = `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim() || 'টেলিগ্রাম মেম্বার';
+      const userHandle = tgUser.username ? `@${tgUser.username}` : (tgUser.id ? `ID:${tgUser.id}` : '@user');
+
+      const withdrawal = {
         id: Date.now(),
+        userId: String(tgUser.id || 'N/A'),
+        userName: fullName,
+        userHandle: userHandle,
+        userPhoto: tgUser.photo_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80',
         amount: amount,
         method: selectedWithdrawMethodName,
         number: num,
         status: 'PENDING',
-        time: new Date().toLocaleTimeString()
-      });
+        time: new Date().toLocaleString('bn-BD', { dateStyle: 'short', timeStyle: 'short' }),
+        timestamp: Date.now()
+      };
+
+      appState.wallet.balance -= amount;
+      appState.wallet.totalWithdrawn = (appState.wallet.totalWithdrawn || 0) + amount;
+      appState.withdrawals.unshift(withdrawal);
 
       saveState();
+      fbSaveWithdrawal(withdrawal);
+      if (fbDb && tgUser.id) {
+        fbDb.collection("users").doc(String(tgUser.id)).set({
+          balance: appState.wallet.balance,
+          totalWithdrawn: appState.wallet.totalWithdrawn,
+          updatedAt: Date.now()
+        }, { merge: true }).catch(err => console.warn(err));
+      }
+
       playSound('chime');
-      alert(`৳${amount} উইথড্র রিকোয়েস্ট সফলভাবে গৃহীত হয়েছে!`);
+      alert(`🎉 ৳${amount} উইথড্র রিকোয়েস্ট সফলভাবে গৃহীত হয়েছে!\nপেমেন্ট মেথড: ${selectedWithdrawMethodName}\nনাম্বার: ${num}\n\nসুপার এডমিন দ্রুত আপনার একাউন্টে টাকা পাঠিয়ে দেবে।`);
       document.getElementById('inWithdrawAmount').value = '';
       document.getElementById('inWithdrawNumber').value = '';
       renderApp();
@@ -2821,17 +3146,27 @@
 
     function renderWithdrawHistory() {
       const container = document.getElementById('withdrawHistoryList');
-      if (appState.withdrawals.length === 0) {
+      if (!container) return;
+      const currentUid = String(tgUser.id || '');
+      const currentHandle = tgUser.username ? `@${tgUser.username.toLowerCase()}` : '';
+
+      const userWiths = (appState.withdrawals || []).filter(w => {
+        const wUid = String(w.userId || '');
+        const wHandle = (w.userHandle || '').toLowerCase();
+        return (currentUid && wUid === currentUid) || (currentHandle && wHandle === currentHandle);
+      });
+
+      if (userWiths.length === 0) {
         container.innerHTML = `<p class="text-xs text-slate-500 py-2">এখনও কোনো উত্তোলন রেকর্ড নেই।</p>`;
         return;
       }
-      container.innerHTML = appState.withdrawals.slice(0, 5).map(w => `
+      container.innerHTML = userWiths.slice(0, 10).map(w => `
         <div class="p-2.5 rounded-xl bg-midnight-card border border-midnight-border flex items-center justify-between text-xs">
           <div>
             <span class="font-bold text-white">৳${w.amount} (${w.method})</span>
             <span class="text-[10px] text-slate-400 block">${w.number} • ${w.time}</span>
           </div>
-          <span class="text-[10px] px-2 py-0.5 rounded font-bold ${w.status === 'APPROVED' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'}">${w.status}</span>
+          <span class="text-[10px] px-2 py-0.5 rounded font-bold ${w.status === 'APPROVED' ? 'bg-emerald-500/20 text-emerald-300' : w.status === 'REJECTED' ? 'bg-rose-500/20 text-rose-300' : 'bg-amber-500/20 text-amber-300'}">${w.status === 'APPROVED' ? 'অনুমোদিত' : w.status === 'REJECTED' ? 'বাতিল' : 'পেন্ডিং'}</span>
         </div>
       `).join('');
     }
@@ -2898,134 +3233,329 @@
 
       // Orders
       const orderContainer = document.getElementById('adminOrdersList');
-      if (!orderContainer) return;
-      if (appState.orders.length === 0) {
-        orderContainer.innerHTML = `<div class="p-6 text-center text-slate-500 bg-midnight-surface rounded-2xl text-xs">কোনো অর্ডার পেন্ডিং নেই।</div>`;
-      } else {
-        orderContainer.innerHTML = appState.orders.map(o => {
-          const userPhoto = o.userPhoto || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80';
-          const userName = o.userName || 'টেলিগ্রাম মেম্বার';
-          const userId = o.userId || 'N/A';
-          const userHandle = o.userHandle || o.userTelegram || '@user';
-          const isApproved = o.status === 'APPROVED';
+      if (orderContainer) {
+        if (appState.orders.length === 0) {
+          orderContainer.innerHTML = `<div class="p-6 text-center text-slate-500 bg-midnight-surface rounded-2xl text-xs">কোনো অর্ডার পেন্ডিং নেই।</div>`;
+        } else {
+          orderContainer.innerHTML = appState.orders.map(o => {
+            const userPhoto = o.userPhoto || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80';
+            const userName = o.userName || 'টেলিগ্রাম মেম্বার';
+            const userId = String(o.userId || 'N/A');
+            const userHandle = o.userHandle || o.userTelegram || '@user';
+            const isApproved = o.status === 'APPROVED';
+            const isRejected = o.status === 'REJECTED';
 
-          return `
-            <div class="p-4 rounded-2xl bg-midnight-surface border ${isApproved ? 'border-emerald-500/40 bg-emerald-950/15' : 'border-midnight-border'} space-y-3 text-xs shadow-md">
-              <!-- Telegram Profile Header: Photo, Name, ID, Username -->
-              <div class="flex items-start justify-between gap-2">
-                <div class="flex items-center gap-3">
-                  <div class="w-12 h-12 rounded-full border-2 border-luxury-gold p-0.5 bg-midnight-dark flex-shrink-0 overflow-hidden shadow">
-                    <img src="${userPhoto}" onerror="this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80'" class="w-full h-full object-cover rounded-full" />
-                  </div>
-                  <div>
-                    <h4 class="font-black text-white text-sm">${userName}</h4>
-                    <div class="flex flex-wrap items-center gap-1.5 text-[11px] mt-0.5">
-                      <span class="text-sky-400 font-bold">${userHandle}</span>
-                      <span class="text-slate-500">•</span>
-                      <span class="text-amber-300 font-mono font-bold">ID: ${userId}</span>
+            return `
+              <div class="p-4 rounded-2xl bg-midnight-surface border ${isApproved ? 'border-emerald-500/40 bg-emerald-950/15' : isRejected ? 'border-rose-500/40 bg-rose-950/15' : 'border-midnight-border'} space-y-3 text-xs shadow-md">
+                <!-- Telegram Profile Header: Photo, Name, ID, Username with Copy -->
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full border-2 border-luxury-gold p-0.5 bg-midnight-dark flex-shrink-0 overflow-hidden shadow">
+                      <img src="${userPhoto}" onerror="this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80'" class="w-full h-full object-cover rounded-full" />
+                    </div>
+                    <div>
+                      <h4 class="font-black text-white text-sm">${userName}</h4>
+                      <div class="flex flex-wrap items-center gap-1.5 text-[11px] mt-0.5">
+                        <span class="text-sky-400 font-bold">${userHandle}</span>
+                        <button onclick="copyText('${userHandle}')" class="px-1.5 py-0.5 text-[10px] rounded bg-sky-500/20 text-sky-300 font-bold hover:bg-sky-500/30" title="ইউজার নাম কপি">কপি</button>
+                        <span class="text-slate-500">•</span>
+                        <span class="text-amber-300 font-mono font-bold">ID: ${userId}</span>
+                        <button onclick="copyText('${userId}')" class="px-1.5 py-0.5 text-[10px] rounded bg-amber-500/20 text-amber-300 font-mono font-bold hover:bg-amber-500/30" title="ইউজার আইডি কপি">কপি</button>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <span class="text-[10px] px-2.5 py-1 rounded-full font-black ${isApproved ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'}">
-                  ${isApproved ? '✓ অনুমোদিত' : '⏳ পেন্ডিং'}
-                </span>
-              </div>
-
-              <!-- Order Info: Group Name, Payment Method, Amount, TrxID -->
-              <div class="p-3 rounded-xl bg-midnight-dark/90 border border-white/5 space-y-1.5 text-[11px]">
-                <div class="flex justify-between items-center font-bold">
-                  <span class="text-white text-xs flex items-center gap-1.5">
-                    <i data-lucide="folder" class="w-3.5 h-3.5 text-amber-400"></i>
-                    <span>${o.groupTitle}</span>
-                  </span>
-                  <span class="text-emerald-400 font-black text-xs bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                    ${o.method} • ৳${o.amount}
+                  <span class="text-[10px] px-2.5 py-1 rounded-full font-black ${isApproved ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : isRejected ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'}">
+                    ${isApproved ? '✓ অনুমোদিত' : isRejected ? '✕ বাতিল' : '⏳ পেন্ডিং'}
                   </span>
                 </div>
-                <div class="flex justify-between items-center text-slate-300 pt-1">
-                  <span>TrxID: <strong class="font-mono text-amber-300 bg-black/50 px-2 py-0.5 rounded border border-white/10">${o.trxId}</strong></span>
-                  <span class="text-[10px] text-slate-400">${o.time}</span>
-                </div>
-              </div>
 
-              <!-- Group Link Box & Action Buttons -->
-              ${!isApproved ? `
-                <div class="space-y-2 pt-1 border-t border-midnight-border/60">
-                  <div>
-                    <label class="text-[11px] text-amber-300 font-bold block mb-1 flex items-center gap-1">
-                      <i data-lucide="link" class="w-3.5 h-3.5"></i>
-                      <span>গ্রুপ লিংক বক্স (ইনভাইট লিংক দিন):</span>
-                    </label>
-                    <input id="adminOrderInvite_${o.id}" type="text" value="${o.inviteLink || ''}" placeholder="যেমন: https://t.me/+xxxxxx (ইনভাইট লিংক পেস্ট করুন)" class="w-full bg-midnight-dark border border-amber-500/60 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400" />
+                <!-- Order Info: Group Name, Payment Method, Amount, TrxID with Copy -->
+                <div class="p-3.5 rounded-xl bg-midnight-dark/95 border border-white/5 space-y-2 text-[11px]">
+                  <div class="flex justify-between items-center font-bold">
+                    <span class="text-white text-xs flex items-center gap-1.5">
+                      <i data-lucide="folder" class="w-3.5 h-3.5 text-amber-400"></i>
+                      <span>${o.groupTitle}</span>
+                    </span>
+                    <span class="text-emerald-400 font-black text-xs bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                      ${o.method} • ৳${o.amount}
+                    </span>
                   </div>
-                  
-                  <div class="flex gap-2 pt-0.5">
-                    <button onclick="adminApproveOrderWithLink(${o.id})" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-midnight-dark font-black text-xs shadow-md btn-bounce flex items-center justify-center gap-1.5">
-                      <i data-lucide="check-circle" class="w-4 h-4"></i>
-                      <span>এপ্রুভ করুন ও লিংক পাঠান</span>
-                    </button>
-                    <button onclick="adminRejectOrder(${o.id})" class="px-3.5 py-2.5 rounded-xl bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold text-xs btn-bounce">
-                      বাতিল
+
+                  <div class="flex items-center justify-between bg-black/40 p-2 rounded-lg border border-white/5">
+                    <div class="truncate mr-2">
+                      <span class="text-slate-400 text-[10px] block">TrxID:</span>
+                      <span class="text-amber-300 font-mono font-bold text-xs select-all">${o.trxId}</span>
+                    </div>
+                    <button onclick="copyText('${o.trxId}')" class="px-2.5 py-1 bg-midnight-surface border border-slate-700 hover:border-slate-500 text-slate-200 rounded text-xs font-bold flex-shrink-0 flex items-center gap-1 btn-bounce">
+                      <i data-lucide="copy" class="w-3 h-3 text-luxury-gold"></i> কপি
                     </button>
                   </div>
+
+                  <div class="flex justify-between items-center text-[10px] text-slate-400 pt-0.5">
+                    <span>অর্ডার আইডি: #${o.id}</span>
+                    <span>সময়: ${o.time}</span>
+                  </div>
                 </div>
-              ` : `
-                <div class="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-[11px] text-emerald-300 flex items-center justify-between">
-                  <span class="truncate flex items-center gap-1.5">
-                    <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> প্রেরিত লিংক: <strong class="text-white">${o.inviteLink || 'দেওয়া হয়নি'}</strong>
-                  </span>
-                  <button onclick="copyText('${o.inviteLink || ''}')" class="text-xs text-white font-bold ml-2 underline px-2 py-0.5 rounded bg-emerald-500/20">কপি</button>
-                </div>
-              `}
-            </div>
-          `;
-        }).join('');
+
+                <!-- Group Link Box & Action Buttons -->
+                ${!isApproved && !isRejected ? `
+                  <div class="space-y-2 pt-1 border-t border-midnight-border/60">
+                    <div>
+                      <label class="text-[11px] text-amber-300 font-bold block mb-1 flex items-center gap-1">
+                        <i data-lucide="link" class="w-3.5 h-3.5"></i>
+                        <span>গ্রুপ লিংক বক্স (ইনভাইট লিংক দিন):</span>
+                      </label>
+                      <input id="adminOrderInvite_${o.id}" type="text" value="${o.inviteLink || ''}" placeholder="যেমন: https://t.me/+xxxxxx (ইনভাইট লিংক পেস্ট করুন)" class="w-full bg-midnight-dark border border-amber-500/60 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400" />
+                    </div>
+                    
+                    <div class="flex gap-2 pt-0.5">
+                      <button onclick="adminApproveOrderWithLink(${o.id})" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-midnight-dark font-black text-xs shadow-md btn-bounce flex items-center justify-center gap-1.5">
+                        <i data-lucide="check-circle" class="w-4 h-4"></i>
+                        <span>এপ্রুভ করুন ও লিংক পাঠান</span>
+                      </button>
+                      <button onclick="adminRejectOrder(${o.id})" class="px-3.5 py-2.5 rounded-xl bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold text-xs btn-bounce flex items-center gap-1">
+                        <i data-lucide="x-circle" class="w-4 h-4"></i>
+                        <span>বাতিল</span>
+                      </button>
+                    </div>
+                  </div>
+                ` : isApproved ? `
+                  <div class="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-[11px] text-emerald-300 flex items-center justify-between">
+                    <span class="truncate flex items-center gap-1.5">
+                      <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> প্রেরিত লিংক: <strong class="text-white">${o.inviteLink || 'দেওয়া হয়নি'}</strong>
+                    </span>
+                    <button onclick="copyText('${o.inviteLink || ''}')" class="text-xs text-white font-bold ml-2 underline px-2 py-0.5 rounded bg-emerald-500/20">কপি</button>
+                  </div>
+                ` : `
+                  <div class="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-[11px] text-rose-300 flex items-center gap-1.5">
+                    <i data-lucide="x" class="w-4 h-4 text-rose-400"></i> এই অর্ডারটি বাতিল করা হয়েছে।
+                  </div>
+                `}
+              </div>
+            `;
+          }).join('');
+        }
       }
 
-      // Sell Submissions
+      // Sell Submissions (Gmail & Facebook with full user profile, copy buttons, type, price)
       const subContainer = document.getElementById('adminSellReqList');
-      if (appState.submissions.length === 0) {
-        subContainer.innerHTML = `<p class="text-xs text-slate-500">কোনো জিমেইল/এফবি জমা হয়নি।</p>`;
-      } else {
-        subContainer.innerHTML = appState.submissions.map(s => `
-          <div class="p-3 rounded-xl bg-midnight-surface border border-midnight-border space-y-1 text-xs">
-            <div class="flex justify-between font-bold text-white">
-              <span>${s.type}: ${s.account}</span>
-              <span class="text-[10px] px-2 py-0.5 rounded ${s.status === 'APPROVED' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'}">${s.status}</span>
-            </div>
-            <p class="text-[11px] text-slate-300">পাসওয়ার্ড: <code class="bg-black px-1.5 py-0.5 rounded text-amber-300">${s.password}</code> ${s.extra ? `• 2FA/Rec: ${s.extra}` : ''}</p>
-            <p class="text-[10px] text-slate-400">টেলিগ্রাম: ${s.userTelegram} • রিওয়ার্ড: ৳${s.reward}</p>
-            ${s.status === 'PENDING' ? `
-              <div class="flex gap-2 pt-1">
-                <button onclick="adminApproveSell(${s.id})" class="px-3 py-1 bg-emerald-600 text-white rounded font-bold text-[11px]">সঠিক (ওয়ালেটে ৳${s.reward} যোগ)</button>
-                <button onclick="adminRejectSell(${s.id})" class="px-3 py-1 bg-rose-600 text-white rounded font-bold text-[11px]">ভুল পাসওয়ার্ড</button>
+      if (subContainer) {
+        if (appState.submissions.length === 0) {
+          subContainer.innerHTML = `<div class="p-6 text-center text-slate-500 bg-midnight-surface rounded-2xl text-xs">কোনো জিমেইল/ফেসবুক বিক্রির রিকোয়েস্ট নেই।</div>`;
+        } else {
+          subContainer.innerHTML = appState.submissions.map(s => {
+            const userPhoto = s.userPhoto || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80';
+            const userName = s.userName || 'টেলিগ্রাম মেম্বার';
+            const userId = String(s.userId || 'N/A');
+            const userHandle = s.userHandle || s.userTelegram || '@user';
+            const isApproved = s.status === 'APPROVED';
+            const isRejected = s.status === 'REJECTED';
+            const isGmail = (s.category === 'GMAIL') || (s.type && s.type.toUpperCase().includes('GMAIL'));
+            const tierText = s.tierLabel || s.rawTier || 'স্ট্যান্ডার্ড';
+            const reward = s.reward || s.price || 0;
+            const accountText = s.email || s.account || s.login || 'N/A';
+            const passwordText = s.password || 'N/A';
+            const extraText = s.recovery || s.twoFA || s.extra || '';
+
+            return `
+              <div class="p-4 rounded-2xl bg-midnight-surface border ${isApproved ? 'border-emerald-500/40 bg-emerald-950/15' : isRejected ? 'border-rose-500/40 bg-rose-950/15' : 'border-midnight-border'} space-y-3 text-xs shadow-md">
+                <!-- User Profile Header: Logo, Name, Username, User ID with Copy -->
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full border-2 border-luxury-gold p-0.5 bg-midnight-dark flex-shrink-0 overflow-hidden shadow">
+                      <img src="${userPhoto}" onerror="this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80'" class="w-full h-full object-cover rounded-full" />
+                    </div>
+                    <div>
+                      <h4 class="font-black text-white text-sm">${userName}</h4>
+                      <div class="flex flex-wrap items-center gap-1.5 text-[11px] mt-0.5">
+                        <span class="text-sky-400 font-bold">${userHandle}</span>
+                        <button onclick="copyText('${userHandle}')" class="px-1.5 py-0.5 text-[10px] rounded bg-sky-500/20 text-sky-300 font-bold hover:bg-sky-500/30" title="ইউজার নাম কপি">কপি</button>
+                        <span class="text-slate-500">•</span>
+                        <span class="text-amber-300 font-mono font-bold">ID: ${userId}</span>
+                        <button onclick="copyText('${userId}')" class="px-1.5 py-0.5 text-[10px] rounded bg-amber-500/20 text-amber-300 font-mono font-bold hover:bg-amber-500/30" title="ইউজার আইডি কপি">কপি</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <span class="text-[10px] px-2.5 py-1 rounded-full font-black ${isApproved ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : isRejected ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'}">
+                    ${isApproved ? '✓ অনুমোদিত' : isRejected ? '✕ বাতিল' : '⏳ পেন্ডিং'}
+                  </span>
+                </div>
+
+                <!-- Detail Box: Category Badge, Type (New/Old), Price, Account/Email with copy, Password with copy, Recovery/2FA with copy -->
+                <div class="p-3.5 rounded-xl bg-midnight-dark/95 border border-white/5 space-y-2 text-[11px]">
+                  <div class="flex items-center justify-between pb-1 border-b border-white/10">
+                    <div class="flex items-center gap-1.5">
+                      <span class="px-2 py-0.5 rounded font-black text-[10px] ${isGmail ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'}">
+                        ${isGmail ? 'GMAIL SELL' : 'FACEBOOK SELL'}
+                      </span>
+                      <span class="text-slate-300 font-bold bg-white/5 px-2 py-0.5 rounded border border-white/10">
+                        টাইপ: <strong class="text-amber-300">${tierText}</strong>
+                      </span>
+                    </div>
+                    <span class="font-black text-xs text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded border border-emerald-500/20">
+                      দাম: ৳${reward}
+                    </span>
+                  </div>
+
+                  <!-- Account / Email with Copy -->
+                  <div class="flex items-center justify-between bg-black/40 p-2 rounded-lg border border-white/5">
+                    <div class="truncate mr-2">
+                      <span class="text-slate-400 text-[10px] block">${isGmail ? 'জিমেইল এড্রেস:' : 'ফেসবুক লগইন / UID:'}</span>
+                      <span class="text-white font-mono font-bold text-xs truncate select-all">${accountText}</span>
+                    </div>
+                    <button onclick="copyText('${accountText}')" class="px-2.5 py-1 bg-midnight-surface border border-slate-700 hover:border-slate-500 text-slate-200 rounded text-xs font-bold flex-shrink-0 flex items-center gap-1 btn-bounce">
+                      <i data-lucide="copy" class="w-3 h-3 text-luxury-gold"></i> কপি
+                    </button>
+                  </div>
+
+                  <!-- Password with Copy -->
+                  <div class="flex items-center justify-between bg-black/40 p-2 rounded-lg border border-white/5">
+                    <div class="truncate mr-2">
+                      <span class="text-slate-400 text-[10px] block">পাসওয়ার্ড:</span>
+                      <span class="text-amber-300 font-mono font-bold text-xs truncate select-all">${passwordText}</span>
+                    </div>
+                    <button onclick="copyText('${passwordText}')" class="px-2.5 py-1 bg-midnight-surface border border-slate-700 hover:border-slate-500 text-slate-200 rounded text-xs font-bold flex-shrink-0 flex items-center gap-1 btn-bounce">
+                      <i data-lucide="copy" class="w-3 h-3 text-luxury-gold"></i> কপি
+                    </button>
+                  </div>
+
+                  <!-- Recovery / 2FA with Copy -->
+                  ${extraText ? `
+                    <div class="flex items-center justify-between bg-black/40 p-2 rounded-lg border border-white/5">
+                      <div class="truncate mr-2">
+                        <span class="text-slate-400 text-[10px] block">${isGmail ? 'রিকভারি জিমেইল:' : '2FA ব্যাকআপ কোড / Extra:'}</span>
+                        <span class="text-sky-300 font-mono font-bold text-xs truncate select-all">${extraText}</span>
+                      </div>
+                      <button onclick="copyText('${extraText}')" class="px-2.5 py-1 bg-midnight-surface border border-slate-700 hover:border-slate-500 text-slate-200 rounded text-xs font-bold flex-shrink-0 flex items-center gap-1 btn-bounce">
+                        <i data-lucide="copy" class="w-3 h-3 text-luxury-gold"></i> কপি
+                      </button>
+                    </div>
+                  ` : ''}
+
+                  <div class="flex justify-between items-center text-[10px] text-slate-400 pt-0.5">
+                    <span>টেলিগ্রাম: <strong class="text-slate-200">${s.userTelegram || userHandle}</strong></span>
+                    <span>সময়: ${s.time}</span>
+                  </div>
+                </div>
+
+                <!-- Action Buttons -->
+                ${!isApproved && !isRejected ? `
+                  <div class="flex gap-2 pt-1 border-t border-midnight-border/60">
+                    <button onclick="adminApproveSell(${s.id})" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-midnight-dark font-black text-xs shadow-md btn-bounce flex items-center justify-center gap-1.5">
+                      <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                      <span>এপ্রুভ করুন (ওয়ালেটে ৳${reward} যোগ)</span>
+                    </button>
+                    <button onclick="adminRejectSell(${s.id})" class="px-3.5 py-2.5 rounded-xl bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold text-xs btn-bounce flex items-center gap-1">
+                      <i data-lucide="x-circle" class="w-4 h-4"></i>
+                      <span>বাতিল</span>
+                    </button>
+                  </div>
+                ` : isApproved ? `
+                  <div class="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-[11px] text-emerald-300 flex items-center gap-1.5 font-bold">
+                    <i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> সফলভাবে এপ্রুভ হয়েছে এবং ইউজারের ওয়ালেটে ৳${reward} যোগ করা হয়েছে।
+                  </div>
+                ` : `
+                  <div class="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-[11px] text-rose-300 flex items-center gap-1.5 font-bold">
+                    <i data-lucide="x" class="w-4 h-4 text-rose-400"></i> ভুল তথ্যের কারণে বাতিল করা হয়েছে।
+                  </div>
+                `}
               </div>
-            ` : ''}
-          </div>
-        `).join('');
+            `;
+          }).join('');
+        }
       }
 
-      // Withdrawals
+      // Withdrawals (Full user profile, payment details, phone with copy)
       const withContainer = document.getElementById('adminWithdrawList');
-      if (appState.withdrawals.length === 0) {
-        withContainer.innerHTML = `<p class="text-xs text-slate-500">কোনো উইথড্র রিকোয়েস্ট নেই।</p>`;
-      } else {
-        withContainer.innerHTML = appState.withdrawals.map(w => `
-          <div class="p-3 rounded-xl bg-midnight-surface border border-midnight-border space-y-1 text-xs">
-            <div class="flex justify-between font-bold text-white">
-              <span>৳${w.amount} (${w.method})</span>
-              <span class="text-[10px] px-2 py-0.5 rounded ${w.status === 'APPROVED' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'}">${w.status}</span>
-            </div>
-            <p class="text-[11px] text-slate-300">নাম্বার: <strong>${w.number}</strong> • সময়: ${w.time}</p>
-            ${w.status === 'PENDING' ? `
-              <div class="flex gap-2 pt-1">
-                <button onclick="adminApproveWithdraw(${w.id})" class="px-3 py-1 bg-emerald-600 text-white rounded font-bold text-[11px]">টাকা পাঠানো হয়েছে</button>
-                <button onclick="adminRejectWithdraw(${w.id})" class="px-3 py-1 bg-rose-600 text-white rounded font-bold text-[11px]">বাতিল ও রিফান্ড</button>
+      if (withContainer) {
+        if (appState.withdrawals.length === 0) {
+          withContainer.innerHTML = `<div class="p-6 text-center text-slate-500 bg-midnight-surface rounded-2xl text-xs">কোনো উইথড্র রিকোয়েস্ট নেই।</div>`;
+        } else {
+          withContainer.innerHTML = appState.withdrawals.map(w => {
+            const userPhoto = w.userPhoto || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80';
+            const userName = w.userName || 'টেলিগ্রাম মেম্বার';
+            const userId = String(w.userId || 'N/A');
+            const userHandle = w.userHandle || '@user';
+            const isApproved = w.status === 'APPROVED';
+            const isRejected = w.status === 'REJECTED';
+
+            return `
+              <div class="p-4 rounded-2xl bg-midnight-surface border ${isApproved ? 'border-emerald-500/40 bg-emerald-950/15' : isRejected ? 'border-rose-500/40 bg-rose-950/15' : 'border-midnight-border'} space-y-3 text-xs shadow-md">
+                <!-- User Profile Header: Photo, Name, ID, Username with Copy -->
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full border-2 border-luxury-gold p-0.5 bg-midnight-dark flex-shrink-0 overflow-hidden shadow">
+                      <img src="${userPhoto}" onerror="this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80'" class="w-full h-full object-cover rounded-full" />
+                    </div>
+                    <div>
+                      <h4 class="font-black text-white text-sm">${userName}</h4>
+                      <div class="flex flex-wrap items-center gap-1.5 text-[11px] mt-0.5">
+                        <span class="text-sky-400 font-bold">${userHandle}</span>
+                        <button onclick="copyText('${userHandle}')" class="px-1.5 py-0.5 text-[10px] rounded bg-sky-500/20 text-sky-300 font-bold hover:bg-sky-500/30" title="ইউজার নাম কপি">কপি</button>
+                        <span class="text-slate-500">•</span>
+                        <span class="text-amber-300 font-mono font-bold">ID: ${userId}</span>
+                        <button onclick="copyText('${userId}')" class="px-1.5 py-0.5 text-[10px] rounded bg-amber-500/20 text-amber-300 font-mono font-bold hover:bg-amber-500/30" title="ইউজার আইডি কপি">কপি</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <span class="text-[10px] px-2.5 py-1 rounded-full font-black ${isApproved ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : isRejected ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'}">
+                    ${isApproved ? '✓ পেইড / সম্পূর্ণ' : isRejected ? '✕ বাতিল ও রিফান্ড' : '⏳ পেন্ডিং'}
+                  </span>
+                </div>
+
+                <!-- Detail Box: Method, Amount, Number with copy -->
+                <div class="p-3.5 rounded-xl bg-midnight-dark/95 border border-white/5 space-y-2 text-[11px]">
+                  <div class="flex items-center justify-between pb-1 border-b border-white/10">
+                    <span class="font-bold text-white text-xs">উত্তোলন মেথড: <span class="text-luxury-gold">${w.method}</span></span>
+                    <span class="font-black text-sm text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded border border-emerald-500/20">
+                      ৳${w.amount}
+                    </span>
+                  </div>
+
+                  <div class="flex items-center justify-between bg-black/40 p-2 rounded-lg border border-white/5">
+                    <div>
+                      <span class="text-slate-400 text-[10px] block">পেমেন্ট গ্রহণকারী নাম্বার:</span>
+                      <span class="text-amber-300 font-mono font-bold text-sm select-all">${w.number}</span>
+                    </div>
+                    <button onclick="copyText('${w.number}')" class="px-2.5 py-1 bg-midnight-surface border border-slate-700 hover:border-slate-500 text-slate-200 rounded text-xs font-bold flex items-center gap-1 btn-bounce">
+                      <i data-lucide="copy" class="w-3 h-3 text-luxury-gold"></i> কপি
+                    </button>
+                  </div>
+
+                  <div class="flex justify-between items-center text-[10px] text-slate-400 pt-0.5">
+                    <span>রিকোয়েস্ট সময়: ${w.time}</span>
+                    <span>আইডি: #${w.id}</span>
+                  </div>
+                </div>
+
+                <!-- Action Buttons -->
+                ${!isApproved && !isRejected ? `
+                  <div class="flex gap-2 pt-1 border-t border-midnight-border/60">
+                    <button onclick="adminApproveWithdraw(${w.id})" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-midnight-dark font-black text-xs shadow-md btn-bounce flex items-center justify-center gap-1.5">
+                      <i data-lucide="send" class="w-4 h-4"></i>
+                      <span>টাকা পাঠানো হয়েছে (অনুমোদন)</span>
+                    </button>
+                    <button onclick="adminRejectWithdraw(${w.id})" class="px-3.5 py-2.5 rounded-xl bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold text-xs btn-bounce flex items-center gap-1">
+                      <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                      <span>বাতিল ও রিফান্ড</span>
+                    </button>
+                  </div>
+                ` : isApproved ? `
+                  <div class="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-[11px] text-emerald-300 font-bold flex items-center gap-1.5">
+                    <i data-lucide="check-check" class="w-4 h-4 text-emerald-400"></i> এই উইথড্র সফলভাবে পরিশোধ করা হয়েছে।
+                  </div>
+                ` : `
+                  <div class="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-[11px] text-rose-300 font-bold flex items-center gap-1.5">
+                    <i data-lucide="rotate-ccw" class="w-4 h-4 text-rose-400"></i> এই রিকোয়েস্ট বাতিল করা হয়েছে এবং ইউজারের ওয়ালেটে ৳${w.amount} ফেরত দেওয়া হয়েছে।
+                  </div>
+                `}
               </div>
-            ` : ''}
-          </div>
-        `).join('');
+            `;
+          }).join('');
+        }
       }
     }
 
@@ -3258,11 +3788,24 @@
       const sub = appState.submissions.find(s => s.id === id);
       if (sub) {
         sub.status = 'APPROVED';
-        appState.wallet.balance += sub.reward;
-        appState.wallet.totalEarned += sub.reward;
+        const reward = sub.reward || sub.price || 0;
         saveState();
+        fbUpdateSubmission(id, { status: 'APPROVED' });
+
+        // Add balance directly to the user's isolated account in Firestore
+        if (sub.userId) {
+          fbAddBalanceToUser(sub.userId, reward);
+        }
+
+        // If this device is the user who sold, update local wallet state immediately
+        if (String(tgUser.id) === String(sub.userId)) {
+          appState.wallet.balance += reward;
+          appState.wallet.totalEarned += reward;
+          saveState();
+        }
+
         renderApp();
-        alert(`অ্যাকাউন্ট এপ্রুভ হয়েছে এবং ওয়ালেটে ৳${sub.reward} যোগ হয়েছে!`);
+        alert(`🎉 অ্যাকাউন্ট #${id} অনুমোদিত হয়েছে!\nইউজারের ওয়ালেটে ৳${reward} যোগ করা হয়েছে।`);
       }
     }
 
@@ -3272,8 +3815,9 @@
       if (sub) {
         sub.status = 'REJECTED';
         saveState();
+        fbUpdateSubmission(id, { status: 'REJECTED' });
         renderApp();
-        alert("সাবমিশন বাতিল করা হয়েছে।");
+        alert(`সাবমিশন #${id} ভুল পাসওয়ার্ড/তথ্যের কারণে বাতিল করা হয়েছে।`);
       }
     }
 
@@ -3282,10 +3826,10 @@
       const w = appState.withdrawals.find(x => x.id === id);
       if (w) {
         w.status = 'APPROVED';
-        appState.wallet.totalWithdrawn += w.amount;
         saveState();
+        fbUpdateWithdrawal(id, { status: 'APPROVED' });
         renderApp();
-        alert(`উইথড্র ৳${w.amount} পেইড মার্ক করা হয়েছে!`);
+        alert(`উইথড্র #${id} (৳${w.amount}) পেইড মার্ক করা হয়েছে!`);
       }
     }
 
@@ -3294,16 +3838,37 @@
       const w = appState.withdrawals.find(x => x.id === id);
       if (w) {
         w.status = 'REJECTED';
-        appState.wallet.balance += w.amount;
         saveState();
+        fbUpdateWithdrawal(id, { status: 'REJECTED' });
+
+        // Refund the amount to the user's isolated wallet in Firestore
+        if (w.userId) {
+          fbRefundWithdrawToUser(w.userId, w.amount);
+        }
+
+        // If this device is the user, refund locally as well
+        if (String(tgUser.id) === String(w.userId)) {
+          appState.wallet.balance += w.amount;
+          if (appState.wallet.totalWithdrawn >= w.amount) {
+            appState.wallet.totalWithdrawn -= w.amount;
+          }
+          saveState();
+        }
+
         renderApp();
-        alert(`উইথড্র বাতিল এবং ৳${w.amount} ওয়ালেটে ফেরত দেওয়া হয়েছে।`);
+        alert(`উইথড্র #${id} বাতিল করা হয়েছে এবং ৳${w.amount} ইউজারের ওয়ালেটে ফেরত দেওয়া হয়েছে।`);
       }
     }
 
     // --- Navigation Tabs ---
     function switchTab(tab) {
       playSound('click');
+
+      if (tab === 'admin' && !appState.adminUnlocked) {
+        promptAdminLogin();
+        return;
+      }
+
       const tabs = ['home', 'groups', 'sell', 'wallet', 'profile', 'admin'];
       tabs.forEach(t => {
         const el = document.getElementById(`tab-${t}`);

@@ -1129,6 +1129,27 @@
             এখানে আপনার ব্যক্তিগত বিকাশ, নগদ, রকেট ও বাইনান্স একাউন্ট নাম্বার, লোগো এবং পেমেন্ট নির্দেশিকা বাংলায় পরিবর্তন করতে পারবেন।
           </p>
 
+          <!-- 0: App Header Branding & Logo (Affects Checkout Topbar & Splash/Header) -->
+          <div class="p-3.5 rounded-xl bg-midnight-dark border border-luxury-gold/50 space-y-2">
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="text-xs font-bold text-amber-300">অ্যাপ হেডার লোগো ও ব্র্যান্ডিং</span>
+                <p class="text-[10px] text-slate-400">পেমেন্ট গেটওয়ে হেডার ও হোমপেজে প্রদর্শিত হবে</p>
+              </div>
+              <div class="w-10 h-10 rounded-full border-2 border-luxury-gold overflow-hidden bg-midnight-surface flex items-center justify-center shadow">
+                <img id="adminHeaderLogoPreview" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100'" />
+              </div>
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-300 block mb-0.5">অ্যাপের নাম (App Name)</label>
+              <input id="adminInPgAppName" type="text" placeholder="SLK BUY GROUP" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-300 block mb-0.5">অ্যাপ গোল লোগো ইমেজ URL (https://...)</label>
+              <input id="adminInPgAppLogo" type="text" placeholder="https://example.com/logo.png" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" oninput="document.getElementById('adminHeaderLogoPreview').src=this.value.trim()" />
+            </div>
+          </div>
+
           <!-- 1: bKash Settings -->
           <div class="p-3 rounded-xl bg-midnight-dark border border-bkash/30 space-y-2">
             <div class="flex items-center justify-between">
@@ -1140,8 +1161,13 @@
               <input id="adminInBkashNum" type="text" placeholder="017XXXXXXXX" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
             </div>
             <div>
-              <label class="text-[10px] text-slate-300 block mb-0.5">বিকাশ লোগো ইমেজ URL (বিকল্প)</label>
-              <input id="adminInBkashLogo" type="text" placeholder="https://..." class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+              <div class="flex items-center justify-between mb-0.5">
+                <label class="text-[10px] text-slate-300 block">বিকাশ লোগো ইমেজ URL (বিকল্প)</label>
+                <div class="w-6 h-6 rounded-full bg-white p-0.5 overflow-hidden flex items-center justify-center border border-pink-400">
+                  <img id="previewBkashLogo" src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80" class="w-full h-full object-contain" onerror="this.src='https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80'" />
+                </div>
+              </div>
+              <input id="adminInBkashLogo" type="text" placeholder="https://..." class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" oninput="document.getElementById('previewBkashLogo').src=this.value.trim()" />
             </div>
             <div>
               <label class="text-[10px] text-slate-300 block mb-0.5">বিকাশ পেমেন্ট নিয়ম / নির্দেশাবলী (বাংলায়)</label>
@@ -1160,8 +1186,13 @@
               <input id="adminInNagadNum" type="text" placeholder="018XXXXXXXX" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
             </div>
             <div>
-              <label class="text-[10px] text-slate-300 block mb-0.5">নগদ লোগো ইমেজ URL (বিকল্প)</label>
-              <input id="adminInNagadLogo" type="text" placeholder="https://..." class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+              <div class="flex items-center justify-between mb-0.5">
+                <label class="text-[10px] text-slate-300 block">নগদ লোগো ইমেজ URL (বিকল্প)</label>
+                <div class="w-6 h-6 rounded-full bg-white p-0.5 overflow-hidden flex items-center justify-center border border-amber-400">
+                  <img id="previewNagadLogo" src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80" class="w-full h-full object-contain" onerror="this.src='https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80'" />
+                </div>
+              </div>
+              <input id="adminInNagadLogo" type="text" placeholder="https://..." class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" oninput="document.getElementById('previewNagadLogo').src=this.value.trim()" />
             </div>
             <div>
               <label class="text-[10px] text-slate-300 block mb-0.5">নগদ পেমেন্ট নিয়ম / নির্দেশাবলী (বাংলায়)</label>
@@ -1180,8 +1211,13 @@
               <input id="adminInRocketNum" type="text" placeholder="019XXXXXXXXX" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
             </div>
             <div>
-              <label class="text-[10px] text-slate-300 block mb-0.5">রকেট লোগো ইমেজ URL (বিকল্প)</label>
-              <input id="adminInRocketLogo" type="text" placeholder="https://..." class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+              <div class="flex items-center justify-between mb-0.5">
+                <label class="text-[10px] text-slate-300 block">রকেট লোগো ইমেজ URL (বিকল্প)</label>
+                <div class="w-6 h-6 rounded-full bg-white p-0.5 overflow-hidden flex items-center justify-center border border-purple-400">
+                  <img id="previewRocketLogo" src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80" class="w-full h-full object-contain" onerror="this.src='https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80'" />
+                </div>
+              </div>
+              <input id="adminInRocketLogo" type="text" placeholder="https://..." class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" oninput="document.getElementById('previewRocketLogo').src=this.value.trim()" />
             </div>
             <div>
               <label class="text-[10px] text-slate-300 block mb-0.5">রকেট পেমেন্ট নিয়ম / নির্দেশাবলী (বাংলায়)</label>
@@ -1200,8 +1236,13 @@
               <input id="adminInBinanceId" type="text" placeholder="8701368956 অথবা USDT BEP20 Address" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white font-mono" />
             </div>
             <div>
-              <label class="text-[10px] text-slate-300 block mb-0.5">বাইনান্স লোগো ইমেজ URL (বিকল্প)</label>
-              <input id="adminInBinanceLogo" type="text" placeholder="https://..." class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+              <div class="flex items-center justify-between mb-0.5">
+                <label class="text-[10px] text-slate-300 block">বাইনান্স লোগো ইমেজ URL (বিকল্প)</label>
+                <div class="w-6 h-6 rounded-full bg-white p-0.5 overflow-hidden flex items-center justify-center border border-amber-400">
+                  <img id="previewBinanceLogo" src="https://images.unsplash.com/photo-1622979135225-d2ba269bc1df?w=80" class="w-full h-full object-contain" onerror="this.src='https://images.unsplash.com/photo-1622979135225-d2ba269bc1df?w=80'" />
+                </div>
+              </div>
+              <input id="adminInBinanceLogo" type="text" placeholder="https://..." class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" oninput="document.getElementById('previewBinanceLogo').src=this.value.trim()" />
             </div>
             <div>
               <label class="text-[10px] text-slate-300 block mb-0.5">বাইনান্স পেমেন্ট নিয়ম / নির্দেশাবলী (বাংলায়)</label>
@@ -2243,6 +2284,33 @@
               fbRtdb = firebase.database();
               console.log("Firebase Realtime Database connected successfully!");
 
+              // Realtime appConfig listener (AppName, AppLogo, Payment Gateways, Channels, Notice, Buttons)
+              fbRtdb.ref("appConfig").on("value", (snap) => {
+                const val = snap.val();
+                if (val) {
+                  if (val.appName) appState.appName = val.appName;
+                  if (val.appLogo) appState.appLogo = val.appLogo;
+                  if (val.officialChannelName) appState.officialChannelName = val.officialChannelName;
+                  if (val.officialChannelLink) appState.officialChannelLink = val.officialChannelLink;
+                  if (val.supportLink) appState.supportLink = val.supportLink;
+                  if (val.noticeText) appState.noticeText = val.noticeText;
+                  if (val.paymentGateways) {
+                    appState.paymentGateways = {
+                      ...appState.paymentGateways,
+                      ...val.paymentGateways
+                    };
+                  }
+                  if (val.buttons) {
+                    appState.buttons = {
+                      ...appState.buttons,
+                      ...val.buttons
+                    };
+                  }
+                  saveState();
+                  renderApp();
+                }
+              }, (err) => console.warn("RTDB appConfig listener:", err));
+
               // Realtime orders listener
               fbRtdb.ref("orders").on("value", (snap) => {
                 const val = snap.val();
@@ -2341,6 +2409,26 @@
         }
       } catch (e) {
         console.warn("Firebase initialization warning:", e);
+      }
+    }
+
+    function syncConfigToFirebase() {
+      if (fbRtdb) {
+        try {
+          fbRtdb.ref("appConfig").update({
+            appName: appState.appName,
+            appLogo: appState.appLogo,
+            paymentGateways: appState.paymentGateways,
+            officialChannelName: appState.officialChannelName,
+            officialChannelLink: appState.officialChannelLink,
+            supportLink: appState.supportLink,
+            noticeText: appState.noticeText,
+            buttons: appState.buttons,
+            lastUpdated: Date.now()
+          }).catch(e => console.warn("Firebase config sync error:", e));
+        } catch (e) {
+          console.warn("RTDB sync error:", e);
+        }
       }
     }
 
@@ -2787,8 +2875,22 @@
         // Identity & Logos
         safeSetText('headerAppName', appState.appName);
         safeSetText('splashAppName', appState.appName);
+        safeSetText('pgAppName', appState.appName || 'SLK BUY GROUP');
         safeSetSrc('headerLogo', appState.appLogo);
         safeSetSrc('splashLogoImg', appState.appLogo);
+        safeSetSrc('pgAppLogo', appState.appLogo || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=120&auto=format&fit=crop&q=80');
+
+        // Payment Gateway Method Logos
+        const pgConfig = appState.paymentGateways || {};
+        const defaultBkash = "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80&auto=format&fit=crop&q=80";
+        const defaultNagad = "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80&auto=format&fit=crop&q=80";
+        const defaultRocket = "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80&auto=format&fit=crop&q=80";
+        const defaultBinance = "https://images.unsplash.com/photo-1622979135225-d2ba269bc1df?w=80&auto=format&fit=crop&q=80";
+
+        safeSetSrc('imgPgLogoBkash', pgConfig.bkash?.logo || defaultBkash);
+        safeSetSrc('imgPgLogoNagad', pgConfig.nagad?.logo || defaultNagad);
+        safeSetSrc('imgPgLogoRocket', pgConfig.rocket?.logo || defaultRocket);
+        safeSetSrc('imgPgLogoBinance', pgConfig.binance?.logo || defaultBinance);
 
         // Channels & Support (Top Bar & Floating)
         safeSetHref('headerChannelBtn', appState.officialChannelLink || 'https://t.me/ItsSaddam9');
@@ -2912,11 +3014,11 @@
       const isPending = order && order.status === 'PENDING';
 
       return `
-        <div class="rounded-2xl bg-midnight-card border ${isApproved ? 'border-emerald-500/60 bg-gradient-to-b from-emerald-950/20 via-midnight-card to-midnight-card' : 'border-midnight-border'} hover:border-luxury-gold/50 transition-all p-3.5 shadow-lg space-y-3">
+        <div class="rounded-2xl bg-midnight-card border ${isApproved ? 'border-emerald-500/60 bg-gradient-to-b from-emerald-950/20 via-midnight-card to-midnight-card' : 'border-midnight-border'} hover:border-luxury-gold/50 transition-all p-3.5 shadow-lg space-y-2.5">
           <!-- Screenshot Thumbnail Preview Header -->
-          <div class="relative w-full h-36 rounded-xl overflow-hidden bg-slate-900 border border-slate-800 group">
-            <img src="${screenshot}" alt="${group.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20"></div>
+          <div class="relative w-full h-40 rounded-xl overflow-hidden bg-slate-900 border border-slate-800 group">
+            <img src="${screenshot}" alt="${group.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600'" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30"></div>
             
             <div class="absolute top-2 left-2 flex items-center gap-1.5">
               ${isApproved ? `
@@ -2926,14 +3028,29 @@
               ` : `
                 <span class="text-[10px] bg-luxury-gold text-midnight-dark font-black px-2 py-0.5 rounded shadow">${group.badge || 'VIP'}</span>
               `}
-              <span class="text-[10px] bg-black/60 backdrop-blur-md text-amber-300 font-bold px-2 py-0.5 rounded border border-white/20">${group.category}</span>
+              <span class="text-[10px] bg-black/70 backdrop-blur-md text-amber-300 font-bold px-2 py-0.5 rounded border border-white/20">${group.category}</span>
             </div>
 
             <div class="absolute bottom-2 left-2 right-2 flex items-center justify-between text-xs text-white">
-              <span class="flex items-center gap-1 font-semibold text-[11px] text-slate-200">
+              <span class="flex items-center gap-1 font-semibold text-[11px] text-slate-200 bg-black/60 px-2 py-0.5 rounded backdrop-blur-sm">
                 <i data-lucide="users" class="w-3.5 h-3.5 text-telegram"></i> ${group.membersCount} মেম্বার
               </span>
-              <span class="font-extrabold text-amber-400">৳${group.price} <s class="text-[10px] text-slate-400 font-normal">৳${group.originalPrice}</s></span>
+              <span class="text-[10px] font-bold text-emerald-400 bg-emerald-950/80 border border-emerald-500/30 px-2 py-0.5 rounded flex items-center gap-1 backdrop-blur-sm">
+                <i data-lucide="zap" class="w-3 h-3 text-emerald-400"></i> অটো এক্সেস
+              </span>
+            </div>
+          </div>
+
+          <!-- Dedicated Luxury Price & Savings Container Directly Under Thumbnail -->
+          <div class="px-3.5 py-2 rounded-xl bg-midnight-surface/90 border border-luxury-gold/50 flex items-center justify-between shadow-sm">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-semibold text-slate-400">মূল্য:</span>
+              <span class="text-lg font-black text-luxury-gold tracking-tight">৳${group.price}</span>
+              <span class="text-xs text-slate-500 line-through">৳${group.originalPrice}</span>
+            </div>
+            <div class="px-2.5 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-[11px] font-black flex items-center gap-1">
+              <i data-lucide="sparkles" class="w-3 h-3"></i>
+              <span>সেভ ৳${group.originalPrice - group.price}</span>
             </div>
           </div>
 
@@ -3017,6 +3134,22 @@
       safeSetText('pgSummaryGroupTitle', group.title);
       safeSetText('pgDisplayAmount', `৳${group.price} BDT`);
       safeSetText('pgInstructionAmount', group.price);
+
+      // App Identity in Payment Gateway
+      safeSetText('pgAppName', appState.appName || 'SLK BUY GROUP');
+      safeSetSrc('pgAppLogo', appState.appLogo || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=120&auto=format&fit=crop&q=80');
+
+      // Payment Gateway Logos
+      const pgConf = appState.paymentGateways || {};
+      const defaultBkash = "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80&auto=format&fit=crop&q=80";
+      const defaultNagad = "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80&auto=format&fit=crop&q=80";
+      const defaultRocket = "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80&auto=format&fit=crop&q=80";
+      const defaultBinance = "https://images.unsplash.com/photo-1622979135225-d2ba269bc1df?w=80&auto=format&fit=crop&q=80";
+
+      safeSetSrc('imgPgLogoBkash', pgConf.bkash?.logo || defaultBkash);
+      safeSetSrc('imgPgLogoNagad', pgConf.nagad?.logo || defaultNagad);
+      safeSetSrc('imgPgLogoRocket', pgConf.rocket?.logo || defaultRocket);
+      safeSetSrc('imgPgLogoBinance', pgConf.binance?.logo || defaultBinance);
 
       // Clear TrxID Input
       safeSetValue('pgTrxInput', '');
@@ -3817,22 +3950,30 @@
       document.getElementById('adminInNotice').value = appState.noticeText;
 
       // Payment Gateways Settings Inputs
+      safeSetValue('adminInPgAppName', appState.appName || '');
+      safeSetValue('adminInPgAppLogo', appState.appLogo || '');
+      safeSetSrc('adminHeaderLogoPreview', appState.appLogo || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100');
+
       if (appState.paymentGateways) {
         const pg = appState.paymentGateways;
         if (document.getElementById('adminInBkashNum')) document.getElementById('adminInBkashNum').value = pg.bkash?.number || '';
         if (document.getElementById('adminInBkashLogo')) document.getElementById('adminInBkashLogo').value = pg.bkash?.logo || '';
+        if (document.getElementById('previewBkashLogo')) safeSetSrc('previewBkashLogo', pg.bkash?.logo || 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80');
         if (document.getElementById('adminInBkashRules')) document.getElementById('adminInBkashRules').value = pg.bkash?.rules || '';
 
         if (document.getElementById('adminInNagadNum')) document.getElementById('adminInNagadNum').value = pg.nagad?.number || '';
         if (document.getElementById('adminInNagadLogo')) document.getElementById('adminInNagadLogo').value = pg.nagad?.logo || '';
+        if (document.getElementById('previewNagadLogo')) safeSetSrc('previewNagadLogo', pg.nagad?.logo || 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80');
         if (document.getElementById('adminInNagadRules')) document.getElementById('adminInNagadRules').value = pg.nagad?.rules || '';
 
         if (document.getElementById('adminInRocketNum')) document.getElementById('adminInRocketNum').value = pg.rocket?.number || '';
         if (document.getElementById('adminInRocketLogo')) document.getElementById('adminInRocketLogo').value = pg.rocket?.logo || '';
+        if (document.getElementById('previewRocketLogo')) safeSetSrc('previewRocketLogo', pg.rocket?.logo || 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80');
         if (document.getElementById('adminInRocketRules')) document.getElementById('adminInRocketRules').value = pg.rocket?.rules || '';
 
         if (document.getElementById('adminInBinanceId')) document.getElementById('adminInBinanceId').value = pg.binance?.number || '';
         if (document.getElementById('adminInBinanceLogo')) document.getElementById('adminInBinanceLogo').value = pg.binance?.logo || '';
+        if (document.getElementById('previewBinanceLogo')) safeSetSrc('previewBinanceLogo', pg.binance?.logo || 'https://images.unsplash.com/photo-1622979135225-d2ba269bc1df?w=80');
         if (document.getElementById('adminInBinanceRules')) document.getElementById('adminInBinanceRules').value = pg.binance?.rules || '';
       }
 
@@ -4201,33 +4342,40 @@
 
     function adminSavePaymentGatewayConfig() {
       playSound('click');
+      // Update app branding if entered in payment settings tab
+      const pgAppName = document.getElementById('adminInPgAppName')?.value.trim();
+      const pgAppLogo = document.getElementById('adminInPgAppLogo')?.value.trim();
+      if (pgAppName) appState.appName = pgAppName;
+      if (pgAppLogo) appState.appLogo = pgAppLogo;
+
       appState.paymentGateways = {
         bkash: {
           name: 'Bkash Personal',
-          number: document.getElementById('adminInBkashNum').value.trim() || '01789-567890',
-          logo: document.getElementById('adminInBkashLogo').value.trim(),
-          rules: document.getElementById('adminInBkashRules').value.trim()
+          number: document.getElementById('adminInBkashNum')?.value.trim() || '01789-567890',
+          logo: document.getElementById('adminInBkashLogo')?.value.trim() || '',
+          rules: document.getElementById('adminInBkashRules')?.value.trim() || ''
         },
         nagad: {
           name: 'Nagad Personal',
-          number: document.getElementById('adminInNagadNum').value.trim() || '01812-345678',
-          logo: document.getElementById('adminInNagadLogo').value.trim(),
-          rules: document.getElementById('adminInNagadRules').value.trim()
+          number: document.getElementById('adminInNagadNum')?.value.trim() || '01812-345678',
+          logo: document.getElementById('adminInNagadLogo')?.value.trim() || '',
+          rules: document.getElementById('adminInNagadRules')?.value.trim() || ''
         },
         rocket: {
           name: 'Rocket Personal',
-          number: document.getElementById('adminInRocketNum').value.trim() || '01934-567891',
-          logo: document.getElementById('adminInRocketLogo').value.trim(),
-          rules: document.getElementById('adminInRocketRules').value.trim()
+          number: document.getElementById('adminInRocketNum')?.value.trim() || '01934-567891',
+          logo: document.getElementById('adminInRocketLogo')?.value.trim() || '',
+          rules: document.getElementById('adminInRocketRules')?.value.trim() || ''
         },
         binance: {
           name: 'Binance Personal',
-          number: document.getElementById('adminInBinanceId').value.trim() || '8701368956 (Pay ID)',
-          logo: document.getElementById('adminInBinanceLogo').value.trim(),
-          rules: document.getElementById('adminInBinanceRules').value.trim()
+          number: document.getElementById('adminInBinanceId')?.value.trim() || '8701368956 (Pay ID)',
+          logo: document.getElementById('adminInBinanceLogo')?.value.trim() || '',
+          rules: document.getElementById('adminInBinanceRules')?.value.trim() || ''
         }
       };
       saveState();
+      syncConfigToFirebase();
       renderApp();
       playSound('chime');
       alert("পেমেন্ট গেটওয়ে সেটিংস সফলভাবে সংরক্ষিত হয়েছে!");
@@ -4320,6 +4468,7 @@
       if (name) appState.appName = name;
       if (logo) appState.appLogo = logo;
       saveState();
+      syncConfigToFirebase();
       renderApp();
       alert("অ্যাপ আইডেন্টিটি আপডেট সম্পন্ন!");
     }
@@ -4353,6 +4502,7 @@
       appState.buttons.btn4Logo = document.getElementById('adminInBtnLogo4')?.value.trim() || '';
 
       saveState();
+      syncConfigToFirebase();
       renderApp();
       playSound('chime');
       alert("হোম পেজের ৪টি বাটন সেটিংস সফলভাবে সেভ হয়েছে!");
@@ -4364,6 +4514,7 @@
       appState.officialChannelLink = document.getElementById('adminInChannelLink').value.trim();
       appState.supportLink = document.getElementById('adminInSupportLink').value.trim();
       saveState();
+      syncConfigToFirebase();
       renderApp();
       alert("চ্যানেল ও সাপোর্ট লিংক আপডেট সম্পন্ন!");
     }
@@ -4374,6 +4525,7 @@
       appState.fbRate = parseInt(document.getElementById('adminInFbPrice').value) || 60;
       appState.minWithdraw = parseInt(document.getElementById('adminInMinWithdraw').value) || 100;
       saveState();
+      syncConfigToFirebase();
       renderApp();
       alert("রেট ও মিনিমাম লিমিট সফলভাবে সেভ হয়েছে!");
     }

@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -28,13 +29,17 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material.icons.filled.AdminPanelSettings
+import androidx.compose.material.icons.filled.Brightness4
+import androidx.compose.material.icons.filled.Brightness7
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.CurrencyBitcoin
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MonetizationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.RocketLaunch
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.SupportAgent
@@ -48,6 +53,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -68,9 +75,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.model.TelegramGroup
 import com.example.ui.theme.BkashPink
+import com.example.ui.theme.BinanceDark
+import com.example.ui.theme.BinanceYellow
 import com.example.ui.theme.ElectricCyan
 import com.example.ui.theme.ElectricCyanDark
 import com.example.ui.theme.LuxuryGold
+import com.example.ui.theme.LuxuryGoldLight
 import com.example.ui.theme.MidnightBorder
 import com.example.ui.theme.MidnightCard
 import com.example.ui.theme.MidnightCardHover
@@ -85,48 +95,262 @@ import com.example.ui.theme.TextSecondary
 import com.example.ui.theme.WarningAmber
 import com.example.ui.viewmodel.AppScreen
 
+/**
+ * App Official Logo Component with custom URL override support and high-polish fallback
+ */
+@Composable
+fun AppLogoBadge(
+    customLogoUrl: String? = null,
+    size: androidx.compose.ui.unit.Dp = 40.dp,
+    modifier: Modifier = Modifier
+) {
+    if (!customLogoUrl.isNullOrBlank()) {
+        SubcomposeAsyncImage(
+            model = customLogoUrl,
+            contentDescription = "SLK BUY GROUP App Logo",
+            modifier = modifier
+                .size(size)
+                .clip(RoundedCornerShape(10.dp))
+                .border(1.dp, LuxuryGold, RoundedCornerShape(10.dp)),
+            contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+            loading = { DefaultAppLogo(size) },
+            error = { DefaultAppLogo(size) }
+        )
+    } else {
+        DefaultAppLogo(size = size, modifier = modifier)
+    }
+}
+
+@Composable
+fun DefaultAppLogo(
+    size: androidx.compose.ui.unit.Dp = 40.dp,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .size(size)
+            .clip(RoundedCornerShape(10.dp))
+            .background(
+                Brush.linearGradient(
+                    listOf(Color(0xFF0C2340), Color(0xFF00E5FF))
+                )
+            )
+            .border(1.dp, LuxuryGoldLight.copy(alpha = 0.8f), RoundedCornerShape(10.dp)),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.Send,
+                contentDescription = "SLK Logo",
+                tint = MidnightDark,
+                modifier = Modifier.size((size.value * 0.48).dp)
+            )
+            Text(
+                text = "SLK",
+                fontSize = (size.value * 0.22).sp,
+                fontWeight = FontWeight.Black,
+                color = MidnightDark,
+                letterSpacing = (-0.5).sp
+            )
+        }
+    }
+}
+
+/**
+ * Authentic branded logo for bKash, Nagad, Rocket, Binance with dynamic URL support
+ */
+@Composable
+fun PaymentBrandLogo(
+    method: String,
+    customLogoUrl: String? = null,
+    modifier: Modifier = Modifier,
+    size: androidx.compose.ui.unit.Dp = 40.dp
+) {
+    if (!customLogoUrl.isNullOrBlank()) {
+        SubcomposeAsyncImage(
+            model = customLogoUrl,
+            contentDescription = "$method Logo",
+            modifier = modifier
+                .size(size)
+                .clip(RoundedCornerShape(8.dp)),
+            contentScale = androidx.compose.ui.layout.ContentScale.Fit,
+            loading = { DefaultPaymentBrandLogo(method = method, size = size) },
+            error = { DefaultPaymentBrandLogo(method = method, size = size) }
+        )
+    } else {
+        DefaultPaymentBrandLogo(method = method, size = size, modifier = modifier)
+    }
+}
+
+@Composable
+fun DefaultPaymentBrandLogo(
+    method: String,
+    size: androidx.compose.ui.unit.Dp = 40.dp,
+    modifier: Modifier = Modifier
+) {
+    val cleanMethod = method.lowercase().trim()
+    when {
+        cleanMethod.contains("bkash") || cleanMethod.contains("বিকাশ") -> {
+            Surface(
+                modifier = modifier
+                    .size(size)
+                    .clip(RoundedCornerShape(8.dp)),
+                color = BkashPink
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = "bKash",
+                            fontSize = (size.value * 0.28).sp,
+                            fontWeight = FontWeight.Black,
+                            color = Color.White,
+                            letterSpacing = (-0.5).sp
+                        )
+                    }
+                }
+            }
+        }
+        cleanMethod.contains("nagad") || cleanMethod.contains("নগদ") -> {
+            Surface(
+                modifier = modifier
+                    .size(size)
+                    .clip(RoundedCornerShape(8.dp)),
+                color = NagadOrange
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = "নগদ",
+                            fontSize = (size.value * 0.32).sp,
+                            fontWeight = FontWeight.Black,
+                            color = Color.White
+                        )
+                    }
+                }
+            }
+        }
+        cleanMethod.contains("rocket") || cleanMethod.contains("রকেট") -> {
+            Surface(
+                modifier = modifier
+                    .size(size)
+                    .clip(RoundedCornerShape(8.dp)),
+                color = RocketPurple
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.RocketLaunch,
+                        contentDescription = "Rocket",
+                        tint = Color.White,
+                        modifier = Modifier.size((size.value * 0.40).dp)
+                    )
+                    Text(
+                        text = "Rocket",
+                        fontSize = (size.value * 0.18).sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                }
+            }
+        }
+        cleanMethod.contains("binance") || cleanMethod.contains("বাইনান্স") || cleanMethod.contains("বাইন্যান্স") || cleanMethod.contains("usdt") -> {
+            Surface(
+                modifier = modifier
+                    .size(size)
+                    .clip(RoundedCornerShape(8.dp))
+                    .border(1.dp, BinanceYellow.copy(alpha = 0.8f), RoundedCornerShape(8.dp)),
+                color = BinanceDark
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.CurrencyBitcoin,
+                        contentDescription = "Binance",
+                        tint = BinanceYellow,
+                        modifier = Modifier.size((size.value * 0.40).dp)
+                    )
+                    Text(
+                        text = "BINANCE",
+                        fontSize = (size.value * 0.16).sp,
+                        fontWeight = FontWeight.Black,
+                        color = BinanceYellow
+                    )
+                }
+            }
+        }
+        else -> {
+            Surface(
+                modifier = modifier
+                    .size(size)
+                    .clip(RoundedCornerShape(8.dp)),
+                color = ElectricCyanDark
+            ) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Icon(
+                        imageVector = Icons.Default.AccountBalanceWallet,
+                        contentDescription = method,
+                        tint = Color.White,
+                        modifier = Modifier.size((size.value * 0.5).dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
 @Composable
 fun SlkTopBar(
     currentBalance: Int,
     isAdminUnlocked: Boolean,
     onWalletClick: () -> Unit,
     onAdminClick: () -> Unit,
-    onSupportClick: () -> Unit
+    onSupportClick: () -> Unit,
+    onToggleTheme: (() -> Unit)? = null,
+    isDarkMode: Boolean = true,
+    appLogoUrl: String? = null
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = MidnightDark,
-        tonalElevation = 8.dp
+        color = MaterialTheme.colorScheme.surface,
+        tonalElevation = 8.dp,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .padding(horizontal = 14.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            // App Branding
+            // App Branding with Custom/Default App Logo
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(38.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(
-                            Brush.linearGradient(
-                                listOf(ElectricCyan, ElectricCyanDark)
-                            )
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.Send,
-                        contentDescription = "SLK Logo",
-                        tint = MidnightDark,
-                        modifier = Modifier.size(22.dp)
-                    )
-                }
+                AppLogoBadge(
+                    customLogoUrl = appLogoUrl,
+                    size = 38.dp
+                )
 
                 Spacer(modifier = Modifier.width(10.dp))
 
@@ -134,9 +358,9 @@ fun SlkTopBar(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
                             text = "SLK BUY GROUP",
-                            fontSize = 17.sp,
+                            fontSize = 16.sp,
                             fontWeight = FontWeight.Black,
-                            color = TextPrimary,
+                            color = MaterialTheme.colorScheme.onSurface,
                             letterSpacing = 0.5.sp
                         )
                         Spacer(modifier = Modifier.width(4.dp))
@@ -144,44 +368,62 @@ fun SlkTopBar(
                             imageVector = Icons.Default.Verified,
                             contentDescription = "Verified",
                             tint = ElectricCyan,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(15.dp)
                         )
                     }
                     Text(
                         text = "UK Premium Marketplace",
-                        fontSize = 11.sp,
+                        fontSize = 10.sp,
                         color = ElectricCyan,
                         fontWeight = FontWeight.Medium
                     )
                 }
             }
 
-            // Quick Actions: Balance Chip, Support, Admin Gate
+            // Quick Actions: Theme Switch, Balance Pill, Support, Admin Gate
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
+                // Theme Toggle Quick Button (White / Dark mode)
+                if (onToggleTheme != null) {
+                    IconButton(
+                        onClick = onToggleTheme,
+                        modifier = Modifier
+                            .size(34.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                    ) {
+                        Icon(
+                            imageVector = if (isDarkMode) Icons.Default.Brightness7 else Icons.Default.Brightness4,
+                            contentDescription = "Toggle Theme",
+                            tint = if (isDarkMode) LuxuryGold else ElectricCyanDark,
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
+                }
+
                 // Balance Pill
                 Surface(
                     onClick = onWalletClick,
                     shape = RoundedCornerShape(20.dp),
-                    color = MidnightCard,
+                    color = MaterialTheme.colorScheme.surfaceVariant,
                     border = BorderStroke(1.dp, ElectricCyanDark)
                 ) {
                     Row(
-                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
                             imageVector = Icons.Default.AccountBalanceWallet,
                             contentDescription = "Wallet",
                             tint = LuxuryGold,
-                            modifier = Modifier.size(14.dp)
+                            modifier = Modifier.size(13.dp)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = "৳$currentBalance",
-                            fontSize = 13.sp,
+                            fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
                             color = LuxuryGold
                         )
@@ -192,15 +434,15 @@ fun SlkTopBar(
                 IconButton(
                     onClick = onSupportClick,
                     modifier = Modifier
-                        .size(36.dp)
+                        .size(34.dp)
                         .clip(CircleShape)
-                        .background(MidnightCard)
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
                 ) {
                     Icon(
                         imageVector = Icons.Default.SupportAgent,
                         contentDescription = "Support",
                         tint = TelegramBlue,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(18.dp)
                     )
                 }
 
@@ -208,15 +450,15 @@ fun SlkTopBar(
                 IconButton(
                     onClick = onAdminClick,
                     modifier = Modifier
-                        .size(36.dp)
+                        .size(34.dp)
                         .clip(CircleShape)
-                        .background(if (isAdminUnlocked) LuxuryGold else MidnightCard)
+                        .background(if (isAdminUnlocked) LuxuryGold else MaterialTheme.colorScheme.surfaceVariant)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Security,
                         contentDescription = "Admin Panel",
                         tint = if (isAdminUnlocked) MidnightDark else WarningAmber,
-                        modifier = Modifier.size(18.dp)
+                        modifier = Modifier.size(17.dp)
                     )
                 }
             }
@@ -361,9 +603,9 @@ fun GroupScreenshotCard(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .border(1.dp, MidnightBorder, RoundedCornerShape(16.dp)),
-        colors = CardDefaults.cardColors(containerColor = MidnightCard),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+            .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.35f), RoundedCornerShape(16.dp)),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             // === Telegram Channel Header Banner ===
@@ -494,6 +736,59 @@ fun GroupScreenshotCard(
                 }
             }
 
+            // === Dedicated Price Bar Directly Under Photo/Banner (User Request) ===
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = MaterialTheme.colorScheme.surface,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.35f))
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 14.dp, vertical = 9.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = "প্রাইস: ",
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            text = "৳${group.price} BDT",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Black,
+                            color = LuxuryGold
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = "৳${group.originalPrice}",
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                            textDecoration = TextDecoration.LineThrough
+                        )
+                    }
+
+                    Surface(
+                        color = BkashPink,
+                        shape = RoundedCornerShape(6.dp)
+                    ) {
+                        val discount = if (group.originalPrice > group.price) {
+                            ((group.originalPrice - group.price) * 100) / group.originalPrice
+                        } else 40
+                        Text(
+                            text = "$discount% ডিসকাউন্ট",
+                            modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp),
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
+                    }
+                }
+            }
+
             // === Group Information & Statistics ===
             Column(modifier = Modifier.padding(14.dp)) {
                 Row(
@@ -505,7 +800,7 @@ fun GroupScreenshotCard(
                         text = group.title,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = TextPrimary,
+                        color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.weight(1f),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -517,7 +812,7 @@ fun GroupScreenshotCard(
                 Text(
                     text = group.description,
                     fontSize = 12.sp,
-                    color = TextSecondary,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     lineHeight = 17.sp
@@ -533,7 +828,7 @@ fun GroupScreenshotCard(
                 ) {
                     // Members badge
                     Surface(
-                        color = MidnightCardHover,
+                        color = MaterialTheme.colorScheme.surfaceVariant,
                         shape = RoundedCornerShape(6.dp)
                     ) {
                         Row(
@@ -558,14 +853,14 @@ fun GroupScreenshotCard(
 
                     // Category badge
                     Surface(
-                        color = MidnightCardHover,
+                        color = MaterialTheme.colorScheme.surfaceVariant,
                         shape = RoundedCornerShape(6.dp)
                     ) {
                         Text(
                             text = group.category,
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                             fontSize = 11.sp,
-                            color = TextSecondary
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
 

@@ -34,6 +34,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
@@ -54,7 +55,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.model.WalletProfile
 import com.example.data.model.Withdrawal
+import com.example.ui.components.AppLogoBadge
+import com.example.ui.components.PaymentBrandLogo
 import com.example.ui.components.TelegramSupportCard
+import com.example.ui.theme.BinanceYellow
 import com.example.ui.theme.BkashPink
 import com.example.ui.theme.DangerRed
 import com.example.ui.theme.ElectricCyan
@@ -76,6 +80,7 @@ import com.example.ui.theme.WarningAmber
 fun WalletScreen(
     walletProfile: WalletProfile,
     withdrawals: List<Withdrawal>,
+    adminConfigs: Map<String, String> = emptyMap(),
     onWithdraw: (method: String, number: String, amount: Int) -> Unit,
     onRecharge: (amount: Int) -> Unit
 ) {
@@ -84,10 +89,16 @@ fun WalletScreen(
     var accountNumber by remember { mutableStateOf("") }
     var withdrawAmountText by remember { mutableStateOf("") }
 
+    val appLogoUrl = adminConfigs["app_logo_url"]
+    val bkashLogoUrl = adminConfigs["payment_logo_bkash"] ?: adminConfigs["bkash_logo_url"]
+    val nagadLogoUrl = adminConfigs["payment_logo_nagad"] ?: adminConfigs["nagad_logo_url"]
+    val rocketLogoUrl = adminConfigs["payment_logo_rocket"] ?: adminConfigs["rocket_logo_url"]
+    val binanceLogoUrl = adminConfigs["payment_logo_binance"] ?: adminConfigs["binance_logo_url"]
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(MidnightDark),
+            .background(MaterialTheme.colorScheme.background),
         contentPadding = PaddingValues(bottom = 36.dp)
     ) {
         // === Page Header & Balance Card ===
@@ -97,17 +108,30 @@ fun WalletScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 16.dp)
             ) {
-                Text(
-                    text = "আমার ওয়ালেট ও লেনদেন",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Black,
-                    color = TextPrimary
-                )
-                Text(
-                    text = "বিকাশ • নগদ • রকেট এ সরাসরি উইথড্র ও রিচার্জ করুন",
-                    fontSize = 12.sp,
-                    color = ElectricCyan
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column {
+                        Text(
+                            text = "আমার ওয়ালেট ও লেনদেন",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Black,
+                            color = TextPrimary
+                        )
+                        Text(
+                            text = "বিকাশ • নগদ • রকেট • Binance নিরাপদ গেটওয়ে",
+                            fontSize = 12.sp,
+                            color = ElectricCyan
+                        )
+                    }
+
+                    AppLogoBadge(
+                        customLogoUrl = appLogoUrl,
+                        size = 38.dp
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -283,32 +307,50 @@ fun WalletScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        val methods = listOf(
-                            Triple("bKash", BkashPink, "বিকাশ"),
-                            Triple("Nagad", NagadOrange, "নগদ"),
-                            Triple("Rocket", RocketPurple, "রকেট")
+                        data class WithdrawalMethodOption(
+                            val id: String,
+                            val name: String,
+                            val color: Color,
+                            val logoUrl: String?
                         )
-                        for ((method, color, name) in methods) {
-                            val isSelected = selectedMethod == method
+                        val methods = listOf(
+                            WithdrawalMethodOption("bKash", "বিকাশ", BkashPink, bkashLogoUrl),
+                            WithdrawalMethodOption("Nagad", "নগদ", NagadOrange, nagadLogoUrl),
+                            WithdrawalMethodOption("Rocket", "রকেট", RocketPurple, rocketLogoUrl),
+                            WithdrawalMethodOption("Binance", "Binance", BinanceYellow, binanceLogoUrl)
+                        )
+                        for (opt in methods) {
+                            val isSelected = selectedMethod == opt.id
                             Surface(
                                 modifier = Modifier
                                     .weight(1f)
-                                    .clickable { selectedMethod = method },
+                                    .clickable { selectedMethod = opt.id },
                                 shape = RoundedCornerShape(10.dp),
-                                color = if (isSelected) color.copy(alpha = 0.2f) else MidnightSurface,
+                                color = if (isSelected) opt.color.copy(alpha = 0.22f) else MidnightSurface,
                                 border = androidx.compose.foundation.BorderStroke(
                                     if (isSelected) 2.dp else 1.dp,
-                                    if (isSelected) color else MidnightBorder
+                                    if (isSelected) opt.color else MidnightBorder
                                 )
                             ) {
-                                Text(
-                                    text = name,
-                                    modifier = Modifier.padding(vertical = 10.dp),
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = if (isSelected) Color.White else TextSecondary,
-                                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
-                                )
+                                Column(
+                                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 2.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    PaymentBrandLogo(
+                                        method = opt.id,
+                                        customLogoUrl = opt.logoUrl,
+                                        size = 28.dp
+                                    )
+                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Text(
+                                        text = opt.name,
+                                        fontSize = 11.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = if (isSelected) Color.White else TextSecondary,
+                                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                                    )
+                                }
                             }
                         }
                     }
@@ -319,8 +361,8 @@ fun WalletScreen(
                         value = accountNumber,
                         onValueChange = { accountNumber = it },
                         modifier = Modifier.fillMaxWidth(),
-                        label = { Text("$selectedMethod পার্সোনাল নাম্বার") },
-                        placeholder = { Text("01XXXXXXXXX") },
+                        label = { Text(if (selectedMethod == "Binance") "আপনার Binance Pay ID / UID" else "$selectedMethod পার্সোনাল নাম্বার") },
+                        placeholder = { Text(if (selectedMethod == "Binance") "e.g. 8701368956" else "01XXXXXXXXX") },
                         singleLine = true,
                         shape = RoundedCornerShape(10.dp),
                         colors = OutlinedTextFieldDefaults.colors(
@@ -424,24 +466,42 @@ fun WalletScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Column {
-                                Text(
-                                    text = "৳${item.amount} (${item.paymentMethod})",
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = TextPrimary
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                PaymentBrandLogo(
+                                    method = item.paymentMethod,
+                                    customLogoUrl = when (item.paymentMethod.lowercase()) {
+                                        "nagad", "নগদ" -> nagadLogoUrl
+                                        "rocket", "রকেট" -> rocketLogoUrl
+                                        "binance", "বাইনান্স", "বাইন্যান্স" -> binanceLogoUrl
+                                        else -> bkashLogoUrl
+                                    },
+                                    size = 36.dp
                                 )
-                                Text(
-                                    text = "নাম্বার: ${item.accountNumber}",
-                                    fontSize = 11.sp,
-                                    color = TextSecondary
-                                )
-                                if (item.adminTrxId.isNotBlank()) {
+
+                                Spacer(modifier = Modifier.width(10.dp))
+
+                                Column {
                                     Text(
-                                        text = "TrxID: ${item.adminTrxId}",
-                                        fontSize = 10.sp,
-                                        color = SuccessGreen
+                                        text = "৳${item.amount} (${item.paymentMethod})",
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = TextPrimary
                                     )
+                                    Text(
+                                        text = "অ্যাকাউন্ট: ${item.accountNumber}",
+                                        fontSize = 11.sp,
+                                        color = TextSecondary
+                                    )
+                                    if (item.adminTrxId.isNotBlank()) {
+                                        Text(
+                                            text = "TrxID: ${item.adminTrxId}",
+                                            fontSize = 10.sp,
+                                            color = SuccessGreen
+                                        )
+                                    }
                                 }
                             }
 

@@ -73,11 +73,14 @@ import com.example.ui.theme.TextSecondary
 import com.example.ui.theme.WarningAmber
 import com.example.ui.viewmodel.SellType
 
+import androidx.compose.material3.MaterialTheme
+
 @Composable
 fun SellAndEarnScreen(
     initialType: SellType,
     gmailSubmissions: List<GmailSubmission>,
     fbSubmissions: List<FacebookSubmission>,
+    adminConfigs: Map<String, String> = emptyMap(),
     onSubmitGmail: (telegram: String, gmail: String, pass: String, recovery: String, type: String, reward: Int) -> Unit,
     onSubmitFacebook: (telegram: String, uid: String, login: String, pass: String, twoFactor: String, year: String, reward: Int) -> Unit
 ) {
@@ -86,7 +89,7 @@ fun SellAndEarnScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(MidnightDark),
+            .background(MaterialTheme.colorScheme.background),
         contentPadding = PaddingValues(bottom = 36.dp)
     ) {
         // === Page Header ===
@@ -100,7 +103,7 @@ fun SellAndEarnScreen(
                     text = "একাউন্ট সেল করে আয় করুন",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Black,
-                    color = TextPrimary
+                    color = MaterialTheme.colorScheme.onBackground
                 )
                 Text(
                     text = "জিমেইল ও ফেসবুক আইডি বিক্রি করুন • এডমিন এপ্রুভ করলে অটো ওয়ালেট পেমেন্ট",
@@ -113,7 +116,7 @@ fun SellAndEarnScreen(
                 // Tab Switcher
                 TabRow(
                     selectedTabIndex = selectedTab,
-                    containerColor = MidnightSurface,
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
                     contentColor = ElectricCyan,
                     indicator = { tabPositions ->
                         TabRowDefaults.SecondaryIndicator(
@@ -172,7 +175,10 @@ fun SellAndEarnScreen(
         if (selectedTab == 0) {
             // GMAIL SELLING CONTENT
             item {
-                GmailSellFormSection(onSubmit = onSubmitGmail)
+                GmailSellFormSection(
+                    adminConfigs = adminConfigs,
+                    onSubmit = onSubmitGmail
+                )
             }
 
             // Gmail Submissions History
@@ -212,7 +218,10 @@ fun SellAndEarnScreen(
         } else {
             // FACEBOOK SELLING CONTENT
             item {
-                FacebookSellFormSection(onSubmit = onSubmitFacebook)
+                FacebookSellFormSection(
+                    adminConfigs = adminConfigs,
+                    onSubmit = onSubmitFacebook
+                )
             }
 
             // Facebook Submissions History
@@ -222,7 +231,7 @@ fun SellAndEarnScreen(
                         text = "আমার ফেসবুক সাবমিশন হিস্ট্রি",
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
-                        color = TextPrimary
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 }
             }
@@ -262,25 +271,34 @@ fun SellAndEarnScreen(
 
 @Composable
 fun GmailSellFormSection(
+    adminConfigs: Map<String, String> = emptyMap(),
     onSubmit: (telegram: String, gmail: String, pass: String, recovery: String, type: String, reward: Int) -> Unit
 ) {
+    val priceFresh = adminConfigs["price_gmail_fresh"]?.toIntOrNull() ?: 15
+    val priceOld = adminConfigs["price_gmail_old"]?.toIntOrNull() ?: 30
+    val priceVeryOld = adminConfigs["price_gmail_very_old"]?.toIntOrNull() ?: 50
+
+    val freshTierLabel = "নতুন (৳$priceFresh)"
+    val oldTierLabel = "পুরাতন (৳$priceOld)"
+    val veryOldTierLabel = "আরো পুরাতন (৳$priceVeryOld)"
+
     var userTelegram by remember { mutableStateOf("") }
     var gmail by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var recoveryEmail by remember { mutableStateOf("") }
-    var selectedTier by remember { mutableStateOf("Fresh (৳15)") }
+    var selectedTier by remember { mutableStateOf(freshTierLabel) }
 
-    val rewardAmount = when (selectedTier) {
-        "Old 6M+ (৳30)" -> 30
-        "Old 1Yr+ (৳50)" -> 50
-        else -> 15
+    val rewardAmount = when {
+        selectedTier.contains("আরো পুরাতন") -> priceVeryOld
+        selectedTier.contains("পুরাতন") -> priceOld
+        else -> priceFresh
     }
 
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         // Detailed Rules Card
         Card(
             modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = MidnightSurface),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
             shape = RoundedCornerShape(14.dp),
             border = androidx.compose.foundation.BorderStroke(1.dp, MidnightBorder)
         ) {
@@ -294,7 +312,7 @@ fun GmailSellFormSection(
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = "জিমেইল বিক্রির নিয়মাবলী ও রেট",
+                        text = "জিমেইল বিক্রির লাইভ রেট ও নিয়মাবলী",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         color = LuxuryGold
@@ -304,9 +322,9 @@ fun GmailSellFormSection(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "• ফ্রেশ জিমেইল: ৳১৫ প্রতি একাউন্ট\n• ৬ মাস পুরাতন জিমেইল: ৳৩০ প্রতি একাউন্ট\n• ১ বছর+ পুরাতন জিমেইল: ৳৫০ প্রতি একাউন্ট",
+                    text = "• নতুন জিমেইল: ৳$priceFresh প্রতি একাউন্ট\n• পুরাতন জিমেইল (৬ মাস+): ৳$priceOld প্রতি একাউন্ট\n• আরো পুরাতন জিমেইল (১ বছর+): ৳$priceVeryOld প্রতি একাউন্ট",
                     fontSize = 12.sp,
-                    color = TextPrimary,
+                    color = MaterialTheme.colorScheme.onSurface,
                     lineHeight = 18.sp
                 )
 
@@ -326,7 +344,7 @@ fun GmailSellFormSection(
         // Submission Form
         Card(
             modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = MidnightCard),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
             shape = RoundedCornerShape(14.dp),
             border = androidx.compose.foundation.BorderStroke(1.dp, MidnightBorder)
         ) {
@@ -335,7 +353,7 @@ fun GmailSellFormSection(
                     text = "জিমেইল তথ্য সাবমিট করুন",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
-                    color = TextPrimary
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -346,15 +364,7 @@ fun GmailSellFormSection(
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text("আপনার টেলিগ্রাম ইউজারনেম (@username)") },
                     singleLine = true,
-                    shape = RoundedCornerShape(10.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = MidnightSurface,
-                        unfocusedContainerColor = MidnightSurface,
-                        focusedBorderColor = ElectricCyan,
-                        unfocusedBorderColor = MidnightBorder,
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary
-                    )
+                    shape = RoundedCornerShape(10.dp)
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -365,15 +375,7 @@ fun GmailSellFormSection(
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text("জিমেইল এড্রেস (example@gmail.com)") },
                     singleLine = true,
-                    shape = RoundedCornerShape(10.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = MidnightSurface,
-                        unfocusedContainerColor = MidnightSurface,
-                        focusedBorderColor = ElectricCyan,
-                        unfocusedBorderColor = MidnightBorder,
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary
-                    )
+                    shape = RoundedCornerShape(10.dp)
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -384,15 +386,7 @@ fun GmailSellFormSection(
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text("জিমেইল পাসওয়ার্ড") },
                     singleLine = true,
-                    shape = RoundedCornerShape(10.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = MidnightSurface,
-                        unfocusedContainerColor = MidnightSurface,
-                        focusedBorderColor = ElectricCyan,
-                        unfocusedBorderColor = MidnightBorder,
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary
-                    )
+                    shape = RoundedCornerShape(10.dp)
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -403,23 +397,15 @@ fun GmailSellFormSection(
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text("রিকভারি ইমেইল (যদি থাকে)") },
                     singleLine = true,
-                    shape = RoundedCornerShape(10.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = MidnightSurface,
-                        unfocusedContainerColor = MidnightSurface,
-                        focusedBorderColor = ElectricCyan,
-                        unfocusedBorderColor = MidnightBorder,
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary
-                    )
+                    shape = RoundedCornerShape(10.dp)
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
-                    text = "একাউন্টের বয়স / রেট নির্বাচন করুন:",
+                    text = "একাউন্টের বয়স / রেট নির্বাচন করুন (নতুন, পুরাতন, আরো পুরাতন):",
                     fontSize = 12.sp,
-                    color = TextSecondary
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Spacer(modifier = Modifier.height(6.dp))
@@ -428,7 +414,7 @@ fun GmailSellFormSection(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    val tiers = listOf("Fresh (৳15)", "Old 6M+ (৳30)", "Old 1Yr+ (৳50)")
+                    val tiers = listOf(freshTierLabel, oldTierLabel, veryOldTierLabel)
                     for (tier in tiers) {
                         val isSelected = selectedTier == tier
                         Surface(
@@ -436,7 +422,7 @@ fun GmailSellFormSection(
                                 .weight(1f)
                                 .clickable { selectedTier = tier },
                             shape = RoundedCornerShape(8.dp),
-                            color = if (isSelected) ElectricCyan else MidnightSurface,
+                            color = if (isSelected) ElectricCyan else MaterialTheme.colorScheme.surface,
                             border = androidx.compose.foundation.BorderStroke(
                                 1.dp,
                                 if (isSelected) ElectricCyan else MidnightBorder
@@ -447,7 +433,7 @@ fun GmailSellFormSection(
                                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 4.dp),
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = if (isSelected) MidnightDark else TextPrimary,
+                                color = if (isSelected) MidnightDark else MaterialTheme.colorScheme.onSurface,
                                 textAlign = androidx.compose.ui.text.style.TextAlign.Center
                             )
                         }
@@ -485,26 +471,35 @@ fun GmailSellFormSection(
 
 @Composable
 fun FacebookSellFormSection(
+    adminConfigs: Map<String, String> = emptyMap(),
     onSubmit: (telegram: String, uid: String, login: String, pass: String, twoFactor: String, year: String, reward: Int) -> Unit
 ) {
+    val priceFresh = adminConfigs["price_fb_fresh"]?.toIntOrNull() ?: 40
+    val priceOld = adminConfigs["price_fb_old"]?.toIntOrNull() ?: 70
+    val priceVeryOld = adminConfigs["price_fb_very_old"]?.toIntOrNull() ?: 120
+
+    val freshTierLabel = "নতুন (৳$priceFresh)"
+    val oldTierLabel = "পুরাতন (৳$priceOld)"
+    val veryOldTierLabel = "আরো পুরাতন (৳$priceVeryOld)"
+
     var userTelegram by remember { mutableStateOf("") }
     var uidOrLink by remember { mutableStateOf("") }
     var loginPhoneOrEmail by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var twoFactorCode by remember { mutableStateOf("") }
-    var selectedTier by remember { mutableStateOf("2022-2026 (৳40)") }
+    var selectedTier by remember { mutableStateOf(freshTierLabel) }
 
-    val rewardAmount = when (selectedTier) {
-        "2018-2022 (৳70)" -> 70
-        "Old Friends (৳120)" -> 120
-        else -> 40
+    val rewardAmount = when {
+        selectedTier.contains("আরো পুরাতন") -> priceVeryOld
+        selectedTier.contains("পুরাতন") -> priceOld
+        else -> priceFresh
     }
 
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         // Detailed Rules Card
         Card(
             modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = MidnightSurface),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
             shape = RoundedCornerShape(14.dp),
             border = androidx.compose.foundation.BorderStroke(1.dp, MidnightBorder)
         ) {
@@ -518,7 +513,7 @@ fun FacebookSellFormSection(
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = "ফেসবুক আইডি বিক্রির নিয়মাবলী ও রেট",
+                        text = "ফেসবুক আইডি বিক্রির লাইভ রেট ও নিয়মাবলী",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         color = TelegramBlue
@@ -528,9 +523,9 @@ fun FacebookSellFormSection(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "• ২০২২-২০২৬ নরমাল আইডি: ৳৪০\n• ২০১৮-২০২২ পুরাতন আইডি: ৳৭০\n• রিয়েল ফ্রেন্ডস যুক্ত পুরাতন ওল্ড আইডি: ৳১২০",
+                    text = "• নতুন ফেসবুক আইডি: ৳$priceFresh প্রতি আইডি\n• পুরাতন ফেসবুক আইডি: ৳$priceOld প্রতি আইডি\n• আরো পুরাতন ওল্ড আইডি: ৳$priceVeryOld প্রতি আইডি",
                     fontSize = 12.sp,
-                    color = TextPrimary,
+                    color = MaterialTheme.colorScheme.onSurface,
                     lineHeight = 18.sp
                 )
 
@@ -550,7 +545,7 @@ fun FacebookSellFormSection(
         // Submission Form
         Card(
             modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = MidnightCard),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
             shape = RoundedCornerShape(14.dp),
             border = androidx.compose.foundation.BorderStroke(1.dp, MidnightBorder)
         ) {
@@ -559,7 +554,7 @@ fun FacebookSellFormSection(
                     text = "ফেসবুক আইডি সাবমিট করুন",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
-                    color = TextPrimary
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -570,15 +565,7 @@ fun FacebookSellFormSection(
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text("আপনার টেলিগ্রাম ইউজারনেম (@username)") },
                     singleLine = true,
-                    shape = RoundedCornerShape(10.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = MidnightSurface,
-                        unfocusedContainerColor = MidnightSurface,
-                        focusedBorderColor = TelegramBlue,
-                        unfocusedBorderColor = MidnightBorder,
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary
-                    )
+                    shape = RoundedCornerShape(10.dp)
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -589,15 +576,7 @@ fun FacebookSellFormSection(
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text("প্রোফাইল লিংক বা UID") },
                     singleLine = true,
-                    shape = RoundedCornerShape(10.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = MidnightSurface,
-                        unfocusedContainerColor = MidnightSurface,
-                        focusedBorderColor = TelegramBlue,
-                        unfocusedBorderColor = MidnightBorder,
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary
-                    )
+                    shape = RoundedCornerShape(10.dp)
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -608,15 +587,7 @@ fun FacebookSellFormSection(
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text("লগইন ফোন নাম্বার বা ইমেইল") },
                     singleLine = true,
-                    shape = RoundedCornerShape(10.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = MidnightSurface,
-                        unfocusedContainerColor = MidnightSurface,
-                        focusedBorderColor = TelegramBlue,
-                        unfocusedBorderColor = MidnightBorder,
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary
-                    )
+                    shape = RoundedCornerShape(10.dp)
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -627,15 +598,7 @@ fun FacebookSellFormSection(
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text("ফেসবুক পাসওয়ার্ড") },
                     singleLine = true,
-                    shape = RoundedCornerShape(10.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = MidnightSurface,
-                        unfocusedContainerColor = MidnightSurface,
-                        focusedBorderColor = TelegramBlue,
-                        unfocusedBorderColor = MidnightBorder,
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary
-                    )
+                    shape = RoundedCornerShape(10.dp)
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -646,23 +609,15 @@ fun FacebookSellFormSection(
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text("2FA সিকিউরিটি কোড / ব্যাকআপ কোড (যদি থাকে)") },
                     singleLine = true,
-                    shape = RoundedCornerShape(10.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = MidnightSurface,
-                        unfocusedContainerColor = MidnightSurface,
-                        focusedBorderColor = TelegramBlue,
-                        unfocusedBorderColor = MidnightBorder,
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary
-                    )
+                    shape = RoundedCornerShape(10.dp)
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
-                    text = "আইডির ক্যাটাগরি / বয়স:",
+                    text = "আইডির ক্যাটাগরি / বয়স (নতুন, পুরাতন, আরো পুরাতন):",
                     fontSize = 12.sp,
-                    color = TextSecondary
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Spacer(modifier = Modifier.height(6.dp))
@@ -671,7 +626,7 @@ fun FacebookSellFormSection(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    val tiers = listOf("2022-2026 (৳40)", "2018-2022 (৳70)", "Old Friends (৳120)")
+                    val tiers = listOf(freshTierLabel, oldTierLabel, veryOldTierLabel)
                     for (tier in tiers) {
                         val isSelected = selectedTier == tier
                         Surface(
@@ -679,7 +634,7 @@ fun FacebookSellFormSection(
                                 .weight(1f)
                                 .clickable { selectedTier = tier },
                             shape = RoundedCornerShape(8.dp),
-                            color = if (isSelected) TelegramBlue else MidnightSurface,
+                            color = if (isSelected) TelegramBlue else MaterialTheme.colorScheme.surface,
                             border = androidx.compose.foundation.BorderStroke(
                                 1.dp,
                                 if (isSelected) TelegramBlue else MidnightBorder
@@ -690,7 +645,7 @@ fun FacebookSellFormSection(
                                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 4.dp),
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = if (isSelected) Color.White else TextPrimary,
+                                color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurface,
                                 textAlign = androidx.compose.ui.text.style.TextAlign.Center
                             )
                         }

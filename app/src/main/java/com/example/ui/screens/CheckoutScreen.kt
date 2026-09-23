@@ -1,5 +1,6 @@
 package com.example.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -22,8 +23,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.Groups
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.PlayCircleFilled
 import androidx.compose.material.icons.filled.Security
@@ -33,6 +32,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
@@ -52,21 +52,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.model.TelegramGroup
+import com.example.ui.components.AppLogoBadge
+import com.example.ui.components.PaymentBrandLogo
 import com.example.ui.components.TelegramSupportCard
 import com.example.ui.components.copyToClipboard
+import com.example.ui.theme.BinanceDark
+import com.example.ui.theme.BinanceYellow
 import com.example.ui.theme.BkashPink
 import com.example.ui.theme.ElectricCyan
 import com.example.ui.theme.ElectricCyanDark
 import com.example.ui.theme.LuxuryGold
 import com.example.ui.theme.MidnightBorder
 import com.example.ui.theme.MidnightCard
-import com.example.ui.theme.MidnightCardHover
 import com.example.ui.theme.MidnightDark
 import com.example.ui.theme.MidnightSurface
 import com.example.ui.theme.NagadOrange
 import com.example.ui.theme.RocketPurple
 import com.example.ui.theme.SuccessGreen
-import com.example.ui.theme.TelegramBlue
 import com.example.ui.theme.TextPrimary
 import com.example.ui.theme.TextSecondary
 import com.example.ui.theme.WarningAmber
@@ -85,52 +87,74 @@ fun CheckoutScreen(
     var trxId by remember { mutableStateOf("") }
     var userTelegram by remember { mutableStateOf("") }
 
+    val appLogoUrl = adminConfigs["app_logo_url"]
+    val bkashLogoUrl = adminConfigs["payment_logo_bkash"] ?: adminConfigs["bkash_logo_url"]
+    val nagadLogoUrl = adminConfigs["payment_logo_nagad"] ?: adminConfigs["nagad_logo_url"]
+    val rocketLogoUrl = adminConfigs["payment_logo_rocket"] ?: adminConfigs["rocket_logo_url"]
+    val binanceLogoUrl = adminConfigs["payment_logo_binance"] ?: adminConfigs["binance_logo_url"]
+
     val bkashNumber = adminConfigs["bkash_number"] ?: "01789-567890"
     val nagadNumber = adminConfigs["nagad_number"] ?: "01812-345678"
     val rocketNumber = adminConfigs["rocket_number"] ?: "01934-567891"
+    val binanceAddress = adminConfigs["binance_id"] ?: adminConfigs["binance_address"] ?: "8701368956 (Binance Pay ID)"
 
     val currentPaymentNumber = when (selectedPaymentMethod) {
         "Nagad" -> nagadNumber
         "Rocket" -> rocketNumber
+        "Binance" -> binanceAddress
         else -> bkashNumber
     }
 
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(MidnightDark),
+            .background(MaterialTheme.colorScheme.background),
         contentPadding = PaddingValues(bottom = 36.dp)
     ) {
-        // === Top Header ===
+        // === Top Header with Official App Logo ===
         item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 12.dp, vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = MaterialTheme.colorScheme.surface,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
             ) {
-                IconButton(onClick = onBack) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        tint = TextPrimary
-                    )
-                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(onClick = onBack) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
 
-                Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
 
-                Column {
-                    Text(
-                        text = "পেমেন্ট ও অর্ডার কনফার্মেশন",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = TextPrimary
+                    AppLogoBadge(
+                        customLogoUrl = appLogoUrl,
+                        size = 38.dp
                     )
-                    Text(
-                        text = "বিকাশ • নগদ • রকেট নিরাপদ পেমেন্ট",
-                        fontSize = 11.sp,
-                        color = ElectricCyan
-                    )
+
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    Column {
+                        Text(
+                            text = "পেমেন্ট ও অর্ডার কনফার্মেশন",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Text(
+                            text = "বিকাশ • নগদ • রকেট • Binance নিরাপদ গেটওয়ে",
+                            fontSize = 11.sp,
+                            color = ElectricCyanDark,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
                 }
             }
         }
@@ -139,11 +163,11 @@ fun CheckoutScreen(
         item {
             Card(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                    .fillMaxWidth()
-                    .border(1.dp, MidnightBorder, RoundedCornerShape(16.dp)),
-                colors = CardDefaults.cardColors(containerColor = MidnightCard),
-                shape = RoundedCornerShape(16.dp)
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                    .fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.4f))
             ) {
                 Column(modifier = Modifier.padding(14.dp)) {
                     // Screenshot preview banner
@@ -199,7 +223,7 @@ fun CheckoutScreen(
                                     text = group.samplePostTitle,
                                     fontSize = 13.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = TextPrimary,
+                                    color = Color.White,
                                     maxLines = 1
                                 )
                                 Text(
@@ -217,7 +241,7 @@ fun CheckoutScreen(
                         text = group.title,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = TextPrimary
+                        color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Spacer(modifier = Modifier.height(6.dp))
@@ -230,91 +254,128 @@ fun CheckoutScreen(
                         Text(
                             text = "পরিশোধযোগ্য মূল্য:",
                             fontSize = 14.sp,
-                            color = TextSecondary
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
-                        Text(
-                            text = "৳${group.price} BDT",
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Black,
-                            color = LuxuryGold
-                        )
+                        Row(verticalAlignment = Alignment.Bottom) {
+                            Text(
+                                text = "৳${group.price} BDT",
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Black,
+                                color = LuxuryGold
+                            )
+                            if (selectedPaymentMethod == "Binance") {
+                                val usdtAmount = String.format("%.2f", group.price / 122.0)
+                                Text(
+                                    text = " (~$$usdtAmount USDT)",
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = BinanceYellow
+                                )
+                            }
+                        }
                     }
                 }
             }
         }
 
-        // === Payment Method Selector (bKash, Nagad, Rocket) ===
+        // === Payment Method Selector (bKash, Nagad, Rocket, Binance) ===
         item {
-            Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+            Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
                 Text(
                     text = "পেমেন্ট মেথড সিলেক্ট করুন:",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
-                    color = TextPrimary
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    PaymentMethodChip(
+                    PaymentMethodSelectionCard(
                         name = "বিকাশ",
                         code = "bKash",
-                        color = BkashPink,
+                        logoUrl = bkashLogoUrl,
+                        brandColor = BkashPink,
                         isSelected = selectedPaymentMethod == "bKash",
                         modifier = Modifier.weight(1f),
                         onClick = { selectedPaymentMethod = "bKash" }
                     )
 
-                    PaymentMethodChip(
+                    PaymentMethodSelectionCard(
                         name = "নগদ",
                         code = "Nagad",
-                        color = NagadOrange,
+                        logoUrl = nagadLogoUrl,
+                        brandColor = NagadOrange,
                         isSelected = selectedPaymentMethod == "Nagad",
                         modifier = Modifier.weight(1f),
                         onClick = { selectedPaymentMethod = "Nagad" }
                     )
 
-                    PaymentMethodChip(
+                    PaymentMethodSelectionCard(
                         name = "রকেট",
                         code = "Rocket",
-                        color = RocketPurple,
+                        logoUrl = rocketLogoUrl,
+                        brandColor = RocketPurple,
                         isSelected = selectedPaymentMethod == "Rocket",
                         modifier = Modifier.weight(1f),
                         onClick = { selectedPaymentMethod = "Rocket" }
+                    )
+
+                    PaymentMethodSelectionCard(
+                        name = "Binance",
+                        code = "Binance",
+                        logoUrl = binanceLogoUrl,
+                        brandColor = BinanceYellow,
+                        isSelected = selectedPaymentMethod == "Binance",
+                        modifier = Modifier.weight(1f),
+                        onClick = { selectedPaymentMethod = "Binance" }
                     )
                 }
             }
         }
 
-        // === Step-by-Step Payment Instructions ===
+        // === Step-by-Step Payment Instructions with Logos ===
         item {
             Card(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .padding(horizontal = 16.dp, vertical = 10.dp)
                     .fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = MidnightSurface),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
                 shape = RoundedCornerShape(14.dp),
-                border = androidx.compose.foundation.BorderStroke(1.dp, MidnightBorder)
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.4f))
             ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        text = "পেমেন্ট নির্দেশনা (Step by Step):",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = LuxuryGold
-                    )
+                Column(modifier = Modifier.padding(14.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        PaymentBrandLogo(
+                            method = selectedPaymentMethod,
+                            customLogoUrl = when (selectedPaymentMethod) {
+                                "Nagad" -> nagadLogoUrl
+                                "Rocket" -> rocketLogoUrl
+                                "Binance" -> binanceLogoUrl
+                                else -> bkashLogoUrl
+                            },
+                            size = 32.dp
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(
+                            text = "$selectedPaymentMethod পেমেন্ট নির্দেশনা:",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = LuxuryGold
+                        )
+                    }
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    // Admin Number Display with Copy
+                    // Admin Number / Pay ID Display with Copy Button
                     Surface(
                         modifier = Modifier.fillMaxWidth(),
-                        color = MidnightCard,
+                        color = MaterialTheme.colorScheme.surface,
                         shape = RoundedCornerShape(10.dp),
-                        border = androidx.compose.foundation.BorderStroke(1.dp, ElectricCyanDark)
+                        border = BorderStroke(1.dp, ElectricCyanDark)
                     ) {
                         Row(
                             modifier = Modifier
@@ -323,39 +384,45 @@ fun CheckoutScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Column {
+                            Column(modifier = Modifier.weight(1f)) {
                                 Text(
-                                    text = "$selectedPaymentMethod পার্সোনাল নাম্বার:",
+                                    text = if (selectedPaymentMethod == "Binance") "Binance Pay ID / USDT Address:" else "$selectedPaymentMethod পার্সোনাল নাম্বার:",
                                     fontSize = 11.sp,
-                                    color = TextSecondary
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                                 Text(
                                     text = currentPaymentNumber,
-                                    fontSize = 18.sp,
+                                    fontSize = if (selectedPaymentMethod == "Binance") 15.sp else 18.sp,
                                     fontWeight = FontWeight.Black,
-                                    color = ElectricCyan,
-                                    letterSpacing = 1.sp
+                                    color = if (selectedPaymentMethod == "Binance") BinanceYellow else ElectricCyanDark,
+                                    letterSpacing = 0.5.sp
                                 )
                             }
 
                             Button(
                                 onClick = {
+                                    val cleaned = if (selectedPaymentMethod == "Binance") {
+                                        currentPaymentNumber.split(" ")[0].trim()
+                                    } else {
+                                        currentPaymentNumber.replace("-", "").replace(" ", "").trim()
+                                    }
                                     copyToClipboard(
                                         context,
-                                        currentPaymentNumber.replace("-", "").replace(" ", ""),
-                                        "$selectedPaymentMethod নাম্বার কপি হয়েছে!"
+                                        cleaned,
+                                        "$selectedPaymentMethod অ্যাড্রেস কপি হয়েছে!"
                                     )
                                 },
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = ElectricCyan,
                                     contentColor = MidnightDark
                                 ),
-                                shape = RoundedCornerShape(8.dp)
+                                shape = RoundedCornerShape(8.dp),
+                                contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp)
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.ContentCopy,
                                     contentDescription = "Copy",
-                                    modifier = Modifier.size(16.dp)
+                                    modifier = Modifier.size(15.dp)
                                 )
                                 Spacer(modifier = Modifier.width(4.dp))
                                 Text("কপি", fontSize = 12.sp, fontWeight = FontWeight.Bold)
@@ -363,116 +430,95 @@ fun CheckoutScreen(
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
 
-                    // Step 1
-                    Text(
-                        text = "১. আপনার $selectedPaymentMethod অ্যাপ ওপেন করে 'Send Money' (সেন্ড মানি) অপশন চাপুন।",
-                        fontSize = 12.sp,
-                        color = TextPrimary,
-                        lineHeight = 18.sp
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    // Step 2
-                    Text(
-                        text = "২. উপরের নাম্বারে নির্ধারিত মূল্য (৳${group.price}) টাকা সেন্ড মানি করুন।",
-                        fontSize = 12.sp,
-                        color = TextPrimary,
-                        lineHeight = 18.sp
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    // Step 3
-                    Text(
-                        text = "৩. পেমেন্ট সফল হওয়ার পর প্রাপ্ত Transaction ID (TrxID) টি কপি করে নিচের বক্সে দিন।",
-                        fontSize = 12.sp,
-                        color = TextPrimary,
-                        lineHeight = 18.sp
-                    )
+                    if (selectedPaymentMethod == "Binance") {
+                        Text(
+                            text = "১. আপনার Binance অ্যাপে গিয়ে Pay অথবা Send অপশন ওপেন করুন।\n" +
+                                    "২. উপরের Binance Pay ID অথবা USDT তে ৳${group.price} সমপরিমাণ (~$$ {String.format(\"%.2f\", group.price / 122.0)} USDT) সেন্ড করুন।\n" +
+                                    "৩. পেমেন্ট সম্পন্ন হলে Order ID / TxID এবং আপনার Telegram ইউজারনেম নিচে সাবমিট করুন।",
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            lineHeight = 18.sp
+                        )
+                    } else {
+                        Text(
+                            text = "১. আপনার $selectedPaymentMethod অ্যাপ অথবা ডায়াল কোড ব্যবহার করে 'Send Money' সিলেক্ট করুন।\n" +
+                                    "২. উপরে দেওয়া নাম্বারে সঠিক মূল্য ৳${group.price} সেন্ড মানি করুন।\n" +
+                                    "৩. সফলভাবে পেমেন্ট করার পর যে নাম্বার থেকে টাকা পাঠিয়েছেন এবং ফিরতি মেসেজের Transaction ID (TrxID) নিচে লিখে সাবমিট করুন।",
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            lineHeight = 18.sp
+                        )
+                    }
                 }
             }
         }
 
-        // === Order Submission Form ===
+        // === Order Input Verification Form ===
         item {
             Card(
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 8.dp)
                     .fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = MidnightCard),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
                 shape = RoundedCornerShape(14.dp),
-                border = androidx.compose.foundation.BorderStroke(1.dp, MidnightBorder)
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.4f))
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        text = "আপনার পেমেন্ট তথ্য দিন:",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = TextPrimary
-                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Default.Security,
+                            contentDescription = "Safe",
+                            tint = SuccessGreen,
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = "পেমেন্ট তথ্য প্রদান করুন:",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // Telegram ID input
+                    // Telegram Username
                     OutlinedTextField(
                         value = userTelegram,
                         onValueChange = { userTelegram = it },
                         modifier = Modifier.fillMaxWidth(),
-                        label = { Text("আপনার টেলিগ্রাম ইউজারনেম (e.g. @YourName)") },
-                        placeholder = { Text("@user_id") },
+                        label = { Text("আপনার টেলিগ্রাম ইউজারনেম (@username)") },
+                        placeholder = { Text("e.g. @YourUsername") },
                         singleLine = true,
-                        shape = RoundedCornerShape(10.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = MidnightSurface,
-                            unfocusedContainerColor = MidnightSurface,
-                            focusedBorderColor = ElectricCyan,
-                            unfocusedBorderColor = MidnightBorder,
-                            focusedTextColor = TextPrimary,
-                            unfocusedTextColor = TextPrimary
-                        )
+                        shape = RoundedCornerShape(10.dp)
                     )
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    // Sender Number
+                    // Sender Number / Binance UID
                     OutlinedTextField(
                         value = senderNumber,
                         onValueChange = { senderNumber = it },
                         modifier = Modifier.fillMaxWidth(),
-                        label = { Text("যে নাম্বার থেকে টাকা পাঠিয়েছেন") },
-                        placeholder = { Text("01XXXXXXXXX") },
+                        label = { Text(if (selectedPaymentMethod == "Binance") "আপনার Binance Pay ID / UID" else "যে $selectedPaymentMethod নাম্বার থেকে টাকা পাঠিয়েছেন") },
+                        placeholder = { Text(if (selectedPaymentMethod == "Binance") "e.g. 123456789" else "e.g. 017XXXXXXXX") },
                         singleLine = true,
-                        shape = RoundedCornerShape(10.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = MidnightSurface,
-                            unfocusedContainerColor = MidnightSurface,
-                            focusedBorderColor = ElectricCyan,
-                            unfocusedBorderColor = MidnightBorder,
-                            focusedTextColor = TextPrimary,
-                            unfocusedTextColor = TextPrimary
-                        )
+                        shape = RoundedCornerShape(10.dp)
                     )
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    // TrxID
+                    // TrxID / TxHash
                     OutlinedTextField(
                         value = trxId,
                         onValueChange = { trxId = it },
                         modifier = Modifier.fillMaxWidth(),
-                        label = { Text("Transaction ID (TrxID)") },
-                        placeholder = { Text("e.g. BKL890XP12") },
+                        label = { Text(if (selectedPaymentMethod == "Binance") "Binance Order ID / TxID" else "Transaction ID (TrxID)") },
+                        placeholder = { Text(if (selectedPaymentMethod == "Binance") "e.g. 2389104812" else "e.g. BKL890XP12") },
                         singleLine = true,
-                        shape = RoundedCornerShape(10.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = MidnightSurface,
-                            unfocusedContainerColor = MidnightSurface,
-                            focusedBorderColor = ElectricCyan,
-                            unfocusedBorderColor = MidnightBorder,
-                            focusedTextColor = TextPrimary,
-                            unfocusedTextColor = TextPrimary
-                        )
+                        shape = RoundedCornerShape(10.dp)
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -507,7 +553,7 @@ fun CheckoutScreen(
             }
         }
 
-        // === Direct Contact Support Button (User Requirement: শেষে একটি কন্টাক্ট সাপোর্ট বাটন থাকবে যাতে সরাসরি কথা বলা যায়) ===
+        // === Direct Contact Support Button ===
         item {
             Box(modifier = Modifier.padding(16.dp)) {
                 TelegramSupportCard(
@@ -518,11 +564,15 @@ fun CheckoutScreen(
     }
 }
 
+/**
+ * Payment method selection card featuring the brand logo + brand label
+ */
 @Composable
-fun PaymentMethodChip(
+fun PaymentMethodSelectionCard(
     name: String,
     code: String,
-    color: Color,
+    logoUrl: String?,
+    brandColor: Color,
     isSelected: Boolean,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
@@ -531,29 +581,29 @@ fun PaymentMethodChip(
         modifier = modifier
             .clip(RoundedCornerShape(12.dp))
             .clickable(onClick = onClick),
-        color = if (isSelected) color.copy(alpha = 0.25f) else MidnightCard,
+        color = if (isSelected) brandColor.copy(alpha = 0.22f) else MaterialTheme.colorScheme.surfaceVariant,
         shape = RoundedCornerShape(12.dp),
-        border = androidx.compose.foundation.BorderStroke(
+        border = BorderStroke(
             if (isSelected) 2.dp else 1.dp,
-            if (isSelected) color else MidnightBorder
+            if (isSelected) brandColor else MaterialTheme.colorScheme.outline.copy(alpha = 0.4f)
         )
     ) {
         Column(
-            modifier = Modifier.padding(vertical = 12.dp, horizontal = 8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.padding(vertical = 10.dp, horizontal = 4.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Box(
-                modifier = Modifier
-                    .size(16.dp)
-                    .clip(CircleShape)
-                    .background(color)
+            PaymentBrandLogo(
+                method = code,
+                customLogoUrl = logoUrl,
+                size = 32.dp
             )
             Spacer(modifier = Modifier.height(6.dp))
             Text(
                 text = name,
-                fontSize = 13.sp,
+                fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
-                color = if (isSelected) Color.White else TextSecondary
+                color = if (isSelected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

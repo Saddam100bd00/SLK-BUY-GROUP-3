@@ -95,7 +95,9 @@ fun SlkApp(viewModel: MainViewModel = viewModel()) {
                     },
                     onSupportClick = {
                         openTelegramLink(context, adminConfigs["admin_telegram"] ?: "https://t.me/ItsSaddam9")
-                    }
+                    },
+                    appLogoUrl = adminConfigs["app_logo_url"] ?: adminConfigs["app_logo"],
+                    appName = adminConfigs["app_name"] ?: "SLK BUY GROUP"
                 )
             }
         },

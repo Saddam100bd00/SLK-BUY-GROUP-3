@@ -86,12 +86,38 @@ import com.example.ui.theme.WarningAmber
 import com.example.ui.viewmodel.AppScreen
 
 @Composable
+fun NetworkImageOrFallback(
+    url: String?,
+    contentDescription: String?,
+    modifier: Modifier = Modifier,
+    fallback: @Composable () -> Unit
+) {
+    if (!url.isNullOrBlank()) {
+        coil.compose.SubcomposeAsyncImage(
+            model = coil.request.ImageRequest.Builder(LocalContext.current)
+                .data(url)
+                .crossfade(true)
+                .build(),
+            contentDescription = contentDescription,
+            modifier = modifier,
+            contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+            loading = { fallback() },
+            error = { fallback() }
+        )
+    } else {
+        fallback()
+    }
+}
+
+@Composable
 fun SlkTopBar(
     currentBalance: Int,
     isAdminUnlocked: Boolean,
     onWalletClick: () -> Unit,
     onAdminClick: () -> Unit,
-    onSupportClick: () -> Unit
+    onSupportClick: () -> Unit,
+    appLogoUrl: String? = null,
+    appName: String = "SLK BUY GROUP"
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
@@ -120,12 +146,20 @@ fun SlkTopBar(
                         ),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.Send,
-                        contentDescription = "SLK Logo",
-                        tint = MidnightDark,
-                        modifier = Modifier.size(22.dp)
-                    )
+                    NetworkImageOrFallback(
+                        url = appLogoUrl,
+                        contentDescription = "App Logo",
+                        modifier = Modifier
+                            .size(38.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.Send,
+                            contentDescription = "SLK Logo",
+                            tint = MidnightDark,
+                            modifier = Modifier.size(22.dp)
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.width(10.dp))
@@ -133,7 +167,7 @@ fun SlkTopBar(
                 Column {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
-                            text = "SLK BUY GROUP",
+                            text = appName.ifBlank { "SLK BUY GROUP" },
                             fontSize = 17.sp,
                             fontWeight = FontWeight.Black,
                             color = TextPrimary,
@@ -490,6 +524,61 @@ fun GroupScreenshotCard(
                                 color = Color.White
                             )
                         }
+                    }
+                }
+            }
+
+            // === Beautiful Price Row Directly Under Thumbnail ===
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 14.dp, vertical = 6.dp),
+                shape = RoundedCornerShape(10.dp),
+                color = MidnightSurface,
+                border = BorderStroke(1.dp, LuxuryGold.copy(alpha = 0.45f))
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 7.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = "মূল্য:",
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = TextSecondary
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = "৳${group.price}",
+                            fontSize = 19.sp,
+                            fontWeight = FontWeight.Black,
+                            color = LuxuryGold
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = "৳${group.originalPrice}",
+                            fontSize = 12.sp,
+                            color = TextSecondary,
+                            textDecoration = TextDecoration.LineThrough
+                        )
+                    }
+
+                    Surface(
+                        color = SuccessGreen.copy(alpha = 0.18f),
+                        shape = RoundedCornerShape(6.dp),
+                        border = BorderStroke(1.dp, SuccessGreen.copy(alpha = 0.4f))
+                    ) {
+                        Text(
+                            text = "সেভ ৳${group.originalPrice - group.price}",
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = SuccessGreen
+                        )
                     }
                 }
             }

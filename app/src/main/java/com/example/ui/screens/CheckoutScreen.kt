@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Groups
@@ -27,6 +28,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.PlayCircleFilled
 import androidx.compose.material.icons.filled.Security
+import androidx.compose.material.icons.filled.Verified
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -52,6 +54,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.model.TelegramGroup
+import com.example.ui.components.NetworkImageOrFallback
 import com.example.ui.components.TelegramSupportCard
 import com.example.ui.components.copyToClipboard
 import com.example.ui.theme.BkashPink
@@ -88,10 +91,17 @@ fun CheckoutScreen(
     val bkashNumber = adminConfigs["bkash_number"] ?: "01789-567890"
     val nagadNumber = adminConfigs["nagad_number"] ?: "01812-345678"
     val rocketNumber = adminConfigs["rocket_number"] ?: "01934-567891"
+    val binanceNumber = adminConfigs["binance_number"] ?: "8701368956"
+
+    val bkashLogo = adminConfigs["bkash_logo"]
+    val nagadLogo = adminConfigs["nagad_logo"]
+    val rocketLogo = adminConfigs["rocket_logo"]
+    val binanceLogo = adminConfigs["binance_logo"]
 
     val currentPaymentNumber = when (selectedPaymentMethod) {
         "Nagad" -> nagadNumber
         "Rocket" -> rocketNumber
+        "Binance" -> binanceNumber
         else -> bkashNumber
     }
 
@@ -101,36 +111,92 @@ fun CheckoutScreen(
             .background(MidnightDark),
         contentPadding = PaddingValues(bottom = 36.dp)
     ) {
-        // === Top Header ===
+        // === Top Header with App Logo & Branding ===
         item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 12.dp, vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = MidnightDark,
+                tonalElevation = 6.dp
             ) {
-                IconButton(onClick = onBack) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        tint = TextPrimary
-                    )
-                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(onClick = onBack) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = TextPrimary
+                        )
+                    }
 
-                Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
 
-                Column {
-                    Text(
-                        text = "পেমেন্ট ও অর্ডার কনফার্মেশন",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = TextPrimary
-                    )
-                    Text(
-                        text = "বিকাশ • নগদ • রকেট নিরাপদ পেমেন্ট",
-                        fontSize = 11.sp,
-                        color = ElectricCyan
-                    )
+                    val appLogoUrl = adminConfigs["app_logo_url"] ?: adminConfigs["app_logo"]
+                    val appName = adminConfigs["app_name"] ?: "SLK BUY GROUP"
+
+                    Box(
+                        modifier = Modifier
+                            .size(42.dp)
+                            .clip(CircleShape)
+                            .border(1.5.dp, LuxuryGold, CircleShape)
+                            .background(MidnightSurface),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        NetworkImageOrFallback(
+                            url = appLogoUrl,
+                            contentDescription = "App Logo",
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(CircleShape)
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(
+                                        Brush.linearGradient(
+                                            listOf(ElectricCyan, ElectricCyanDark)
+                                        )
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.Send,
+                                    contentDescription = "SLK",
+                                    tint = MidnightDark,
+                                    modifier = Modifier.size(22.dp)
+                                )
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    Column {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = appName.ifBlank { "SLK BUY GROUP" },
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Black,
+                                color = TextPrimary
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Icon(
+                                imageVector = Icons.Default.Verified,
+                                contentDescription = "Verified",
+                                tint = ElectricCyan,
+                                modifier = Modifier.size(15.dp)
+                            )
+                        }
+                        Text(
+                            text = "পেমেন্ট ও অর্ডার কনফার্মেশন",
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = LuxuryGold
+                        )
+                    }
                 }
             }
         }
@@ -243,7 +309,7 @@ fun CheckoutScreen(
             }
         }
 
-        // === Payment Method Selector (bKash, Nagad, Rocket) ===
+        // === Payment Method Selector (bKash, Nagad, Rocket, Binance) ===
         item {
             Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
                 Text(
@@ -257,12 +323,13 @@ fun CheckoutScreen(
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     PaymentMethodChip(
                         name = "বিকাশ",
                         code = "bKash",
                         color = BkashPink,
+                        logoUrl = bkashLogo,
                         isSelected = selectedPaymentMethod == "bKash",
                         modifier = Modifier.weight(1f),
                         onClick = { selectedPaymentMethod = "bKash" }
@@ -272,6 +339,7 @@ fun CheckoutScreen(
                         name = "নগদ",
                         code = "Nagad",
                         color = NagadOrange,
+                        logoUrl = nagadLogo,
                         isSelected = selectedPaymentMethod == "Nagad",
                         modifier = Modifier.weight(1f),
                         onClick = { selectedPaymentMethod = "Nagad" }
@@ -281,9 +349,20 @@ fun CheckoutScreen(
                         name = "রকেট",
                         code = "Rocket",
                         color = RocketPurple,
+                        logoUrl = rocketLogo,
                         isSelected = selectedPaymentMethod == "Rocket",
                         modifier = Modifier.weight(1f),
                         onClick = { selectedPaymentMethod = "Rocket" }
+                    )
+
+                    PaymentMethodChip(
+                        name = "Binance",
+                        code = "Binance",
+                        color = LuxuryGold,
+                        logoUrl = binanceLogo,
+                        isSelected = selectedPaymentMethod == "Binance",
+                        modifier = Modifier.weight(1f),
+                        onClick = { selectedPaymentMethod = "Binance" }
                     )
                 }
             }
@@ -323,27 +402,29 @@ fun CheckoutScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Column {
+                            Column(modifier = Modifier.weight(1f)) {
                                 Text(
-                                    text = "$selectedPaymentMethod পার্সোনাল নাম্বার:",
+                                    text = if (selectedPaymentMethod == "Binance") "Binance Pay ID / USDT Address:" else "$selectedPaymentMethod পার্সোনাল নাম্বার:",
                                     fontSize = 11.sp,
                                     color = TextSecondary
                                 )
                                 Text(
                                     text = currentPaymentNumber,
-                                    fontSize = 18.sp,
+                                    fontSize = if (currentPaymentNumber.length > 16) 14.sp else 18.sp,
                                     fontWeight = FontWeight.Black,
                                     color = ElectricCyan,
-                                    letterSpacing = 1.sp
+                                    letterSpacing = 0.5.sp
                                 )
                             }
+
+                            Spacer(modifier = Modifier.width(8.dp))
 
                             Button(
                                 onClick = {
                                     copyToClipboard(
                                         context,
-                                        currentPaymentNumber.replace("-", "").replace(" ", ""),
-                                        "$selectedPaymentMethod নাম্বার কপি হয়েছে!"
+                                        currentPaymentNumber.replace("-", "").trim(),
+                                        "$selectedPaymentMethod একাউন্ট তথ্য কপি হয়েছে!"
                                     )
                                 },
                                 colors = ButtonDefaults.buttonColors(
@@ -365,31 +446,54 @@ fun CheckoutScreen(
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // Step 1
-                    Text(
-                        text = "১. আপনার $selectedPaymentMethod অ্যাপ ওপেন করে 'Send Money' (সেন্ড মানি) অপশন চাপুন।",
-                        fontSize = 12.sp,
-                        color = TextPrimary,
-                        lineHeight = 18.sp
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
+                    if (selectedPaymentMethod == "Binance") {
+                        Text(
+                            text = "১. আপনার Binance অ্যাপ ওপেন করে Pay অথবা Wallet অপশনে যান।",
+                            fontSize = 12.sp,
+                            color = TextPrimary,
+                            lineHeight = 18.sp
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "২. উপরের Pay ID অথবা Address এ সমপরিমাণ মূল্য (৳${group.price} সমমানের ডলার) পাঠান।",
+                            fontSize = 12.sp,
+                            color = TextPrimary,
+                            lineHeight = 18.sp
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "৩. ট্রানজেকশন সফল হলে প্রাপ্ত Order ID বা Internal TrxID টি নিচের বক্সে দিন।",
+                            fontSize = 12.sp,
+                            color = TextPrimary,
+                            lineHeight = 18.sp
+                        )
+                    } else {
+                        // Step 1
+                        Text(
+                            text = "১. আপনার $selectedPaymentMethod অ্যাপ ওপেন করে 'Send Money' (সেন্ড মানি) অপশন চাপুন।",
+                            fontSize = 12.sp,
+                            color = TextPrimary,
+                            lineHeight = 18.sp
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
 
-                    // Step 2
-                    Text(
-                        text = "২. উপরের নাম্বারে নির্ধারিত মূল্য (৳${group.price}) টাকা সেন্ড মানি করুন।",
-                        fontSize = 12.sp,
-                        color = TextPrimary,
-                        lineHeight = 18.sp
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
+                        // Step 2
+                        Text(
+                            text = "২. উপরের নাম্বারে নির্ধারিত মূল্য (৳${group.price}) টাকা সেন্ড মানি করুন।",
+                            fontSize = 12.sp,
+                            color = TextPrimary,
+                            lineHeight = 18.sp
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
 
-                    // Step 3
-                    Text(
-                        text = "৩. পেমেন্ট সফল হওয়ার পর প্রাপ্ত Transaction ID (TrxID) টি কপি করে নিচের বক্সে দিন।",
-                        fontSize = 12.sp,
-                        color = TextPrimary,
-                        lineHeight = 18.sp
-                    )
+                        // Step 3
+                        Text(
+                            text = "৩. পেমেন্ট সফল হওয়ার পর প্রাপ্ত Transaction ID (TrxID) টি কপি করে নিচের বক্সে দিন।",
+                            fontSize = 12.sp,
+                            color = TextPrimary,
+                            lineHeight = 18.sp
+                        )
+                    }
                 }
             }
         }
@@ -435,13 +539,23 @@ fun CheckoutScreen(
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    // Sender Number
+                    // Sender Number / Binance Pay ID
                     OutlinedTextField(
                         value = senderNumber,
                         onValueChange = { senderNumber = it },
                         modifier = Modifier.fillMaxWidth(),
-                        label = { Text("যে নাম্বার থেকে টাকা পাঠিয়েছেন") },
-                        placeholder = { Text("01XXXXXXXXX") },
+                        label = {
+                            Text(
+                                if (selectedPaymentMethod == "Binance") "আপনার Binance Pay ID / Email বা Phone"
+                                else "যে নাম্বার থেকে টাকা পাঠিয়েছেন (Sender Number)"
+                            )
+                        },
+                        placeholder = {
+                            Text(
+                                if (selectedPaymentMethod == "Binance") "8701368956"
+                                else "01XXXXXXXXX"
+                            )
+                        },
                         singleLine = true,
                         shape = RoundedCornerShape(10.dp),
                         colors = OutlinedTextFieldDefaults.colors(
@@ -523,6 +637,7 @@ fun PaymentMethodChip(
     name: String,
     code: String,
     color: Color,
+    logoUrl: String? = null,
     isSelected: Boolean,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
@@ -531,7 +646,7 @@ fun PaymentMethodChip(
         modifier = modifier
             .clip(RoundedCornerShape(12.dp))
             .clickable(onClick = onClick),
-        color = if (isSelected) color.copy(alpha = 0.25f) else MidnightCard,
+        color = if (isSelected) color.copy(alpha = 0.22f) else MidnightCard,
         shape = RoundedCornerShape(12.dp),
         border = androidx.compose.foundation.BorderStroke(
             if (isSelected) 2.dp else 1.dp,
@@ -539,21 +654,45 @@ fun PaymentMethodChip(
         )
     ) {
         Column(
-            modifier = Modifier.padding(vertical = 12.dp, horizontal = 8.dp),
+            modifier = Modifier.padding(vertical = 10.dp, horizontal = 4.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(
                 modifier = Modifier
-                    .size(16.dp)
+                    .size(28.dp)
                     .clip(CircleShape)
-                    .background(color)
-            )
+                    .background(Color.White.copy(alpha = 0.95f)),
+                contentAlignment = Alignment.Center
+            ) {
+                NetworkImageOrFallback(
+                    url = logoUrl,
+                    contentDescription = name,
+                    modifier = Modifier
+                        .size(28.dp)
+                        .clip(CircleShape)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(color),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = code.take(1),
+                            color = Color.White,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Black
+                        )
+                    }
+                }
+            }
             Spacer(modifier = Modifier.height(6.dp))
             Text(
                 text = name,
-                fontSize = 13.sp,
+                fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
-                color = if (isSelected) Color.White else TextSecondary
+                color = if (isSelected) Color.White else TextSecondary,
+                maxLines = 1
             )
         }
     }

@@ -68,6 +68,7 @@ import com.example.data.model.GmailSubmission
 import com.example.data.model.GroupOrder
 import com.example.data.model.TelegramGroup
 import com.example.data.model.Withdrawal
+import com.example.ui.components.NetworkImageOrFallback
 import com.example.ui.theme.BkashPink
 import com.example.ui.theme.DangerRed
 import com.example.ui.theme.ElectricCyan
@@ -918,87 +919,436 @@ fun AdminPaymentSettingsSection(
     configs: Map<String, String>,
     onUpdateNumber: (String, String) -> Unit
 ) {
-    var bkash by remember { mutableStateOf(configs["bkash_number"] ?: "01789-567890") }
-    var nagad by remember { mutableStateOf(configs["nagad_number"] ?: "01812-345678") }
-    var rocket by remember { mutableStateOf(configs["rocket_number"] ?: "01934-567891") }
+    var appName by remember(configs["app_name"]) { mutableStateOf(configs["app_name"] ?: "SLK BUY GROUP") }
+    var appLogoUrl by remember(configs["app_logo_url"]) { mutableStateOf(configs["app_logo_url"] ?: "") }
 
-    Card(
+    var bkashNumber by remember(configs["bkash_number"]) { mutableStateOf(configs["bkash_number"] ?: "01789-567890") }
+    var bkashLogo by remember(configs["bkash_logo"]) { mutableStateOf(configs["bkash_logo"] ?: "") }
+
+    var nagadNumber by remember(configs["nagad_number"]) { mutableStateOf(configs["nagad_number"] ?: "01812-345678") }
+    var nagadLogo by remember(configs["nagad_logo"]) { mutableStateOf(configs["nagad_logo"] ?: "") }
+
+    var rocketNumber by remember(configs["rocket_number"]) { mutableStateOf(configs["rocket_number"] ?: "01934-567891") }
+    var rocketLogo by remember(configs["rocket_logo"]) { mutableStateOf(configs["rocket_logo"] ?: "") }
+
+    var binanceNumber by remember(configs["binance_number"]) { mutableStateOf(configs["binance_number"] ?: "8701368956") }
+    var binanceLogo by remember(configs["binance_logo"]) { mutableStateOf(configs["binance_logo"] ?: "") }
+
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
-        colors = CardDefaults.cardColors(containerColor = MidnightCard),
-        shape = RoundedCornerShape(14.dp),
-        border = androidx.compose.foundation.BorderStroke(1.dp, MidnightBorder)
+        verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = "পেমেন্ট গেটওয়ে সেটিংস (অটো ডিসপ্লে)",
-                fontSize = 15.sp,
-                fontWeight = FontWeight.Bold,
-                color = LuxuryGold
-            )
-            Text(
-                text = "এখানে যে নাম্বার দিবেন ইউজাররা চেকআউটে সেটাই দেখতে পাবে",
-                fontSize = 11.sp,
-                color = TextSecondary
-            )
+        // 1. App Header Logo & Identity Settings
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = MidnightCard),
+            shape = RoundedCornerShape(14.dp),
+            border = androidx.compose.foundation.BorderStroke(1.dp, LuxuryGold.copy(alpha = 0.5f))
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column {
+                        Text(
+                            text = "অ্যাপ হেডার লোগো ও ব্র্যান্ডিং",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = LuxuryGold
+                        )
+                        Text(
+                            text = "পেমেন্ট হেডার ও টপবারে যে লোগো ও নাম দেখাবে",
+                            fontSize = 11.sp,
+                            color = TextSecondary
+                        )
+                    }
 
-            Spacer(modifier = Modifier.height(12.dp))
+                    // Live Logo Preview
+                    Box(
+                        modifier = Modifier
+                            .size(46.dp)
+                            .clip(CircleShape)
+                            .border(2.dp, LuxuryGold, CircleShape)
+                            .background(MidnightSurface),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        NetworkImageOrFallback(
+                            url = appLogoUrl,
+                            contentDescription = "Header Logo Preview",
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(CircleShape)
+                        ) {
+                            Text(
+                                text = "SLK",
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Black,
+                                color = LuxuryGold
+                            )
+                        }
+                    }
+                }
 
-            // bKash
-            OutlinedTextField(
-                value = bkash,
-                onValueChange = { bkash = it },
-                label = { Text("বিকাশ পার্সোনাল নাম্বার") },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Button(
-                onClick = { onUpdateNumber("bkash_number", bkash) },
-                colors = ButtonDefaults.buttonColors(containerColor = BkashPink, contentColor = Color.White),
-                shape = RoundedCornerShape(8.dp)
-            ) {
-                Text("বিকাশ নাম্বার সেভ", fontSize = 11.sp)
-            }
+                Spacer(modifier = Modifier.height(12.dp))
 
-            Spacer(modifier = Modifier.height(14.dp))
+                OutlinedTextField(
+                    value = appName,
+                    onValueChange = { appName = it },
+                    label = { Text("অ্যাপের নাম (App Name)") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
 
-            // Nagad
-            OutlinedTextField(
-                value = nagad,
-                onValueChange = { nagad = it },
-                label = { Text("নগদ পার্সোনাল নাম্বার") },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Button(
-                onClick = { onUpdateNumber("nagad_number", nagad) },
-                colors = ButtonDefaults.buttonColors(containerColor = NagadOrange, contentColor = Color.White),
-                shape = RoundedCornerShape(8.dp)
-            ) {
-                Text("নগদ নাম্বার সেভ", fontSize = 11.sp)
-            }
+                Spacer(modifier = Modifier.height(8.dp))
 
-            Spacer(modifier = Modifier.height(14.dp))
+                OutlinedTextField(
+                    value = appLogoUrl,
+                    onValueChange = { appLogoUrl = it },
+                    label = { Text("হেডার অ্যাপস লোগো ইমেজ URL (https://...)") },
+                    placeholder = { Text("https://example.com/logo.png") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
 
-            // Rocket
-            OutlinedTextField(
-                value = rocket,
-                onValueChange = { rocket = it },
-                label = { Text("রকেট পার্সোনাল নাম্বার") },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Button(
-                onClick = { onUpdateNumber("rocket_number", rocket) },
-                colors = ButtonDefaults.buttonColors(containerColor = RocketPurple, contentColor = Color.White),
-                shape = RoundedCornerShape(8.dp)
-            ) {
-                Text("রকেট নাম্বার সেভ", fontSize = 11.sp)
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Button(
+                    onClick = {
+                        onUpdateNumber("app_name", appName)
+                        onUpdateNumber("app_logo_url", appLogoUrl)
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = LuxuryGold, contentColor = MidnightDark),
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Icon(imageVector = Icons.Default.Save, contentDescription = "Save", modifier = Modifier.size(16.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text("অ্যাপ হেডার লোগো ও নাম সেভ করুন", fontWeight = FontWeight.Bold)
+                }
             }
         }
+
+        // 2. bKash Settings
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = MidnightCard),
+            shape = RoundedCornerShape(14.dp),
+            border = androidx.compose.foundation.BorderStroke(1.dp, MidnightBorder)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "বিকাশ (bKash) সেটিংস",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = BkashPink
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(CircleShape)
+                            .border(1.dp, BkashPink, CircleShape)
+                            .background(Color.White),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        NetworkImageOrFallback(
+                            url = bkashLogo,
+                            contentDescription = "bKash Logo",
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(CircleShape)
+                        ) {
+                            Text("BK", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = BkashPink)
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                OutlinedTextField(
+                    value = bkashNumber,
+                    onValueChange = { bkashNumber = it },
+                    label = { Text("বিকাশ পার্সোনাল নাম্বার") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                OutlinedTextField(
+                    value = bkashLogo,
+                    onValueChange = { bkashLogo = it },
+                    label = { Text("বিকাশ লোগো ইমেজ URL (Logo URL)") },
+                    placeholder = { Text("https://example.com/bkash.png") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Button(
+                    onClick = {
+                        onUpdateNumber("bkash_number", bkashNumber)
+                        onUpdateNumber("bkash_logo", bkashLogo)
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = BkashPink, contentColor = Color.White),
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Icon(imageVector = Icons.Default.Save, contentDescription = "Save", modifier = Modifier.size(16.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text("বিকাশ সেটিংস সেভ করুন", fontWeight = FontWeight.Bold)
+                }
+            }
+        }
+
+        // 3. Nagad Settings
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = MidnightCard),
+            shape = RoundedCornerShape(14.dp),
+            border = androidx.compose.foundation.BorderStroke(1.dp, MidnightBorder)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "নগদ (Nagad) সেটিংস",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = NagadOrange
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(CircleShape)
+                            .border(1.dp, NagadOrange, CircleShape)
+                            .background(Color.White),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        NetworkImageOrFallback(
+                            url = nagadLogo,
+                            contentDescription = "Nagad Logo",
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(CircleShape)
+                        ) {
+                            Text("NG", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = NagadOrange)
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                OutlinedTextField(
+                    value = nagadNumber,
+                    onValueChange = { nagadNumber = it },
+                    label = { Text("নগদ পার্সোনাল নাম্বার") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                OutlinedTextField(
+                    value = nagadLogo,
+                    onValueChange = { nagadLogo = it },
+                    label = { Text("নগদ লোগো ইমেজ URL (Logo URL)") },
+                    placeholder = { Text("https://example.com/nagad.png") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Button(
+                    onClick = {
+                        onUpdateNumber("nagad_number", nagadNumber)
+                        onUpdateNumber("nagad_logo", nagadLogo)
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = NagadOrange, contentColor = Color.White),
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Icon(imageVector = Icons.Default.Save, contentDescription = "Save", modifier = Modifier.size(16.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text("নগদ সেটিংস সেভ করুন", fontWeight = FontWeight.Bold)
+                }
+            }
+        }
+
+        // 4. Rocket Settings
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = MidnightCard),
+            shape = RoundedCornerShape(14.dp),
+            border = androidx.compose.foundation.BorderStroke(1.dp, MidnightBorder)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "রকেট (Rocket) সেটিংস",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = RocketPurple
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(CircleShape)
+                            .border(1.dp, RocketPurple, CircleShape)
+                            .background(Color.White),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        NetworkImageOrFallback(
+                            url = rocketLogo,
+                            contentDescription = "Rocket Logo",
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(CircleShape)
+                        ) {
+                            Text("RK", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = RocketPurple)
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                OutlinedTextField(
+                    value = rocketNumber,
+                    onValueChange = { rocketNumber = it },
+                    label = { Text("রকেট পার্সোনাল নাম্বার") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                OutlinedTextField(
+                    value = rocketLogo,
+                    onValueChange = { rocketLogo = it },
+                    label = { Text("রকেট লোগো ইমেজ URL (Logo URL)") },
+                    placeholder = { Text("https://example.com/rocket.png") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Button(
+                    onClick = {
+                        onUpdateNumber("rocket_number", rocketNumber)
+                        onUpdateNumber("rocket_logo", rocketLogo)
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = RocketPurple, contentColor = Color.White),
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Icon(imageVector = Icons.Default.Save, contentDescription = "Save", modifier = Modifier.size(16.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text("রকেট সেটিংস সেভ করুন", fontWeight = FontWeight.Bold)
+                }
+            }
+        }
+
+        // 5. Binance Settings
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = MidnightCard),
+            shape = RoundedCornerShape(14.dp),
+            border = androidx.compose.foundation.BorderStroke(1.dp, MidnightBorder)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Binance (বাইনান্স) সেটিংস",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = LuxuryGold
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(CircleShape)
+                            .border(1.dp, LuxuryGold, CircleShape)
+                            .background(Color.White),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        NetworkImageOrFallback(
+                            url = binanceLogo,
+                            contentDescription = "Binance Logo",
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(CircleShape)
+                        ) {
+                            Text("BN", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = LuxuryGold)
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                OutlinedTextField(
+                    value = binanceNumber,
+                    onValueChange = { binanceNumber = it },
+                    label = { Text("Binance Pay ID অথবা USDT Address") },
+                    placeholder = { Text("8701368956 অথবা TXXX...") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                OutlinedTextField(
+                    value = binanceLogo,
+                    onValueChange = { binanceLogo = it },
+                    label = { Text("Binance লোগো ইমেজ URL (Logo URL)") },
+                    placeholder = { Text("https://example.com/binance.png") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Button(
+                    onClick = {
+                        onUpdateNumber("binance_number", binanceNumber)
+                        onUpdateNumber("binance_logo", binanceLogo)
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = LuxuryGold, contentColor = MidnightDark),
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Icon(imageVector = Icons.Default.Save, contentDescription = "Save", modifier = Modifier.size(16.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text("Binance সেটিংস সেভ করুন", fontWeight = FontWeight.Bold)
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }

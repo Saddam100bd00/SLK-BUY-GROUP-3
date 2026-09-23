@@ -407,10 +407,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun updatePaymentNumber(key: String, number: String) {
         viewModelScope.launch {
-            if (number.isNotBlank()) {
-                repository.updateConfig(key, number.trim())
-                _toastMessage.emit("পেমেন্ট নাম্বার আপডেট হয়েছে!")
-            }
+            repository.updateConfig(key, number.trim())
+            _toastMessage.emit("পেমেন্ট সেটিংস সফলভাবে সেভ হয়েছে!")
         }
     }
 }

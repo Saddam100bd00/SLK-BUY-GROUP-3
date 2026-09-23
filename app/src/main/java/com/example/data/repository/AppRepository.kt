@@ -120,6 +120,27 @@ class AppRepository(private val dao: AppDao) {
                 )
             )
         }
+
+        val defaultConfigs = mapOf(
+            "bkash_number" to "01789-567890",
+            "bkash_logo" to "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80&auto=format&fit=crop&q=80",
+            "nagad_number" to "01812-345678",
+            "nagad_logo" to "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80&auto=format&fit=crop&q=80",
+            "rocket_number" to "01934-567891",
+            "rocket_logo" to "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80&auto=format&fit=crop&q=80",
+            "binance_number" to "8701368956",
+            "binance_logo" to "https://images.unsplash.com/photo-1622979135225-d2ba269bc1df?w=80&auto=format&fit=crop&q=80",
+            "app_name" to "SLK BUY GROUP",
+            "app_logo_url" to "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=120&auto=format&fit=crop&q=80",
+            "admin_telegram" to "https://t.me/ItsSaddam9",
+            "notice_text" to "📢 স্বাগতম SLK BUY GROUP এ! টেলিগ্রাম প্রিমিয়াম গ্রুপ কিনুন এবং জিমেইল/ফেসবুক বিক্রি করে ঘরে বসে ইনকাম করুন।"
+        )
+        val currentConfigs = allConfigs.firstOrNull()?.associate { it.key to it.value } ?: emptyMap()
+        for ((k, v) in defaultConfigs) {
+            if (!currentConfigs.containsKey(k)) {
+                dao.setConfig(AdminConfig(k, v))
+            }
+        }
     }
 
     suspend fun placeGroupOrder(

@@ -63,39 +63,33 @@
       transition: background-color 0.3s, color 0.3s;
     }
 
-    /* Clean Light Mode (Only when .dark class is removed) */
-    html:not(.dark) body {
+    /* Light Mode Overrides */
+    html.light body {
       background-color: #f8fafc !important;
       color: #0f172a !important;
     }
-    html:not(.dark) .bg-midnight-dark {
+    html.light .bg-midnight-dark {
       background-color: #f1f5f9 !important;
     }
-    html:not(.dark) .bg-midnight-card {
+    html.light .bg-midnight-card {
       background-color: #ffffff !important;
       border-color: #e2e8f0 !important;
-      box-shadow: 0 4px 15px -2px rgba(0, 0, 0, 0.05) !important;
+      box-shadow: 0 4px 14px 0 rgba(0,0,0,0.06) !important;
     }
-    html:not(.dark) .bg-midnight-surface {
+    html.light .bg-midnight-surface {
       background-color: #e2e8f0 !important;
       color: #0f172a !important;
     }
-    html:not(.dark) .border-midnight-border {
-      border-color: #cbd5e1 !important;
-    }
-    html:not(.dark) .text-white {
+    html.light .text-white {
       color: #0f172a !important;
     }
-    html:not(.dark) .text-slate-100,
-    html:not(.dark) .text-slate-200,
-    html:not(.dark) .text-slate-300 {
+    html.light .text-slate-100, html.light .text-slate-200, html.light .text-slate-300 {
       color: #1e293b !important;
     }
-    html:not(.dark) .text-slate-400 {
+    html.light .text-slate-400 {
       color: #64748b !important;
     }
-    html:not(.dark) nav {
-      background-color: rgba(255, 255, 255, 0.98) !important;
+    html.light .border-midnight-border {
       border-color: #e2e8f0 !important;
     }
     
@@ -1397,174 +1391,25 @@
           </button>
         </div>
 
-        <!-- Dynamic Sell Account Rates for All Tiers (Gmail & Facebook) -->
-        <div class="p-4 rounded-2xl bg-midnight-card border border-luxury-gold/40 space-y-4">
-          <div class="flex items-center justify-between">
-            <h3 class="text-xs font-black text-amber-300 flex items-center gap-1.5">
-              <i data-lucide="badge-dollar-sign" class="w-4 h-4 text-luxury-gold"></i>
-              <span>জিমেইল ও ফেসবুক বিক্রির রেট কন্ট্রোল (নতুন, পুরাতন, আরো পুরাতন)</span>
-            </h3>
-            <span class="text-[9px] text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20 font-bold">Live Rates</span>
-          </div>
-
-          <!-- Gmail 3 Tiers -->
-          <div class="p-3 rounded-xl bg-midnight-dark border border-rose-500/30 space-y-2">
-            <div class="flex items-center justify-between text-xs font-bold text-rose-400">
-              <span class="flex items-center gap-1.5"><i data-lucide="mail" class="w-3.5 h-3.5"></i> জিমেইল (Gmail) টায়ার রেট</span>
-              <span class="text-[10px] text-slate-400">ইউজার ওয়ালেটে জমা হবে</span>
-            </div>
-            <div class="grid grid-cols-3 gap-2">
-              <div>
-                <label class="text-[10px] text-slate-300 block mb-0.5">নতুন জিমেইল (৳)</label>
-                <input id="adminInGmailRateNew" type="number" placeholder="15" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
-              </div>
-              <div>
-                <label class="text-[10px] text-slate-300 block mb-0.5">পুরাতন (৩+ মাস) (৳)</label>
-                <input id="adminInGmailRateOld" type="number" placeholder="25" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
-              </div>
-              <div>
-                <label class="text-[10px] text-slate-300 block mb-0.5">আরো পুরাতন (১+ বছর) (৳)</label>
-                <input id="adminInGmailRateAged" type="number" placeholder="40" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
-              </div>
-            </div>
-          </div>
-
-          <!-- Facebook 3 Tiers -->
-          <div class="p-3 rounded-xl bg-midnight-dark border border-blue-500/30 space-y-2">
-            <div class="flex items-center justify-between text-xs font-bold text-blue-400">
-              <span class="flex items-center gap-1.5"><i data-lucide="facebook" class="w-3.5 h-3.5"></i> ফেসবুক আইডি (Facebook) টায়ার রেট</span>
-              <span class="text-[10px] text-slate-400">ইউজার ওয়ালেটে জমা হবে</span>
-            </div>
-            <div class="grid grid-cols-3 gap-2">
-              <div>
-                <label class="text-[10px] text-slate-300 block mb-0.5">নতুন আইডি (৳)</label>
-                <input id="adminInFbRateNew" type="number" placeholder="20" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
-              </div>
-              <div>
-                <label class="text-[10px] text-slate-300 block mb-0.5">পুরাতন (১-২ বছর) (৳)</label>
-                <input id="adminInFbRateOld" type="number" placeholder="60" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
-              </div>
-              <div>
-                <label class="text-[10px] text-slate-300 block mb-0.5">আরো পুরাতন / 2FA (৳)</label>
-                <input id="adminInFbRateAged" type="number" placeholder="110" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
-              </div>
-            </div>
-          </div>
-
-          <!-- Minimum Withdraw -->
-          <div class="p-3 rounded-xl bg-midnight-dark border border-emerald-500/30">
-            <label class="text-[11px] font-bold text-emerald-400 block mb-1">সর্বনিম্ন উইথড্র সীমা / Minimum Withdraw (৳)</label>
-            <input id="adminInMinWithdraw" type="number" placeholder="100" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-3 py-1.5 text-xs text-white" />
-          </div>
-
-          <button onclick="adminSaveRatesConfig()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark font-black text-xs shadow-md btn-bounce">
-            সকল রেট ও উইথড্র সীমা সেভ করুন
-          </button>
-        </div>
-
-        <!-- Payment Gateway Settings (bKash, Nagad, Rocket, Binance) -->
-        <div class="p-4 rounded-2xl bg-midnight-card border border-luxury-gold/40 space-y-4">
-          <div class="flex items-center justify-between">
-            <h3 class="text-xs font-black text-amber-300 flex items-center gap-1.5">
-              <i data-lucide="credit-card" class="w-4 h-4 text-luxury-gold"></i>
-              <span>পেমেন্ট গেটওয়ে সেটিংস (বিকাশ, নগদ, রকেট, Binance)</span>
-            </h3>
-            <span class="text-[9px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 font-bold">Auto Logo Fallback</span>
-          </div>
-          <p class="text-[11px] text-slate-400">
-            এখানে আপনার পেমেন্ট নাম্বার ও নিয়মাবলী দিন। কাস্টম লোগো ইমেজ URL দিলে সেটি প্রদর্শিত হবে, ফাঁকা রাখলে স্বয়ংক্রিয়ভাবে অরিজিনাল সুন্দর লোগো দেখাবে।
-          </p>
-
-          <!-- 1: bKash -->
-          <div class="p-3 rounded-xl bg-midnight-dark border border-pink-500/30 space-y-2">
-            <div class="flex items-center justify-between text-xs font-bold text-pink-400">
-              <span>১. বিকাশ পার্সোনাল (bKash)</span>
-              <span class="text-[10px] text-pink-300 bg-pink-500/10 px-1.5 py-0.5 rounded">bKash</span>
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-              <div>
-                <label class="text-[10px] text-slate-400 block mb-0.5">বিকাশ পার্সোনাল নাম্বার *</label>
-                <input id="adminInBkashNumber" type="text" placeholder="017XXXXXXXX" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
-              </div>
-              <div>
-                <label class="text-[10px] text-slate-400 block mb-0.5">কাস্টম লোগো URL (ঐচ্ছিক)</label>
-                <input id="adminInBkashLogo" type="text" placeholder="https://... (ফাঁকা রাখলে অরিজিনাল)" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
-              </div>
+        <!-- Rates & Minimum Withdraw -->
+        <div class="p-4 rounded-2xl bg-midnight-card border border-midnight-border space-y-3">
+          <h3 class="text-xs font-bold text-amber-400">রেট ও মিনিমাম উইথড্র লিমিট</h3>
+          <div class="grid grid-cols-3 gap-2">
+            <div>
+              <label class="text-[10px] text-slate-300 block mb-0.5">জিমেইল প্রাইস (৳)</label>
+              <input id="adminInGmailPrice" type="number" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-2.5 py-1.5 text-xs text-white" />
             </div>
             <div>
-              <label class="text-[10px] text-slate-400 block mb-0.5">পেমেন্ট করার নিয়মাবলী</label>
-              <textarea id="adminInBkashRules" rows="2" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white"></textarea>
-            </div>
-          </div>
-
-          <!-- 2: Nagad -->
-          <div class="p-3 rounded-xl bg-midnight-dark border border-amber-500/30 space-y-2">
-            <div class="flex items-center justify-between text-xs font-bold text-amber-400">
-              <span>২. নগদ পার্সোনাল (Nagad)</span>
-              <span class="text-[10px] text-amber-300 bg-amber-500/10 px-1.5 py-0.5 rounded">Nagad</span>
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-              <div>
-                <label class="text-[10px] text-slate-400 block mb-0.5">নগদ পার্সোনাল নাম্বার *</label>
-                <input id="adminInNagadNumber" type="text" placeholder="018XXXXXXXX" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
-              </div>
-              <div>
-                <label class="text-[10px] text-slate-400 block mb-0.5">কাস্টম লোগো URL (ঐচ্ছিক)</label>
-                <input id="adminInNagadLogo" type="text" placeholder="https://... (ফাঁকা রাখলে অরিজিনাল)" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
-              </div>
+              <label class="text-[10px] text-slate-300 block mb-0.5">ফেসবুক প্রাইস (৳)</label>
+              <input id="adminInFbPrice" type="number" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-2.5 py-1.5 text-xs text-white" />
             </div>
             <div>
-              <label class="text-[10px] text-slate-400 block mb-0.5">পেমেন্ট করার নিয়মাবলী</label>
-              <textarea id="adminInNagadRules" rows="2" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white"></textarea>
+              <label class="text-[10px] text-slate-300 block mb-0.5">মিনিমাম উইথড্র (৳)</label>
+              <input id="adminInMinWithdraw" type="number" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-2.5 py-1.5 text-xs text-white" />
             </div>
           </div>
-
-          <!-- 3: Rocket -->
-          <div class="p-3 rounded-xl bg-midnight-dark border border-purple-500/30 space-y-2">
-            <div class="flex items-center justify-between text-xs font-bold text-purple-400">
-              <span>৩. রকেট পার্সোনাল (Rocket)</span>
-              <span class="text-[10px] text-purple-300 bg-purple-500/10 px-1.5 py-0.5 rounded">Rocket</span>
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-              <div>
-                <label class="text-[10px] text-slate-400 block mb-0.5">রকেট ১২ ডিজিট নাম্বার *</label>
-                <input id="adminInRocketNumber" type="text" placeholder="019XXXXXXXXX" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
-              </div>
-              <div>
-                <label class="text-[10px] text-slate-400 block mb-0.5">কাস্টম লোগো URL (ঐচ্ছিক)</label>
-                <input id="adminInRocketLogo" type="text" placeholder="https://... (ফাঁকা রাখলে অরিজিনাল)" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
-              </div>
-            </div>
-            <div>
-              <label class="text-[10px] text-slate-400 block mb-0.5">পেমেন্ট করার নিয়মাবলী</label>
-              <textarea id="adminInRocketRules" rows="2" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white"></textarea>
-            </div>
-          </div>
-
-          <!-- 4: Binance -->
-          <div class="p-3 rounded-xl bg-midnight-dark border border-yellow-500/30 space-y-2">
-            <div class="flex items-center justify-between text-xs font-bold text-yellow-400">
-              <span>৪. বাইন্যান্স (Binance Pay / USDT)</span>
-              <span class="text-[10px] text-yellow-300 bg-yellow-500/10 px-1.5 py-0.5 rounded">Binance</span>
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-              <div>
-                <label class="text-[10px] text-slate-400 block mb-0.5">Binance Pay ID / USDT Address *</label>
-                <input id="adminInBinanceNumber" type="text" placeholder="8701368956 (Pay ID)" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
-              </div>
-              <div>
-                <label class="text-[10px] text-slate-400 block mb-0.5">কাস্টম লোগো URL (ঐচ্ছিক)</label>
-                <input id="adminInBinanceLogo" type="text" placeholder="https://... (ফাঁকা রাখলে অরিজিনাল)" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
-              </div>
-            </div>
-            <div>
-              <label class="text-[10px] text-slate-400 block mb-0.5">পেমেন্ট করার নিয়মাবলী</label>
-              <textarea id="adminInBinanceRules" rows="2" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white"></textarea>
-            </div>
-          </div>
-
-          <button onclick="adminSavePaymentGatewaysConfig()" class="w-full py-3 rounded-xl bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark font-black text-xs shadow-lg btn-bounce">
-            পেমেন্ট গেটওয়ে সেটিংস সংরক্ষণ করুন
+          <button onclick="adminSaveRatesConfig()" class="px-4 py-2 rounded-xl bg-luxury-gold text-midnight-dark font-bold text-xs btn-bounce">
+            রেট আপডেট করুন
           </button>
         </div>
 
@@ -1775,43 +1620,24 @@
           
           <!-- bKash Card -->
           <div onclick="selectPgMethod('bkash')" id="cardPgBkash" class="cursor-pointer p-2.5 rounded-2xl border-2 border-bkash bg-bkash/15 hover:bg-bkash/25 transition text-center flex flex-col items-center justify-between btn-bounce shadow-md">
-            <div id="boxPgLogoBkash" class="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shadow-sm overflow-hidden mb-1">
-              <!-- Official bKash Bird Vector -->
-              <svg viewBox="0 0 48 48" class="w-full h-full" fill="none">
-                <path d="M4 14L44 14L24 38L4 14Z" fill="#E2136E"/>
-                <path d="M4 14L24 38L10 44L4 14Z" fill="#B80E57"/>
-                <path d="M44 14L24 38L38 44L44 14Z" fill="#E2136E"/>
-                <path d="M24 38L10 44L24 48L38 44L24 38Z" fill="#900943"/>
-              </svg>
+            <div class="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shadow-sm overflow-hidden mb-1">
+              <img id="imgPgLogoBkash" src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80&auto=format&fit=crop&q=80" alt="bKash" class="w-full h-full object-contain" />
             </div>
             <span class="text-[11px] font-black text-pink-400 leading-tight">Bkash<br>Personal</span>
           </div>
 
           <!-- Nagad Card -->
           <div onclick="selectPgMethod('nagad')" id="cardPgNagad" class="cursor-pointer p-2.5 rounded-2xl border-2 border-midnight-border bg-midnight-dark hover:border-nagad/60 transition text-center flex flex-col items-center justify-between btn-bounce shadow-md">
-            <div id="boxPgLogoNagad" class="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shadow-sm overflow-hidden mb-1">
-              <!-- Official Nagad Swirl Vector -->
-              <svg viewBox="0 0 48 48" class="w-full h-full">
-                <circle cx="24" cy="24" r="22" fill="#F7941D"/>
-                <path d="M24 8C15 8 9 15 9 23C9 32 17 40 24 44C31 40 39 32 39 23C39 15 33 8 24 8Z" fill="#ED1C24"/>
-                <path d="M24 13C19 13 15 17 15 23C15 29 20 34 24 37C28 34 33 29 33 23C33 17 29 13 24 13Z" fill="#FFFFFF"/>
-                <circle cx="24" cy="23" r="5" fill="#F7941D"/>
-              </svg>
+            <div class="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shadow-sm overflow-hidden mb-1">
+              <img id="imgPgLogoNagad" src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80&auto=format&fit=crop&q=80" alt="Nagad" class="w-full h-full object-contain" />
             </div>
             <span class="text-[11px] font-black text-amber-400 leading-tight">Nagad<br>Personal</span>
           </div>
 
           <!-- Rocket Card -->
           <div onclick="selectPgMethod('rocket')" id="cardPgRocket" class="cursor-pointer p-2.5 rounded-2xl border-2 border-midnight-border bg-midnight-dark hover:border-rocket/60 transition text-center flex flex-col items-center justify-between btn-bounce shadow-md">
-            <div id="boxPgLogoRocket" class="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shadow-sm overflow-hidden mb-1">
-              <!-- Official Rocket Vector -->
-              <svg viewBox="0 0 48 48" class="w-full h-full">
-                <rect width="48" height="48" rx="12" fill="#8C3494"/>
-                <path d="M24 6L33 26H28V38L24 43L20 38V26H15L24 6Z" fill="#FFFFFF"/>
-                <circle cx="24" cy="20" r="3.5" fill="#8C3494"/>
-                <path d="M15 30L9 39L17 37Z" fill="#F37023"/>
-                <path d="M33 30L39 39L31 37Z" fill="#F37023"/>
-              </svg>
+            <div class="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shadow-sm overflow-hidden mb-1">
+              <img id="imgPgLogoRocket" src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80&auto=format&fit=crop&q=80" alt="Rocket" class="w-full h-full object-contain" />
             </div>
             <span class="text-[11px] font-black text-purple-400 leading-tight">Rocket<br>Personal</span>
           </div>
@@ -1821,16 +1647,8 @@
         <div id="pgGlobalCardsGrid" class="grid grid-cols-1 gap-2 hidden">
           <!-- Binance Card -->
           <div onclick="selectPgMethod('binance')" id="cardPgBinance" class="cursor-pointer p-3 rounded-2xl border-2 border-amber-500 bg-amber-500/15 hover:bg-amber-500/25 transition flex items-center gap-3 btn-bounce shadow-md">
-            <div id="boxPgLogoBinance" class="w-11 h-11 rounded-xl bg-white p-1 flex items-center justify-center shadow-sm overflow-hidden flex-shrink-0">
-              <!-- Official Binance Vector -->
-              <svg viewBox="0 0 48 48" class="w-full h-full">
-                <rect width="48" height="48" rx="12" fill="#181A20"/>
-                <path d="M24 10L30.5 16.5L24 23L17.5 16.5L24 10Z" fill="#F3BA2F"/>
-                <path d="M11 23L17.5 29.5L11 36L4.5 29.5L11 23Z" fill="#F3BA2F"/>
-                <path d="M37 23L43.5 29.5L37 36L30.5 29.5L37 23Z" fill="#F3BA2F"/>
-                <path d="M24 36L30.5 42.5L24 49L17.5 42.5L24 36Z" fill="#F3BA2F"/>
-                <path d="M24 23L30.5 29.5L24 36L17.5 29.5L24 23Z" fill="#F3BA2F"/>
-              </svg>
+            <div class="w-11 h-11 rounded-xl bg-white p-1 flex items-center justify-center shadow-sm overflow-hidden flex-shrink-0">
+              <img id="imgPgLogoBinance" src="https://images.unsplash.com/photo-1622979135225-d2ba269bc1df?w=80&auto=format&fit=crop&q=80" alt="Binance" class="w-full h-full object-contain" />
             </div>
             <div>
               <span class="text-xs font-black text-amber-400">Binance Personal</span>
@@ -2049,17 +1867,6 @@
         </button>
       </div>
 
-      <!-- Sound Effects Switcher -->
-      <div class="p-3 bg-midnight-dark rounded-xl border border-midnight-border flex items-center justify-between">
-        <div>
-          <p class="text-xs font-bold text-white">সাউন্ড ইফেক্ট / Sound FX</p>
-          <p class="text-[11px] text-slate-400" id="soundStatusText">চালু আছে (On)</p>
-        </div>
-        <button onclick="toggleSoundFX()" class="px-3 py-1.5 rounded-xl bg-midnight-surface border border-slate-600 text-xs font-bold text-luxury-gold btn-bounce">
-          অন / অফ
-        </button>
-      </div>
-
       <button onclick="toggleSettingsModal()" class="w-full py-2.5 rounded-xl bg-midnight-surface border border-midnight-border text-white text-xs font-bold btn-bounce">
         বন্ধ করুন
       </button>
@@ -2144,14 +1951,7 @@
     // --- Audio Synthesis via Web Audio API (Smooth & Offline) ---
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     let audioCtx = null;
-    let isSoundEnabled = true;
-    try {
-      const savedSound = localStorage.getItem('slk_sound_enabled');
-      if (savedSound !== null) isSoundEnabled = (savedSound === 'true');
-    } catch(e) {}
-
     function playSound(type = 'click') {
-      if (!isSoundEnabled) return;
       try {
         if (!audioCtx) audioCtx = new AudioCtx();
         const osc = audioCtx.createOscillator();
@@ -2981,41 +2781,6 @@
       }
     }
 
-    // --- Dynamic Payment Gateway Logos (bKash, Nagad, Rocket, Binance) ---
-    function renderPaymentGatewayLogos() {
-      const gateways = appState.paymentGateways || (defaultInitialState && defaultInitialState.paymentGateways) || {};
-
-      renderSinglePgLogo('boxPgLogoBkash', gateways.bkash?.logo, 'bkash');
-      renderSinglePgLogo('boxPgLogoNagad', gateways.nagad?.logo, 'nagad');
-      renderSinglePgLogo('boxPgLogoRocket', gateways.rocket?.logo, 'rocket');
-      renderSinglePgLogo('boxPgLogoBinance', gateways.binance?.logo, 'binance');
-    }
-
-    function renderSinglePgLogo(boxId, customLogoUrl, method) {
-      const box = document.getElementById(boxId);
-      if (!box) return;
-
-      if (customLogoUrl && customLogoUrl.trim().startsWith('http')) {
-        box.innerHTML = `<img src="${customLogoUrl.trim()}" alt="${method}" class="w-full h-full object-contain" onerror="renderSinglePgDefaultLogo('${boxId}', '${method}')" />`;
-      } else {
-        renderSinglePgDefaultLogo(boxId, method);
-      }
-    }
-
-    function renderSinglePgDefaultLogo(boxId, method) {
-      const box = document.getElementById(boxId);
-      if (!box) return;
-      if (method === 'bkash') {
-        box.innerHTML = `<svg viewBox="0 0 48 48" class="w-full h-full" fill="none"><path d="M4 14L44 14L24 38L4 14Z" fill="#E2136E"/><path d="M4 14L24 38L10 44L4 14Z" fill="#B80E57"/><path d="M44 14L24 38L38 44L44 14Z" fill="#E2136E"/><path d="M24 38L10 44L24 48L38 44L24 38Z" fill="#900943"/></svg>`;
-      } else if (method === 'nagad') {
-        box.innerHTML = `<svg viewBox="0 0 48 48" class="w-full h-full"><circle cx="24" cy="24" r="22" fill="#F7941D"/><path d="M24 8C15 8 9 15 9 23C9 32 17 40 24 44C31 40 39 32 39 23C39 15 33 8 24 8Z" fill="#ED1C24"/><path d="M24 13C19 13 15 17 15 23C15 29 20 34 24 37C28 34 33 29 33 23C33 17 29 13 24 13Z" fill="#FFFFFF"/><circle cx="24" cy="23" r="5" fill="#F7941D"/></svg>`;
-      } else if (method === 'rocket') {
-        box.innerHTML = `<svg viewBox="0 0 48 48" class="w-full h-full"><rect width="48" height="48" rx="12" fill="#8C3494"/><path d="M24 6L33 26H28V38L24 43L20 38V26H15L24 6Z" fill="#FFFFFF"/><circle cx="24" cy="20" r="3.5" fill="#8C3494"/><path d="M15 30L9 39L17 37Z" fill="#F37023"/><path d="M33 30L39 39L31 37Z" fill="#F37023"/></svg>`;
-      } else if (method === 'binance') {
-        box.innerHTML = `<svg viewBox="0 0 48 48" class="w-full h-full"><rect width="48" height="48" rx="12" fill="#181A20"/><path d="M24 10L30.5 16.5L24 23L17.5 16.5L24 10Z" fill="#F3BA2F"/><path d="M11 23L17.5 29.5L11 36L4.5 29.5L11 23Z" fill="#F3BA2F"/><path d="M37 23L43.5 29.5L37 36L30.5 29.5L37 23Z" fill="#F3BA2F"/><path d="M24 36L30.5 42.5L24 49L17.5 42.5L24 36Z" fill="#F3BA2F"/><path d="M24 23L30.5 29.5L24 36L17.5 29.5L24 23Z" fill="#F3BA2F"/></svg>`;
-      }
-    }
-
     // --- Dynamic UI Rendering ---
     function renderApp() {
       try {
@@ -3024,11 +2789,6 @@
         safeSetText('splashAppName', appState.appName);
         safeSetSrc('headerLogo', appState.appLogo);
         safeSetSrc('splashLogoImg', appState.appLogo);
-
-        // Payment Modal Identity & Dynamic Gateways
-        safeSetSrc('pgAppLogo', appState.appLogo || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=120&auto=format&fit=crop&q=80');
-        safeSetText('pgAppName', appState.appName || 'SLK BUY GROUP');
-        renderPaymentGatewayLogos();
 
         // Channels & Support (Top Bar & Floating)
         safeSetHref('headerChannelBtn', appState.officialChannelLink || 'https://t.me/ItsSaddam9');
@@ -3173,22 +2933,7 @@
               <span class="flex items-center gap-1 font-semibold text-[11px] text-slate-200">
                 <i data-lucide="users" class="w-3.5 h-3.5 text-telegram"></i> ${group.membersCount} মেম্বার
               </span>
-              <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30 font-bold">ভেরিফাইড চ্যানেল</span>
-            </div>
-          </div>
-
-          <!-- Prominent Price Display Directly Under The Photo (As Requested) -->
-          <div class="flex items-center justify-between px-3 py-2 rounded-xl bg-midnight-surface/80 border border-luxury-gold/30">
-            <div class="flex items-center gap-1.5">
-              <span class="text-[11px] font-bold text-slate-400">মূল্য:</span>
-              <span class="text-base font-black text-amber-400">৳${group.price}</span>
-              <s class="text-xs text-slate-500 font-medium">৳${group.originalPrice}</s>
-              <span class="text-[9px] bg-rose-500/20 text-rose-300 font-black px-1.5 py-0.5 rounded border border-rose-500/30">
-                ${Math.max(10, Math.round((1 - (group.price / (group.originalPrice || (group.price + 100)))) * 100))}% ছাড়
-              </span>
-            </div>
-            <div class="text-[10px] text-emerald-400 font-bold flex items-center gap-1">
-              <i data-lucide="zap" class="w-3 h-3 text-amber-400"></i> ইনস্ট্যান্ট এক্সেস
+              <span class="font-extrabold text-amber-400">৳${group.price} <s class="text-[10px] text-slate-400 font-normal">৳${group.originalPrice}</s></span>
             </div>
           </div>
 
@@ -4061,50 +3806,34 @@
       safeSetValue('adminInBtnLogo4', btns.btn4Logo || '');
 
       // Channels
-      safeSetValue('adminInChannelName', appState.officialChannelName);
-      safeSetValue('adminInChannelLink', appState.officialChannelLink);
-      safeSetValue('adminInSupportLink', appState.supportLink);
+      document.getElementById('adminInChannelName').value = appState.officialChannelName;
+      document.getElementById('adminInChannelLink').value = appState.officialChannelLink;
+      document.getElementById('adminInSupportLink').value = appState.supportLink;
 
-      // Rates (Tiered for New, Old, Aged)
-      const gRates = appState.gmailRates || { new: 15, old: 25, aged: 40 };
-      const fRates = appState.fbRates || { new: 20, old: 60, aged: 110 };
-      safeSetValue('adminInGmailRateNew', gRates.new);
-      safeSetValue('adminInGmailRateOld', gRates.old);
-      safeSetValue('adminInGmailRateAged', gRates.aged);
-
-      safeSetValue('adminInFbRateNew', fRates.new);
-      safeSetValue('adminInFbRateOld', fRates.old);
-      safeSetValue('adminInFbRateAged', fRates.aged);
-
-      safeSetValue('adminInMinWithdraw', appState.minWithdraw || 100);
-      safeSetValue('adminInNotice', appState.noticeText);
+      // Rates
+      document.getElementById('adminInGmailPrice').value = appState.gmailRate;
+      document.getElementById('adminInFbPrice').value = appState.fbRate;
+      document.getElementById('adminInMinWithdraw').value = appState.minWithdraw;
+      document.getElementById('adminInNotice').value = appState.noticeText;
 
       // Payment Gateways Settings Inputs
       if (appState.paymentGateways) {
         const pg = appState.paymentGateways;
-        // Bkash
-        safeSetValue('adminInBkashNumber', pg.bkash?.number || '');
-        safeSetValue('adminInBkashNum', pg.bkash?.number || '');
-        safeSetValue('adminInBkashLogo', pg.bkash?.logo || '');
-        safeSetValue('adminInBkashRules', pg.bkash?.rules || '');
+        if (document.getElementById('adminInBkashNum')) document.getElementById('adminInBkashNum').value = pg.bkash?.number || '';
+        if (document.getElementById('adminInBkashLogo')) document.getElementById('adminInBkashLogo').value = pg.bkash?.logo || '';
+        if (document.getElementById('adminInBkashRules')) document.getElementById('adminInBkashRules').value = pg.bkash?.rules || '';
 
-        // Nagad
-        safeSetValue('adminInNagadNumber', pg.nagad?.number || '');
-        safeSetValue('adminInNagadNum', pg.nagad?.number || '');
-        safeSetValue('adminInNagadLogo', pg.nagad?.logo || '');
-        safeSetValue('adminInNagadRules', pg.nagad?.rules || '');
+        if (document.getElementById('adminInNagadNum')) document.getElementById('adminInNagadNum').value = pg.nagad?.number || '';
+        if (document.getElementById('adminInNagadLogo')) document.getElementById('adminInNagadLogo').value = pg.nagad?.logo || '';
+        if (document.getElementById('adminInNagadRules')) document.getElementById('adminInNagadRules').value = pg.nagad?.rules || '';
 
-        // Rocket
-        safeSetValue('adminInRocketNumber', pg.rocket?.number || '');
-        safeSetValue('adminInRocketNum', pg.rocket?.number || '');
-        safeSetValue('adminInRocketLogo', pg.rocket?.logo || '');
-        safeSetValue('adminInRocketRules', pg.rocket?.rules || '');
+        if (document.getElementById('adminInRocketNum')) document.getElementById('adminInRocketNum').value = pg.rocket?.number || '';
+        if (document.getElementById('adminInRocketLogo')) document.getElementById('adminInRocketLogo').value = pg.rocket?.logo || '';
+        if (document.getElementById('adminInRocketRules')) document.getElementById('adminInRocketRules').value = pg.rocket?.rules || '';
 
-        // Binance
-        safeSetValue('adminInBinanceNumber', pg.binance?.number || '');
-        safeSetValue('adminInBinanceId', pg.binance?.number || '');
-        safeSetValue('adminInBinanceLogo', pg.binance?.logo || '');
-        safeSetValue('adminInBinanceRules', pg.binance?.rules || '');
+        if (document.getElementById('adminInBinanceId')) document.getElementById('adminInBinanceId').value = pg.binance?.number || '';
+        if (document.getElementById('adminInBinanceLogo')) document.getElementById('adminInBinanceLogo').value = pg.binance?.logo || '';
+        if (document.getElementById('adminInBinanceRules')) document.getElementById('adminInBinanceRules').value = pg.binance?.rules || '';
       }
 
       // Admin group list
@@ -4470,61 +4199,38 @@
       lucide.createIcons();
     }
 
-    function adminSavePaymentGatewaysConfig() {
-      adminSavePaymentGatewayConfig();
-    }
-
     function adminSavePaymentGatewayConfig() {
       playSound('click');
-      if (!appState.paymentGateways) appState.paymentGateways = {};
-
-      const bkashNum = (document.getElementById('adminInBkashNumber')?.value || document.getElementById('adminInBkashNum')?.value || '').trim() || '01789-567890';
-      const bkashLogo = (document.getElementById('adminInBkashLogo')?.value || '').trim();
-      const bkashRules = (document.getElementById('adminInBkashRules')?.value || '').trim() || defaultInitialState.paymentGateways.bkash.rules;
-
-      const nagadNum = (document.getElementById('adminInNagadNumber')?.value || document.getElementById('adminInNagadNum')?.value || '').trim() || '01812-345678';
-      const nagadLogo = (document.getElementById('adminInNagadLogo')?.value || '').trim();
-      const nagadRules = (document.getElementById('adminInNagadRules')?.value || '').trim() || defaultInitialState.paymentGateways.nagad.rules;
-
-      const rocketNum = (document.getElementById('adminInRocketNumber')?.value || document.getElementById('adminInRocketNum')?.value || '').trim() || '01934-567891';
-      const rocketLogo = (document.getElementById('adminInRocketLogo')?.value || '').trim();
-      const rocketRules = (document.getElementById('adminInRocketRules')?.value || '').trim() || defaultInitialState.paymentGateways.rocket.rules;
-
-      const binanceNum = (document.getElementById('adminInBinanceNumber')?.value || document.getElementById('adminInBinanceId')?.value || '').trim() || '8701368956 (Pay ID) / USDT (BEP20)';
-      const binanceLogo = (document.getElementById('adminInBinanceLogo')?.value || '').trim();
-      const binanceRules = (document.getElementById('adminInBinanceRules')?.value || '').trim() || defaultInitialState.paymentGateways.binance.rules;
-
       appState.paymentGateways = {
         bkash: {
           name: 'Bkash Personal',
-          number: bkashNum,
-          logo: bkashLogo,
-          rules: bkashRules
+          number: document.getElementById('adminInBkashNum').value.trim() || '01789-567890',
+          logo: document.getElementById('adminInBkashLogo').value.trim(),
+          rules: document.getElementById('adminInBkashRules').value.trim()
         },
         nagad: {
           name: 'Nagad Personal',
-          number: nagadNum,
-          logo: nagadLogo,
-          rules: nagadRules
+          number: document.getElementById('adminInNagadNum').value.trim() || '01812-345678',
+          logo: document.getElementById('adminInNagadLogo').value.trim(),
+          rules: document.getElementById('adminInNagadRules').value.trim()
         },
         rocket: {
           name: 'Rocket Personal',
-          number: rocketNum,
-          logo: rocketLogo,
-          rules: rocketRules
+          number: document.getElementById('adminInRocketNum').value.trim() || '01934-567891',
+          logo: document.getElementById('adminInRocketLogo').value.trim(),
+          rules: document.getElementById('adminInRocketRules').value.trim()
         },
         binance: {
           name: 'Binance Personal',
-          number: binanceNum,
-          logo: binanceLogo,
-          rules: binanceRules
+          number: document.getElementById('adminInBinanceId').value.trim() || '8701368956 (Pay ID)',
+          logo: document.getElementById('adminInBinanceLogo').value.trim(),
+          rules: document.getElementById('adminInBinanceRules').value.trim()
         }
       };
-
       saveState();
       renderApp();
       playSound('chime');
-      alert("✅ বিকাশ, নগদ, রকেট এবং বাইন্যান্সের পেমেন্ট সেটিংস ও লোগো সফলভাবে সংরক্ষিত হয়েছে!");
+      alert("পেমেন্ট গেটওয়ে সেটিংস সফলভাবে সংরক্ষিত হয়েছে!");
     }
 
     function adminSaveGroup() {
@@ -4664,38 +4370,12 @@
 
     function adminSaveRatesConfig() {
       playSound('click');
-      if (!appState.gmailRates) appState.gmailRates = { new: 15, old: 25, aged: 40 };
-      if (!appState.fbRates) appState.fbRates = { new: 20, old: 60, aged: 110 };
-
-      const gNew = parseInt(document.getElementById('adminInGmailRateNew')?.value);
-      const gOld = parseInt(document.getElementById('adminInGmailRateOld')?.value);
-      const gAged = parseInt(document.getElementById('adminInGmailRateAged')?.value);
-
-      const fNew = parseInt(document.getElementById('adminInFbRateNew')?.value);
-      const fOld = parseInt(document.getElementById('adminInFbRateOld')?.value);
-      const fAged = parseInt(document.getElementById('adminInFbRateAged')?.value);
-
-      const minW = parseInt(document.getElementById('adminInMinWithdraw')?.value);
-
-      if (!isNaN(gNew)) appState.gmailRates.new = gNew;
-      if (!isNaN(gOld)) appState.gmailRates.old = gOld;
-      if (!isNaN(gAged)) appState.gmailRates.aged = gAged;
-
-      if (!isNaN(fNew)) appState.fbRates.new = fNew;
-      if (!isNaN(fOld)) appState.fbRates.old = fOld;
-      if (!isNaN(fAged)) appState.fbRates.aged = fAged;
-
-      if (!isNaN(minW)) appState.minWithdraw = minW;
-
-      appState.gmailRate = appState.gmailRates.new;
-      appState.fbRate = appState.fbRates.old;
-
+      appState.gmailRate = parseInt(document.getElementById('adminInGmailPrice').value) || 15;
+      appState.fbRate = parseInt(document.getElementById('adminInFbPrice').value) || 60;
+      appState.minWithdraw = parseInt(document.getElementById('adminInMinWithdraw').value) || 100;
       saveState();
       renderApp();
-      updateGmailSellRate();
-      updateFbSellRate();
-      playSound('chime');
-      alert("✅ জিমেইল ও ফেসবুকের নতুন, পুরাতন এবং আরো পুরাতন সকল রেট সফলভাবে সংরক্ষিত হয়েছে!");
+      alert("রেট ও মিনিমাম লিমিট সফলভাবে সেভ হয়েছে!");
     }
 
     function adminSaveNotice() {
@@ -4870,34 +4550,17 @@
       modal.classList.toggle('hidden');
     }
 
-    let isDarkTheme = true;
-    function applyTheme(isDark) {
-      isDarkTheme = isDark;
-      const html = document.documentElement;
-      if (isDark) {
-        html.classList.add('dark');
-        safeSetText('themeStatusText', "বর্তমানে: কালো মোড (Dark)");
-      } else {
-        html.classList.remove('dark');
-        safeSetText('themeStatusText', "বর্তমানে: সাদা মোড (Light)");
-      }
-      try {
-        localStorage.setItem('slk_theme_mode', isDark ? 'dark' : 'light');
-      } catch(e) {}
-    }
-
     function toggleTheme() {
       playSound('click');
-      applyTheme(!isDarkTheme);
-    }
-
-    function toggleSoundFX() {
-      isSoundEnabled = !isSoundEnabled;
-      try {
-        localStorage.setItem('slk_sound_enabled', isSoundEnabled ? 'true' : 'false');
-      } catch(e) {}
-      safeSetText('soundStatusText', isSoundEnabled ? 'চালু আছে (On)' : 'বন্ধ আছে (Off)');
-      if (isSoundEnabled) playSound('chime');
+      isDarkTheme = !isDarkTheme;
+      const html = document.documentElement;
+      if (isDarkTheme) {
+        html.classList.add('dark');
+        document.getElementById('themeStatusText').innerText = "বর্তমানে: কালো মোড (Dark)";
+      } else {
+        html.classList.remove('dark');
+        document.getElementById('themeStatusText').innerText = "বর্তমানে: সাদা মোড (Light)";
+      }
     }
 
     function toggleLanguage() {
@@ -4978,11 +4641,6 @@
     // --- Onload Initialization ---
     window.addEventListener('DOMContentLoaded', () => {
       try {
-        const savedTheme = localStorage.getItem('slk_theme_mode');
-        applyTheme(savedTheme !== 'light');
-      } catch(e) {}
-
-      try {
         initFirebase();
       } catch (e) {
         console.warn("initFirebase error:", e);
@@ -5001,7 +4659,6 @@
       }
 
       try {
-        safeSetText('soundStatusText', isSoundEnabled ? 'চালু আছে (On)' : 'বন্ধ আছে (Off)');
         startOnlineFluctuation();
       } catch(e) {}
 

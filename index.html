@@ -63,52 +63,40 @@
       transition: background-color 0.3s, color 0.3s;
     }
 
-    /* Complete Light Mode Overrides */
-    html.light body, body.light-mode {
-      background-color: #f1f5f9 !important;
+    /* Clean Light Mode (Only when .dark class is removed) */
+    html:not(.dark) body {
+      background-color: #f8fafc !important;
       color: #0f172a !important;
     }
-    html.light .bg-midnight-dark, body.light-mode .bg-midnight-dark {
-      background-color: #f8fafc !important;
+    html:not(.dark) .bg-midnight-dark {
+      background-color: #f1f5f9 !important;
     }
-    html.light .bg-midnight-card, body.light-mode .bg-midnight-card {
+    html:not(.dark) .bg-midnight-card {
       background-color: #ffffff !important;
       border-color: #e2e8f0 !important;
-      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.06) !important;
+      box-shadow: 0 4px 15px -2px rgba(0, 0, 0, 0.05) !important;
     }
-    html.light .bg-midnight-surface, body.light-mode .bg-midnight-surface {
+    html:not(.dark) .bg-midnight-surface {
       background-color: #e2e8f0 !important;
       color: #0f172a !important;
     }
-    html.light .bg-slate-900, body.light-mode .bg-slate-900,
-    html.light .bg-slate-950, body.light-mode .bg-slate-950,
-    html.light .bg-black\/40, body.light-mode .bg-black\/40 {
-      background-color: #f8fafc !important;
+    html:not(.dark) .border-midnight-border {
+      border-color: #cbd5e1 !important;
     }
-    html.light .text-white, body.light-mode .text-white {
+    html:not(.dark) .text-white {
       color: #0f172a !important;
     }
-    html.light .text-slate-100, body.light-mode .text-slate-100,
-    html.light .text-slate-200, body.light-mode .text-slate-200,
-    html.light .text-slate-300, body.light-mode .text-slate-300 {
+    html:not(.dark) .text-slate-100,
+    html:not(.dark) .text-slate-200,
+    html:not(.dark) .text-slate-300 {
       color: #1e293b !important;
     }
-    html.light .text-slate-400, body.light-mode .text-slate-400 {
-      color: #475569 !important;
+    html:not(.dark) .text-slate-400 {
+      color: #64748b !important;
     }
-    html.light .border-midnight-border, body.light-mode .border-midnight-border {
-      border-color: #cbd5e1 !important;
-    }
-    html.light input, html.light textarea,
-    body.light-mode input, body.light-mode textarea {
-      background-color: #ffffff !important;
-      color: #0f172a !important;
-      border-color: #cbd5e1 !important;
-    }
-    html.light nav, body.light-mode nav {
-      background-color: rgba(255, 255, 255, 0.95) !important;
+    html:not(.dark) nav {
+      background-color: rgba(255, 255, 255, 0.98) !important;
       border-color: #e2e8f0 !important;
-      box-shadow: 0 -4px 20px -2px rgba(0, 0, 0, 0.06) !important;
     }
     
     /* Luxury Floating Animation */
@@ -462,26 +450,6 @@
           <span>রেফার</span>
           <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
         </div>
-      </div>
-
-      <!-- ================= DAILY FREE BONUS REWARD (PREMIUM ENGAGEMENT FEATURE) ================= -->
-      <div id="dailyBonusBanner" onclick="claimDailyBonus()" class="cursor-pointer p-3 rounded-2xl bg-gradient-to-r from-amber-500/15 via-yellow-500/10 to-amber-500/20 border border-luxury-gold/40 flex items-center justify-between shadow-lg btn-bounce group relative overflow-hidden">
-        <div class="absolute -right-6 -bottom-6 w-20 h-20 bg-luxury-gold/20 rounded-full blur-xl pointer-events-none group-hover:scale-125 transition"></div>
-        <div class="flex items-center gap-2.5">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-400 to-yellow-500 text-midnight-dark flex items-center justify-center font-black shadow-md shadow-amber-500/30 flex-shrink-0">
-            <i data-lucide="sparkles" class="w-5 h-5 text-midnight-dark animate-pulse"></i>
-          </div>
-          <div>
-            <div class="flex items-center gap-1.5">
-              <h4 class="text-xs font-black text-white" id="lblDailyBonusTitle">দৈনিক ফ্রি ক্যাশ বোনাস</h4>
-              <span class="bg-emerald-500/20 text-emerald-300 text-[10px] px-2 py-0.5 rounded-full font-black border border-emerald-500/30" id="badgeDailyBonusStatus">ফ্রি ক্লেইম</span>
-            </div>
-            <p class="text-[11px] text-amber-200/90 mt-0.5" id="lblDailyBonusSub">প্রতিদিন অ্যাপ ওপেন করে ওয়ালেটে ৳১ - ৳৫ ফ্রি বোনাস নিন!</p>
-          </div>
-        </div>
-        <button type="button" class="flex-shrink-0 px-3 py-1.5 rounded-xl bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark font-black text-xs shadow-md group-hover:scale-105 transition" id="btnClaimDailyBonus">
-          ক্লেইম
-        </button>
       </div>
 
       <!-- Wallet & Balance Quick Card -->
@@ -2171,19 +2139,6 @@
     </div>
   </div>
 
-  <!-- ================= FLOATING LIVE RECENT PURCHASES & WITHDRAWALS TICKER ================= -->
-  <div id="liveActivityToast" class="fixed bottom-20 left-4 right-4 sm:left-4 sm:right-auto sm:max-w-xs z-40 transition-all duration-500 transform translate-y-24 opacity-0 pointer-events-none">
-    <div class="flex items-center gap-2.5 p-2.5 rounded-2xl bg-midnight-card/95 backdrop-blur-xl border border-luxury-gold/40 shadow-2xl text-xs text-white">
-      <div id="liveToastIcon" class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0">
-        <i data-lucide="bell" class="w-4 h-4"></i>
-      </div>
-      <div class="truncate flex-1">
-        <p id="liveToastText" class="text-[11px] font-bold text-slate-100 truncate">তানভীর বিকাশ দিয়ে VIP গ্রুপ কিনেছেন</p>
-        <span id="liveToastTime" class="text-[9px] text-slate-400">৩ মিনিট আগে • ভেরিফাইড</span>
-      </div>
-    </div>
-  </div>
-
   <!-- ================= JAVASCRIPT LOGIC ================= -->
   <script>
     // --- Audio Synthesis via Web Audio API (Smooth & Offline) ---
@@ -3074,7 +3029,6 @@
         safeSetSrc('pgAppLogo', appState.appLogo || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=120&auto=format&fit=crop&q=80');
         safeSetText('pgAppName', appState.appName || 'SLK BUY GROUP');
         renderPaymentGatewayLogos();
-        updateDailyBonusStatus();
 
         // Channels & Support (Top Bar & Floating)
         safeSetHref('headerChannelBtn', appState.officialChannelLink || 'https://t.me/ItsSaddam9');
@@ -4920,20 +4874,11 @@
     function applyTheme(isDark) {
       isDarkTheme = isDark;
       const html = document.documentElement;
-      const body = document.body;
       if (isDark) {
         html.classList.add('dark');
-        html.classList.remove('light');
-        if (body) {
-          body.classList.remove('light-mode');
-        }
         safeSetText('themeStatusText', "বর্তমানে: কালো মোড (Dark)");
       } else {
         html.classList.remove('dark');
-        html.classList.add('light');
-        if (body) {
-          body.classList.add('light-mode');
-        }
         safeSetText('themeStatusText', "বর্তমানে: সাদা মোড (Light)");
       }
       try {
@@ -4953,103 +4898,6 @@
       } catch(e) {}
       safeSetText('soundStatusText', isSoundEnabled ? 'চালু আছে (On)' : 'বন্ধ আছে (Off)');
       if (isSoundEnabled) playSound('chime');
-    }
-
-    // --- Daily Bonus Claim Logic ---
-    function updateDailyBonusStatus() {
-      try {
-        const today = new Date().toDateString();
-        const lastClaim = localStorage.getItem('slk_last_daily_bonus');
-        const badge = document.getElementById('badgeDailyBonusStatus');
-        const btn = document.getElementById('btnClaimDailyBonus');
-
-        if (lastClaim === today) {
-          if (badge) {
-            badge.innerText = 'ক্লেইম করা হয়েছে ✓';
-            badge.className = 'bg-slate-700/50 text-slate-400 text-[10px] px-2 py-0.5 rounded-full font-black border border-slate-600';
-          }
-          if (btn) {
-            btn.innerText = 'সম্পন্ন';
-            btn.classList.add('opacity-50', 'cursor-not-allowed');
-          }
-        } else {
-          if (badge) {
-            badge.innerText = 'ফ্রি ক্লেইম';
-            badge.className = 'bg-emerald-500/20 text-emerald-300 text-[10px] px-2 py-0.5 rounded-full font-black border border-emerald-500/30';
-          }
-          if (btn) {
-            btn.innerText = 'ক্লেইম';
-            btn.classList.remove('opacity-50', 'cursor-not-allowed');
-          }
-        }
-      } catch(e) {}
-    }
-
-    function claimDailyBonus() {
-      playSound('click');
-      const today = new Date().toDateString();
-      const lastClaim = localStorage.getItem('slk_last_daily_bonus');
-      if (lastClaim === today) {
-        alert("আজকের দৈনিক ফ্রি বোনাস আপনি ইতোমধ্যে গ্রহণ করেছেন! আগামীকাল আবার চেষ্টা করুন।");
-        return;
-      }
-
-      // Bonus between 1 and 5 Taka
-      const bonusAmounts = [1, 2, 3, 5, 2];
-      const bonus = bonusAmounts[Math.floor(Math.random() * bonusAmounts.length)];
-
-      appState.wallet.balance += bonus;
-      appState.wallet.totalEarned += bonus;
-      saveState();
-      try {
-        localStorage.setItem('slk_last_daily_bonus', today);
-      } catch(e) {}
-
-      // If user has isolated wallet in Firestore, sync it
-      if (tgUser && tgUser.id) {
-        fbAddBalanceToUser(tgUser.id, bonus);
-      }
-
-      renderApp();
-      updateDailyBonusStatus();
-      playSound('chime');
-      alert(`🎉 অভিনন্দন! আপনি ৳${bonus} দৈনিক ফ্রি ক্যাশ বোনাস পেয়েছেন এবং তা আপনার ওয়ালেটে যোগ হয়েছে!`);
-    }
-
-    // --- Live Recent Purchases & Withdrawals Floating Ticker ---
-    function initLiveActivityTicker() {
-      const activities = [
-        { name: 'রাকিব', action: 'বিকাশ দিয়ে VIP মুভি গ্রুপ কিনেছেন', time: '১ মিনিট আগে' },
-        { name: 'সোহাগ', action: '১৫টি পুরাতন জিমেইল বিক্রি করেছেন', time: '৩ মিনিট আগে' },
-        { name: 'মেহেদী', action: '৳৫০০ বিকাশ উইথড্র গ্রহণ করেছেন', time: '৪ মিনিট আগে' },
-        { name: 'আরিফ', action: 'নগদ দিয়ে টেলিগ্রাম শপ গ্রুপ কিনেছেন', time: '৬ মিনিট আগে' },
-        { name: 'জুয়েল', action: '৳২০০ নগদ উইথড্র পেয়েছেন', time: '৭ মিনিট আগে' },
-        { name: 'ফাহিম', action: '৮টি ফেসবুক আইডি বিক্রি করেছেন', time: '৯ মিনিট আগে' }
-      ];
-
-      const toast = document.getElementById('liveActivityToast');
-      const txt = document.getElementById('liveToastText');
-      const time = document.getElementById('liveToastTime');
-      if (!toast || !txt) return;
-
-      let idx = 0;
-      function showNextActivity() {
-        const item = activities[idx % activities.length];
-        idx++;
-        txt.innerText = `${item.name} ${item.action}`;
-        if (time) time.innerText = `${item.time} • ভেরিফাইড`;
-
-        toast.classList.remove('translate-y-24', 'opacity-0');
-        toast.classList.add('translate-y-0', 'opacity-100');
-
-        setTimeout(() => {
-          toast.classList.remove('translate-y-0', 'opacity-100');
-          toast.classList.add('translate-y-24', 'opacity-0');
-        }, 4000);
-      }
-
-      setTimeout(showNextActivity, 4000);
-      setInterval(showNextActivity, 14000);
     }
 
     function toggleLanguage() {
@@ -5154,8 +5002,6 @@
 
       try {
         safeSetText('soundStatusText', isSoundEnabled ? 'চালু আছে (On)' : 'বন্ধ আছে (Off)');
-        updateDailyBonusStatus();
-        initLiveActivityTicker();
         startOnlineFluctuation();
       } catch(e) {}
 

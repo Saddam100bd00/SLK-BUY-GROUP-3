@@ -1,0 +1,28 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    <!-- Hexagonal Glow / Shield -->
+    <path
+        android:pathData="M32,6 L56,19 L56,45 L32,58 L8,45 L8,19 Z"
+        android:fillColor="#0D1B2A"
+        android:strokeColor="#00E5FF"
+        android:strokeWidth="2" />
+    <!-- Inner Golden Hexagon Border -->
+    <path
+        android:pathData="M32,11 L51,22 L51,42 L32,53 L13,42 L13,22 Z"
+        android:fillColor="#1A2744"
+        android:strokeColor="#F59E0B"
+        android:strokeWidth="1.2" />
+    <!-- Telegram Paper Plane Vector in Cyan / White -->
+    <path
+        android:pathData="M20,33 L44,22 L39,43 L32,36 L27,39 L28,34 Z"
+        android:fillColor="#00E5FF"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1" />
+    <!-- Star / Crown Accent at top -->
+    <path
+        android:pathData="M32,15 L34,18 L38,18 L35,21 L36,24 L32,22 L28,24 L29,21 L26,18 L30,18 Z"
+        android:fillColor="#FBBF24" />
+</vector>

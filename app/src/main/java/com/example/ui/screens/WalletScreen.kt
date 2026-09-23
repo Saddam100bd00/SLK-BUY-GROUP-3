@@ -1,7 +1,6 @@
 package com.example.ui.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,16 +16,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.HourglassEmpty
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -34,6 +30,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
@@ -58,18 +55,11 @@ import com.example.ui.components.TelegramSupportCard
 import com.example.ui.theme.BkashPink
 import com.example.ui.theme.DangerRed
 import com.example.ui.theme.ElectricCyan
-import com.example.ui.theme.ElectricCyanDark
 import com.example.ui.theme.LuxuryGold
-import com.example.ui.theme.MidnightBorder
-import com.example.ui.theme.MidnightCard
-import com.example.ui.theme.MidnightCardHover
 import com.example.ui.theme.MidnightDark
-import com.example.ui.theme.MidnightSurface
 import com.example.ui.theme.NagadOrange
 import com.example.ui.theme.RocketPurple
 import com.example.ui.theme.SuccessGreen
-import com.example.ui.theme.TextPrimary
-import com.example.ui.theme.TextSecondary
 import com.example.ui.theme.WarningAmber
 
 @Composable
@@ -87,7 +77,7 @@ fun WalletScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(MidnightDark),
+            .background(MaterialTheme.colorScheme.background),
         contentPadding = PaddingValues(bottom = 36.dp)
     ) {
         // === Page Header & Balance Card ===
@@ -101,31 +91,34 @@ fun WalletScreen(
                     text = "আমার ওয়ালেট ও লেনদেন",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Black,
-                    color = TextPrimary
+                    color = MaterialTheme.colorScheme.onBackground
                 )
                 Text(
-                    text = "বিকাশ • নগদ • রকেট এ সরাসরি উইথড্র ও রিচার্জ করুন",
+                    text = "বিকাশ • নগদ • রকেট • Binance এ সরাসরি উইথড্র ও রিচার্জ করুন",
                     fontSize = 12.sp,
-                    color = ElectricCyan
+                    color = MaterialTheme.colorScheme.primary
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // UK Luxury Glass Card
+                // Luxury Balance Card
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clip(RoundedCornerShape(16.dp))
-                        .border(1.dp, Color(0x5500E5FF), RoundedCornerShape(16.dp)),
-                    colors = CardDefaults.cardColors(containerColor = MidnightCard),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                        .clip(RoundedCornerShape(16.dp)),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, LuxuryGold.copy(alpha = 0.5f)),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
                 ) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(
                                 Brush.verticalGradient(
-                                    listOf(Color(0xFF0F2642), Color(0xFF0D172A))
+                                    listOf(
+                                        MaterialTheme.colorScheme.surfaceVariant,
+                                        MaterialTheme.colorScheme.surface
+                                    )
                                 )
                             )
                             .padding(20.dp)
@@ -147,12 +140,12 @@ fun WalletScreen(
                                     Text(
                                         text = "বর্তমান ব্যালেন্স",
                                         fontSize = 13.sp,
-                                        color = TextSecondary
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
 
                                 Surface(
-                                    color = Color(0x3300E5FF),
+                                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
                                     shape = RoundedCornerShape(8.dp)
                                 ) {
                                     Text(
@@ -160,7 +153,7 @@ fun WalletScreen(
                                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
                                         fontSize = 10.sp,
                                         fontWeight = FontWeight.Bold,
-                                        color = ElectricCyan
+                                        color = MaterialTheme.colorScheme.primary
                                     )
                                 }
                             }
@@ -171,7 +164,7 @@ fun WalletScreen(
                                 text = "৳${walletProfile.currentBalance}",
                                 fontSize = 36.sp,
                                 fontWeight = FontWeight.Black,
-                                color = TextPrimary
+                                color = MaterialTheme.colorScheme.onSurface
                             )
 
                             Spacer(modifier = Modifier.height(16.dp))
@@ -182,7 +175,7 @@ fun WalletScreen(
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Column {
-                                    Text("মোট আয়", fontSize = 11.sp, color = TextSecondary)
+                                    Text("মোট আয়", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                     Text(
                                         "৳${walletProfile.totalEarned}",
                                         fontSize = 16.sp,
@@ -192,7 +185,7 @@ fun WalletScreen(
                                 }
 
                                 Column {
-                                    Text("মোট উইথড্র", fontSize = 11.sp, color = TextSecondary)
+                                    Text("মোট উইথড্র", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                     Text(
                                         "৳${walletProfile.totalWithdrawn}",
                                         fontSize = 16.sp,
@@ -202,7 +195,7 @@ fun WalletScreen(
                                 }
 
                                 Column {
-                                    Text("রেফারেল বোনাস", fontSize = 11.sp, color = TextSecondary)
+                                    Text("রেফারেল বোনাস", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                     Text(
                                         "৳${walletProfile.totalReferrals * 20}",
                                         fontSize = 16.sp,
@@ -248,9 +241,9 @@ fun WalletScreen(
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 8.dp)
                     .fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = MidnightCard),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
                 shape = RoundedCornerShape(14.dp),
-                border = androidx.compose.foundation.BorderStroke(1.dp, MidnightBorder)
+                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -265,7 +258,7 @@ fun WalletScreen(
                             text = "টাকা উইথড্র করুন",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            color = TextPrimary
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
 
@@ -274,19 +267,20 @@ fun WalletScreen(
                     Text(
                         text = "পেমেন্ট মাধ্যম নির্বাচন করুন:",
                         fontSize = 12.sp,
-                        color = TextSecondary
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
                     Spacer(modifier = Modifier.height(6.dp))
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
                         val methods = listOf(
                             Triple("bKash", BkashPink, "বিকাশ"),
                             Triple("Nagad", NagadOrange, "নগদ"),
-                            Triple("Rocket", RocketPurple, "রকেট")
+                            Triple("Rocket", RocketPurple, "রকেট"),
+                            Triple("Binance", Color(0xFFF0B90B), "Binance")
                         )
                         for ((method, color, name) in methods) {
                             val isSelected = selectedMethod == method
@@ -295,18 +289,18 @@ fun WalletScreen(
                                     .weight(1f)
                                     .clickable { selectedMethod = method },
                                 shape = RoundedCornerShape(10.dp),
-                                color = if (isSelected) color.copy(alpha = 0.2f) else MidnightSurface,
+                                color = if (isSelected) color.copy(alpha = 0.2f) else MaterialTheme.colorScheme.surface,
                                 border = androidx.compose.foundation.BorderStroke(
                                     if (isSelected) 2.dp else 1.dp,
-                                    if (isSelected) color else MidnightBorder
+                                    if (isSelected) color else MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
                                 )
                             ) {
                                 Text(
                                     text = name,
                                     modifier = Modifier.padding(vertical = 10.dp),
-                                    fontSize = 12.sp,
+                                    fontSize = 11.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = if (isSelected) Color.White else TextSecondary,
+                                    color = if (isSelected) color else MaterialTheme.colorScheme.onSurfaceVariant,
                                     textAlign = androidx.compose.ui.text.style.TextAlign.Center
                                 )
                             }
@@ -319,17 +313,17 @@ fun WalletScreen(
                         value = accountNumber,
                         onValueChange = { accountNumber = it },
                         modifier = Modifier.fillMaxWidth(),
-                        label = { Text("$selectedMethod পার্সোনাল নাম্বার") },
-                        placeholder = { Text("01XXXXXXXXX") },
+                        label = { Text(if (selectedMethod == "Binance") "Binance Pay ID / USDT Address" else "$selectedMethod পার্সোনাল নাম্বার") },
+                        placeholder = { Text(if (selectedMethod == "Binance") "Pay ID বা TRC20 Address" else "01XXXXXXXXX") },
                         singleLine = true,
                         shape = RoundedCornerShape(10.dp),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = MidnightSurface,
-                            unfocusedContainerColor = MidnightSurface,
-                            focusedBorderColor = ElectricCyan,
-                            unfocusedBorderColor = MidnightBorder,
-                            focusedTextColor = TextPrimary,
-                            unfocusedTextColor = TextPrimary
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface
                         )
                     )
 
@@ -344,12 +338,12 @@ fun WalletScreen(
                         singleLine = true,
                         shape = RoundedCornerShape(10.dp),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = MidnightSurface,
-                            unfocusedContainerColor = MidnightSurface,
-                            focusedBorderColor = ElectricCyan,
-                            unfocusedBorderColor = MidnightBorder,
-                            focusedTextColor = TextPrimary,
-                            unfocusedTextColor = TextPrimary
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface
                         )
                     )
 
@@ -388,7 +382,7 @@ fun WalletScreen(
                     text = "উইথড্র হিস্ট্রি",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
-                    color = TextPrimary
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
         }
@@ -404,7 +398,7 @@ fun WalletScreen(
                     Text(
                         text = "এখনো কোনো উইথড্র করেননি।",
                         fontSize = 12.sp,
-                        color = TextSecondary
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -413,9 +407,9 @@ fun WalletScreen(
                 Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 5.dp)) {
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(containerColor = MidnightCard),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
                         shape = RoundedCornerShape(12.dp),
-                        border = androidx.compose.foundation.BorderStroke(1.dp, MidnightBorder)
+                        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
                     ) {
                         Row(
                             modifier = Modifier
@@ -429,12 +423,12 @@ fun WalletScreen(
                                     text = "৳${item.amount} (${item.paymentMethod})",
                                     fontSize = 14.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = TextPrimary
+                                    color = MaterialTheme.colorScheme.onSurface
                                 )
                                 Text(
                                     text = "নাম্বার: ${item.accountNumber}",
                                     fontSize = 11.sp,
-                                    color = TextSecondary
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                                 if (item.adminTrxId.isNotBlank()) {
                                     Text(
@@ -466,12 +460,12 @@ fun WalletScreen(
 
         AlertDialog(
             onDismissRequest = { showRechargeDialog = false },
-            containerColor = MidnightCard,
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
             title = {
                 Text(
                     text = "ওয়ালেট ব্যালেন্স রিচার্জ",
                     fontWeight = FontWeight.Bold,
-                    color = TextPrimary
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             },
             text = {
@@ -479,7 +473,7 @@ fun WalletScreen(
                     Text(
                         text = "টেস্ট বা দ্রুত ব্যালেন্স এড করতে অ্যামাউন্ট নির্বাচন করুন:",
                         fontSize = 12.sp,
-                        color = TextSecondary
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Spacer(modifier = Modifier.height(10.dp))
 
@@ -493,10 +487,10 @@ fun WalletScreen(
                                     .weight(1f)
                                     .clickable { rechargeAmountText = amt.toString() },
                                 shape = RoundedCornerShape(8.dp),
-                                color = if (rechargeAmountText == amt.toString()) ElectricCyan else MidnightSurface,
+                                color = if (rechargeAmountText == amt.toString()) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
                                 border = androidx.compose.foundation.BorderStroke(
                                     1.dp,
-                                    if (rechargeAmountText == amt.toString()) ElectricCyan else MidnightBorder
+                                    if (rechargeAmountText == amt.toString()) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
                                 )
                             ) {
                                 Text(
@@ -504,7 +498,7 @@ fun WalletScreen(
                                     modifier = Modifier.padding(vertical = 8.dp),
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = if (rechargeAmountText == amt.toString()) MidnightDark else TextPrimary,
+                                    color = if (rechargeAmountText == amt.toString()) MidnightDark else MaterialTheme.colorScheme.onSurface,
                                     textAlign = androidx.compose.ui.text.style.TextAlign.Center
                                 )
                             }
@@ -520,12 +514,12 @@ fun WalletScreen(
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = MidnightSurface,
-                            unfocusedContainerColor = MidnightSurface,
-                            focusedBorderColor = ElectricCyan,
-                            unfocusedBorderColor = MidnightBorder,
-                            focusedTextColor = TextPrimary,
-                            unfocusedTextColor = TextPrimary
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface
                         )
                     )
                 }
@@ -547,7 +541,7 @@ fun WalletScreen(
             },
             dismissButton = {
                 TextButton(onClick = { showRechargeDialog = false }) {
-                    Text("বাতিল", color = TextSecondary)
+                    Text("বাতিল", color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
         )

@@ -117,6 +117,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _isDarkMode.value = !_isDarkMode.value
     }
 
+    fun toggleTheme() {
+        _isDarkMode.value = !_isDarkMode.value
+    }
+
     fun toggleLanguage() {
         _isEnglish.value = !_isEnglish.value
     }
@@ -410,6 +414,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             if (number.isNotBlank()) {
                 repository.updateConfig(key, number.trim())
                 _toastMessage.emit("পেমেন্ট নাম্বার আপডেট হয়েছে!")
+            }
+        }
+    }
+
+    fun redeemPromoCode(code: String) {
+        viewModelScope.launch {
+            val trimmed = code.trim().uppercase()
+            if (trimmed == "SLK50" || trimmed == "VIP50") {
+                repository.addReferralReward(50)
+                _toastMessage.emit("অভিনন্দন! ৳৫০ বোনাস ওয়ালেটে যোগ হয়েছে!")
+            } else if (trimmed == "WELCOME100" || trimmed == "VIP100" || trimmed == "SADDAM100") {
+                repository.addReferralReward(100)
+                _toastMessage.emit("অভিনন্দন! ৳১০০ ভিআইপি ক্যাশব্যাক ওয়ালেটে যোগ হয়েছে!")
+            } else {
+                _toastMessage.emit("ভুল বা মেয়াদোত্তীর্ণ প্রোমো কোড! বৈধ কোড: VIP50 বা WELCOME100")
             }
         }
     }

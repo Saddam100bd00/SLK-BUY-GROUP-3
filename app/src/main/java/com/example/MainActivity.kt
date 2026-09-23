@@ -12,7 +12,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -34,6 +33,7 @@ import com.example.ui.screens.HomeScreen
 import com.example.ui.screens.ProfileScreen
 import com.example.ui.screens.SellAndEarnScreen
 import com.example.ui.screens.WalletScreen
+import com.example.ui.theme.MidnightDark
 import com.example.ui.theme.MyApplicationTheme
 import com.example.ui.viewmodel.AppScreen
 import com.example.ui.viewmodel.MainViewModel
@@ -44,20 +44,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val viewModel: MainViewModel = viewModel()
-            val isDarkMode by viewModel.isDarkMode.collectAsState()
-            MyApplicationTheme(darkTheme = isDarkMode) {
-                SlkApp(viewModel = viewModel, isDarkMode = isDarkMode)
+            MyApplicationTheme {
+                SlkApp()
             }
         }
     }
 }
 
 @Composable
-fun SlkApp(
-    viewModel: MainViewModel = viewModel(),
-    isDarkMode: Boolean = true
-) {
+fun SlkApp(viewModel: MainViewModel = viewModel()) {
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -83,16 +78,13 @@ fun SlkApp(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+            .background(MidnightDark),
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             if (currentScreen != AppScreen.CHECKOUT) {
                 SlkTopBar(
                     currentBalance = walletProfile.currentBalance,
                     isAdminUnlocked = isAdminUnlocked,
-                    isDarkMode = isDarkMode,
-                    customLogoUrl = adminConfigs["app_logo_url"],
-                    onToggleTheme = { viewModel.toggleTheme() },
                     onWalletClick = { viewModel.navigateTo(AppScreen.WALLET) },
                     onAdminClick = {
                         if (isAdminUnlocked) {
@@ -121,7 +113,7 @@ fun SlkApp(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .background(MaterialTheme.colorScheme.background)
+                .background(MidnightDark)
         ) {
             AnimatedContent(
                 targetState = currentScreen,
@@ -165,7 +157,6 @@ fun SlkApp(
                         initialType = sellType,
                         gmailSubmissions = gmailSubmissions,
                         fbSubmissions = fbSubmissions,
-                        adminConfigs = adminConfigs,
                         onSubmitGmail = { tg, mail, pass, rec, type, reward ->
                             viewModel.submitGmail(tg, mail, pass, rec, type, reward)
                         },
@@ -189,11 +180,8 @@ fun SlkApp(
                         walletProfile = walletProfile,
                         orders = allOrders,
                         isAdminUnlocked = isAdminUnlocked,
-                        isDarkMode = isDarkMode,
-                        onToggleTheme = { viewModel.toggleTheme() },
                         onUnlockAdmin = { input -> viewModel.unlockAdmin(input) },
-                        onNavigate = { target -> viewModel.navigateTo(target) },
-                        onRedeemPromoCode = { code -> viewModel.redeemPromoCode(code) }
+                        onNavigate = { target -> viewModel.navigateTo(target) }
                     )
 
                     AppScreen.ADMIN -> {

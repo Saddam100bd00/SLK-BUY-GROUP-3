@@ -47,104 +47,8 @@
     }
   </script>
 
-  <!-- Lucide Icons: Local bundle first for 100% offline & in-app webview reliability, with CDN fallback -->
-  <script src="./lucide.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.min.js"></script>
+  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script>
-    // Embedded SVG Icon Dictionary for 100% reliable rendering without relying on external CDN
-    window.SVG_ICONS = {
-      'home': '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
-      'layers': '<path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 12.5-8.58 3.91a2 2 0 0 1-1.66 0L2 12.5"/><path d="m22 17.5-8.58 3.91a2 2 0 0 1-1.66 0L2 17.5"/>',
-      'gift': '<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/>',
-      'user': '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
-      'users': '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
-      'badge-dollar-sign': '<path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><line x1="12" x2="12" y1="8" y2="16"/><path d="M14.5 10a2.5 2.5 0 0 0-5 0c0 1.5 1 2 2.5 2s2.5.5 2.5 2a2.5 2.5 0 0 1-5 0"/>',
-      'bell': '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
-      'bell-ring': '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/><path d="M4 2C2.8 3.7 2 5.7 2 8"/><path d="M22 8c0-2.3-.8-4.3-2-6"/>',
-      'settings': '<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>',
-      'megaphone': '<path d="m3 11 18-5v12L3 13v-2z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
-      'chevron-right': '<path d="m9 18 6-6-6-6"/>',
-      'copy': '<rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>',
-      'check': '<path d="M20 6 9 17l-5-5"/>',
-      'check-check': '<path d="M18 6 7 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/>',
-      'check-circle': '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
-      'check-circle-2': '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
-      'x': '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
-      'x-circle': '<circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/>',
-      'shield-check': '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>',
-      'shield-alert': '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/>',
-      'message-circle': '<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>',
-      'flame': '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
-      'send': '<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
-      'wallet': '<path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>',
-      'wallet-cards': '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2"/><path d="M3 11h3c.8 0 1.6.3 2.1.9l.9.9c.5.5 1.3.9 2.1.9H21"/>',
-      'sparkles': '<path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>',
-      'lock': '<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
-      'external-link': '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/>',
-      'image': '<rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>',
-      'rotate-ccw': '<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>',
-      'clock': '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
-      'eye': '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',
-      'mail': '<rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>',
-      'facebook': '<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>',
-      'arrow-left': '<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>',
-      'arrow-down-to-dot': '<path d="M12 2v14"/><path d="m19 9-7 7-7-7"/><circle cx="12" cy="21" r="1"/>',
-      'shopping-cart': '<circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>',
-      'receipt': '<path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/>',
-      'sliders': '<line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="1" x2="7" y1="14" y2="14"/><line x1="9" x2="15" y1="8" y2="8"/><line x1="17" x2="23" y1="16" y2="16"/>',
-      'info': '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
-      'help-circle': '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>',
-      'package-open': '<path d="M12 22v-9"/><path d="m15.5 15.5 5.5-3.5-9-5-9 5 5.5 3.5"/><path d="M3.3 7 12 12l8.7-5"/><path d="m21 12-9 5-9-5"/>',
-      'party-popper': '<path d="M5.8 11.3 2 22l10.7-3.8A7.8 7.8 0 0 0 18.5 7L17 5.5a7.8 7.8 0 0 0-11.2 5.8Z"/><path d="m11 8 3 3"/><path d="m17 2 2 2"/>',
-      'key-round': '<path d="M2.586 17.414A2 2 0 1 1 5.414 20.242l1.414-1.414a2 2 0 0 0 .586-1.414V16h2v-2h2v-2.172a2 2 0 0 0-.586-1.414L9.414 9A6.5 6.5 0 1 1 14 2.5a6.5 6.5 0 0 1-4.586 11.086z"/>',
-      'languages': '<path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/>'
-    };
-
-    function renderSvgIconHtml(name, extraClass) {
-      const path = window.SVG_ICONS[name] || '<circle cx="12" cy="12" r="9"/>';
-      return `<svg class="${extraClass || 'w-4 h-4'}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`;
-    }
-
-    function renderAllFallbackIcons() {
-      document.querySelectorAll('[data-lucide]').forEach(function(el) {
-        var iconName = el.getAttribute('data-lucide');
-        if (!iconName) return;
-        var classes = el.getAttribute('class') || 'w-4 h-4';
-        var svgPath = window.SVG_ICONS[iconName];
-        if (svgPath) {
-          var svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-          svgEl.setAttribute('viewBox', '0 0 24 24');
-          svgEl.setAttribute('fill', 'none');
-          svgEl.setAttribute('stroke', 'currentColor');
-          svgEl.setAttribute('stroke-width', '2');
-          svgEl.setAttribute('stroke-linecap', 'round');
-          svgEl.setAttribute('stroke-linejoin', 'round');
-          svgEl.setAttribute('class', classes);
-          svgEl.innerHTML = svgPath;
-          if (el.id) svgEl.id = el.id;
-          el.parentNode.replaceChild(svgEl, el);
-        }
-      });
-    }
-
-    // Failsafe wrapper so lucide.createIcons never crashes and always replaces icons
-    window.refreshAllIcons = function() {
-      try {
-        if (typeof lucide !== 'undefined' && typeof lucide.createIcons === 'function') {
-          lucide.createIcons();
-        } else {
-          renderAllFallbackIcons();
-        }
-      } catch (err) {
-        console.warn("Lucide error fallback:", err);
-        renderAllFallbackIcons();
-      }
-    };
-    if (typeof lucide === 'undefined') {
-      window.lucide = { createIcons: renderAllFallbackIcons };
-    }
-  </script>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -446,63 +350,58 @@
   </script>
 
   <!-- ================= TOP BAR ================= -->
-  <header class="sticky top-0 z-40 backdrop-blur-xl bg-midnight-card/95 border-b border-midnight-border/80 px-3 py-2 shadow-md">
-    <div class="max-w-md mx-auto flex items-center justify-between gap-1.5">
+  <header class="sticky top-0 z-40 backdrop-blur-xl bg-midnight-card/95 border-b border-midnight-border/80 px-3.5 py-2.5 shadow-md">
+    <div class="max-w-md mx-auto flex items-center justify-between gap-2">
       
       <!-- Brand & Circular Logo -->
-      <div class="flex items-center gap-2 cursor-pointer min-w-0 flex-1 mr-1" onclick="switchTab('home')">
-        <div class="relative w-9 h-9 rounded-full p-0.5 bg-gradient-to-tr from-amber-400 via-yellow-300 to-amber-600 shadow-md shadow-amber-500/20 flex-shrink-0">
+      <div class="flex items-center gap-2.5 cursor-pointer min-w-0 flex-shrink" onclick="switchTab('home')">
+        <div class="relative w-10 h-10 rounded-full p-0.5 bg-gradient-to-tr from-amber-400 via-yellow-300 to-amber-600 shadow-md shadow-amber-500/20 flex-shrink-0">
           <img id="headerLogo" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100&auto=format&fit=crop&q=80" class="w-full h-full object-cover rounded-full bg-midnight-dark" alt="Logo" />
-          <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-midnight-card flex items-center justify-center">
-            <svg class="w-1.5 h-1.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          <span class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-midnight-card flex items-center justify-center">
+            <i data-lucide="check" class="w-2 h-2 text-white"></i>
           </span>
         </div>
-        <div class="min-w-0 flex-1">
-          <div class="flex items-center gap-1">
-            <span id="headerAppName" class="font-black text-sm tracking-tight bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-300 bg-clip-text text-transparent glow-appname truncate block">
+        <div class="truncate">
+          <div class="flex items-center gap-1.5">
+            <span id="headerAppName" class="font-black text-sm tracking-wide bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-300 bg-clip-text text-transparent glow-appname truncate">
               SLK BUY GROUP
             </span>
           </div>
-          <div class="flex items-center gap-1 text-[10px] text-slate-400 leading-none mt-0.5">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse flex-shrink-0"></span>
-            <span id="headerVerifiedText" class="text-slate-300 font-medium truncate block">100% ভেরিফাইড শপ</span>
+          <div class="flex items-center gap-1.5 text-[10px] text-slate-400 leading-none mt-0.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span id="headerVerifiedText" class="text-slate-300 font-medium truncate">100% ভেরিফাইড গ্রুপ মার্কেট</span>
           </div>
         </div>
       </div>
 
       <!-- Action Items: Online Counter + Telegram + Notice Bell + Settings -->
-      <div class="flex items-center gap-1 flex-shrink-0">
+      <div class="flex items-center gap-1.5 flex-shrink-0">
         <!-- Live Auto-Fluctuating Online Counter Pill -->
-        <div class="flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-[10px] text-emerald-300 font-bold shadow-inner" title="বর্তমানে সক্রিয় ইউজার">
-          <span class="relative flex h-1.5 w-1.5 flex-shrink-0">
+        <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-950/40 border border-emerald-500/30 text-[10px] text-emerald-300 font-bold shadow-inner" title="বর্তমানে সক্রিয় ইউজার">
+          <span class="relative flex h-2 w-2">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
           </span>
-          <span id="dispOnlineUsers" class="font-mono text-[10px]">১,৪২৮</span>
+          <span id="dispOnlineUsers" class="font-mono">১,৪২৮</span>
+          <span class="text-[9px] text-emerald-400/80 font-normal hidden xs:inline">অনলাইন</span>
         </div>
 
         <!-- Official Telegram Button (Settable Link from Admin) -->
-        <a id="headerChannelBtn" href="https://t.me/ItsSaddam9" target="_blank" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-tr from-sky-400 to-[#0088cc] text-white flex items-center justify-center shadow-md shadow-sky-500/30 animate-tg hover:scale-105 active:scale-95 transition flex-shrink-0" title="অফিসিয়াল টেলিগ্রাম চ্যানেল">
-          <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current" viewBox="0 0 24 24">
+        <a id="headerChannelBtn" href="https://t.me/ItsSaddam9" target="_blank" class="w-8 h-8 rounded-full bg-gradient-to-tr from-sky-400 to-[#0088cc] text-white flex items-center justify-center shadow-md shadow-sky-500/30 animate-tg hover:scale-105 active:scale-95 transition" title="অফিসিয়াল টেলিগ্রাম চ্যানেল">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .37z"/>
           </svg>
         </a>
 
         <!-- Notification Bell with Ringing Animation & Unread Badge -->
-        <button id="headerBellBtn" onclick="openNoticeModal()" class="relative w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-midnight-surface text-slate-200 border border-midnight-border hover:border-amber-400/50 transition flex items-center justify-center btn-bounce flex-shrink-0" title="নোটিশ">
-          <svg id="bellIcon" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400 animate-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
-            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
-          </svg>
-          <span id="noticeBadge" class="absolute -top-0.5 -right-0.5 w-3 h-3 sm:w-3.5 sm:h-3.5 bg-rose-500 text-[8px] sm:text-[9px] font-bold text-white rounded-full flex items-center justify-center ring-2 ring-midnight-dark">1</span>
+        <button id="headerBellBtn" onclick="openNoticeModal()" class="relative w-8 h-8 rounded-full bg-midnight-surface text-slate-200 border border-midnight-border hover:border-amber-400/50 transition flex items-center justify-center btn-bounce" title="নোটিশ">
+          <i id="bellIcon" data-lucide="bell" class="w-4 h-4 animate-bell text-amber-400"></i>
+          <span id="noticeBadge" class="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-rose-500 text-[9px] font-bold text-white rounded-full flex items-center justify-center ring-2 ring-midnight-dark">1</span>
         </button>
 
         <!-- Settings Dropdown Trigger -->
-        <button onclick="toggleSettingsModal()" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-midnight-surface text-slate-300 border border-midnight-border hover:border-slate-500 transition flex items-center justify-center btn-bounce flex-shrink-0" title="সেটিংস">
-          <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
-            <circle cx="12" cy="12" r="3"/>
-          </svg>
+        <button onclick="toggleSettingsModal()" class="w-8 h-8 rounded-full bg-midnight-surface text-slate-300 border border-midnight-border hover:border-slate-500 transition flex items-center justify-center btn-bounce" title="সেটিংস">
+          <i data-lucide="settings" class="w-4 h-4"></i>
         </button>
       </div>
 
@@ -512,20 +411,17 @@
   <!-- ================= SMOOTH CONTINUOUS MARQUEE RUNNING TICKER ================= -->
   <div onclick="openNoticeModal()" class="cursor-pointer bg-gradient-to-r from-amber-500/20 via-yellow-500/15 to-amber-500/20 border-b border-luxury-gold/30 py-1.5 px-3 flex items-center gap-2 overflow-hidden shadow-sm btn-bounce">
     <div class="flex items-center gap-1 text-[11px] font-bold text-luxury-gold bg-luxury-gold/20 px-2 py-0.5 rounded-md flex-shrink-0 border border-luxury-gold/30">
-      <svg class="w-3.5 h-3.5 text-luxury-gold animate-bounce" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="m3 11 18-5v12L3 13v-2z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>
-      </svg>
-      <span>নোটিশ:</span>
+      <i data-lucide="megaphone" class="w-3.5 h-3.5 animate-bounce"></i> <span>নোটিশ:</span>
     </div>
     <div class="relative w-full overflow-hidden whitespace-nowrap">
-      <div id="marqueeNoticeText" class="animate-marquee inline-block text-xs font-semibold text-amber-200 pl-4">
+      <div id="marqueeNoticeText" class="animate-marquee inline-block text-xs font-semibold text-amber-200">
         📢 স্বাগতম SLK BUY GROUP এ! টেলিগ্রাম প্রিমিয়াম গ্রুপ কিনুন এবং জিমেইল ও ফেসবুক বিক্রি করে প্রতিদিন আনলিমিটেড টাকা আয় করুন...
       </div>
     </div>
   </div>
 
   <!-- ================= MAIN CONTAINER ================= -->
-  <main class="max-w-md mx-auto px-4 pt-3 pb-32 space-y-4">
+  <main class="max-w-md mx-auto px-4 pt-3 space-y-4">
 
     <!-- TAB 1: HOME -->
     <section id="tab-home" class="space-y-4">
@@ -534,12 +430,7 @@
       <div onclick="switchTab('referral')" class="cursor-pointer p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/20 via-yellow-500/10 to-amber-500/5 border border-luxury-gold/50 flex items-center justify-between shadow-xl btn-bounce">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-400 to-yellow-500 text-midnight-dark flex items-center justify-center font-black shadow-md shadow-amber-500/30 flex-shrink-0">
-            <svg class="w-5 h-5 text-midnight-dark animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="8" width="18" height="4" rx="1"/>
-              <path d="M12 8v13"/>
-              <path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/>
-              <path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/>
-            </svg>
+            <i data-lucide="gift" class="w-5 h-5 animate-pulse"></i>
           </div>
           <div>
             <div class="flex items-center gap-1.5">
@@ -551,7 +442,7 @@
         </div>
         <div class="flex items-center gap-1 text-xs font-bold text-luxury-gold flex-shrink-0 bg-luxury-gold/10 px-2.5 py-1 rounded-lg border border-luxury-gold/30">
           <span>রেফার</span>
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
         </div>
       </div>
 
@@ -611,7 +502,7 @@
                   <path fill="#FBBC04" d="M7 19h10v-7.24l-5 3.52-5-3.52V19z"/>
                 </svg>
               </div>
-              <span id="badgeGmailRate" class="text-[10px] bg-rose-500/20 text-rose-300 px-2 py-0.5 rounded-full font-bold border border-rose-500/30">৳ ১৫-২০</span>
+              <span id="badgeGmailRate" class="text-[10px] bg-rose-500/20 text-rose-300 px-2 py-0.5 rounded-full font-bold border border-rose-500/30">১৫-২০৳</span>
             </div>
             <h3 id="btnTitle2" class="font-extrabold text-sm text-slate-100 group-hover:text-rose-300 transition">জিমেইল বিক্রি</h3>
             <p id="btnSub2" class="text-[11px] text-slate-400 mt-0.5">ইনস্ট্যান্ট ক্যাশ পেমেন্ট</p>
@@ -626,7 +517,7 @@
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                 </svg>
               </div>
-              <span id="badgeFbRate" class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full font-bold border border-blue-500/30">৳ ৫০-৭০</span>
+              <span id="badgeFbRate" class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full font-bold border border-blue-500/30">৫০-৭০৳</span>
             </div>
             <h3 id="btnTitle3" class="font-extrabold text-sm text-slate-100 group-hover:text-sky-300 transition">ফেসবুক আইডি</h3>
             <p id="btnSub3" class="text-[11px] text-slate-400 mt-0.5">পুরাতন আইডি বিক্রি</p>
@@ -646,7 +537,7 @@
               <span id="badgeBtn4" class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-bold border border-emerald-500/30">বিকাশ/নগদ</span>
             </div>
             <h3 id="btnTitle4" class="font-extrabold text-sm text-slate-100 group-hover:text-emerald-300 transition">ইনস্ট্যান্ট উইথড্র</h3>
-            <p id="btnSub4" class="text-[11px] text-slate-400 mt-0.5">মিনিমাম ৳১০০</p>
+            <p id="btnSub4" class="text-[11px] text-slate-400 mt-0.5">মিনিমাম ৳১০০ থেকে</p>
           </button>
         </div>
       </div>
@@ -1559,81 +1450,57 @@
 
   </main>
 
-  <!-- ================= FLOATING ANIMATED SUPPORT BUTTON ================= -->
-  <aside class="fixed bottom-20 right-3.5 z-30">
-    <a id="floatingSupportBtn" href="https://t.me/ItsSaddam9" target="_blank" class="animate-floating flex items-center gap-1.5 px-3 py-2 rounded-full bg-gradient-to-r from-[#0088cc] via-sky-500 to-cyan-500 text-white font-extrabold text-xs shadow-xl shadow-sky-500/40 border border-white/30 backdrop-blur-md btn-bounce" title="Direct Telegram Support">
-      <svg class="w-4 h-4 fill-current flex-shrink-0" viewBox="0 0 24 24">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .37z"/>
-      </svg>
+  <!-- ================= FLOATING ANIMATED SUPPORT BUTTON (ALWAYS VISIBLE & BOUNCING) ================= -->
+  <aside class="fixed bottom-20 right-4 z-40">
+    <a id="floatingSupportBtn" href="https://t.me/ItsSaddam9" target="_blank" class="animate-floating flex items-center gap-2 px-3.5 py-2.5 rounded-full bg-gradient-to-r from-telegram to-sky-500 text-white font-black text-xs shadow-2xl border-2 border-white/30 backdrop-blur-md btn-bounce" title="Direct Telegram Support">
+      <i data-lucide="message-circle" class="w-5 h-5 animate-pulse"></i>
       <span class="tracking-wide" id="floatingSupportText">সাপোর্ট</span>
     </a>
   </aside>
 
   <!-- ================= BOTTOM NAVIGATION BAR (5 PRIMARY TABS) ================= -->
-  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-midnight-card/95 backdrop-blur-xl border-t border-midnight-border/80 pt-2 pb-[max(0.6rem,env(safe-area-inset-bottom,0.6rem))] px-1.5 shadow-2xl">
+  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-midnight-card/95 backdrop-blur-xl border-t border-midnight-border/80 py-1.5 px-1.5 shadow-2xl">
     <div class="max-w-md mx-auto grid grid-cols-5 gap-1 text-center text-[10px]" id="bottomNavContainer">
       
       <!-- Tab 1: Home -->
-      <button onclick="switchTab('home')" class="nav-btn active flex flex-col items-center justify-center py-1" data-nav="home">
+      <button onclick="switchTab('home')" class="nav-btn active" data-nav="home">
         <div class="nav-indicator"></div>
-        <svg class="w-5 h-5 nav-icon mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-          <polyline points="9 22 9 12 15 12 15 22"/>
-        </svg>
+        <i data-lucide="home" class="w-5 h-5 nav-icon mb-0.5"></i>
         <span id="navHome">হোম</span>
       </button>
 
       <!-- Tab 2: Group Shop -->
-      <button onclick="switchTab('groups')" class="nav-btn flex flex-col items-center justify-center py-1" data-nav="groups">
+      <button onclick="switchTab('groups')" class="nav-btn" data-nav="groups">
         <div class="nav-indicator"></div>
-        <svg class="w-5 h-5 nav-icon mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/>
-          <path d="m22 12.5-8.58 3.91a2 2 0 0 1-1.66 0L2 12.5"/>
-          <path d="m22 17.5-8.58 3.91a2 2 0 0 1-1.66 0L2 17.5"/>
-        </svg>
+        <i data-lucide="layers" class="w-5 h-5 nav-icon mb-0.5"></i>
         <span id="navGroups">গ্রুপ শপ</span>
       </button>
 
       <!-- Tab 3: Referral -->
-      <button onclick="switchTab('referral')" class="nav-btn flex flex-col items-center justify-center py-1" data-nav="referral">
+      <button onclick="switchTab('referral')" class="nav-btn" data-nav="referral">
         <div class="nav-indicator"></div>
-        <svg class="w-5 h-5 nav-icon mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="8" width="18" height="4" rx="1"/>
-          <path d="M12 8v13"/>
-          <path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/>
-          <path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/>
-        </svg>
+        <i data-lucide="gift" class="w-5 h-5 nav-icon mb-0.5"></i>
         <span id="navReferral">রেফারেল</span>
       </button>
 
       <!-- Tab 4: Income (Account Sell) -->
-      <button onclick="switchTab('sell')" class="nav-btn flex flex-col items-center justify-center py-1" data-nav="sell">
+      <button onclick="switchTab('sell')" class="nav-btn" data-nav="sell">
         <div class="nav-indicator"></div>
-        <svg class="w-5 h-5 nav-icon mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/>
-          <line x1="12" x2="12" y1="8" y2="16"/>
-          <path d="M14.5 10a2.5 2.5 0 0 0-5 0c0 1.5 1 2 2.5 2s2.5.5 2.5 2a2.5 2.5 0 0 1-5 0"/>
-        </svg>
+        <i data-lucide="badge-dollar-sign" class="w-5 h-5 nav-icon mb-0.5"></i>
         <span id="navSell">ইনকাম</span>
       </button>
 
       <!-- Tab 5: Profile -->
-      <button onclick="switchTab('profile')" class="nav-btn flex flex-col items-center justify-center py-1" data-nav="profile">
+      <button onclick="switchTab('profile')" class="nav-btn" data-nav="profile">
         <div class="nav-indicator"></div>
-        <svg class="w-5 h-5 nav-icon mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-          <circle cx="12" cy="7" r="4"/>
-        </svg>
+        <i data-lucide="user" class="w-5 h-5 nav-icon mb-0.5"></i>
         <span id="navProfile">প্রোফাইল</span>
       </button>
 
       <!-- Admin Tab: ONLY shown for 8701368956 / @ItsSaddam9 -->
-      <button id="navAdminBtn" onclick="switchTab('admin')" class="hidden nav-btn flex flex-col items-center justify-center py-1" data-nav="admin">
+      <button id="navAdminBtn" onclick="switchTab('admin')" class="hidden nav-btn" data-nav="admin">
         <div class="nav-indicator"></div>
-        <svg class="w-5 h-5 nav-icon mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          <path d="m9 12 2 2 4-4"/>
-        </svg>
+        <i data-lucide="shield-check" class="w-5 h-5 nav-icon mb-0.5"></i>
         <span>এডমিন</span>
       </button>
     </div>
@@ -2950,35 +2817,21 @@
         safeSetText('badgeBtn1', appState.buttons.btn1Badge || 'VIP শপ');
         renderButtonLogo('iconBox1', appState.buttons.btn1Logo, 'telegram');
 
-        // Helper to format rate badges cleanly with Taka prefix
-        function cleanRateBadge(b, fallback) {
-          if (!b) return fallback;
-          let s = String(b).trim();
-          if (s.endsWith('৳')) {
-            s = '৳ ' + s.slice(0, -1).trim();
-          } else if (!s.startsWith('৳') && !s.includes('৳')) {
-            s = '৳ ' + s;
-          }
-          return s;
-        }
-
         // Button 2: Sell Gmail
         safeSetText('btnTitle2', appState.buttons.btn2Title || 'জিমেইল বিক্রি');
         safeSetText('btnSub2', appState.buttons.btn2Sub || 'ইনস্ট্যান্ট ক্যাশ পেমেন্ট');
-        safeSetText('badgeGmailRate', cleanRateBadge(appState.buttons.btn2Badge, '৳ ১৫-২০'));
+        safeSetText('badgeGmailRate', appState.buttons.btn2Badge || '১৫-২০৳');
         renderButtonLogo('iconBox2', appState.buttons.btn2Logo, 'gmail');
 
         // Button 3: Sell Facebook
         safeSetText('btnTitle3', appState.buttons.btn3Title || 'ফেসবুক আইডি');
         safeSetText('btnSub3', appState.buttons.btn3Sub || 'পুরাতন আইডি বিক্রি');
-        safeSetText('badgeFbRate', cleanRateBadge(appState.buttons.btn3Badge, '৳ ৫০-৭০'));
+        safeSetText('badgeFbRate', appState.buttons.btn3Badge || '৫০-৭০৳');
         renderButtonLogo('iconBox3', appState.buttons.btn3Logo, 'facebook');
 
         // Button 4: Instant Withdraw
         safeSetText('btnTitle4', appState.buttons.btn4Title || 'ইনস্ট্যান্ট উইথড্র');
-        let sub4 = appState.buttons.btn4Sub || 'মিনিমাম ৳১০০';
-        if (sub4.includes('মিনিমাম ৳১০০ থেকে')) sub4 = 'মিনিমাম ৳১০০';
-        safeSetText('btnSub4', sub4);
+        safeSetText('btnSub4', appState.buttons.btn4Sub || 'মিনিমাম ৳১০০ থেকে');
         safeSetText('badgeBtn4', appState.buttons.btn4Badge || 'বিকাশ/নগদ');
         renderButtonLogo('iconBox4', appState.buttons.btn4Logo, 'withdraw');
 
@@ -3002,8 +2855,8 @@
         updateGmailSellRate();
         updateFbSellRate();
 
-        // Refresh Icons safely
-        window.refreshAllIcons();
+        // Refresh Lucide Icons
+        lucide.createIcons();
       } catch (err) {
         console.error("Error in renderApp:", err);
       }
@@ -4687,7 +4540,7 @@
       }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      window.refreshAllIcons();
+      lucide.createIcons();
     }
 
     // --- Settings: Theme & Language ---

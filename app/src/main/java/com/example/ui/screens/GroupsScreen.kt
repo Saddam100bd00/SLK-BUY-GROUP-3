@@ -26,6 +26,7 @@ import androidx.compose.material.icons.filled.VerifiedUser
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
@@ -37,6 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -45,16 +47,9 @@ import com.example.data.model.TelegramGroup
 import com.example.ui.components.GroupScreenshotCard
 import com.example.ui.components.TelegramSupportCard
 import com.example.ui.theme.ElectricCyan
-import com.example.ui.theme.ElectricCyanDark
 import com.example.ui.theme.LuxuryGold
-import com.example.ui.theme.MidnightBorder
-import com.example.ui.theme.MidnightCard
-import com.example.ui.theme.MidnightCardHover
 import com.example.ui.theme.MidnightDark
-import com.example.ui.theme.MidnightSurface
 import com.example.ui.theme.SuccessGreen
-import com.example.ui.theme.TextPrimary
-import com.example.ui.theme.TextSecondary
 
 @Composable
 fun GroupsScreen(
@@ -87,7 +82,7 @@ fun GroupsScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(MidnightDark),
+            .background(MaterialTheme.colorScheme.background),
         contentPadding = PaddingValues(bottom = 30.dp)
     ) {
         // === Page Header ===
@@ -107,12 +102,12 @@ fun GroupsScreen(
                             text = "টেলিগ্রাম প্রিমিয়াম গ্রুপ মার্কেটপ্লেস",
                             fontSize = 19.sp,
                             fontWeight = FontWeight.Black,
-                            color = TextPrimary
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                         Text(
                             text = "লাইফটাইম এক্সেস • ইনস্ট্যান্ট অটো ইনভাইট লিংক",
                             fontSize = 12.sp,
-                            color = ElectricCyan
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
 
@@ -129,11 +124,11 @@ fun GroupsScreen(
                                 imageVector = Icons.Default.VerifiedUser,
                                 contentDescription = "Safe",
                                 tint = SuccessGreen,
-                                modifier = Modifier.size(13.dp)
+                                modifier = Modifier.size(14.dp)
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
-                                text = "100% Safe",
+                                text = "১০০% সেফ",
                                 fontSize = 10.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = SuccessGreen
@@ -149,51 +144,51 @@ fun GroupsScreen(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = {
-                        Text("মুভি, সিরিজ বা টুলস গ্রুপ সার্চ করুন...", fontSize = 13.sp, color = TextSecondary)
-                    },
+                    placeholder = { Text("গ্রুপের নাম বা বিষয় লিখে খুঁজুন...", fontSize = 13.sp) },
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Search,
                             contentDescription = "Search",
-                            tint = ElectricCyan
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     },
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = MidnightSurface,
-                        unfocusedContainerColor = MidnightSurface,
-                        focusedBorderColor = ElectricCyan,
-                        unfocusedBorderColor = MidnightBorder,
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary
+                        focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface
                     )
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                // Category Chips Horizontal Scroll
+                // Category Chips
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(categories) { category ->
                         val isSelected = selectedCategory == category
                         Surface(
-                            modifier = Modifier.clickable { selectedCategory = category },
-                            shape = RoundedCornerShape(20.dp),
-                            color = if (isSelected) ElectricCyan else MidnightCard,
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(20.dp))
+                                .clickable { selectedCategory = category },
+                            color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
                             border = androidx.compose.foundation.BorderStroke(
                                 1.dp,
-                                if (isSelected) ElectricCyan else MidnightBorder
-                            )
+                                if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                            ),
+                            shape = RoundedCornerShape(20.dp)
                         ) {
                             Text(
                                 text = category,
-                                modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp),
+                                modifier = Modifier.padding(horizontal = 14.dp, vertical = 7.dp),
                                 fontSize = 12.sp,
                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                                color = if (isSelected) MidnightDark else TextPrimary
+                                color = if (isSelected) MidnightDark else MaterialTheme.colorScheme.onSurface
                             )
                         }
                     }
@@ -201,29 +196,76 @@ fun GroupsScreen(
             }
         }
 
-        // === List of Telegram Group Screenshot Cards ===
-        if (filteredGroups.isEmpty()) {
-            item {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(40.dp),
-                    contentAlignment = Alignment.Center
-                ) {
+        // Section Title & Result Count
+        item {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 6.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "উপলব্ধ গ্রুপ তালিকা (${filteredGroups.size})",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Default.FilterList,
+                        contentDescription = "Filter",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "কোন গ্রুপ পাওয়া যায়নি!",
-                        color = TextSecondary,
-                        fontSize = 14.sp
+                        text = selectedCategory,
+                        fontSize = 11.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
-        } else {
-            items(filteredGroups) { group ->
-                Box(
+        }
+
+        // Empty state
+        if (filteredGroups.isEmpty()) {
+            item {
+                Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 7.dp)
+                        .padding(24.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                    shape = RoundedCornerShape(14.dp),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
                 ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "কোনো গ্রুপ পাওয়া যায়নি",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Text(
+                            text = "অন্য কোনো কিওয়ার্ড দিয়ে খুঁজুন অথবা অন্য ক্যাটাগরি সিলেক্ট করুন।",
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                        )
+                    }
+                }
+            }
+        } else {
+            // Group Cards with full screenshots & price banners
+            items(filteredGroups) { group ->
+                Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 7.dp)) {
                     GroupScreenshotCard(
                         group = group,
                         onBuyClick = { onBuyGroup(group) }
@@ -232,7 +274,7 @@ fun GroupsScreen(
             }
         }
 
-        // Direct Telegram Support helpline at bottom
+        // Telegram Support Card
         item {
             Box(modifier = Modifier.padding(16.dp)) {
                 TelegramSupportCard()

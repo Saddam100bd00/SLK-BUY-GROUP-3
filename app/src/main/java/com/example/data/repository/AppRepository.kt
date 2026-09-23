@@ -120,6 +120,46 @@ class AppRepository(private val dao: AppDao) {
                 )
             )
         }
+
+        // Ensure default admin configs exist
+        val defaultConfigs = mapOf(
+            "bkash_number" to "01789-567890",
+            "nagad_number" to "01812-345678",
+            "rocket_number" to "01934-567891",
+            "binance_id" to "87013689",
+            "binance_usdt_address" to "TYeK8Q3LqW4vH1m9PbzE9102XUsdtTrc20",
+            "app_logo_url" to "",
+            "bkash_logo_url" to "",
+            "nagad_logo_url" to "",
+            "rocket_logo_url" to "",
+            "binance_logo_url" to "",
+            "gmail_price_fresh" to "15",
+            "gmail_price_old_6m" to "30",
+            "gmail_price_old_1yr" to "50",
+            "fb_price_new" to "40",
+            "fb_price_old" to "70",
+            "fb_price_very_old" to "120",
+            "admin_telegram" to "https://t.me/ItsSaddam9",
+            "admin_telegram_id" to "8701368956",
+            "admin_username" to "ItsSaddam9",
+            "notice_text" to "📢 স্বাগতম SLK BUY GROUP এ! টেলিগ্রাম প্রিমিয়াম গ্রুপ কিনুন এবং জিমেইল ও ফেসবুক বিক্রি করে প্রতিদিন আনলিমিটেড টাকা আয় করুন। বিকাশ, নগদ, রকেট ও Binance এ নিরাপদ পেমেন্ট।"
+        )
+        for ((key, value) in defaultConfigs) {
+            val existing = dao.getConfigValue(key)
+            if (existing == null) {
+                dao.setConfig(AdminConfig(key, value))
+            }
+        }
+    }
+
+    suspend fun addReferralReward(amount: Int) {
+        val currentWallet = dao.getWalletProfileSync() ?: WalletProfile()
+        val updatedWallet = currentWallet.copy(
+            currentBalance = currentWallet.currentBalance + amount,
+            totalEarned = currentWallet.totalEarned + amount,
+            totalReferrals = currentWallet.totalReferrals + 1
+        )
+        dao.insertOrUpdateWalletProfile(updatedWallet)
     }
 
     suspend fun placeGroupOrder(

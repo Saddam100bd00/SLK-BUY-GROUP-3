@@ -27,15 +27,13 @@ import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material.icons.filled.PersonAdd
 import androidx.compose.material.icons.filled.Public
-import androidx.compose.material.icons.filled.Security
-import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.Speed
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.filled.Wallet
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -51,21 +49,11 @@ import androidx.compose.ui.unit.sp
 import com.example.data.model.TelegramGroup
 import com.example.ui.components.GroupScreenshotCard
 import com.example.ui.components.TelegramSupportCard
-import com.example.ui.theme.BkashPink
 import com.example.ui.theme.ElectricCyan
-import com.example.ui.theme.ElectricCyanDark
 import com.example.ui.theme.LuxuryGold
-import com.example.ui.theme.MidnightBorder
-import com.example.ui.theme.MidnightCard
-import com.example.ui.theme.MidnightCardHover
 import com.example.ui.theme.MidnightDark
-import com.example.ui.theme.MidnightSurface
-import com.example.ui.theme.NagadOrange
-import com.example.ui.theme.RocketPurple
 import com.example.ui.theme.SuccessGreen
 import com.example.ui.theme.TelegramBlue
-import com.example.ui.theme.TextPrimary
-import com.example.ui.theme.TextSecondary
 import com.example.ui.theme.WarningAmber
 import com.example.ui.viewmodel.AppScreen
 import com.example.ui.viewmodel.SellType
@@ -81,7 +69,7 @@ fun HomeScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(MidnightDark),
+            .background(MaterialTheme.colorScheme.background),
         contentPadding = PaddingValues(bottom = 24.dp)
     ) {
         // === 1. Hero Luxury Header Banner ===
@@ -92,9 +80,8 @@ fun HomeScreen(
                     .background(
                         Brush.verticalGradient(
                             listOf(
-                                Color(0xFF0F1E36),
-                                Color(0xFF0D172A),
-                                MidnightDark
+                                MaterialTheme.colorScheme.surfaceVariant,
+                                MaterialTheme.colorScheme.background
                             )
                         )
                     )
@@ -107,9 +94,9 @@ fun HomeScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Surface(
-                            color = Color(0x3300E5FF),
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
                             shape = RoundedCornerShape(20.dp),
-                            border = androidx.compose.foundation.BorderStroke(1.dp, ElectricCyan)
+                            border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
                         ) {
                             Row(
                                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
@@ -126,13 +113,13 @@ fun HomeScreen(
                                     text = "OFFICIAL TELEGRAM STORE",
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = ElectricCyan
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                             }
                         }
 
                         Surface(
-                            color = MidnightCard,
+                            color = MaterialTheme.colorScheme.surface,
                             shape = RoundedCornerShape(12.dp)
                         ) {
                             Text(
@@ -151,7 +138,7 @@ fun HomeScreen(
                         text = "প্রিমিয়াম টেলিগ্রাম গ্রুপ\nকিনুন ও সেল করে আয় করুন",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Black,
-                        color = TextPrimary,
+                        color = MaterialTheme.colorScheme.onBackground,
                         lineHeight = 32.sp
                     )
 
@@ -160,7 +147,7 @@ fun HomeScreen(
                     Text(
                         text = "বিকাশ, নগদ ও রকেটে দ্রুত পেমেন্ট • জিমেইল ও ফেসবুক বিক্রি করে প্রতিদিন আনলিমিটেড টাকা ইনকাম",
                         fontSize = 13.sp,
-                        color = TextSecondary,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         lineHeight = 18.sp
                     )
                 }
@@ -174,8 +161,8 @@ fun HomeScreen(
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(12.dp))
-                    .background(MidnightSurface)
-                    .border(1.dp, MidnightBorder, RoundedCornerShape(12.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f), RoundedCornerShape(12.dp))
                     .padding(12.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -191,21 +178,21 @@ fun HomeScreen(
                             "📢 স্বাগতম SLK BUY GROUP এ! টেলিগ্রাম প্রিমিয়াম গ্রুপ কিনুন এবং জিমেইল/ফেসবুক বিক্রি করে ঘরে বসে ইনকাম করুন।"
                         },
                         fontSize = 12.sp,
-                        color = TextPrimary,
+                        color = MaterialTheme.colorScheme.onSurface,
                         lineHeight = 16.sp
                     )
                 }
             }
         }
 
-        // === 3. Quick Action Hub (5 Primary Options) ===
+        // === 3. Quick Action Hub (4 Primary Options) ===
         item {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
                     text = "প্রধান সেবাসমূহ",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    color = TextPrimary
+                    color = MaterialTheme.colorScheme.onBackground
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -241,7 +228,7 @@ fun HomeScreen(
                 ) {
                     QuickActionCard(
                         title = "ফেসবুক আইডি বিক্রি",
-                        subtitle = "৳৪০ - ৳১৫০ প্রতি আইডি",
+                        subtitle = "৳৪০ - ৳১২০ প্রতি আইডি",
                         icon = Icons.Default.Public,
                         accentColor = TelegramBlue,
                         modifier = Modifier.weight(1f),
@@ -266,9 +253,9 @@ fun HomeScreen(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = MidnightSurface),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
                 shape = RoundedCornerShape(14.dp),
-                border = androidx.compose.foundation.BorderStroke(1.dp, MidnightBorder)
+                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
             ) {
                 Row(
                     modifier = Modifier
@@ -303,7 +290,7 @@ fun HomeScreen(
                             text = "সেরা টেলিগ্রাম প্রিমিয়াম গ্রুপ",
                             fontSize = 17.sp,
                             fontWeight = FontWeight.Bold,
-                            color = TextPrimary
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                     }
 
@@ -311,7 +298,7 @@ fun HomeScreen(
                         text = "সবগুলো দেখুন",
                         fontSize = 12.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = ElectricCyan,
+                        color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.clickable { onNavigate(AppScreen.GROUPS) }
                     )
                 }
@@ -335,9 +322,9 @@ fun HomeScreen(
                     .padding(horizontal = 16.dp, vertical = 10.dp)
                     .fillMaxWidth()
                     .clickable { onNavigate(AppScreen.PROFILE) },
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF13221B)),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
                 shape = RoundedCornerShape(14.dp),
-                border = androidx.compose.foundation.BorderStroke(1.dp, Color(0x5510B981))
+                border = androidx.compose.foundation.BorderStroke(1.dp, SuccessGreen.copy(alpha = 0.5f))
             ) {
                 Row(
                     modifier = Modifier
@@ -372,7 +359,7 @@ fun HomeScreen(
                                 text = "রেফারেল ইনকাম প্রোগ্রাম",
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = TextPrimary
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                             Text(
                                 text = "প্রতি রেফারে ৳২০ বোনাস + ৫% লাইফটাইম কমিশন",
@@ -414,8 +401,8 @@ fun QuickActionCard(
         modifier = modifier
             .clip(RoundedCornerShape(14.dp))
             .clickable(onClick = onClick)
-            .border(1.dp, MidnightBorder, RoundedCornerShape(14.dp)),
-        colors = CardDefaults.cardColors(containerColor = MidnightCard)
+            .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f), RoundedCornerShape(14.dp)),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
         Column(
             modifier = Modifier.padding(14.dp)
@@ -441,7 +428,7 @@ fun QuickActionCard(
                 text = title,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
-                color = TextPrimary
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Spacer(modifier = Modifier.height(2.dp))
@@ -449,7 +436,7 @@ fun QuickActionCard(
             Text(
                 text = subtitle,
                 fontSize = 11.sp,
-                color = TextSecondary
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -469,12 +456,12 @@ fun StatItem(number: String, label: String, icon: ImageVector) {
             text = number,
             fontSize = 15.sp,
             fontWeight = FontWeight.Black,
-            color = TextPrimary
+            color = MaterialTheme.colorScheme.onSurface
         )
         Text(
             text = label,
             fontSize = 10.sp,
-            color = TextSecondary
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }

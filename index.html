@@ -47,13 +47,8 @@
     }
   </script>
 
-  <!-- Lucide Icons with Reliable Multi-CDN Fallback -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.344.0/umd/lucide.min.js"></script>
-  <script>
-    if (!window.lucide) {
-      document.write('<script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"><\/script>');
-    }
-  </script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -68,8 +63,8 @@
       transition: background-color 0.3s, color 0.3s;
     }
 
-    /* Complete, Crisp Light Mode Overrides */
-    html.light, html.light body {
+    /* Light Mode Overrides */
+    html.light body {
       background-color: #f8fafc !important;
       color: #0f172a !important;
     }
@@ -79,8 +74,7 @@
     html.light .bg-midnight-card {
       background-color: #ffffff !important;
       border-color: #e2e8f0 !important;
-      box-shadow: 0 4px 18px 0 rgba(0,0,0,0.07) !important;
-      color: #0f172a !important;
+      box-shadow: 0 4px 14px 0 rgba(0,0,0,0.06) !important;
     }
     html.light .bg-midnight-surface {
       background-color: #e2e8f0 !important;
@@ -96,24 +90,7 @@
       color: #64748b !important;
     }
     html.light .border-midnight-border {
-      border-color: #cbd5e1 !important;
-    }
-    html.light header, html.light nav {
-      background-color: rgba(255, 255, 255, 0.95) !important;
       border-color: #e2e8f0 !important;
-    }
-    html.light input, html.light select, html.light textarea {
-      background-color: #ffffff !important;
-      color: #0f172a !important;
-      border-color: #cbd5e1 !important;
-    }
-    html.light .bg-slate-900, html.light .bg-slate-800 {
-      background-color: #f1f5f9 !important;
-      color: #0f172a !important;
-    }
-    html.light .bg-black\/40, html.light .bg-black\/60, html.light .bg-black\/80, html.light .bg-black\/85, html.light .bg-black\/90 {
-      background-color: rgba(241, 245, 249, 0.92) !important;
-      color: #0f172a !important;
     }
     
     /* Luxury Floating Animation */
@@ -1473,10 +1450,11 @@
 
   </main>
 
-  <!-- ================= FLOATING ANIMATED SUPPORT BUTTON (ALWAYS VISIBLE & NON-BLOCKING) ================= -->
-  <aside class="fixed bottom-24 right-3 z-30">
-    <a id="floatingSupportBtn" href="https://t.me/ItsSaddam9" target="_blank" class="animate-floating flex items-center justify-center w-11 h-11 rounded-full bg-gradient-to-r from-telegram to-sky-500 text-white font-black shadow-2xl border-2 border-white/40 backdrop-blur-md btn-bounce" title="Direct Telegram Support">
-      <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .37z"/></svg>
+  <!-- ================= FLOATING ANIMATED SUPPORT BUTTON (ALWAYS VISIBLE & BOUNCING) ================= -->
+  <aside class="fixed bottom-20 right-4 z-40">
+    <a id="floatingSupportBtn" href="https://t.me/ItsSaddam9" target="_blank" class="animate-floating flex items-center gap-2 px-3.5 py-2.5 rounded-full bg-gradient-to-r from-telegram to-sky-500 text-white font-black text-xs shadow-2xl border-2 border-white/30 backdrop-blur-md btn-bounce" title="Direct Telegram Support">
+      <i data-lucide="message-circle" class="w-5 h-5 animate-pulse"></i>
+      <span class="tracking-wide" id="floatingSupportText">সাপোর্ট</span>
     </a>
   </aside>
 
@@ -1641,25 +1619,25 @@
         <div id="pgMobileCardsGrid" class="grid grid-cols-3 gap-2">
           
           <!-- bKash Card -->
-          <div onclick="selectPgMethod('bkash')" id="cardPgBkash" class="cursor-pointer p-2 rounded-2xl border-2 border-bkash bg-bkash/15 hover:bg-bkash/25 transition text-center flex flex-col items-center justify-between btn-bounce shadow-md">
-            <div id="boxPgLogoBkash" class="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shadow-sm overflow-hidden mb-1">
-              <svg viewBox="0 0 100 100" class="w-full h-full"><rect width="100" height="100" rx="18" fill="#E2136E"/><path d="M22 68L48 20l26 48H52l-4-10-8 10H22z" fill="#FFF"/><path d="M48 20l18 34-18-6-8 10V20z" fill="#DF146E"/><circle cx="75" cy="30" r="7" fill="#FFF"/></svg>
+          <div onclick="selectPgMethod('bkash')" id="cardPgBkash" class="cursor-pointer p-2.5 rounded-2xl border-2 border-bkash bg-bkash/15 hover:bg-bkash/25 transition text-center flex flex-col items-center justify-between btn-bounce shadow-md">
+            <div class="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shadow-sm overflow-hidden mb-1">
+              <img id="imgPgLogoBkash" src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80&auto=format&fit=crop&q=80" alt="bKash" class="w-full h-full object-contain" />
             </div>
             <span class="text-[11px] font-black text-pink-400 leading-tight">Bkash<br>Personal</span>
           </div>
 
           <!-- Nagad Card -->
-          <div onclick="selectPgMethod('nagad')" id="cardPgNagad" class="cursor-pointer p-2 rounded-2xl border-2 border-midnight-border bg-midnight-dark hover:border-nagad/60 transition text-center flex flex-col items-center justify-between btn-bounce shadow-md">
-            <div id="boxPgLogoNagad" class="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shadow-sm overflow-hidden mb-1">
-              <svg viewBox="0 0 100 100" class="w-full h-full"><rect width="100" height="100" rx="18" fill="#F7931A"/><path d="M25 75 C25 75 38 28 50 28 C62 28 50 58 70 58 C78 58 78 45 78 45 C78 72 62 76 50 76 C35 76 25 75 25 75 Z" fill="#FFF"/><circle cx="50" cy="42" r="8" fill="#D9381E"/></svg>
+          <div onclick="selectPgMethod('nagad')" id="cardPgNagad" class="cursor-pointer p-2.5 rounded-2xl border-2 border-midnight-border bg-midnight-dark hover:border-nagad/60 transition text-center flex flex-col items-center justify-between btn-bounce shadow-md">
+            <div class="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shadow-sm overflow-hidden mb-1">
+              <img id="imgPgLogoNagad" src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80&auto=format&fit=crop&q=80" alt="Nagad" class="w-full h-full object-contain" />
             </div>
             <span class="text-[11px] font-black text-amber-400 leading-tight">Nagad<br>Personal</span>
           </div>
 
           <!-- Rocket Card -->
-          <div onclick="selectPgMethod('rocket')" id="cardPgRocket" class="cursor-pointer p-2 rounded-2xl border-2 border-midnight-border bg-midnight-dark hover:border-rocket/60 transition text-center flex flex-col items-center justify-between btn-bounce shadow-md">
-            <div id="boxPgLogoRocket" class="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shadow-sm overflow-hidden mb-1">
-              <svg viewBox="0 0 100 100" class="w-full h-full"><rect width="100" height="100" rx="18" fill="#8C30F5"/><path d="M50 18 C50 18 66 35 66 60 L50 54 L34 60 C34 35 50 18 50 18 Z" fill="#FFF"/><circle cx="50" cy="38" r="6" fill="#8C30F5"/><path d="M34 60 L26 72 L38 68 Z" fill="#F59E0B"/><path d="M66 60 L74 72 L62 68 Z" fill="#F59E0B"/><path d="M45 66 L50 82 L55 66 Z" fill="#EF4444"/></svg>
+          <div onclick="selectPgMethod('rocket')" id="cardPgRocket" class="cursor-pointer p-2.5 rounded-2xl border-2 border-midnight-border bg-midnight-dark hover:border-rocket/60 transition text-center flex flex-col items-center justify-between btn-bounce shadow-md">
+            <div class="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shadow-sm overflow-hidden mb-1">
+              <img id="imgPgLogoRocket" src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80&auto=format&fit=crop&q=80" alt="Rocket" class="w-full h-full object-contain" />
             </div>
             <span class="text-[11px] font-black text-purple-400 leading-tight">Rocket<br>Personal</span>
           </div>
@@ -1669,8 +1647,8 @@
         <div id="pgGlobalCardsGrid" class="grid grid-cols-1 gap-2 hidden">
           <!-- Binance Card -->
           <div onclick="selectPgMethod('binance')" id="cardPgBinance" class="cursor-pointer p-3 rounded-2xl border-2 border-amber-500 bg-amber-500/15 hover:bg-amber-500/25 transition flex items-center gap-3 btn-bounce shadow-md">
-            <div id="boxPgLogoBinance" class="w-11 h-11 rounded-xl bg-white p-1 flex items-center justify-center shadow-sm overflow-hidden flex-shrink-0">
-              <svg viewBox="0 0 100 100" class="w-full h-full"><rect width="100" height="100" rx="18" fill="#181A20"/><path d="M50 20 L62 32 L50 44 L38 32 Z" fill="#F3BA2F"/><path d="M66 36 L78 48 L66 60 L54 48 Z" fill="#F3BA2F"/><path d="M34 36 L46 48 L34 60 L22 48 Z" fill="#F3BA2F"/><path d="M50 52 L62 64 L50 76 L38 64 Z" fill="#F3BA2F"/><path d="M50 36 L58 44 L50 52 L42 44 Z" fill="#F3BA2F"/></svg>
+            <div class="w-11 h-11 rounded-xl bg-white p-1 flex items-center justify-center shadow-sm overflow-hidden flex-shrink-0">
+              <img id="imgPgLogoBinance" src="https://images.unsplash.com/photo-1622979135225-d2ba269bc1df?w=80&auto=format&fit=crop&q=80" alt="Binance" class="w-full h-full object-contain" />
             </div>
             <div>
               <span class="text-xs font-black text-amber-400">Binance Personal</span>
@@ -2027,16 +2005,6 @@
     function safeSetHref(id, val) {
       const el = document.getElementById(id);
       if (el && val) el.href = val;
-    }
-
-    function safeLucideCreate() {
-      try {
-        if (window.lucide && typeof window.lucide.createIcons === 'function') {
-          window.lucide.createIcons();
-        }
-      } catch (e) {
-        console.warn("Lucide create error:", e);
-      }
     }
     function safeSetValue(id, val) {
       const el = document.getElementById(id);
@@ -2925,7 +2893,6 @@
       const sorted = sortGroupsForUser(appState.groups);
       const featured = sorted.slice(0, 3);
       container.innerHTML = featured.map(group => createGroupCardHtml(group)).join('');
-      safeLucideCreate();
     }
 
     function renderAllGroups(filteredList = null) {
@@ -2935,7 +2902,7 @@
       const sorted = sortGroupsForUser(list);
       safeSetText('totalGroupsBadge', `${sorted.length}টি গ্রুপ`);
       container.innerHTML = sorted.map(group => createGroupCardHtml(group)).join('');
-      safeLucideCreate();
+      lucide.createIcons();
     }
 
     function createGroupCardHtml(group) {
@@ -2945,7 +2912,7 @@
       const isPending = order && order.status === 'PENDING';
 
       return `
-        <div class="rounded-2xl bg-midnight-card border ${isApproved ? 'border-emerald-500/60 bg-gradient-to-b from-emerald-950/20 via-midnight-card to-midnight-card' : 'border-midnight-border'} hover:border-luxury-gold/50 transition-all p-3.5 shadow-lg space-y-2.5">
+        <div class="rounded-2xl bg-midnight-card border ${isApproved ? 'border-emerald-500/60 bg-gradient-to-b from-emerald-950/20 via-midnight-card to-midnight-card' : 'border-midnight-border'} hover:border-luxury-gold/50 transition-all p-3.5 shadow-lg space-y-3">
           <!-- Screenshot Thumbnail Preview Header -->
           <div class="relative w-full h-36 rounded-xl overflow-hidden bg-slate-900 border border-slate-800 group">
             <img src="${screenshot}" alt="${group.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
@@ -2966,19 +2933,7 @@
               <span class="flex items-center gap-1 font-semibold text-[11px] text-slate-200">
                 <i data-lucide="users" class="w-3.5 h-3.5 text-telegram"></i> ${group.membersCount} মেম্বার
               </span>
-              <span class="text-[10px] text-emerald-400 font-bold bg-black/50 px-1.5 py-0.5 rounded">অরিজিনাল ভিডিও</span>
-            </div>
-          </div>
-
-          <!-- Dedicated Price Tag Directly Under Photo (User Request: গ্রুপ কার্ড এ ফটোর নিচে প্রাইজ লেখা থাকবে) -->
-          <div class="flex items-center justify-between px-3 py-2 rounded-xl bg-midnight-surface/80 border border-luxury-gold/35 shadow-inner">
-            <div class="flex items-center gap-1.5">
-              <span class="text-[11px] text-slate-300 font-semibold">প্রাইস:</span>
-              <span class="text-sm font-black text-amber-400 tracking-wide">৳${group.price} BDT</span>
-            </div>
-            <div class="flex items-center gap-1">
-              <span class="text-[10px] text-slate-400">আসল:</span>
-              <s class="text-[11px] text-slate-400">৳${group.originalPrice || (Number(group.price) + 200)}</s>
+              <span class="font-extrabold text-amber-400">৳${group.price} <s class="text-[10px] text-slate-400 font-normal">৳${group.originalPrice}</s></span>
             </div>
           </div>
 
@@ -2994,7 +2949,7 @@
           <!-- Action Buttons: View Demo & Buy / Join -->
           <div class="grid grid-cols-2 gap-2 pt-1 border-t border-midnight-border/60">
             <!-- View Demo Full Page Screenshot Button -->
-            <button onclick="openDemoModal('${group.id}')" class="btn-bounce py-2 rounded-xl bg-midnight-surface hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center justify-center gap-1.5 border border-slate-600 transition">
+            <button onclick="openDemoModal(${group.id})" class="btn-bounce py-2 rounded-xl bg-midnight-surface hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center justify-center gap-1.5 border border-slate-600 transition">
               <i data-lucide="eye" class="w-4 h-4 text-electric-cyan"></i>
               <span>ভিউ ডেমো</span>
             </button>
@@ -3011,7 +2966,7 @@
                 <span>যাচাই চলছে...</span>
               </button>
             ` : `
-              <button onclick="openCheckout('${group.id}')" class="btn-bounce py-2 rounded-xl bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark text-xs font-black flex items-center justify-center gap-1.5 shadow-md shadow-amber-500/20 transition">
+              <button onclick="openCheckout(${group.id})" class="btn-bounce py-2 rounded-xl bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark text-xs font-black flex items-center justify-center gap-1.5 shadow-md shadow-amber-500/20 transition">
                 <i data-lucide="shopping-cart" class="w-4 h-4"></i>
                 <span>এখনই কিনুন</span>
               </button>
@@ -3024,96 +2979,28 @@
     // --- Modal Functions: View Demo Screenshot ---
     function openDemoModal(groupId) {
       playSound('click');
-      const group = (groupId != null)
-        ? appState.groups.find(g => String(g.id) === String(groupId))
-        : (appState.groups[0] || null);
+      const group = appState.groups.find(g => g.id === groupId);
       if (!group) return;
-      safeSetText('demoModalTitle', group.title);
-      const img = document.getElementById('demoModalImage');
-      if (img) img.src = group.screenshotUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80';
-      const buyBtn = document.getElementById('demoModalBuyBtn');
-      if (buyBtn) {
-        buyBtn.onclick = () => {
-          closeDemoModal();
-          openCheckout(group.id);
-        };
-      }
-      const modal = document.getElementById('demoScreenshotModal');
-      if (modal) {
-        modal.classList.remove('hidden');
-        modal.style.display = 'flex';
-      }
-      safeLucideCreate();
+      document.getElementById('demoModalTitle').innerText = group.title;
+      document.getElementById('demoModalImage').src = group.screenshotUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80';
+      document.getElementById('demoModalBuyBtn').onclick = () => {
+        closeDemoModal();
+        openCheckout(group.id);
+      };
+      document.getElementById('demoScreenshotModal').classList.remove('hidden');
     }
 
     function closeDemoModal() {
-      const modal = document.getElementById('demoScreenshotModal');
-      if (modal) {
-        modal.classList.add('hidden');
-        modal.style.display = 'none';
-      }
+      document.getElementById('demoScreenshotModal').classList.add('hidden');
     }
 
     // --- Modal Functions: Notice ---
     function openNoticeModal() {
       playSound('chime');
-      const modal = document.getElementById('noticeModal');
-      if (modal) {
-        modal.classList.remove('hidden');
-        modal.style.display = 'flex';
-      }
-      safeLucideCreate();
+      document.getElementById('noticeModal').classList.remove('hidden');
     }
     function closeNoticeModal() {
-      const modal = document.getElementById('noticeModal');
-      if (modal) {
-        modal.classList.add('hidden');
-        modal.style.display = 'none';
-      }
-    }
-
-    // --- Logo Rendering Functions (Custom URL or Crisp Official SVGs) ---
-    function getPaymentLogoSvg(method) {
-      if (method === 'bkash') {
-        return `<svg viewBox="0 0 100 100" class="w-full h-full"><rect width="100" height="100" rx="18" fill="#E2136E"/><path d="M22 68L48 20l26 48H52l-4-10-8 10H22z" fill="#FFF"/><path d="M48 20l18 34-18-6-8 10V20z" fill="#DF146E"/><circle cx="75" cy="30" r="7" fill="#FFF"/></svg>`;
-      } else if (method === 'nagad') {
-        return `<svg viewBox="0 0 100 100" class="w-full h-full"><rect width="100" height="100" rx="18" fill="#F7931A"/><path d="M25 75 C25 75 38 28 50 28 C62 28 50 58 70 58 C78 58 78 45 78 45 C78 72 62 76 50 76 C35 76 25 75 25 75 Z" fill="#FFF"/><circle cx="50" cy="42" r="8" fill="#D9381E"/></svg>`;
-      } else if (method === 'rocket') {
-        return `<svg viewBox="0 0 100 100" class="w-full h-full"><rect width="100" height="100" rx="18" fill="#8C30F5"/><path d="M50 18 C50 18 66 35 66 60 L50 54 L34 60 C34 35 50 18 50 18 Z" fill="#FFF"/><circle cx="50" cy="38" r="6" fill="#8C30F5"/><path d="M34 60 L26 72 L38 68 Z" fill="#F59E0B"/><path d="M66 60 L74 72 L62 68 Z" fill="#F59E0B"/><path d="M45 66 L50 82 L55 66 Z" fill="#EF4444"/></svg>`;
-      } else if (method === 'binance') {
-        return `<svg viewBox="0 0 100 100" class="w-full h-full"><rect width="100" height="100" rx="18" fill="#181A20"/><path d="M50 20 L62 32 L50 44 L38 32 Z" fill="#F3BA2F"/><path d="M66 36 L78 48 L66 60 L54 48 Z" fill="#F3BA2F"/><path d="M34 36 L46 48 L34 60 L22 48 Z" fill="#F3BA2F"/><path d="M50 52 L62 64 L50 76 L38 64 Z" fill="#F3BA2F"/><path d="M50 36 L58 44 L50 52 L42 44 Z" fill="#F3BA2F"/></svg>`;
-      }
-      return '';
-    }
-
-    function renderPaymentLogoBox(containerId, method, customUrl) {
-      const container = document.getElementById(containerId);
-      if (!container) return;
-      if (customUrl && customUrl.trim().length > 5) {
-        container.innerHTML = `<img src="${customUrl.trim()}" alt="${method}" class="w-full h-full object-contain rounded-lg" onerror="this.parentElement.innerHTML=getPaymentLogoSvg('${method}')" />`;
-      } else {
-        container.innerHTML = getPaymentLogoSvg(method);
-      }
-    }
-
-    function renderAllPaymentLogos() {
-      const pg = appState.paymentGateways || {};
-      renderPaymentLogoBox('boxPgLogoBkash', 'bkash', pg.bkash?.logo);
-      renderPaymentLogoBox('boxPgLogoNagad', 'nagad', pg.nagad?.logo);
-      renderPaymentLogoBox('boxPgLogoRocket', 'rocket', pg.rocket?.logo);
-      renderPaymentLogoBox('boxPgLogoBinance', 'binance', pg.binance?.logo);
-      renderPaymentAppLogo();
-    }
-
-    function renderPaymentAppLogo() {
-      const box = document.getElementById('boxPgAppLogo');
-      if (!box) return;
-      const logoUrl = appState.appLogo;
-      if (logoUrl && logoUrl.trim().length > 5) {
-        box.innerHTML = `<img id="pgAppLogo" src="${logoUrl.trim()}" alt="App Logo" class="w-full h-full object-cover rounded-full" onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full bg-gradient-to-tr from-amber-400 to-yellow-500 flex items-center justify-center text-midnight-dark font-black text-xs\\'>SLK</div>'" />`;
-      } else {
-        box.innerHTML = `<div class="w-full h-full bg-gradient-to-tr from-amber-400 to-yellow-500 flex items-center justify-center text-midnight-dark font-black text-xs">SLK</div>`;
-      }
+      document.getElementById('noticeModal').classList.add('hidden');
     }
 
     // --- Modal Functions: Two-Tab Payment Gateway (MOBILE BANKING & GLOBAL) ---
@@ -3122,45 +3009,30 @@
 
     function openCheckout(groupId) {
       playSound('click');
-      const group = (groupId != null)
-        ? appState.groups.find(g => String(g.id) === String(groupId))
-        : (selectedGroupForCheckout || appState.groups[0]);
-      if (!group) {
-        alert("গ্রুপ পাওয়া যায়নি। দয়া করে পেজটি রিফ্রেশ করুন।");
-        return;
-      }
+      const group = appState.groups.find(g => g.id === groupId);
+      if (!group) return;
       selectedGroupForCheckout = group;
 
       // Group Details Header
       safeSetText('pgSummaryGroupTitle', group.title);
       safeSetText('pgDisplayAmount', `৳${group.price} BDT`);
       safeSetText('pgInstructionAmount', group.price);
-      safeSetText('pgAppName', appState.appName || 'SLK BUY GROUP');
 
       // Clear TrxID Input
       safeSetValue('pgTrxInput', '');
-
-      // Refresh Brand & Gateway Logos
-      renderAllPaymentLogos();
 
       // Default to Mobile Banking & bKash
       switchPgCategory('MOBILE');
       selectPgMethod('bkash');
 
       const modal = document.getElementById('checkoutModal');
-      if (modal) {
-        modal.classList.remove('hidden');
-        modal.style.display = 'flex';
-      }
-      safeLucideCreate();
+      if (modal) modal.classList.remove('hidden');
+      lucide.createIcons();
     }
 
     function closeCheckoutModal() {
       const modal = document.getElementById('checkoutModal');
-      if (modal) {
-        modal.classList.add('hidden');
-        modal.style.display = 'none';
-      }
+      if (modal) modal.classList.add('hidden');
     }
 
     function switchPgCategory(cat) {
@@ -3184,7 +3056,7 @@
         if (gridMob) gridMob.classList.add('hidden');
         selectPgMethod('binance');
       }
-      safeLucideCreate();
+      lucide.createIcons();
     }
 
     function selectPgMethod(methodKey) {
@@ -3207,7 +3079,7 @@
       // Reset card borders
       [cardBkash, cardNagad, cardRocket].forEach(c => {
         if (!c) return;
-        c.className = "cursor-pointer p-2 rounded-2xl border-2 border-midnight-border bg-midnight-dark hover:border-slate-600 transition text-center flex flex-col items-center justify-between btn-bounce shadow-md";
+        c.className = "cursor-pointer p-2.5 rounded-2xl border-2 border-midnight-border bg-midnight-dark hover:border-slate-600 transition text-center flex flex-col items-center justify-between btn-bounce shadow-md";
       });
       if (cardBinance) {
         cardBinance.className = "cursor-pointer p-3 rounded-2xl border-2 border-midnight-border bg-midnight-dark hover:border-slate-600 transition flex items-center gap-3 btn-bounce shadow-md";
@@ -3216,25 +3088,25 @@
       const conf = (appState.paymentGateways && appState.paymentGateways[methodKey]) || {};
 
       if (methodKey === 'bkash') {
-        if (cardBkash) cardBkash.className = "cursor-pointer p-2 rounded-2xl border-2 border-bkash bg-bkash/20 ring-2 ring-pink-500/50 transition text-center flex flex-col items-center justify-between btn-bounce shadow-md";
+        if (cardBkash) cardBkash.className = "cursor-pointer p-2.5 rounded-2xl border-2 border-bkash bg-bkash/20 ring-2 ring-pink-500/50 transition text-center flex flex-col items-center justify-between btn-bounce shadow-md";
         if (container) container.className = "rounded-2xl p-4 transition-all duration-300 border space-y-3 bg-gradient-to-br from-pink-950/60 to-midnight-card border-pink-500/50";
         if (badge) {
           badge.innerText = conf.name || "Bkash Personal";
           badge.className = "text-xs font-black text-pink-300 bg-pink-500/20 px-2.5 py-1 rounded-lg border border-pink-500/30";
         }
         if (activeNumber) activeNumber.innerText = conf.number || '01789-567890';
-        if (dynamicRules) dynamicRules.innerHTML = (conf.rules || '১. বিকাশ অ্যাপে Send Money অপশনে যান।<br>২. উপরে দেওয়া নাম্বারে সঠিক টাকা পাঠান।<br>৩. TrxID নিচে সাবমিট করুন।').replace(/\n/g, '<br>');
+        if (dynamicRules) dynamicRules.innerHTML = (conf.rules || '১. বিকাশ অ্যাপে Send Money অপশনে যান।<br>২. উপরে দেওয়া নাম্বারে সঠিক টাকা পাঠান।<br>৩. TrxID নিচে সাবমিট করুন।').replace(/\n/g, '<br>');
       } else if (methodKey === 'nagad') {
-        if (cardNagad) cardNagad.className = "cursor-pointer p-2 rounded-2xl border-2 border-nagad bg-amber-500/20 ring-2 ring-amber-500/50 transition text-center flex flex-col items-center justify-between btn-bounce shadow-md";
+        if (cardNagad) cardNagad.className = "cursor-pointer p-2.5 rounded-2xl border-2 border-nagad bg-amber-500/20 ring-2 ring-amber-500/50 transition text-center flex flex-col items-center justify-between btn-bounce shadow-md";
         if (container) container.className = "rounded-2xl p-4 transition-all duration-300 border space-y-3 bg-gradient-to-br from-amber-950/60 to-midnight-card border-amber-500/50";
         if (badge) {
           badge.innerText = conf.name || "Nagad Personal";
           badge.className = "text-xs font-black text-amber-300 bg-amber-500/20 px-2.5 py-1 rounded-lg border border-amber-500/30";
         }
         if (activeNumber) activeNumber.innerText = conf.number || '01812-345678';
-        if (dynamicRules) dynamicRules.innerHTML = (conf.rules || '১. নগদ অ্যাপ বা *167# দিয়ে Send Money করুন।<br>২. উপরে দেওয়া নাম্বারে টাকা পাঠান।<br>৩. TrxID নিচে সাবমিট করুন।').replace(/\n/g, '<br>');
+        if (dynamicRules) dynamicRules.innerHTML = (conf.rules || '১. নগদ অ্যাপ বা *167# দিয়ে Send Money করুন।<br>২. উপরে দেওয়া নাম্বারে টাকা পাঠান।<br>৩. TrxID নিচে সাবমিট করুন।').replace(/\n/g, '<br>');
       } else if (methodKey === 'rocket') {
-        if (cardRocket) cardRocket.className = "cursor-pointer p-2 rounded-2xl border-2 border-rocket bg-purple-500/20 ring-2 ring-purple-500/50 transition text-center flex flex-col items-center justify-between btn-bounce shadow-md";
+        if (cardRocket) cardRocket.className = "cursor-pointer p-2.5 rounded-2xl border-2 border-rocket bg-purple-500/20 ring-2 ring-purple-500/50 transition text-center flex flex-col items-center justify-between btn-bounce shadow-md";
         if (container) container.className = "rounded-2xl p-4 transition-all duration-300 border space-y-3 bg-gradient-to-br from-purple-950/60 to-midnight-card border-purple-500/50";
         if (badge) {
           badge.innerText = conf.name || "Rocket Personal";
@@ -3253,7 +3125,7 @@
         if (dynamicRules) dynamicRules.innerHTML = (conf.rules || '১. আপনার Binance অ্যাপে Binance Pay তে যান।<br>২. Pay ID বা USDT এড্রেসে পেমেন্ট পাঠান।<br>৩. Order ID / TrxID লিখে সাবমিট করুন।').replace(/\n/g, '<br>');
       }
 
-      safeLucideCreate();
+      lucide.createIcons();
     }
 
     function copyPgNumber() {
@@ -4678,26 +4550,17 @@
       modal.classList.toggle('hidden');
     }
 
-    function applyTheme(isDark) {
-      isDarkTheme = !!isDark;
+    function toggleTheme() {
+      playSound('click');
+      isDarkTheme = !isDarkTheme;
       const html = document.documentElement;
       if (isDarkTheme) {
         html.classList.add('dark');
-        html.classList.remove('light');
-        safeSetText('themeStatusText', "বর্তমানে: কালো মোড (Dark)");
+        document.getElementById('themeStatusText').innerText = "বর্তমানে: কালো মোড (Dark)";
       } else {
         html.classList.remove('dark');
-        html.classList.add('light');
-        safeSetText('themeStatusText', "বর্তমানে: সাদা মোড (Light)");
+        document.getElementById('themeStatusText').innerText = "বর্তমানে: সাদা মোড (Light)";
       }
-      try {
-        localStorage.setItem('slk_theme', isDarkTheme ? 'dark' : 'light');
-      } catch (e) {}
-    }
-
-    function toggleTheme() {
-      playSound('click');
-      applyTheme(!isDarkTheme);
     }
 
     function toggleLanguage() {
@@ -4777,15 +4640,6 @@
 
     // --- Onload Initialization ---
     window.addEventListener('DOMContentLoaded', () => {
-      try {
-        const savedTheme = localStorage.getItem('slk_theme');
-        if (savedTheme === 'light') {
-          applyTheme(false);
-        } else {
-          applyTheme(true);
-        }
-      } catch (e) {}
-
       try {
         initFirebase();
       } catch (e) {

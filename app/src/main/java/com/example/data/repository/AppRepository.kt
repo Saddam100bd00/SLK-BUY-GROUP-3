@@ -120,33 +120,6 @@ class AppRepository(private val dao: AppDao) {
                 )
             )
         }
-
-        // Initialize default pricing and payment gateway configuration if not already configured
-        val defaultConfigs = mapOf(
-            "bkash_number" to "01789-567890",
-            "nagad_number" to "01812-345678",
-            "rocket_number" to "01934-567891",
-            "binance_address" to "8701368956 (Binance Pay ID)",
-            "admin_telegram" to "https://t.me/ItsSaddam9",
-            "price_gmail_fresh" to "15",
-            "price_gmail_old" to "30",
-            "price_gmail_very_old" to "50",
-            "price_fb_fresh" to "40",
-            "price_fb_old" to "70",
-            "price_fb_very_old" to "120",
-            "payment_logo_bkash" to "",
-            "payment_logo_nagad" to "",
-            "payment_logo_rocket" to "",
-            "payment_logo_binance" to "",
-            "app_logo_url" to ""
-        )
-
-        for ((key, value) in defaultConfigs) {
-            val existing = dao.getConfigValue(key)
-            if (existing == null) {
-                dao.setConfig(AdminConfig(key, value))
-            }
-        }
     }
 
     suspend fun placeGroupOrder(

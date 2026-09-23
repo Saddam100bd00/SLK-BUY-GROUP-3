@@ -41,7 +41,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
@@ -69,8 +68,6 @@ import com.example.data.model.GmailSubmission
 import com.example.data.model.GroupOrder
 import com.example.data.model.TelegramGroup
 import com.example.data.model.Withdrawal
-import com.example.ui.components.AppLogoBadge
-import com.example.ui.components.PaymentBrandLogo
 import com.example.ui.theme.BkashPink
 import com.example.ui.theme.DangerRed
 import com.example.ui.theme.ElectricCyan
@@ -118,7 +115,7 @@ fun AdminScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+            .background(MidnightDark),
         contentPadding = PaddingValues(bottom = 40.dp)
     ) {
         // === Top Admin Header ===
@@ -217,15 +214,7 @@ fun AdminScreen(
 
         // === Admin Section Tabs ===
         item {
-            val tabs = listOf(
-                "অর্ডার ($pendingOrdersCount)",
-                "জিমেইল ($pendingGmailsCount)",
-                "ফেসবুক ($pendingFbsCount)",
-                "উইথড্র ($pendingWithdrawalsCount)",
-                "নতুন গ্রুপ",
-                "পেমেন্ট সেটিংস",
-                "প্রাইজ রেট"
-            )
+            val tabs = listOf("অর্ডার ($pendingOrdersCount)", "জিমেইল ($pendingGmailsCount)", "ফেসবুক ($pendingFbsCount)", "উইথড্র ($pendingWithdrawalsCount)", "নতুন গ্রুপ", "পেমেন্ট সেটিংস")
 
             LazyRow(
                 modifier = Modifier
@@ -347,16 +336,6 @@ fun AdminScreen(
                 AdminPaymentSettingsSection(
                     configs = adminConfigs,
                     onUpdateNumber = onUpdatePaymentNumber
-                )
-            }
-        }
-
-        // 7. PRICE RATE SETTINGS TAB (নতুন, পুরাতন, আরো পুরাতন)
-        else if (selectedTab == 6) {
-            item {
-                AdminPriceRateSettingsSection(
-                    configs = adminConfigs,
-                    onUpdateConfig = onUpdatePaymentNumber
                 )
             }
         }
@@ -939,18 +918,9 @@ fun AdminPaymentSettingsSection(
     configs: Map<String, String>,
     onUpdateNumber: (String, String) -> Unit
 ) {
-    var appLogo by remember { mutableStateOf(configs["app_logo_url"] ?: "") }
     var bkash by remember { mutableStateOf(configs["bkash_number"] ?: "01789-567890") }
-    var bkashLogo by remember { mutableStateOf(configs["payment_logo_bkash"] ?: configs["bkash_logo_url"] ?: "") }
-
     var nagad by remember { mutableStateOf(configs["nagad_number"] ?: "01812-345678") }
-    var nagadLogo by remember { mutableStateOf(configs["payment_logo_nagad"] ?: configs["nagad_logo_url"] ?: "") }
-
     var rocket by remember { mutableStateOf(configs["rocket_number"] ?: "01934-567891") }
-    var rocketLogo by remember { mutableStateOf(configs["payment_logo_rocket"] ?: configs["rocket_logo_url"] ?: "") }
-
-    var binance by remember { mutableStateOf(configs["binance_id"] ?: configs["binance_address"] ?: "8701368956") }
-    var binanceLogo by remember { mutableStateOf(configs["payment_logo_binance"] ?: configs["binance_logo_url"] ?: "") }
 
     Card(
         modifier = Modifier
@@ -962,97 +932,20 @@ fun AdminPaymentSettingsSection(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = "পেমেন্ট গেটওয়ে সেটিংস ও লোগো কনফিগ",
+                text = "পেমেন্ট গেটওয়ে সেটিংস (অটো ডিসপ্লে)",
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Bold,
                 color = LuxuryGold
             )
             Text(
-                text = "এখানে অ্যাপ লোগো এবং বিকাশ, নগদ, রকেট, Binance এর নাম্বার ও কাস্টম লোগো URL সেট করুন",
+                text = "এখানে যে নাম্বার দিবেন ইউজাররা চেকআউটে সেটাই দেখতে পাবে",
                 fontSize = 11.sp,
                 color = TextSecondary
             )
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // === Live Logo Preview Box ===
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(10.dp),
-                color = MidnightSurface,
-                border = androidx.compose.foundation.BorderStroke(1.dp, ElectricCyanDark)
-            ) {
-                Column(modifier = Modifier.padding(10.dp)) {
-                    Text(
-                        text = "লাইভ লোগো প্রিভিউ (ইউজাররা যেমন দেখবে):",
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = ElectricCyan
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceAround,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            AppLogoBadge(customLogoUrl = appLogo.ifBlank { null }, size = 36.dp)
-                            Spacer(modifier = Modifier.height(3.dp))
-                            Text("অ্যাপ লোগো", fontSize = 9.sp, color = TextSecondary)
-                        }
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            PaymentBrandLogo(method = "bKash", customLogoUrl = bkashLogo.ifBlank { null }, size = 36.dp)
-                            Spacer(modifier = Modifier.height(3.dp))
-                            Text("বিকাশ", fontSize = 9.sp, color = BkashPink)
-                        }
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            PaymentBrandLogo(method = "Nagad", customLogoUrl = nagadLogo.ifBlank { null }, size = 36.dp)
-                            Spacer(modifier = Modifier.height(3.dp))
-                            Text("নগদ", fontSize = 9.sp, color = NagadOrange)
-                        }
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            PaymentBrandLogo(method = "Rocket", customLogoUrl = rocketLogo.ifBlank { null }, size = 36.dp)
-                            Spacer(modifier = Modifier.height(3.dp))
-                            Text("রকেট", fontSize = 9.sp, color = RocketPurple)
-                        }
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            PaymentBrandLogo(method = "Binance", customLogoUrl = binanceLogo.ifBlank { null }, size = 36.dp)
-                            Spacer(modifier = Modifier.height(3.dp))
-                            Text("Binance", fontSize = 9.sp, color = WarningAmber)
-                        }
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(14.dp))
-
-            // 0. App Logo URL
-            Text("০. অ্যাপের অফিশিয়াল লোগো (App Logo)", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = ElectricCyan)
-            Spacer(modifier = Modifier.height(4.dp))
-            OutlinedTextField(
-                value = appLogo,
-                onValueChange = { appLogo = it },
-                label = { Text("অ্যাপ লোগো ইমেজ URL (ঐচ্ছিক)") },
-                placeholder = { Text("https://example.com/app-logo.png") },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Button(
-                onClick = {
-                    onUpdateNumber("app_logo_url", appLogo)
-                },
-                colors = ButtonDefaults.buttonColors(containerColor = ElectricCyanDark, contentColor = Color.White),
-                shape = RoundedCornerShape(8.dp)
-            ) {
-                Text("অ্যাপ লোগো সেভ করুন", fontSize = 11.sp, fontWeight = FontWeight.Bold)
-            }
-
-            Spacer(modifier = Modifier.height(14.dp))
-
             // bKash
-            Text("১. বিকাশ (bKash)", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = BkashPink)
-            Spacer(modifier = Modifier.height(4.dp))
             OutlinedTextField(
                 value = bkash,
                 onValueChange = { bkash = it },
@@ -1061,31 +954,17 @@ fun AdminPaymentSettingsSection(
                 singleLine = true
             )
             Spacer(modifier = Modifier.height(4.dp))
-            OutlinedTextField(
-                value = bkashLogo,
-                onValueChange = { bkashLogo = it },
-                label = { Text("বিকাশ লোগো URL (ঐচ্ছিক)") },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
-            )
-            Spacer(modifier = Modifier.height(4.dp))
             Button(
-                onClick = {
-                    onUpdateNumber("bkash_number", bkash)
-                    onUpdateNumber("bkash_logo_url", bkashLogo)
-                    onUpdateNumber("payment_logo_bkash", bkashLogo)
-                },
+                onClick = { onUpdateNumber("bkash_number", bkash) },
                 colors = ButtonDefaults.buttonColors(containerColor = BkashPink, contentColor = Color.White),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text("বিকাশ তথ্য ও লোগো সেভ", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                Text("বিকাশ নাম্বার সেভ", fontSize = 11.sp)
             }
 
             Spacer(modifier = Modifier.height(14.dp))
 
             // Nagad
-            Text("২. নগদ (Nagad)", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = NagadOrange)
-            Spacer(modifier = Modifier.height(4.dp))
             OutlinedTextField(
                 value = nagad,
                 onValueChange = { nagad = it },
@@ -1094,31 +973,17 @@ fun AdminPaymentSettingsSection(
                 singleLine = true
             )
             Spacer(modifier = Modifier.height(4.dp))
-            OutlinedTextField(
-                value = nagadLogo,
-                onValueChange = { nagadLogo = it },
-                label = { Text("নগদ লোগো URL (ঐচ্ছিক)") },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
-            )
-            Spacer(modifier = Modifier.height(4.dp))
             Button(
-                onClick = {
-                    onUpdateNumber("nagad_number", nagad)
-                    onUpdateNumber("nagad_logo_url", nagadLogo)
-                    onUpdateNumber("payment_logo_nagad", nagadLogo)
-                },
+                onClick = { onUpdateNumber("nagad_number", nagad) },
                 colors = ButtonDefaults.buttonColors(containerColor = NagadOrange, contentColor = Color.White),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text("নগদ তথ্য ও লোগো সেভ", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                Text("নগদ নাম্বার সেভ", fontSize = 11.sp)
             }
 
             Spacer(modifier = Modifier.height(14.dp))
 
             // Rocket
-            Text("৩. রকেট (Rocket)", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = RocketPurple)
-            Spacer(modifier = Modifier.height(4.dp))
             OutlinedTextField(
                 value = rocket,
                 onValueChange = { rocket = it },
@@ -1127,259 +992,12 @@ fun AdminPaymentSettingsSection(
                 singleLine = true
             )
             Spacer(modifier = Modifier.height(4.dp))
-            OutlinedTextField(
-                value = rocketLogo,
-                onValueChange = { rocketLogo = it },
-                label = { Text("রকেট লোগো URL (ঐচ্ছিক)") },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
-            )
-            Spacer(modifier = Modifier.height(4.dp))
             Button(
-                onClick = {
-                    onUpdateNumber("rocket_number", rocket)
-                    onUpdateNumber("rocket_logo_url", rocketLogo)
-                    onUpdateNumber("payment_logo_rocket", rocketLogo)
-                },
+                onClick = { onUpdateNumber("rocket_number", rocket) },
                 colors = ButtonDefaults.buttonColors(containerColor = RocketPurple, contentColor = Color.White),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text("রকেট তথ্য ও লোগো সেভ", fontSize = 11.sp, fontWeight = FontWeight.Bold)
-            }
-
-            Spacer(modifier = Modifier.height(14.dp))
-
-            // Binance Pay
-            Text("৪. বাইন্যান্স (Binance Pay / USDT)", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = WarningAmber)
-            Spacer(modifier = Modifier.height(4.dp))
-            OutlinedTextField(
-                value = binance,
-                onValueChange = { binance = it },
-                label = { Text("বাইন্যান্স পে আইডি বা টিআরসি২০ এড্রেস") },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            OutlinedTextField(
-                value = binanceLogo,
-                onValueChange = { binanceLogo = it },
-                label = { Text("বাইন্যান্স লোগো URL (ঐচ্ছিক)") },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Button(
-                onClick = {
-                    onUpdateNumber("binance_id", binance)
-                    onUpdateNumber("binance_address", binance)
-                    onUpdateNumber("binance_logo_url", binanceLogo)
-                    onUpdateNumber("payment_logo_binance", binanceLogo)
-                },
-                colors = ButtonDefaults.buttonColors(containerColor = WarningAmber, contentColor = MidnightDark),
-                shape = RoundedCornerShape(8.dp)
-            ) {
-                Text("বাইন্যান্স তথ্য ও লোগো সেভ", fontSize = 11.sp, fontWeight = FontWeight.Bold)
-            }
-
-            Spacer(modifier = Modifier.height(18.dp))
-
-            // Master Save All Button
-            Button(
-                onClick = {
-                    if (appLogo.isNotBlank()) onUpdateNumber("app_logo_url", appLogo)
-                    onUpdateNumber("bkash_number", bkash)
-                    onUpdateNumber("bkash_logo_url", bkashLogo)
-                    onUpdateNumber("payment_logo_bkash", bkashLogo)
-
-                    onUpdateNumber("nagad_number", nagad)
-                    onUpdateNumber("nagad_logo_url", nagadLogo)
-                    onUpdateNumber("payment_logo_nagad", nagadLogo)
-
-                    onUpdateNumber("rocket_number", rocket)
-                    onUpdateNumber("rocket_logo_url", rocketLogo)
-                    onUpdateNumber("payment_logo_rocket", rocketLogo)
-
-                    onUpdateNumber("binance_id", binance)
-                    onUpdateNumber("binance_address", binance)
-                    onUpdateNumber("binance_logo_url", binanceLogo)
-                    onUpdateNumber("payment_logo_binance", binanceLogo)
-                },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = LuxuryGold, contentColor = MidnightDark),
-                shape = RoundedCornerShape(10.dp)
-            ) {
-                Icon(imageVector = Icons.Default.Save, contentDescription = "Save All")
-                Spacer(modifier = Modifier.width(6.dp))
-                Text("সব পেমেন্ট ও লোগো সেটিংস একবারে সেভ করুন", fontSize = 13.sp, fontWeight = FontWeight.Black)
-            }
-        }
-    }
-}
-
-@Composable
-fun AdminPriceRateSettingsSection(
-    configs: Map<String, String>,
-    onUpdateConfig: (String, String) -> Unit
-) {
-    // Gmail prices: fresh, old, very_old
-    var gmailFresh by remember { mutableStateOf(configs["price_gmail_fresh"] ?: "15") }
-    var gmailOld by remember { mutableStateOf(configs["price_gmail_old"] ?: "30") }
-    var gmailVeryOld by remember { mutableStateOf(configs["price_gmail_very_old"] ?: "50") }
-
-    // Facebook prices: fresh, old, very_old
-    var fbFresh by remember { mutableStateOf(configs["price_fb_fresh"] ?: "40") }
-    var fbOld by remember { mutableStateOf(configs["price_fb_old"] ?: "70") }
-    var fbVeryOld by remember { mutableStateOf(configs["price_fb_very_old"] ?: "120") }
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp)
-    ) {
-        // Gmail Pricing Card
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = MidnightCard),
-            shape = RoundedCornerShape(14.dp),
-            border = androidx.compose.foundation.BorderStroke(1.dp, MidnightBorder)
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(imageVector = Icons.Default.Mail, contentDescription = "Gmail", tint = ElectricCyan, modifier = Modifier.size(20.dp))
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "জিমেইল ক্রয় মূল্য সেটিংস (টাকা)",
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = ElectricCyan
-                    )
-                }
-                Text(
-                    text = "ইউজাররা জিমেইল বিক্রি করার সময় এই রেট দেখতে পাবে ও ওয়ালেটে টাকা যোগ হবে",
-                    fontSize = 11.sp,
-                    color = TextSecondary
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                OutlinedTextField(
-                    value = gmailFresh,
-                    onValueChange = { gmailFresh = it },
-                    label = { Text("নতুন ফ্রেশ জিমেইল রেট (৳)") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                OutlinedTextField(
-                    value = gmailOld,
-                    onValueChange = { gmailOld = it },
-                    label = { Text("পুরাতন ৬ মাস+ জিমেইল রেট (৳)") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                OutlinedTextField(
-                    value = gmailVeryOld,
-                    onValueChange = { gmailVeryOld = it },
-                    label = { Text("আরো পুরাতন ১ বছর+ জিমেইল রেট (৳)") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                Button(
-                    onClick = {
-                        onUpdateConfig("price_gmail_fresh", gmailFresh)
-                        onUpdateConfig("price_gmail_old", gmailOld)
-                        onUpdateConfig("price_gmail_very_old", gmailVeryOld)
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = ElectricCyan, contentColor = MidnightDark),
-                    shape = RoundedCornerShape(8.dp)
-                ) {
-                    Icon(imageVector = Icons.Default.Save, contentDescription = "Save")
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text("জিমেইলের সব রেট সেভ করুন", fontWeight = FontWeight.Bold)
-                }
-            }
-        }
-
-        // Facebook Pricing Card
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = MidnightCard),
-            shape = RoundedCornerShape(14.dp),
-            border = androidx.compose.foundation.BorderStroke(1.dp, MidnightBorder)
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(imageVector = Icons.Default.Public, contentDescription = "Facebook", tint = TelegramBlue, modifier = Modifier.size(20.dp))
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "ফেসবুক আইডি ক্রয় মূল্য সেটিংস (টাকা)",
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = TelegramBlue
-                    )
-                }
-                Text(
-                    text = "ইউজাররা ফেসবুক আইডি বিক্রি করার সময় এই রেট দেখতে পাবে ও ওয়ালেটে টাকা যোগ হবে",
-                    fontSize = 11.sp,
-                    color = TextSecondary
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                OutlinedTextField(
-                    value = fbFresh,
-                    onValueChange = { fbFresh = it },
-                    label = { Text("নতুন ফেসবুক আইডি রেট (৳)") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                OutlinedTextField(
-                    value = fbOld,
-                    onValueChange = { fbOld = it },
-                    label = { Text("পুরাতন ফেসবুক আইডি রেট (৳)") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                OutlinedTextField(
-                    value = fbVeryOld,
-                    onValueChange = { fbVeryOld = it },
-                    label = { Text("আরো পুরাতন ফ্রেন্ডস সহ আইডি রেট (৳)") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                Button(
-                    onClick = {
-                        onUpdateConfig("price_fb_fresh", fbFresh)
-                        onUpdateConfig("price_fb_old", fbOld)
-                        onUpdateConfig("price_fb_very_old", fbVeryOld)
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = TelegramBlue, contentColor = Color.White),
-                    shape = RoundedCornerShape(8.dp)
-                ) {
-                    Icon(imageVector = Icons.Default.Save, contentDescription = "Save")
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text("ফেসবুকের সব রেট সেভ করুন", fontWeight = FontWeight.Bold)
-                }
+                Text("রকেট নাম্বার সেভ", fontSize = 11.sp)
             }
         }
     }

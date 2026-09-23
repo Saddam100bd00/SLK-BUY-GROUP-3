@@ -26,36 +26,14 @@ private val DarkColorScheme =
     outline = MidnightBorder
   )
 
-private val LightColorScheme =
-  androidx.compose.material3.lightColorScheme(
-    primary = ElectricCyanDark,
-    onPrimary = Color.White,
-    primaryContainer = Color(0xFFE0F2FE),
-    onPrimaryContainer = Color(0xFF0369A1),
-    secondary = LuxuryGold,
-    onSecondary = Color.White,
-    secondaryContainer = Color(0xFFFEF3C7),
-    onSecondaryContainer = Color(0xFFB45309),
-    tertiary = TelegramBlue,
-    background = LightBackground,
-    onBackground = LightTextPrimary,
-    surface = LightSurface,
-    onSurface = LightTextPrimary,
-    surfaceVariant = LightCardHover,
-    onSurfaceVariant = LightTextSecondary,
-    outline = LightBorder
-  )
-
 @Composable
 fun MyApplicationTheme(
   darkTheme: Boolean = isSystemInDarkTheme(),
   dynamicColor: Boolean = false, // Keep bespoke luxury theme consistent
   content: @Composable () -> Unit,
 ) {
-  val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
-
   MaterialTheme(
-    colorScheme = colorScheme,
+    colorScheme = DarkColorScheme,
     typography = Typography,
     content = content
   )

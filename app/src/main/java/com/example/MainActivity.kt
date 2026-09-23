@@ -12,7 +12,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -45,20 +44,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val viewModel: MainViewModel = viewModel()
-            val isDarkMode by viewModel.isDarkMode.collectAsState()
-            MyApplicationTheme(darkTheme = isDarkMode) {
-                SlkApp(viewModel = viewModel, isDarkMode = isDarkMode)
+            MyApplicationTheme {
+                SlkApp()
             }
         }
     }
 }
 
 @Composable
-fun SlkApp(
-    viewModel: MainViewModel = viewModel(),
-    isDarkMode: Boolean = true
-) {
+fun SlkApp(viewModel: MainViewModel = viewModel()) {
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -84,7 +78,7 @@ fun SlkApp(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+            .background(MidnightDark),
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             if (currentScreen != AppScreen.CHECKOUT) {
@@ -101,10 +95,7 @@ fun SlkApp(
                     },
                     onSupportClick = {
                         openTelegramLink(context, adminConfigs["admin_telegram"] ?: "https://t.me/ItsSaddam9")
-                    },
-                    onToggleTheme = { viewModel.toggleDarkMode() },
-                    isDarkMode = isDarkMode,
-                    appLogoUrl = adminConfigs["app_logo_url"]
+                    }
                 )
             }
         },
@@ -122,7 +113,7 @@ fun SlkApp(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .background(MaterialTheme.colorScheme.background)
+                .background(MidnightDark)
         ) {
             AnimatedContent(
                 targetState = currentScreen,
@@ -166,7 +157,6 @@ fun SlkApp(
                         initialType = sellType,
                         gmailSubmissions = gmailSubmissions,
                         fbSubmissions = fbSubmissions,
-                        adminConfigs = adminConfigs,
                         onSubmitGmail = { tg, mail, pass, rec, type, reward ->
                             viewModel.submitGmail(tg, mail, pass, rec, type, reward)
                         },
@@ -178,7 +168,6 @@ fun SlkApp(
                     AppScreen.WALLET -> WalletScreen(
                         walletProfile = walletProfile,
                         withdrawals = withdrawals,
-                        adminConfigs = adminConfigs,
                         onWithdraw = { method, number, amount ->
                             viewModel.requestWithdraw(method, number, amount)
                         },
@@ -191,9 +180,6 @@ fun SlkApp(
                         walletProfile = walletProfile,
                         orders = allOrders,
                         isAdminUnlocked = isAdminUnlocked,
-                        isDarkMode = isDarkMode,
-                        onToggleTheme = { viewModel.toggleDarkMode() },
-                        adminConfigs = adminConfigs,
                         onUnlockAdmin = { input -> viewModel.unlockAdmin(input) },
                         onNavigate = { target -> viewModel.navigateTo(target) }
                     )

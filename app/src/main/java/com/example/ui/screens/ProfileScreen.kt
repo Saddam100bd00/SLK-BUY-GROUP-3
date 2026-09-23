@@ -82,14 +82,6 @@ import com.example.ui.theme.TelegramBlue
 import com.example.ui.theme.TextPrimary
 import com.example.ui.theme.TextSecondary
 import com.example.ui.theme.WarningAmber
-import androidx.compose.material.icons.filled.DarkMode
-import androidx.compose.material.icons.filled.LightMode
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.WorkspacePremium
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import com.example.ui.viewmodel.AppScreen
 
 @Composable
@@ -97,9 +89,6 @@ fun ProfileScreen(
     walletProfile: WalletProfile,
     orders: List<GroupOrder>,
     isAdminUnlocked: Boolean,
-    isDarkMode: Boolean = true,
-    onToggleTheme: () -> Unit = {},
-    adminConfigs: Map<String, String> = emptyMap(),
     onUnlockAdmin: (String) -> Boolean,
     onNavigate: (AppScreen) -> Unit
 ) {
@@ -108,14 +97,13 @@ fun ProfileScreen(
     var adminSecretInput by remember { mutableStateOf("") }
     var showInstallDialog by remember { mutableStateOf(false) }
     var showGithubDialog by remember { mutableStateOf(false) }
-    var notificationsEnabled by remember { mutableStateOf(true) }
 
     val referralLink = "https://t.me/ItsSaddam9?start=${walletProfile.referralCode}"
 
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+            .background(MidnightDark),
         contentPadding = PaddingValues(bottom = 36.dp)
     ) {
         // === Profile Header Card ===
@@ -431,274 +419,17 @@ fun ProfileScreen(
             }
         }
 
-        // === Premium Features & VIP Privileges (User Request: এবং আরো কিছু প্রিমিয়াম ফিচার এড করে দাও) ===
+        // === Install App & GitHub System Options ===
         item {
-            Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) {
-                Text(
-                    text = "প্রিমিয়াম মেম্বারশিপ ও এক্সক্লুসিভ ফিচার",
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(14.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-                    border = androidx.compose.foundation.BorderStroke(1.dp, LuxuryGold)
-                ) {
-                    Column(modifier = Modifier.padding(14.dp)) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Box(
-                                    modifier = Modifier
-                                        .size(36.dp)
-                                        .clip(CircleShape)
-                                        .background(LuxuryGold.copy(alpha = 0.2f)),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.WorkspacePremium,
-                                        contentDescription = "VIP",
-                                        tint = LuxuryGold,
-                                        modifier = Modifier.size(22.dp)
-                                    )
-                                }
-                                Spacer(modifier = Modifier.width(10.dp))
-                                Column {
-                                    Text(
-                                        text = "VIP ডায়মন্ড মেম্বার স্ট্যাটাস",
-                                        fontSize = 14.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = LuxuryGold
-                                    )
-                                    Text(
-                                        text = "সক্রিয় মেম্বারশিপ • লাইফটাইম ভ্যালিডিটি",
-                                        fontSize = 11.sp,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                }
-                            }
-
-                            Surface(
-                                color = LuxuryGold,
-                                shape = RoundedCornerShape(6.dp)
-                            ) {
-                                Text(
-                                    text = "ACTIVE",
-                                    modifier = Modifier.padding(horizontal = 7.dp, vertical = 2.dp),
-                                    fontSize = 10.sp,
-                                    fontWeight = FontWeight.Black,
-                                    color = MidnightDark
-                                )
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(10.dp))
-
-                        // 3 VIP bullet perks
-                        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(
-                                    imageVector = Icons.Default.CheckCircle,
-                                    contentDescription = "Check",
-                                    tint = SuccessGreen,
-                                    modifier = Modifier.size(15.dp)
-                                )
-                                Spacer(modifier = Modifier.width(6.dp))
-                                Text(
-                                    text = "প্রতিটি গ্রুপ অর্ডারে ৫% অটো ওয়ালেট ক্যাশব্যাক",
-                                    fontSize = 12.sp,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                            }
-
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(
-                                    imageVector = Icons.Default.CheckCircle,
-                                    contentDescription = "Check",
-                                    tint = SuccessGreen,
-                                    modifier = Modifier.size(15.dp)
-                                )
-                                Spacer(modifier = Modifier.width(6.dp))
-                                Text(
-                                    text = "সুপারফাস্ট প্রায়োরিটি গ্রুপ লিংক অ্যাক্সেস",
-                                    fontSize = 12.sp,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                            }
-
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(
-                                    imageVector = Icons.Default.CheckCircle,
-                                    contentDescription = "Check",
-                                    tint = SuccessGreen,
-                                    modifier = Modifier.size(15.dp)
-                                )
-                                Spacer(modifier = Modifier.width(6.dp))
-                                Text(
-                                    text = "২৪/৭ ডিরেক্ট টেলিগ্রাম ভিআইপি সাপোর্ট (@ItsSaddam9)",
-                                    fontSize = 12.sp,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // === App Settings (Theme Switcher, Install, Export) ===
-        item {
-            Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
+            Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp)) {
                 Text(
                     text = "অ্যাপ ও সিস্টেম সেটিংস",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onBackground
+                    color = TextPrimary
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
-
-                // === Dark & Light (White) Theme Switcher (User Request: সেলিংস এ dark এবং white কাজে করছে না) ===
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.dp))
-                        .clickable { onToggleTheme() },
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-                    shape = RoundedCornerShape(12.dp),
-                    border = androidx.compose.foundation.BorderStroke(
-                        1.dp,
-                        MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
-                    )
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 14.dp, vertical = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Box(
-                                modifier = Modifier
-                                    .size(38.dp)
-                                    .clip(CircleShape)
-                                    .background(if (isDarkMode) Color(0xFF1E293B) else Color(0xFFFEF3C7)),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    imageVector = if (isDarkMode) Icons.Default.DarkMode else Icons.Default.LightMode,
-                                    contentDescription = "Theme",
-                                    tint = if (isDarkMode) ElectricCyan else LuxuryGold,
-                                    modifier = Modifier.size(22.dp)
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.width(12.dp))
-
-                            Column {
-                                Text(
-                                    text = if (isDarkMode) "ডার্ক মোড (Dark Theme)" else "হোয়াইট মোড (White / Light Theme)",
-                                    fontSize = 13.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                                Text(
-                                    text = if (isDarkMode) "বর্তমান: ডার্ক মোড সক্রিয় • ক্লিক করে লাইট মোড করুন" else "বর্তমান: হোয়াইট মোড সক্রিয় • ক্লিক করে ডার্ক মোড করুন",
-                                    fontSize = 11.sp,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                        }
-
-                        Switch(
-                            checked = isDarkMode,
-                            onCheckedChange = { onToggleTheme() },
-                            colors = SwitchDefaults.colors(
-                                checkedThumbColor = MidnightDark,
-                                checkedTrackColor = ElectricCyan,
-                                uncheckedThumbColor = Color.White,
-                                uncheckedTrackColor = LuxuryGold
-                            )
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // === Telegram Instant Notification Alerts Toggle ===
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.dp))
-                        .clickable { notificationsEnabled = !notificationsEnabled },
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-                    shape = RoundedCornerShape(12.dp),
-                    border = androidx.compose.foundation.BorderStroke(
-                        1.dp,
-                        MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
-                    )
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 14.dp, vertical = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Box(
-                                modifier = Modifier
-                                    .size(38.dp)
-                                    .clip(CircleShape)
-                                    .background(TelegramBlue.copy(alpha = 0.2f)),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Notifications,
-                                    contentDescription = "Alerts",
-                                    tint = TelegramBlue,
-                                    modifier = Modifier.size(22.dp)
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.width(12.dp))
-
-                            Column {
-                                Text(
-                                    text = "টেলিগ্রাম ইনস্ট্যান্ট অ্যালার্ট",
-                                    fontSize = 13.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                                Text(
-                                    text = if (notificationsEnabled) "নতুন গ্রুপ ও এপ্রুভাল নোটিফিকেশন চালু" else "নোটিফিকেশন অ্যালার্ট বন্ধ",
-                                    fontSize = 11.sp,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                        }
-
-                        Switch(
-                            checked = notificationsEnabled,
-                            onCheckedChange = { notificationsEnabled = it },
-                            colors = SwitchDefaults.colors(
-                                checkedThumbColor = MidnightDark,
-                                checkedTrackColor = TelegramBlue
-                            )
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
 
                 // Install APK / System Guide
                 Card(

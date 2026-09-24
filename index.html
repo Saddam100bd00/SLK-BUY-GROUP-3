@@ -1500,7 +1500,7 @@
 
           <div class="p-3 bg-midnight-dark border border-midnight-border rounded-xl space-y-2">
             <label class="text-[11px] text-slate-300 block font-bold">রেফারেল লিংক টেমপ্লেট / বেস ইউআরএল *</label>
-            <input id="adminInRefTemplate" type="text" placeholder="https://t.me/PREMIUM_GROUP_BUY_BOT?startapp=ref_{USER_ID}" class="w-full bg-midnight-surface border border-luxury-gold/50 rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-amber-400" />
+            <input id="adminInRefTemplate" type="text" oninput="updateAdminRefLinkPreview(this.value)" placeholder="https://t.me/PREMIUM_GROUP_BUY_BOT?startapp=ref_{USER_ID}" class="w-full bg-midnight-surface border border-luxury-gold/50 rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-amber-400" />
             <p class="text-[10px] text-slate-400">
               💡 টিপস: আপনি <code class="text-amber-300 font-mono">{USER_ID}</code> ট্যাগ ব্যবহার করতে পারেন। প্রতিটি ইউজারের রেফারেল লিংকে তার নিজস্ব টেলিগ্রাম আইডি স্বয়ংক্রিয়ভাবে বসে যাবে। উদাহরণ: <span class="text-emerald-400 font-mono text-[10px]">https://t.me/PREMIUM_GROUP_BUY_BOT?startapp=ref_{USER_ID}</span>
             </p>
@@ -3545,12 +3545,28 @@
       renderApp();
     }
 
+    // --- Helper to get user's dynamically configured referral link ---
+    function getUserReferralLink() {
+      const uid = String(tgUser.id || 'member');
+      const template = (appState.referralLinkTemplate && appState.referralLinkTemplate.trim()) 
+        ? appState.referralLinkTemplate.trim() 
+        : 'https://t.me/PREMIUM_GROUP_BUY_BOT?startapp=ref_{USER_ID}';
+      
+      if (template.includes('{USER_ID}')) {
+        return template.replace(/\{USER_ID\}/g, uid);
+      } else if (template.includes('?startapp=') || template.includes('?start=')) {
+        return template.endsWith('=') || template.endsWith('_') ? `${template}${uid}` : `${template}_${uid}`;
+      } else {
+        return `${template}?startapp=ref_${uid}`;
+      }
+    }
+
     // --- Referral System Logic (20 Referrals = 1 Free Premium Group) ---
     function openReferralModal() {
       playSound('click');
-      const uid = tgUser.id || 'member';
-      const refLink = `https://t.me/ItsSaddam9_bot?start=ref_${uid}`;
-      document.getElementById('inUserRefLink').value = refLink;
+      const refLink = getUserReferralLink();
+      const inEl = document.getElementById('inUserRefLink');
+      if (inEl) inEl.value = refLink;
 
       switchRefSubTab('LINK');
       renderReferralUI();
@@ -3585,22 +3601,26 @@
     }
 
     function copyReferralLink() {
-      const link = document.getElementById('inUserRefLink')?.value || `https://t.me/ItsSaddam9_bot?start=ref_${tgUser.id || 'member'}`;
+      const link = getUserReferralLink();
+      const inEl = document.getElementById('inUserRefLink');
+      if (inEl) inEl.value = link;
       navigator.clipboard.writeText(link);
       playSound('chime');
-      alert(`রেফারেল লিংক কপি হয়েছে!\n${link}\n\nবন্ধুদের শেয়ার করুন। ২০ জন জয়েন করলেই ফ্রি গ্রুপ!`);
+      alert(`রেফারেল লিংক কপি হয়েছে!\n\n${link}\n\nবন্ধুদের সাথে শেয়ার করুন। ২০ জন জয়েন করলেই ফ্রি গ্রুপ!`);
     }
 
     function copyReferralLinkTab() {
-      const link = document.getElementById('inUserRefLinkTab')?.value || `https://t.me/ItsSaddam9_bot?start=ref_${tgUser.id || 'member'}`;
+      const link = getUserReferralLink();
+      const inElTab = document.getElementById('inUserRefLinkTab');
+      if (inElTab) inElTab.value = link;
       navigator.clipboard.writeText(link);
       playSound('chime');
-      alert(`রেফারেল লিংক কপি হয়েছে!\n${link}\n\nবন্ধুদের শেয়ার করুন। ২০ জন জয়েন করলেই ফ্রি গ্রুপ!`);
+      alert(`রেফারেল লিংক কপি হয়েছে!\n\n${link}\n\nবন্ধুদের সাথে শেয়ার করুন। ২০ জন জয়েন করলেই ফ্রি গ্রুপ!`);
     }
 
     function shareReferralToTg() {
       playSound('click');
-      const link = document.getElementById('inUserRefLink')?.value || `https://t.me/ItsSaddam9_bot?start=ref_${tgUser.id || 'member'}`;
+      const link = getUserReferralLink();
       const text = `🔥 SLK BUY GROUP - সেরা টেলিগ্রাম প্রিমিয়াম গ্রুপ ও একাউন্ট ক্রয়-বিক্রয় মার্কেটপ্লেস! এখনই ফ্রিতে যুক্ত হন এবং প্রিমিয়াম গ্রুপ উপভোগ করুন:`;
       const tgUrl = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`;
       window.open(tgUrl, '_blank');
@@ -3608,7 +3628,7 @@
 
     function shareReferralToTgTab() {
       playSound('click');
-      const link = document.getElementById('inUserRefLinkTab')?.value || `https://t.me/ItsSaddam9_bot?start=ref_${tgUser.id || 'member'}`;
+      const link = getUserReferralLink();
       const text = `🔥 SLK BUY GROUP - সেরা টেলিগ্রাম প্রিমিয়াম গ্রুপ ও একাউন্ট ক্রয়-বিক্রয় মার্কেটপ্লেস! এখনই ফ্রিতে যুক্ত হন এবং প্রিমিয়াম গ্রুপ উপভোগ করুন:`;
       const tgUrl = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`;
       window.open(tgUrl, '_blank');
@@ -3620,8 +3640,7 @@
       const remaining = Math.max(0, target - count);
       const pct = Math.min(100, Math.round((count / target) * 100));
 
-      const uid = tgUser.id || 'member';
-      const refLink = `https://t.me/ItsSaddam9_bot?start=ref_${uid}`;
+      const refLink = getUserReferralLink();
       const inUserRefLink = document.getElementById('inUserRefLink');
       if (inUserRefLink) inUserRefLink.value = refLink;
       const inUserRefLinkTab = document.getElementById('inUserRefLinkTab');
@@ -4605,6 +4624,23 @@
     }
 
     // --- Admin Referral Link Settings Handler ---
+    function updateAdminRefLinkPreview(val) {
+      const v = (val || '').trim() || 'https://t.me/PREMIUM_GROUP_BUY_BOT?startapp=ref_{USER_ID}';
+      const uid = String(tgUser.id || '8701368956');
+      let preview = v;
+      if (v.includes('{USER_ID}')) {
+        preview = v.replace(/\{USER_ID\}/g, uid);
+      } else if (v.includes('?startapp=') || v.includes('?start=')) {
+        preview = v.endsWith('=') || v.endsWith('_') ? `${v}${uid}` : `${v}_${uid}`;
+      } else {
+        preview = `${v}?startapp=ref_${uid}`;
+      }
+      const p1 = document.getElementById('adminRefLinkPreview');
+      if (p1) p1.innerText = preview;
+      const p2 = document.getElementById('previewAdminRefLink');
+      if (p2) p2.innerText = preview;
+    }
+
     function adminSaveReferralSettings() {
       playSound('click');
       const inputEl = document.getElementById('adminInRefTemplate') || document.getElementById('adminInRefLinkTemplate');
@@ -4620,8 +4656,9 @@
       syncConfigToFirebase();
       renderApp();
       renderReferralUI();
+      updateAdminRefLinkPreview(val);
       playSound('chime');
-      alert(`🎉 রেফারেল লিংক টেমপ্লেট সফলভাবে আপডেট হয়েছে!\n\nনতুন টেমপ্লেট: ${val}\n\nএখন থেকে সব মেম্বারের রেফারেল পেজে ও কপি লিংকে এই নতুন ফরম্যাটে রেফারেল লিংক তৈরি হবে।`);
+      alert(`🎉 রেফারেল লিংক টেমপ্লেট সফলভাবে আপডেট হয়েছে!\n\nনতুন টেমপ্লেট: ${val}\n\nএখন থেকে রেফারেল পেজ ও বন্ধুদের পাঠানোর সব লিংকে এই নতুন ফরম্যাট কাজ করছে।`);
     }
 
     // --- Admin Manager Role Management Handlers ---

@@ -624,14 +624,14 @@
       <div class="p-4 rounded-2xl bg-midnight-card border border-midnight-border space-y-3">
         <label class="text-xs font-bold text-slate-200 block">আপনার পার্সোনাল রেফারেল লিংক</label>
         <div class="flex items-center gap-2">
-          <input id="inUserRefLinkTab" type="text" readonly value="https://t.me/ItsSaddam9_bot?start=ref" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3.5 py-2.5 text-amber-300 font-mono text-xs focus:outline-none select-all" />
+          <input id="inUserRefLinkTab" type="text" readonly value="https://t.me/PREMIUM_GROUP_BUY_BOT?startapp=ref_8701368956" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3.5 py-2.5 text-amber-300 font-mono text-xs focus:outline-none select-all" />
           <button onclick="copyReferralLinkTab()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark font-black text-xs btn-bounce shadow flex-shrink-0">
             কপি
           </button>
         </div>
 
         <div class="grid grid-cols-2 gap-2 pt-1">
-          <button onclick="shareReferralToTg()" class="py-2.5 rounded-xl bg-gradient-to-r from-telegram to-sky-500 text-white font-bold text-xs shadow-md flex items-center justify-center gap-2 btn-bounce">
+          <button onclick="shareReferralToTgTab()" class="py-2.5 rounded-xl bg-gradient-to-r from-telegram to-sky-500 text-white font-bold text-xs shadow-md flex items-center justify-center gap-2 btn-bounce">
             <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .37z"/></svg>
             <span>টেলিগ্রামে পাঠান</span>
           </button>
@@ -640,6 +640,27 @@
             <span>লিংক কপি করুন</span>
           </button>
         </div>
+      </div>
+
+      <!-- Referral Detailed History & Joined Users Section -->
+      <div class="p-4 rounded-2xl bg-midnight-card border border-midnight-border space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
+            <i data-lucide="users" class="w-4 h-4 text-amber-400"></i>
+            <span>রেফারেল হিস্টরি (আপনার লিংকে যারা জয়েন করেছে)</span>
+          </h3>
+          <span id="badgeRefHistoryCount" class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full font-bold border border-amber-500/30">০ জন</span>
+        </div>
+        <p class="text-[11px] text-slate-400">আপনার রেফারেল লিংক ব্যবহার করে যারা অ্যাপে প্রবেশ করেছে তাদের নাম, ইউজারনেম, আইডি ও সময় নিচে প্রদর্শিত হচ্ছে:</p>
+        
+        <div id="tabRefUsersHistoryList" class="space-y-2 max-h-56 overflow-y-auto custom-scrollbar">
+          <!-- Populated by JS -->
+        </div>
+
+        <button id="btnClaimFreeGroupTab" onclick="claimFreeGroup()" disabled class="w-full py-3 rounded-2xl bg-slate-800/80 text-slate-500 font-bold text-xs cursor-not-allowed flex items-center justify-center gap-2 border border-white/5">
+          <i data-lucide="lock" class="w-4 h-4"></i>
+          <span>ফ্রি গ্রুপ আনলক করুন (২০ জন বাকি)</span>
+        </button>
       </div>
 
       <!-- How it works guide -->
@@ -1034,6 +1055,8 @@
         <button onclick="switchAdminTab('groups')" class="admin-tab-btn active px-3 py-1.5 rounded-xl font-bold bg-luxury-gold text-midnight-dark whitespace-nowrap" data-tab="groups">গ্রুপ ম্যানেজ</button>
         <button onclick="switchAdminTab('payment-settings')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="payment-settings">পেমেন্ট গেটওয়ে সেটিংস</button>
         <button onclick="switchAdminTab('app-settings')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="app-settings">অ্যাপ ও বাটন সেটিংস</button>
+        <button onclick="switchAdminTab('referral-settings')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="referral-settings">রেফারেল লিংক সেটিংস</button>
+        <button id="adminTabManagersBtn" onclick="switchAdminTab('managers')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="managers">ম্যানেজার রোল (Owner Only)</button>
         <button onclick="switchAdminTab('orders')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="orders">অর্ডার অনুমোদন</button>
         <button onclick="switchAdminTab('sell-req')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="sell-req">জিমেইল/এফবি চেক</button>
         <button onclick="switchAdminTab('withdrawals')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="withdrawals">উইথড্র রিকোয়েস্ট</button>
@@ -1461,6 +1484,99 @@
           <button onclick="adminSaveNotice()" class="px-4 py-2 rounded-xl bg-luxury-gold text-midnight-dark font-bold text-xs btn-bounce">
             নোটিশ পাবলিশ করুন
           </button>
+        </div>
+      </div>
+
+      <!-- Admin Sub Tab: Referral Link Settings -->
+      <div id="admin-view-referral-settings" class="space-y-4 hidden">
+        <div class="p-4 rounded-2xl bg-midnight-card border border-luxury-gold/40 space-y-3">
+          <div class="flex items-center gap-2 text-amber-300">
+            <i data-lucide="link" class="w-4 h-4"></i>
+            <h3 class="text-xs font-bold">রেফারেল লিংক ফরম্যাট কনফিগারেশন</h3>
+          </div>
+          <p class="text-[11px] text-slate-300 leading-relaxed">
+            এখানে আপনি রেফারেল লিংকের মূল বেস ইউআরএল ফরম্যাট পরিবর্তন করতে পারবেন। যেমন: <code class="text-amber-300 font-mono text-[10px] bg-black/40 px-1 py-0.5 rounded">https://t.me/PREMIUM_GROUP_BUY_BOT?startapp=ref_</code>
+          </p>
+
+          <div class="p-3 bg-midnight-dark border border-midnight-border rounded-xl space-y-2">
+            <label class="text-[11px] text-slate-300 block font-bold">রেফারেল লিংক টেমপ্লেট / বেস ইউআরএল *</label>
+            <input id="adminInRefTemplate" type="text" placeholder="https://t.me/PREMIUM_GROUP_BUY_BOT?startapp=ref_{USER_ID}" class="w-full bg-midnight-surface border border-luxury-gold/50 rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-amber-400" />
+            <p class="text-[10px] text-slate-400">
+              💡 টিপস: আপনি <code class="text-amber-300 font-mono">{USER_ID}</code> ট্যাগ ব্যবহার করতে পারেন। প্রতিটি ইউজারের রেফারেল লিংকে তার নিজস্ব টেলিগ্রাম আইডি স্বয়ংক্রিয়ভাবে বসে যাবে। উদাহরণ: <span class="text-emerald-400 font-mono text-[10px]">https://t.me/PREMIUM_GROUP_BUY_BOT?startapp=ref_{USER_ID}</span>
+            </p>
+          </div>
+
+          <!-- Live Preview for Saddam / Current User -->
+          <div class="p-3 bg-black/40 border border-white/10 rounded-xl space-y-1">
+            <span class="text-[10px] text-slate-400 block">লাইভ প্রিভিউ (ইউজাররা যেভাবে পাবে):</span>
+            <p id="adminRefLinkPreview" class="text-xs font-mono text-amber-300 break-all">https://t.me/PREMIUM_GROUP_BUY_BOT?startapp=ref_8701368956</p>
+          </div>
+
+          <button onclick="adminSaveReferralSettings()" class="w-full py-3 rounded-xl bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark font-black text-xs shadow-lg btn-bounce flex items-center justify-center gap-1.5">
+            <i data-lucide="check" class="w-4 h-4"></i>
+            <span>রেফারেল লিংক সেটিংস সংরক্ষণ করুন</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Admin Sub Tab: Manager Roles Management (Super Owner Only) -->
+      <div id="admin-view-managers" class="space-y-4 hidden">
+        <!-- Notice if viewer is Manager instead of Super Owner -->
+        <div id="managerRestrictedNotice" class="hidden p-4 rounded-2xl bg-rose-500/15 border border-rose-500/40 text-rose-300 text-xs font-medium flex items-start gap-2">
+          <i data-lucide="shield-x" class="w-5 h-5 text-rose-400 flex-shrink-0 mt-0.5"></i>
+          <div>
+            <strong class="font-bold block text-sm">অনুমতি সীমাবদ্ধ</strong>
+            <span>আপনি একজন ম্যানেজার। শুধুমাত্র আসল ওনার (সাদ্দাম ভাই - 8701368956) নতুন ম্যানেজার যুক্ত বা রিমুভ করতে পারেন।</span>
+          </div>
+        </div>
+
+        <div id="managerAdminFormBlock" class="p-4 rounded-2xl bg-midnight-card border border-luxury-gold/40 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2 text-amber-300">
+              <i data-lucide="user-plus" class="w-4 h-4"></i>
+              <h3 class="text-xs font-bold">ম্যানেজার রোল পরিচালনা (Super Owner: Saddam)</h3>
+            </div>
+            <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-mono font-bold">Owner Only</span>
+          </div>
+          <p class="text-[11px] text-slate-300 leading-relaxed">
+            ম্যানেজাররা এডমিন প্যানেলে প্রবেশ করে গ্রুপ এডিট, অর্ডার অনুমোদন, জিমেইল/এফবি চেক ও উইথড্র রিকোয়েস্ট পরিচালনা করতে পারবে। কিন্তু ম্যানেজাররা কখনোই আসল অনারকে কোনো পরিবর্তন করতে পারবে না এবং অন্য কোনো ম্যানেজার যোগ করতে পারবে না।
+          </p>
+
+          <!-- Add Manager Form -->
+          <div class="p-3.5 rounded-xl bg-midnight-dark border border-midnight-border space-y-2.5">
+            <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+              <i data-lucide="plus-circle" class="w-4 h-4 text-emerald-400"></i> নতুন ম্যানেজার যুক্ত করুন
+            </h4>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="text-[10px] text-slate-300 block mb-0.5">টেলিগ্রাম ইউজার আইডি (User ID) *</label>
+                <input id="adminInNewManagerId" type="text" placeholder="যেমন: 1234567890" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white font-mono" />
+              </div>
+              <div>
+                <label class="text-[10px] text-slate-300 block mb-0.5">টেলিগ্রাম ইউজারনেম (@username)</label>
+                <input id="adminInNewManagerHandle" type="text" placeholder="@username" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+              </div>
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-300 block mb-0.5">ম্যানেজারের নাম</label>
+              <input id="adminInNewManagerName" type="text" placeholder="যেমন: করিম ভাই (সহকারী ম্যানেজার)" class="w-full bg-midnight-surface border border-midnight-border rounded-lg px-2.5 py-1.5 text-xs text-white" />
+            </div>
+            <button onclick="adminAddManager()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-midnight-dark font-black text-xs btn-bounce flex items-center justify-center gap-1.5 shadow-md">
+              <i data-lucide="shield-plus" class="w-4 h-4"></i>
+              <span>ম্যানেজার হিসেবে যুক্ত করুন</span>
+            </button>
+          </div>
+
+          <!-- Managers List -->
+          <div class="space-y-2 pt-2">
+            <h4 class="text-xs font-bold text-slate-200 flex items-center justify-between">
+              <span>অনুমোদিত ম্যানেজার তালিকা</span>
+              <span id="badgeManagersCount" class="text-[10px] text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded">০ জন</span>
+            </h4>
+            <div id="adminManagersList" class="space-y-2">
+              <!-- Populated by JS -->
+            </div>
+          </div>
         </div>
       </div>
 
@@ -2199,10 +2315,15 @@
         aged: 110
       },
 
-      // Referral Program State (Clean 0 start for each member)
+      // Referral Program State (Dynamic link template & tracking)
+      referralLinkTemplate: 'https://t.me/PREMIUM_GROUP_BUY_BOT?startapp=ref_{USER_ID}',
       referralCount: 0,
       referredUsers: [],
       claimedFreeGroups: [],
+
+      // Managers role management (Super Owner is Saddam 8701368956)
+      superOwnerId: '8701368956',
+      managers: [],
 
       // Admin access state
       adminUnlocked: false
@@ -2224,7 +2345,8 @@
             paymentGateways: { ...defaultInitialState.paymentGateways, ...(parsed.paymentGateways || {}) },
             gmailRates: { ...defaultInitialState.gmailRates, ...(parsed.gmailRates || {}) },
             fbRates: { ...defaultInitialState.fbRates, ...(parsed.fbRates || {}) },
-            buttons: { ...defaultInitialState.buttons, ...(parsed.buttons || {}) }
+            buttons: { ...defaultInitialState.buttons, ...(parsed.buttons || {}) },
+            managers: Array.isArray(parsed.managers) ? parsed.managers : []
           };
         }
       } catch (e) {}
@@ -2284,7 +2406,7 @@
               fbRtdb = firebase.database();
               console.log("Firebase Realtime Database connected successfully!");
 
-              // Realtime appConfig listener (AppName, AppLogo, Payment Gateways, Channels, Notice, Buttons)
+              // Realtime appConfig listener (AppName, AppLogo, Payment Gateways, Channels, Notice, Buttons, Referral Link Template, Managers)
               fbRtdb.ref("appConfig").on("value", (snap) => {
                 const val = snap.val();
                 if (val) {
@@ -2294,6 +2416,10 @@
                   if (val.officialChannelLink) appState.officialChannelLink = val.officialChannelLink;
                   if (val.supportLink) appState.supportLink = val.supportLink;
                   if (val.noticeText) appState.noticeText = val.noticeText;
+                  if (val.referralLinkTemplate) appState.referralLinkTemplate = val.referralLinkTemplate;
+                  if (val.managers) {
+                    appState.managers = Array.isArray(val.managers) ? val.managers : Object.values(val.managers);
+                  }
                   if (val.paymentGateways) {
                     appState.paymentGateways = {
                       ...appState.paymentGateways,
@@ -2307,6 +2433,7 @@
                     };
                   }
                   saveState();
+                  updateAdminAccessLevel();
                   renderApp();
                 }
               }, (err) => console.warn("RTDB appConfig listener:", err));
@@ -2424,11 +2551,21 @@
             supportLink: appState.supportLink,
             noticeText: appState.noticeText,
             buttons: appState.buttons,
+            referralLinkTemplate: appState.referralLinkTemplate,
+            managers: appState.managers || [],
             lastUpdated: Date.now()
           }).catch(e => console.warn("Firebase config sync error:", e));
         } catch (e) {
           console.warn("RTDB sync error:", e);
         }
+      }
+    }
+
+    function syncManagersToFirebase() {
+      if (fbRtdb) {
+        try {
+          fbRtdb.ref("appConfig/managers").set(appState.managers || []).catch(e => console.warn("Firebase managers sync error:", e));
+        } catch(e) {}
       }
     }
 
@@ -2652,6 +2789,46 @@
       safeSetText('dispTotalWithdrawn', `৳${appState.wallet.totalWithdrawn}`);
     }
 
+    // Helper to check if current user is Super Owner (Saddam)
+    function isSuperOwner() {
+      const myId = String(tgUser.id || '');
+      const myHandle = (tgUser.username || '').toLowerCase().replace('@', '');
+      return myId === '8701368956' || myHandle === 'itssaddam9';
+    }
+
+    // Helper to check if current user is Manager
+    function isManager() {
+      if (isSuperOwner()) return true;
+      const myId = String(tgUser.id || '');
+      const myHandle = (tgUser.username || '').toLowerCase().replace('@', '');
+      const managers = appState.managers || [];
+      return managers.some(m => {
+        const mId = String(m.id || m.userId || '');
+        const mHandle = (m.handle || m.username || '').toLowerCase().replace('@', '');
+        return (myId && mId === myId) || (myHandle && mHandle === myHandle);
+      });
+    }
+
+    function updateAdminAccessLevel() {
+      const isOwner = isSuperOwner();
+      const isMgr = isManager();
+      appState.adminUnlocked = isOwner || isMgr;
+      
+      // Update Owner-exclusive UI elements in admin panel
+      const formBlock = document.getElementById('managerAdminFormBlock');
+      const restrictNotice = document.getElementById('managerRestrictedNotice');
+      if (formBlock && restrictNotice) {
+        if (isOwner) {
+          formBlock.classList.remove('opacity-50', 'pointer-events-none');
+          restrictNotice.classList.add('hidden');
+        } else {
+          formBlock.classList.add('opacity-50', 'pointer-events-none');
+          restrictNotice.classList.remove('hidden');
+        }
+      }
+      updateAdminVisibility();
+    }
+
     // --- Check Telegram User & Super Admin Auto-Detection ---
     function initTelegramUser() {
       try {
@@ -2661,6 +2838,15 @@
           detectedUser = tg.initDataUnsafe.user;
           tg.ready();
           tg.expand();
+        }
+
+        // Check for referral start parameter (e.g. ?startapp=ref_8701368956 or start_param)
+        let refParam = '';
+        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param) {
+          refParam = tg.initDataUnsafe.start_param;
+        } else {
+          const urlParams = new URLSearchParams(window.location.search);
+          refParam = urlParams.get('startapp') || urlParams.get('start') || '';
         }
 
         if (detectedUser) {
@@ -2696,10 +2882,14 @@
           }
         }
 
-        // Strictly verify if Saddam Bhai (8701368956 / ItsSaddam9)
-        const isSaddam = (String(tgUser.id) === '8701368956') || 
-                         (tgUser.username && tgUser.username.toLowerCase() === 'itssaddam9');
-        appState.adminUnlocked = isSaddam;
+        // Process referral if joined via referral link
+        if (refParam && refParam.startsWith('ref_')) {
+          const referrerId = refParam.replace('ref_', '').trim();
+          handleReferralJoin(referrerId, tgUser);
+        }
+
+        // Check Admin/Manager access
+        updateAdminAccessLevel();
         saveState();
 
         // Update Profile Header with Telegram Photo & Details
@@ -2713,6 +2903,7 @@
 
         // Listen to this user's isolated wallet from Firestore
         listenUserWallet(tgUser.id);
+        listenUserReferrals(tgUser.id);
 
         // Check if any order was approved while the user was away
         setTimeout(checkAndShowApprovedNotice, 1000);
@@ -2823,18 +3014,39 @@
         switchTab('admin');
         return;
       }
-      const code = prompt("সুপার এডমিন পাসকোড বা টেলিগ্রাম আইডি দিন:");
+      const code = prompt("এডমিন / ম্যানেজার পাসকোড বা টেলিগ্রাম আইডি দিন:");
       if (!code) return;
       const clean = code.trim();
+      
+      // Super Owner check
       if (clean === "8701368956" || clean.toLowerCase() === "itssaddam9" || clean === "@ItsSaddam9" || clean === "saddam8701") {
         appState.adminUnlocked = true;
         saveState();
-        updateAdminVisibility();
+        updateAdminAccessLevel();
         playSound('chime');
-        alert("স্বাগতম সাদ্দাম ভাই! সুপার এডমিন প্যানেল সফলভাবে আনলক হয়েছে।");
+        alert("স্বাগতম সাদ্দাম ভাই! সুপার ওনার কন্ট্রোল প্যানেল সফলভাবে আনলক হয়েছে।");
+        switchTab('admin');
+        return;
+      }
+
+      // Check if code matches any manager ID/handle
+      const managers = appState.managers || [];
+      const matchedMgr = managers.find(m => {
+        const mId = String(m.id || m.userId || '').trim();
+        const mHandle = (m.handle || m.username || '').toLowerCase().replace('@', '').trim();
+        const c = clean.toLowerCase().replace('@', '');
+        return mId === clean || mHandle === c;
+      });
+
+      if (matchedMgr) {
+        appState.adminUnlocked = true;
+        saveState();
+        updateAdminAccessLevel();
+        playSound('chime');
+        alert(`স্বাগতম ${matchedMgr.name || 'ম্যানেজার'}! ম্যানেজার প্যানেল আনলক হয়েছে।`);
         switchTab('admin');
       } else {
-        alert("ভুল পাসকোড! শুধুমাত্র নির্দিষ্ট সুপার এডমিনের জন্য এই সুবিধা সংরক্ষিত।");
+        alert("ভুল পাসকোড! শুধুমাত্র ওনার ও নির্ধারিত ম্যানেজারদের জন্য এই সুবিধা সংরক্ষিত।");
       }
     }
 
@@ -3977,6 +4189,55 @@
         if (document.getElementById('adminInBinanceRules')) document.getElementById('adminInBinanceRules').value = pg.binance?.rules || '';
       }
 
+      // Referral Link Settings Input
+      const tplVal = appState.referralLinkTemplate || 'https://t.me/PREMIUM_GROUP_BUY_BOT?startapp=ref_{USER_ID}';
+      safeSetValue('adminInRefTemplate', tplVal);
+      safeSetValue('adminInRefLinkTemplate', tplVal);
+      const refPreview = document.getElementById('adminRefLinkPreview') || document.getElementById('previewAdminRefLink');
+      if (refPreview) {
+        refPreview.innerText = tplVal.replace('{USER_ID}', String(tgUser.id || '8701368956'));
+      }
+
+      // Render Managers List in Admin Panel
+      const mgrListContainer = document.getElementById('adminManagersList');
+      if (mgrListContainer) {
+        const mgrs = appState.managers || [];
+        const isOwner = isSuperOwner();
+        const badgeCount = document.getElementById('badgeManagersCount');
+        if (badgeCount) badgeCount.innerText = `${mgrs.length} জন`;
+
+        if (mgrs.length === 0) {
+          mgrListContainer.innerHTML = `<div class="p-4 text-center text-slate-500 bg-midnight-dark rounded-xl text-xs">কোনো ম্যানেজার এখনো যোগ করা হয়নি। শুধুমাত্র সুপার ওনার (সাদ্দাম ভাই) ম্যানেজার যোগ করতে পারেন।</div>`;
+        } else {
+          mgrListContainer.innerHTML = mgrs.map(m => `
+            <div class="p-3 rounded-xl bg-midnight-dark border border-white/10 flex items-center justify-between text-xs hover:border-amber-400/30 transition">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-300 font-bold flex items-center justify-center border border-amber-500/30">
+                  <i data-lucide="shield" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-white flex items-center gap-1.5">
+                    <span>${m.name || 'ম্যানেজার'}</span>
+                    <span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono">MANAGER</span>
+                  </h4>
+                  <p class="text-[11px] text-amber-300 font-mono">${m.handle || ''} ${m.userId ? '(ID: ' + m.userId + ')' : ''}</p>
+                  <p class="text-[10px] text-slate-400">অনুমতি: ${m.permissions || 'সব এডিট, এপ্রুভ ও রিজেক্ট'}</p>
+                </div>
+              </div>
+              <div>
+                ${isOwner ? `
+                  <button onclick="adminRemoveManager('${m.id}')" class="px-2.5 py-1 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs font-bold btn-bounce flex items-center gap-1">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> রিমুভ
+                  </button>
+                ` : `
+                  <span class="text-[10px] text-slate-500 italic">লক করা</span>
+                `}
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+
       // Admin group list
       const groupContainer = document.getElementById('adminGroupEditList');
       groupContainer.innerHTML = appState.groups.map(g => `
@@ -4326,10 +4587,13 @@
         b.classList.remove('bg-luxury-gold', 'text-midnight-dark');
         b.classList.add('bg-midnight-card', 'text-slate-300');
       });
-      event.target.classList.remove('bg-midnight-card', 'text-slate-300');
-      event.target.classList.add('bg-luxury-gold', 'text-midnight-dark');
+      if (event && event.target) {
+        const targetBtn = event.target.closest('.admin-tab-btn') || event.target;
+        targetBtn.classList.remove('bg-midnight-card', 'text-slate-300');
+        targetBtn.classList.add('bg-luxury-gold', 'text-midnight-dark');
+      }
 
-      const views = ['groups', 'payment-settings', 'app-settings', 'orders', 'sell-req', 'withdrawals'];
+      const views = ['groups', 'payment-settings', 'app-settings', 'orders', 'sell-req', 'withdrawals', 'referral-settings', 'managers'];
       views.forEach(v => {
         const el = document.getElementById(`admin-view-${v}`);
         if (el) {
@@ -4338,6 +4602,111 @@
         }
       });
       lucide.createIcons();
+    }
+
+    // --- Admin Referral Link Settings Handler ---
+    function adminSaveReferralSettings() {
+      playSound('click');
+      const inputEl = document.getElementById('adminInRefTemplate') || document.getElementById('adminInRefLinkTemplate');
+      const val = inputEl ? inputEl.value.trim() : '';
+      
+      if (!val) {
+        alert("অনুগ্রহ করে একটি রেফারেল লিংক টেমপ্লেট দিন!");
+        return;
+      }
+
+      appState.referralLinkTemplate = val;
+      saveState();
+      syncConfigToFirebase();
+      renderApp();
+      renderReferralUI();
+      playSound('chime');
+      alert(`🎉 রেফারেল লিংক টেমপ্লেট সফলভাবে আপডেট হয়েছে!\n\nনতুন টেমপ্লেট: ${val}\n\nএখন থেকে সব মেম্বারের রেফারেল পেজে ও কপি লিংকে এই নতুন ফরম্যাটে রেফারেল লিংক তৈরি হবে।`);
+    }
+
+    // --- Admin Manager Role Management Handlers ---
+    function adminAddManager() {
+      playSound('click');
+      if (!isSuperOwner()) {
+        alert("⚠️ শুধুমাত্র সুপার ওনার (সাদ্দাম ভাই) নতুন ম্যানেজার যোগ করতে পারবেন!");
+        return;
+      }
+
+      const name = (document.getElementById('adminInNewManagerName')?.value || document.getElementById('adminInMgrName')?.value || '').trim();
+      const idInput = (document.getElementById('adminInNewManagerId')?.value || '').trim();
+      const handleInput = (document.getElementById('adminInNewManagerHandle')?.value || '').trim();
+      const idOrHandle = idInput || handleInput || (document.getElementById('adminInMgrId')?.value || '').trim();
+
+      if (!name || !idOrHandle) {
+        alert("দয়া করে ম্যানেজারের নাম এবং টেলিগ্রাম ইউজার আইডি বা ইউজারনেম দিন!");
+        return;
+      }
+
+      // Check if user is trying to add themselves as manager if they are owner (not needed)
+      if (idOrHandle === '8701368956' || idOrHandle.toLowerCase() === 'itssaddam9' || handleInput.toLowerCase() === '@itssaddam9') {
+        alert("সাদ্দাম ভাই তো অলরেডি প্রধান সুপার ওনার!");
+        return;
+      }
+
+      if (!appState.managers) appState.managers = [];
+      
+      // Check if already exists
+      const cleanInput = idOrHandle.replace('@', '');
+      const exists = appState.managers.some(m => {
+        const mId = String(m.id || m.userId || '');
+        const mHandle = (m.handle || m.username || '').toLowerCase().replace('@', '');
+        return mId === cleanInput || (handleInput && mHandle.toLowerCase() === handleInput.replace('@','').toLowerCase());
+      });
+
+      if (exists) {
+        alert("এই ইউজার ইতিমধ্যে ম্যানেজার হিসেবে তালিকায় রয়েছে!");
+        return;
+      }
+
+      const newMgr = {
+        id: 'mgr_' + Date.now(),
+        userId: idInput ? idInput : (cleanInput.match(/^\d+$/) ? cleanInput : ''),
+        handle: handleInput ? (handleInput.startsWith('@') ? handleInput : '@' + handleInput) : (cleanInput.match(/^\d+$/) ? '' : '@' + cleanInput),
+        name: name,
+        permissions: 'সব এডিট, অর্ডার এপ্রুভ, রিজেক্ট ও উইথড্র নিয়ন্ত্রণ',
+        addedAt: new Date().toLocaleDateString('bn-BD'),
+        timestamp: Date.now()
+      };
+
+      appState.managers.push(newMgr);
+      saveState();
+      syncConfigToFirebase();
+      syncManagersToFirebase();
+      renderAdminData();
+      
+      // Clear inputs
+      if (document.getElementById('adminInNewManagerName')) document.getElementById('adminInNewManagerName').value = '';
+      if (document.getElementById('adminInNewManagerId')) document.getElementById('adminInNewManagerId').value = '';
+      if (document.getElementById('adminInNewManagerHandle')) document.getElementById('adminInNewManagerHandle').value = '';
+      if (document.getElementById('adminInMgrName')) document.getElementById('adminInMgrName').value = '';
+      if (document.getElementById('adminInMgrId')) document.getElementById('adminInMgrId').value = '';
+
+      playSound('chime');
+      alert(`🎉 সফল! ${name} (${newMgr.handle || newMgr.userId}) কে ম্যানেজার বানানো হয়েছে!\n\nম্যানেজার সব গ্রুপ এডিট করতে পারবে, অর্ডার ও উইথড্র এপ্রুভ/রিজেক্ট করতে পারবে, কিন্তু সুপার ওনারকে পরিবর্তন বা নতুন ম্যানেজার যোগ করতে পারবে না।`);
+    }
+
+    function adminRemoveManager(mgrId) {
+      playSound('click');
+      if (!isSuperOwner()) {
+        alert("⚠️ শুধুমাত্র সুপার ওনার (সাদ্দাম ভাই) ম্যানেজার রিমুভ করতে পারবেন!");
+        return;
+      }
+
+      if (!confirm("আপনি কি নিশ্চিত এই ম্যানেজারকে রিমুভ করতে চান?")) return;
+
+      if (!appState.managers) appState.managers = [];
+      appState.managers = appState.managers.filter(m => String(m.id) !== String(mgrId));
+      saveState();
+      syncConfigToFirebase();
+      syncManagersToFirebase();
+      renderAdminData();
+      playSound('chime');
+      alert("ম্যানেজার সফলভাবে রিমুভ করা হয়েছে!");
     }
 
     function adminSavePaymentGatewayConfig() {

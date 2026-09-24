@@ -7,9 +7,11 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.data.dao.AppDao
 import com.example.data.model.AdminConfig
+import com.example.data.model.AppManager
 import com.example.data.model.FacebookSubmission
 import com.example.data.model.GmailSubmission
 import com.example.data.model.GroupOrder
+import com.example.data.model.ReferralEntry
 import com.example.data.model.TelegramGroup
 import com.example.data.model.WalletProfile
 import com.example.data.model.Withdrawal
@@ -25,9 +27,11 @@ import kotlinx.coroutines.launch
         FacebookSubmission::class,
         Withdrawal::class,
         WalletProfile::class,
-        AdminConfig::class
+        AdminConfig::class,
+        AppManager::class,
+        ReferralEntry::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -46,7 +50,7 @@ abstract class AppDatabase : RoomDatabase() {
                     "slk_buy_group_db"
                 )
                     .addCallback(DatabaseCallback(scope))
-                    .fallbackToDestructiveMigration()
+                    .fallbackToDestructiveMigration(true)
                     .build()
                 INSTANCE = instance
                 instance
@@ -149,8 +153,8 @@ abstract class AppDatabase : RoomDatabase() {
                 // Initial Wallet Profile
                 val initialWallet = WalletProfile(
                     id = 1,
-                    currentBalance = 100, // ৳100 Free Welcome bonus
-                    totalEarned = 100,
+                    currentBalance = 140, // ৳100 Welcome + ৳40 Referrals
+                    totalEarned = 140,
                     totalWithdrawn = 0,
                     referralCode = "SLK-8701",
                     totalReferrals = 2,
@@ -158,14 +162,57 @@ abstract class AppDatabase : RoomDatabase() {
                 )
                 dao.insertOrUpdateWalletProfile(initialWallet)
 
+                // Initial Referral History
+                val initialReferrals = listOf(
+                    ReferralEntry(
+                        referrerCode = "SLK-8701",
+                        referredUserName = "তানভীর হোসেন (Tanvir)",
+                        referredUserTelegram = "@tanvir_hossain",
+                        joinedTimestamp = System.currentTimeMillis() - 86400000L * 2, // 2 days ago
+                        bonusAmount = 20,
+                        status = "সক্রিয় মেম্বার (Active)",
+                        commissionEarned = 18
+                    ),
+                    ReferralEntry(
+                        referrerCode = "SLK-8701",
+                        referredUserName = "সোহেল রানা (Sohel)",
+                        referredUserTelegram = "@sohel_rana_bd",
+                        joinedTimestamp = System.currentTimeMillis() - 86400000L * 5, // 5 days ago
+                        bonusAmount = 20,
+                        status = "প্রথম অর্ডার সম্পন্ন (Order Completed)",
+                        commissionEarned = 25
+                    )
+                )
+                dao.insertReferrals(initialReferrals)
+
+                // Initial Managers
+                val initialManagers = listOf(
+                    AppManager(
+                        name = "ম্যানেজার তানভীর (Manager Tanvir)",
+                        telegramIdOrUsername = "manager_tanvir",
+                        passcode = "123456",
+                        addedBy = "Owner (@ItsSaddam9)",
+                        status = "ACTIVE"
+                    )
+                )
+                dao.insertManagers(initialManagers)
+
                 // Initial Admin Configs
                 val configs = listOf(
                     AdminConfig("bkash_number", "01789-567890"),
+                    AdminConfig("bkash_logo", "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80&auto=format&fit=crop&q=80"),
                     AdminConfig("nagad_number", "01812-345678"),
+                    AdminConfig("nagad_logo", "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80&auto=format&fit=crop&q=80"),
                     AdminConfig("rocket_number", "01934-567891"),
+                    AdminConfig("rocket_logo", "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=80&auto=format&fit=crop&q=80"),
+                    AdminConfig("binance_number", "8701368956"),
+                    AdminConfig("binance_logo", "https://images.unsplash.com/photo-1622979135225-d2ba269bc1df?w=80&auto=format&fit=crop&q=80"),
+                    AdminConfig("app_name", "SLK BUY GROUP"),
+                    AdminConfig("app_logo_url", "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=120&auto=format&fit=crop&q=80"),
                     AdminConfig("admin_telegram", "https://t.me/ItsSaddam9"),
                     AdminConfig("admin_telegram_id", "8701368956"),
                     AdminConfig("admin_username", "ItsSaddam9"),
+                    AdminConfig("referral_base_url", "https://t.me/PREMIUM_GROUP_BUY_BOT?startapp=ref_"),
                     AdminConfig("notice_text", "📢 স্বাগতম SLK BUY GROUP এ! টেলিগ্রাম প্রিমিয়াম গ্রুপ কিনুন এবং জিমেইল ও ফেসবুক বিক্রি করে প্রতিদিন আনলিমিটেড টাকা আয় করুন। বিকাশ, নগদ ও রকেটে দ্রুত পেমেন্ট দেওয়া হয়।")
                 )
                 for (config in configs) {

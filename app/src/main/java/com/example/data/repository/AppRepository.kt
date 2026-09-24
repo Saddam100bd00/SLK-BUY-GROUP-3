@@ -2,9 +2,11 @@ package com.example.data.repository
 
 import com.example.data.dao.AppDao
 import com.example.data.model.AdminConfig
+import com.example.data.model.AppManager
 import com.example.data.model.FacebookSubmission
 import com.example.data.model.GmailSubmission
 import com.example.data.model.GroupOrder
+import com.example.data.model.ReferralEntry
 import com.example.data.model.TelegramGroup
 import com.example.data.model.WalletProfile
 import com.example.data.model.Withdrawal
@@ -20,8 +22,12 @@ class AppRepository(private val dao: AppDao) {
     val allWithdrawals: Flow<List<Withdrawal>> = dao.getAllWithdrawals()
     val walletProfile: Flow<WalletProfile?> = dao.getWalletProfile()
     val allConfigs: Flow<List<AdminConfig>> = dao.getAllConfig()
+    val allManagers: Flow<List<AppManager>> = dao.getAllManagers()
+    val allReferrals: Flow<List<ReferralEntry>> = dao.getAllReferrals()
 
     fun getGroupById(id: Long): Flow<TelegramGroup?> = dao.getGroupById(id)
+
+    fun getReferralsByCode(code: String): Flow<List<ReferralEntry>> = dao.getReferralsByCode(code)
 
     suspend fun ensureInitialDataLoaded() {
         val currentGroups = allGroups.firstOrNull()
@@ -111,14 +117,53 @@ class AppRepository(private val dao: AppDao) {
             dao.insertOrUpdateWalletProfile(
                 WalletProfile(
                     id = 1,
-                    currentBalance = 100,
-                    totalEarned = 100,
+                    currentBalance = 140,
+                    totalEarned = 140,
                     totalWithdrawn = 0,
                     referralCode = "SLK-8701",
                     totalReferrals = 2,
                     userTelegram = "@ItsSaddam9_member"
                 )
             )
+        }
+
+        val currentReferrals = dao.getAllReferrals().firstOrNull()
+        if (currentReferrals.isNullOrEmpty()) {
+            val initialReferrals = listOf(
+                ReferralEntry(
+                    referrerCode = "SLK-8701",
+                    referredUserName = "তানভীর হোসেন (Tanvir)",
+                    referredUserTelegram = "@tanvir_hossain",
+                    joinedTimestamp = System.currentTimeMillis() - 86400000L * 2,
+                    bonusAmount = 20,
+                    status = "সক্রিয় মেম্বার (Active)",
+                    commissionEarned = 18
+                ),
+                ReferralEntry(
+                    referrerCode = "SLK-8701",
+                    referredUserName = "সোহেল রানা (Sohel)",
+                    referredUserTelegram = "@sohel_rana_bd",
+                    joinedTimestamp = System.currentTimeMillis() - 86400000L * 5,
+                    bonusAmount = 20,
+                    status = "প্রথম অর্ডার সম্পন্ন (Order Completed)",
+                    commissionEarned = 25
+                )
+            )
+            dao.insertReferrals(initialReferrals)
+        }
+
+        val currentManagers = dao.getAllManagersSync()
+        if (currentManagers.isEmpty()) {
+            val initialManagers = listOf(
+                AppManager(
+                    name = "ম্যানেজার তানভীর (Manager Tanvir)",
+                    telegramIdOrUsername = "manager_tanvir",
+                    passcode = "123456",
+                    addedBy = "Owner (@ItsSaddam9)",
+                    status = "ACTIVE"
+                )
+            )
+            dao.insertManagers(initialManagers)
         }
 
         val defaultConfigs = mapOf(
@@ -133,6 +178,7 @@ class AppRepository(private val dao: AppDao) {
             "app_name" to "SLK BUY GROUP",
             "app_logo_url" to "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=120&auto=format&fit=crop&q=80",
             "admin_telegram" to "https://t.me/ItsSaddam9",
+            "referral_base_url" to "https://t.me/PREMIUM_GROUP_BUY_BOT?startapp=ref_",
             "notice_text" to "📢 স্বাগতম SLK BUY GROUP এ! টেলিগ্রাম প্রিমিয়াম গ্রুপ কিনুন এবং জিমেইল/ফেসবুক বিক্রি করে ঘরে বসে ইনকাম করুন।"
         )
         val currentConfigs = allConfigs.firstOrNull()?.associate { it.key to it.value } ?: emptyMap()
@@ -218,7 +264,6 @@ class AppRepository(private val dao: AppDao) {
             return Result.failure(Exception("পর্যাপ্ত ব্যালেন্স নেই! আপনার বর্তমান ব্যালেন্স ৳${currentWallet.currentBalance}"))
         }
 
-        // Deduct from balance
         val updatedWallet = currentWallet.copy(
             currentBalance = currentWallet.currentBalance - amount
         )
@@ -244,6 +289,43 @@ class AppRepository(private val dao: AppDao) {
         dao.insertOrUpdateWalletProfile(updated)
     }
 
+    // === Manager Operations (Owner Only) ===
+    suspend fun addManager(name: String, telegramIdOrUsername: String, passcode: String): Long {
+        val manager = AppManager(
+            name = name.trim(),
+            telegramIdOrUsername = telegramIdOrUsername.trim().removePrefix("@"),
+            passcode = passcode.trim(),
+            addedBy = "Owner (@ItsSaddam9)",
+            status = "ACTIVE"
+        )
+        return dao.insertManager(manager)
+    }
+
+    suspend fun deleteManager(manager: AppManager) {
+        dao.deleteManager(manager)
+    }
+
+    suspend fun updateManager(manager: AppManager) {
+        dao.updateManager(manager)
+    }
+
+    suspend fun getManagersList(): List<AppManager> {
+        return dao.getAllManagersSync()
+    }
+
+    // === Referral Operations ===
+    suspend fun addReferralEntry(entry: ReferralEntry): Long {
+        val id = dao.insertReferral(entry)
+        val currentWallet = dao.getWalletProfileSync() ?: WalletProfile()
+        val updatedWallet = currentWallet.copy(
+            currentBalance = currentWallet.currentBalance + entry.bonusAmount,
+            totalEarned = currentWallet.totalEarned + entry.bonusAmount,
+            totalReferrals = currentWallet.totalReferrals + 1
+        )
+        dao.insertOrUpdateWalletProfile(updatedWallet)
+        return id
+    }
+
     // === Admin Operations ===
 
     suspend fun adminApproveOrder(order: GroupOrder, inviteLink: String) {
@@ -263,7 +345,6 @@ class AppRepository(private val dao: AppDao) {
         val updated = submission.copy(status = "APPROVED")
         dao.updateGmailSubmission(updated)
 
-        // Credit to user's wallet
         val currentWallet = dao.getWalletProfileSync() ?: WalletProfile()
         val updatedWallet = currentWallet.copy(
             currentBalance = currentWallet.currentBalance + submission.rewardAmount,
@@ -281,7 +362,6 @@ class AppRepository(private val dao: AppDao) {
         val updated = submission.copy(status = "APPROVED")
         dao.updateFacebookSubmission(updated)
 
-        // Credit to user's wallet
         val currentWallet = dao.getWalletProfileSync() ?: WalletProfile()
         val updatedWallet = currentWallet.copy(
             currentBalance = currentWallet.currentBalance + submission.rewardAmount,
@@ -313,7 +393,6 @@ class AppRepository(private val dao: AppDao) {
         val updated = withdrawal.copy(status = "REJECTED")
         dao.updateWithdrawal(updated)
 
-        // Refund back to user's balance
         val currentWallet = dao.getWalletProfileSync() ?: WalletProfile()
         val updatedWallet = currentWallet.copy(
             currentBalance = currentWallet.currentBalance + withdrawal.amount

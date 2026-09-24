@@ -101,3 +101,28 @@ data class AdminConfig(
     val key: String,
     val value: String
 )
+
+@Entity(tableName = "app_managers")
+data class AppManager(
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
+    val name: String,
+    val telegramIdOrUsername: String,
+    val passcode: String = "",
+    val addedBy: String = "Owner (@ItsSaddam9)",
+    val status: String = "ACTIVE", // ACTIVE, INACTIVE
+    val timestamp: Long = System.currentTimeMillis()
+)
+
+@Entity(tableName = "referral_history")
+data class ReferralEntry(
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
+    val referrerCode: String,
+    val referredUserName: String,
+    val referredUserTelegram: String,
+    val joinedTimestamp: Long = System.currentTimeMillis(),
+    val bonusAmount: Int = 20, // ৳20
+    val status: String = "সক্রিয় মেম্বার (Active)",
+    val commissionEarned: Int = 0
+)

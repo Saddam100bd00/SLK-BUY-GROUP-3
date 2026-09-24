@@ -1,7 +1,6 @@
 package com.example.ui.screens
 
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,10 +23,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.AdminPanelSettings
+import androidx.compose.material.icons.filled.CardGiftcard
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.HourglassEmpty
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Key
@@ -64,6 +65,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.model.GroupOrder
+import com.example.data.model.ReferralEntry
 import com.example.data.model.WalletProfile
 import com.example.ui.components.TelegramSupportCard
 import com.example.ui.components.copyToClipboard
@@ -83,13 +85,19 @@ import com.example.ui.theme.TextPrimary
 import com.example.ui.theme.TextSecondary
 import com.example.ui.theme.WarningAmber
 import com.example.ui.viewmodel.AppScreen
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun ProfileScreen(
     walletProfile: WalletProfile,
     orders: List<GroupOrder>,
+    referralHistory: List<ReferralEntry> = emptyList(),
+    referralLink: String,
     isAdminUnlocked: Boolean,
     onUnlockAdmin: (String) -> Boolean,
+    onSimulateReferral: (name: String, tg: String) -> Unit = { _, _ -> },
     onNavigate: (AppScreen) -> Unit
 ) {
     val context = LocalContext.current
@@ -97,8 +105,11 @@ fun ProfileScreen(
     var adminSecretInput by remember { mutableStateOf("") }
     var showInstallDialog by remember { mutableStateOf(false) }
     var showGithubDialog by remember { mutableStateOf(false) }
+    var showSimulateReferralDialog by remember { mutableStateOf(false) }
+    var testRefName by remember { mutableStateOf("") }
+    var testRefTg by remember { mutableStateOf("") }
 
-    val referralLink = "https://t.me/ItsSaddam9?start=${walletProfile.referralCode}"
+    val totalReferralBonusEarned = referralHistory.sumOf { it.bonusAmount } + referralHistory.sumOf { it.commissionEarned }
 
     LazyColumn(
         modifier = Modifier
@@ -193,29 +204,48 @@ fun ProfileScreen(
                     .fillMaxWidth(),
                 colors = CardDefaults.cardColors(containerColor = MidnightSurface),
                 shape = RoundedCornerShape(14.dp),
-                border = androidx.compose.foundation.BorderStroke(1.dp, MidnightBorder)
+                border = androidx.compose.foundation.BorderStroke(1.dp, ElectricCyan.copy(alpha = 0.5f))
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Default.PersonAdd,
-                            contentDescription = "Referral",
-                            tint = SuccessGreen,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = "রেফারেল ইনকাম প্রোগ্রাম",
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = TextPrimary
-                        )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Default.PersonAdd,
+                                contentDescription = "Referral",
+                                tint = SuccessGreen,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = "রেফারেল ইনকাম ও বেনিফিট",
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = TextPrimary
+                            )
+                        }
+
+                        Surface(
+                            color = SuccessGreen.copy(alpha = 0.2f),
+                            shape = RoundedCornerShape(6.dp)
+                        ) {
+                            Text(
+                                text = "প্রতি রেফারে ৳২০ বোনাস",
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp),
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = SuccessGreen
+                            )
+                        }
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(
-                        text = "আপনার বন্ধুদের রেফার করে প্রতি রেফারে ৳২০ বোনাস পান এবং তাদের প্রতিটি কেনাকাটায় ৫% লাইফটাইম কমিশন উপভোগ করুন!",
+                        text = "আপনার বন্ধুদের রেফার লিংকের মাধ্যমে জয়েন করান। তারা জয়েন করলেই আপনার ওয়ালেটে ৳২০ ইনস্ট্যান্ট বোনাস জমা হবে এবং তাদের প্রতিটি গ্রুপ কেনাকাটায় লাইফটাইম ৫% কমিশন পাবেন।",
                         fontSize = 12.sp,
                         color = TextSecondary,
                         lineHeight = 17.sp
@@ -223,42 +253,64 @@ fun ProfileScreen(
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // Referral Code Box
+                    // Dynamic Referral Link Box
                     Surface(
                         modifier = Modifier.fillMaxWidth(),
                         color = MidnightCard,
                         shape = RoundedCornerShape(10.dp),
                         border = androidx.compose.foundation.BorderStroke(1.dp, ElectricCyanDark)
                     ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 12.dp, vertical = 10.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Column {
-                                Text(text = "আপনার রেফার কোড:", fontSize = 10.sp, color = TextSecondary)
-                                Text(
-                                    text = walletProfile.referralCode,
-                                    fontSize = 17.sp,
-                                    fontWeight = FontWeight.Black,
-                                    color = ElectricCyan,
-                                    letterSpacing = 1.sp
-                                )
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(text = "আপনার অটো রেফারেল টেলিগ্রাম লিংক:", fontSize = 11.sp, color = ElectricCyan, fontWeight = FontWeight.Bold)
+                                Surface(
+                                    color = LuxuryGold.copy(alpha = 0.2f),
+                                    shape = RoundedCornerShape(4.dp)
+                                ) {
+                                    Text(
+                                        text = "কোড: ${walletProfile.referralCode}",
+                                        fontSize = 10.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = LuxuryGold,
+                                        modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
+                                    )
+                                }
                             }
 
-                            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Spacer(modifier = Modifier.height(6.dp))
+
+                            Text(
+                                text = referralLink,
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = TextPrimary,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(MidnightSurface, RoundedCornerShape(6.dp))
+                                    .padding(8.dp)
+                            )
+
+                            Spacer(modifier = Modifier.height(10.dp))
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
                                 Button(
                                     onClick = {
-                                        copyToClipboard(context, walletProfile.referralCode, "রেফার কোড কপি হয়েছে!")
+                                        copyToClipboard(context, referralLink, "রেফারেল লিংক কপি হয়েছে!")
                                     },
                                     colors = ButtonDefaults.buttonColors(
                                         containerColor = ElectricCyan,
                                         contentColor = MidnightDark
                                     ),
                                     shape = RoundedCornerShape(8.dp),
-                                    contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp)
+                                    modifier = Modifier.weight(1f),
+                                    contentPadding = PaddingValues(vertical = 8.dp)
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.ContentCopy,
@@ -266,7 +318,7 @@ fun ProfileScreen(
                                         modifier = Modifier.size(14.dp)
                                     )
                                     Spacer(modifier = Modifier.width(4.dp))
-                                    Text("কপি", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                                    Text("লিংক কপি", fontSize = 12.sp, fontWeight = FontWeight.Bold)
                                 }
 
                                 Button(
@@ -275,17 +327,18 @@ fun ProfileScreen(
                                             type = "text/plain"
                                             putExtra(
                                                 Intent.EXTRA_TEXT,
-                                                "🔥 SLK BUY GROUP - সেরা টেলিগ্রাম প্রিমিয়াম ভিডিও গ্রুপ মার্কেটপ্লেস ও জিমেইল/ফেসবুক বিক্রি করে ইনকাম করুন! আমার রেফারেল লিংক: $referralLink"
+                                                "🔥 SLK BUY GROUP - সেরা টেলিগ্রাম প্রিমিয়াম ভিডিও গ্রুপ মার্কেটপ্লেস ও জিমেইল/ফেসবুক বিক্রি করে ইনকাম করুন! আমার রেফারেল লিংক দিয়ে প্রবেশ করুন: $referralLink"
                                             )
                                         }
                                         context.startActivity(Intent.createChooser(shareIntent, "Share Referral Link"))
                                     },
                                     colors = ButtonDefaults.buttonColors(
-                                        containerColor = SuccessGreen,
-                                        contentColor = MidnightDark
+                                        containerColor = TelegramBlue,
+                                        contentColor = Color.White
                                     ),
                                     shape = RoundedCornerShape(8.dp),
-                                    contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp)
+                                    modifier = Modifier.weight(1f),
+                                    contentPadding = PaddingValues(vertical = 8.dp)
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.Share,
@@ -293,30 +346,182 @@ fun ProfileScreen(
                                         modifier = Modifier.size(14.dp)
                                     )
                                     Spacer(modifier = Modifier.width(4.dp))
-                                    Text("শেয়ার", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                                    Text("শেয়ার করুন", fontSize = 12.sp, fontWeight = FontWeight.Bold)
                                 }
                             }
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
 
+                    // Summary Stats
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
+                        Column {
+                            Text(text = "মোট রেফারেল মেম্বার", fontSize = 11.sp, color = TextSecondary)
+                            Text(
+                                text = "${referralHistory.size} জন",
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = LuxuryGold
+                            )
+                        }
+
+                        Column(horizontalAlignment = Alignment.End) {
+                            Text(text = "মোট রেফারেল আয়", fontSize = 11.sp, color = TextSecondary)
+                            Text(
+                                text = "৳$totalReferralBonusEarned BDT",
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = SuccessGreen
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        // === Referral History (রেফারেল হিস্টরি বিস্তারিত) ===
+        item {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp, top = 14.dp, bottom = 6.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(imageVector = Icons.Default.History, contentDescription = "History", tint = LuxuryGold, modifier = Modifier.size(18.dp))
+                        Spacer(modifier = Modifier.width(6.dp))
                         Text(
-                            text = "মোট সফল রেফার: ${walletProfile.totalReferrals} জন",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = LuxuryGold
+                            text = "রেফারেল হিস্টরি (Referral History)",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = TextPrimary
                         )
+                    }
+
+                    OutlinedButton(
+                        onClick = { showSimulateReferralDialog = true },
+                        shape = RoundedCornerShape(8.dp),
+                        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
+                    ) {
+                        Icon(imageVector = Icons.Default.PersonAdd, contentDescription = "Test", modifier = Modifier.size(12.dp), tint = ElectricCyan)
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text("নতুন মেম্বার টেস্ট", fontSize = 10.sp, color = ElectricCyan)
+                    }
+                }
+                Text(
+                    text = "আপনার রেফারেল লিংক থেকে যারা অ্যাপে প্রবেশ ও জয়েন করেছে তাদের তালিকা:",
+                    fontSize = 11.sp,
+                    color = TextSecondary,
+                    modifier = Modifier.padding(top = 2.dp)
+                )
+            }
+        }
+
+        if (referralHistory.isEmpty()) {
+            item {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 4.dp),
+                    colors = CardDefaults.cardColors(containerColor = MidnightCard),
+                    shape = RoundedCornerShape(10.dp),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, MidnightBorder)
+                ) {
+                    Box(modifier = Modifier.padding(20.dp), contentAlignment = Alignment.Center) {
                         Text(
-                            text = "মোট আয়: ৳${walletProfile.totalReferrals * 20}",
+                            text = "এখনো কোনো রেফারেল মেম্বার যুক্ত হয়নি। আপনার রেফারেল লিংক বন্ধুদের সাথে শেয়ার করুন!",
                             fontSize = 12.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = SuccessGreen
+                            color = TextSecondary,
+                            lineHeight = 16.sp
                         )
+                    }
+                }
+            }
+        } else {
+            items(referralHistory) { ref ->
+                Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(containerColor = MidnightCard),
+                        shape = RoundedCornerShape(12.dp),
+                        border = androidx.compose.foundation.BorderStroke(1.dp, MidnightBorder)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(12.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(40.dp)
+                                        .clip(CircleShape)
+                                        .background(ElectricCyan.copy(alpha = 0.15f)),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = ref.referredUserName.take(1).uppercase(),
+                                        fontWeight = FontWeight.Bold,
+                                        color = ElectricCyan,
+                                        fontSize = 16.sp
+                                    )
+                                }
+
+                                Spacer(modifier = Modifier.width(10.dp))
+
+                                Column {
+                                    Text(
+                                        text = ref.referredUserName,
+                                        fontSize = 13.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = TextPrimary
+                                    )
+                                    Text(
+                                        text = "টেলিগ্রাম: ${ref.referredUserTelegram}",
+                                        fontSize = 11.sp,
+                                        color = ElectricCyan
+                                    )
+                                    Text(
+                                        text = "জয়েন: ${formatTimestamp(ref.joinedTimestamp)}",
+                                        fontSize = 10.sp,
+                                        color = TextSecondary
+                                    )
+                                }
+                            }
+
+                            Column(horizontalAlignment = Alignment.End) {
+                                Surface(
+                                    color = SuccessGreen.copy(alpha = 0.2f),
+                                    shape = RoundedCornerShape(6.dp)
+                                ) {
+                                    Text(
+                                        text = "+৳${ref.bonusAmount} বোনাস",
+                                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                                        fontSize = 10.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = SuccessGreen
+                                    )
+                                }
+
+                                Spacer(modifier = Modifier.height(4.dp))
+
+                                Text(
+                                    text = ref.status,
+                                    fontSize = 9.sp,
+                                    color = LuxuryGold
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -326,7 +531,7 @@ fun ProfileScreen(
         item {
             Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp)) {
                 Text(
-                    text = "আমার অর্ডারসমূহ",
+                    text = "আমার গ্রুপ অর্ডারসমূহ",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
                     color = TextPrimary
@@ -566,13 +771,13 @@ fun ProfileScreen(
                             Spacer(modifier = Modifier.width(12.dp))
                             Column {
                                 Text(
-                                    text = if (isAdminUnlocked) "সিক্রেট এডমিন প্যানেল (আনলকড)" else "সিক্রেট এডমিন প্যানেল প্রবেশ করুন",
+                                    text = if (isAdminUnlocked) "সিক্রেট এডমিন প্যানেল (আনলকড)" else "সিক্রেট এডমিন ও ম্যানেজার প্যানেল",
                                     fontSize = 13.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = if (isAdminUnlocked) LuxuryGold else WarningAmber
                                 )
                                 Text(
-                                    text = "অনুমোদিত ইউজার: 8701368956 (@ItsSaddam9)",
+                                    text = "আসল অনার (8701368956) ও ম্যানেজার লগইন",
                                     fontSize = 11.sp,
                                     color = TextSecondary
                                 )
@@ -612,7 +817,7 @@ fun ProfileScreen(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "সিক্রেট এডমিন গেটওয়ে",
+                        text = "সিক্রেট এডমিন ও ম্যানেজার গেটওয়ে",
                         fontWeight = FontWeight.Bold,
                         color = TextPrimary
                     )
@@ -621,7 +826,7 @@ fun ProfileScreen(
             text = {
                 Column {
                     Text(
-                        text = "এই প্যানেল শুধুমাত্র নির্দিষ্ট ইউজারের জন্য অনুমোদিত:\nটেলিগ্রাম আইডি: 8701368956 (@ItsSaddam9)",
+                        text = "👑 আসল অনার: 8701368956 (@ItsSaddam9)\n🛡️ অথবা এডমিনের দেওয়া আপনার ম্যানেজার আইডি/পাসকোড লিখুন:",
                         fontSize = 12.sp,
                         color = TextSecondary,
                         lineHeight = 16.sp
@@ -632,8 +837,8 @@ fun ProfileScreen(
                     OutlinedTextField(
                         value = adminSecretInput,
                         onValueChange = { adminSecretInput = it },
-                        label = { Text("টেলিগ্রাম আইডি / পাসকোড লিখুন") },
-                        placeholder = { Text("8701368956") },
+                        label = { Text("আইডি / পাসকোড লিখুন") },
+                        placeholder = { Text("8701368956 অথবা ম্যানেজার আইডি") },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
                         colors = OutlinedTextFieldDefaults.colors(
@@ -667,6 +872,64 @@ fun ProfileScreen(
                 TextButton(onClick = { showAdminDialog = false }) {
                     Text("বাতিল", color = TextSecondary)
                 }
+            }
+        )
+    }
+
+    // Simulate Referral Dialog (For testing real-time referral additions)
+    if (showSimulateReferralDialog) {
+        AlertDialog(
+            onDismissRequest = { showSimulateReferralDialog = false },
+            containerColor = MidnightCard,
+            title = {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(imageVector = Icons.Default.CardGiftcard, contentDescription = "Simulate", tint = SuccessGreen)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("নতুন রেফারেল জয়েন সিমুলেশন", color = TextPrimary, fontWeight = FontWeight.Bold)
+                }
+            },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text(
+                        text = "আপনার রেফারেল লিংক থেকে কোনো মেম্বার টেলিগ্রামে জয়েন করলে কেমন দেখাবে তা টেস্ট করুন:",
+                        fontSize = 12.sp,
+                        color = TextSecondary
+                    )
+
+                    OutlinedTextField(
+                        value = testRefName,
+                        onValueChange = { testRefName = it },
+                        label = { Text("মেম্বারের নাম") },
+                        placeholder = { Text("e.g. আকাশ আহমেদ") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    OutlinedTextField(
+                        value = testRefTg,
+                        onValueChange = { testRefTg = it },
+                        label = { Text("মেম্বারের টেলিগ্রাম") },
+                        placeholder = { Text("@akash_vip") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        onSimulateReferral(testRefName, testRefTg)
+                        showSimulateReferralDialog = false
+                        testRefName = ""
+                        testRefTg = ""
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = SuccessGreen, contentColor = MidnightDark)
+                ) {
+                    Text("মেম্বার জয়েন করান (+৳২০)", fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showSimulateReferralDialog = false }) { Text("বাতিল", color = TextSecondary) }
             }
         )
     }
@@ -735,6 +998,15 @@ fun ProfileScreen(
                 }
             }
         )
+    }
+}
+
+private fun formatTimestamp(timestamp: Long): String {
+    return try {
+        val sdf = SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault())
+        sdf.format(Date(timestamp))
+    } catch (e: Exception) {
+        "সম্প্রতি"
     }
 }
 

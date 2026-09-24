@@ -64,9 +64,17 @@ fun SlkApp(viewModel: MainViewModel = viewModel()) {
     val withdrawals by viewModel.allWithdrawals.collectAsState()
     val walletProfile by viewModel.walletProfile.collectAsState()
     val adminConfigs by viewModel.adminConfigs.collectAsState()
+    val allManagers by viewModel.allManagers.collectAsState()
+    val allReferrals by viewModel.allReferrals.collectAsState()
     val isAdminUnlocked by viewModel.isAdminUnlocked.collectAsState()
+    val adminRole by viewModel.adminRole.collectAsState()
+    val currentLoggedInAdminName by viewModel.currentLoggedInAdminName.collectAsState()
     val selectedGroupForCheckout by viewModel.selectedGroupForCheckout.collectAsState()
     val sellType by viewModel.sellType.collectAsState()
+
+    val computedReferralLink = remember(walletProfile.referralCode, adminConfigs) {
+        viewModel.computeReferralLink(walletProfile.referralCode)
+    }
 
     // Collect Toast/Snackbar messages
     LaunchedEffect(Unit) {
@@ -181,18 +189,24 @@ fun SlkApp(viewModel: MainViewModel = viewModel()) {
                     AppScreen.PROFILE -> ProfileScreen(
                         walletProfile = walletProfile,
                         orders = allOrders,
+                        referralHistory = allReferrals,
+                        referralLink = computedReferralLink,
                         isAdminUnlocked = isAdminUnlocked,
                         onUnlockAdmin = { input -> viewModel.unlockAdmin(input) },
+                        onSimulateReferral = { name, tg -> viewModel.simulateNewReferral(name, tg) },
                         onNavigate = { target -> viewModel.navigateTo(target) }
                     )
 
                     AppScreen.ADMIN -> {
                         if (isAdminUnlocked) {
                             AdminScreen(
+                                adminRole = adminRole,
+                                loggedInAdminName = currentLoggedInAdminName,
                                 orders = allOrders,
                                 gmailSubmissions = gmailSubmissions,
                                 fbSubmissions = fbSubmissions,
                                 withdrawals = withdrawals,
+                                managers = allManagers,
                                 adminConfigs = adminConfigs,
                                 onLockAdmin = { viewModel.lockAdmin() },
                                 onApproveOrder = { order, link -> viewModel.adminApproveOrder(order, link) },
@@ -206,7 +220,10 @@ fun SlkApp(viewModel: MainViewModel = viewModel()) {
                                 onAddNewGroup = { title, cat, desc, mem, p, op, link, badge ->
                                     viewModel.addNewGroup(title, cat, desc, mem, p, op, link, badge)
                                 },
-                                onUpdatePaymentNumber = { key, num -> viewModel.updatePaymentNumber(key, num) }
+                                onUpdatePaymentNumber = { key, num -> viewModel.updatePaymentNumber(key, num) },
+                                onAddManager = { name, tg, pass -> viewModel.addManager(name, tg, pass) },
+                                onDeleteManager = { mgr -> viewModel.deleteManager(mgr) },
+                                onUpdateReferralBaseUrl = { url -> viewModel.updateReferralBaseUrl(url) }
                             )
                         } else {
                             viewModel.navigateTo(AppScreen.PROFILE)

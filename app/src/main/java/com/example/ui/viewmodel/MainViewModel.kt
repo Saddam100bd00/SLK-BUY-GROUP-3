@@ -4,9 +4,11 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.database.AppDatabase
+import com.example.data.model.AppManager
 import com.example.data.model.FacebookSubmission
 import com.example.data.model.GmailSubmission
 import com.example.data.model.GroupOrder
+import com.example.data.model.ReferralEntry
 import com.example.data.model.TelegramGroup
 import com.example.data.model.WalletProfile
 import com.example.data.model.Withdrawal
@@ -18,6 +20,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -35,6 +38,12 @@ enum class AppScreen {
 enum class SellType {
     GMAIL,
     FACEBOOK
+}
+
+enum class AdminRole {
+    NONE,
+    OWNER,      // আসল অনার (Super Admin) - Can do EVERYTHING + manage managers
+    MANAGER     // ম্যানেজার - Can edit, approve, reject, edit payment/referral link settings, but CANNOT edit/remove Owner and CANNOT add/remove managers
 }
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -72,6 +81,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         .map { list -> list.associate { it.key to it.value } }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyMap())
 
+    val allManagers: StateFlow<List<AppManager>> = repository.allManagers
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    val allReferrals: StateFlow<List<ReferralEntry>> = repository.allReferrals
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
     // UI & Navigation State
     private val _currentScreen = MutableStateFlow(AppScreen.HOME)
     val currentScreen: StateFlow<AppScreen> = _currentScreen.asStateFlow()
@@ -82,10 +97,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _sellType = MutableStateFlow(SellType.GMAIL)
     val sellType: StateFlow<SellType> = _sellType.asStateFlow()
 
-    // Secret Admin Gate
-    // User requested: "সিক্রেট এডমিন প্যানেল যেটা শুধু এই ইউজার ইউজ করতে পারবে 8701368956 ইউজার t.me/ItsSaddam9 কারণ এটা টেলিগ্রাম মিনি অ্যাপস"
+    // Secret Admin Gate & Role Management
     private val _isAdminUnlocked = MutableStateFlow(false)
     val isAdminUnlocked: StateFlow<Boolean> = _isAdminUnlocked.asStateFlow()
+
+    private val _adminRole = MutableStateFlow(AdminRole.NONE)
+    val adminRole: StateFlow<AdminRole> = _adminRole.asStateFlow()
+
+    private val _currentLoggedInAdminName = MutableStateFlow("Guest")
+    val currentLoggedInAdminName: StateFlow<String> = _currentLoggedInAdminName.asStateFlow()
 
     // App Preferences
     private val _isDarkMode = MutableStateFlow(true)
@@ -94,7 +114,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _isEnglish = MutableStateFlow(false)
     val isEnglish: StateFlow<Boolean> = _isEnglish.asStateFlow()
 
-    private val _demoGroupScreenshot = MutableStateFlow<Pair<String, String>?>(null) // Pair(Title, ScreenshotUrl)
+    private val _demoGroupScreenshot = MutableStateFlow<Pair<String, String>?>(null)
     val demoGroupScreenshot: StateFlow<Pair<String, String>?> = _demoGroupScreenshot.asStateFlow()
 
     private val _showNoticeDialog = MutableStateFlow(false)
@@ -108,7 +128,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         viewModelScope.launch {
-            kotlinx.coroutines.delay(1800) // smooth circular splash display
+            kotlinx.coroutines.delay(1800)
             _isLoadingSplash.value = false
         }
     }
@@ -146,31 +166,141 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _sellType.value = type
     }
 
+    /**
+     * Compute referral link based on admin configured base link:
+     * e.g. "https://t.me/PREMIUM_GROUP_BUY_BOT?startapp=ref_"
+     * or "https://t.me/PREMIUM_GROUP_BUY_BOT?startapp=ref_{USER_ID}"
+     */
+    fun computeReferralLink(referralCode: String): String {
+        val baseUrl = adminConfigs.value["referral_base_url"]?.trim()
+            ?: "https://t.me/PREMIUM_GROUP_BUY_BOT?startapp=ref_"
+
+        return when {
+            baseUrl.contains("{USER_ID}") -> baseUrl.replace("{USER_ID}", referralCode)
+            baseUrl.contains("{REF_CODE}") -> baseUrl.replace("{REF_CODE}", referralCode)
+            baseUrl.endsWith("ref_") || baseUrl.endsWith("startapp=") || baseUrl.endsWith("start=") || baseUrl.endsWith("=") -> "$baseUrl$referralCode"
+            baseUrl.contains("?") -> "$baseUrl&ref=$referralCode"
+            else -> "$baseUrl?startapp=ref_$referralCode"
+        }
+    }
+
     fun unlockAdmin(secretKeyOrTelegramId: String): Boolean {
         val trimmed = secretKeyOrTelegramId.trim()
-        val isValid = trimmed == "8701368956" ||
+
+        // 1. Check Owner (আসল অনার - সাদ্দাম ভাই)
+        val isOwner = trimmed == "8701368956" ||
                 trimmed.equals("ItsSaddam9", ignoreCase = true) ||
                 trimmed.equals("@ItsSaddam9", ignoreCase = true) ||
                 trimmed == "saddam8701"
 
-        if (isValid) {
+        if (isOwner) {
+            _adminRole.value = AdminRole.OWNER
+            _currentLoggedInAdminName.value = "সাদ্দাম ভাই (আসল অনার)"
             _isAdminUnlocked.value = true
             _currentScreen.value = AppScreen.ADMIN
             viewModelScope.launch {
-                _toastMessage.emit("স্বাগতম সাদ্দাম ভাই! সিক্রেট এডমিন প্যানেল আনলক হয়েছে।")
+                _toastMessage.emit("👑 স্বাগতম সাদ্দাম ভাই! আসল অনার প্যানেলে প্রবেশ করেছেন।")
             }
             return true
-        } else {
-            viewModelScope.launch {
-                _toastMessage.emit("ভুল এডমিন আইডি বা পাসকোড! শুধুমাত্র অনুমোদিত এডমিনের জন্য।")
-            }
-            return false
         }
+
+        // 2. Check Managers (ম্যানেজারদের চেক করুন)
+        val cleanInput = trimmed.removePrefix("@")
+        val matchedManager = allManagers.value.firstOrNull {
+            (it.telegramIdOrUsername.equals(cleanInput, ignoreCase = true) ||
+             it.passcode == cleanInput) && it.status == "ACTIVE"
+        }
+
+        if (matchedManager != null) {
+            _adminRole.value = AdminRole.MANAGER
+            _currentLoggedInAdminName.value = matchedManager.name
+            _isAdminUnlocked.value = true
+            _currentScreen.value = AppScreen.ADMIN
+            viewModelScope.launch {
+                _toastMessage.emit("🛡️ স্বাগতম ম্যানেজার '${matchedManager.name}'! আপনি সব অর্ডার, ডিপোজিট ও লিংক ম্যানেজ করতে পারবেন।")
+            }
+            return true
+        }
+
+        viewModelScope.launch {
+            _toastMessage.emit("❌ ভুল এডমিন বা ম্যানেজার আইডি/পাসকোড! শুধুমাত্র অনুমোদিত এডমিনের জন্য।")
+        }
+        return false
     }
 
     fun lockAdmin() {
         _isAdminUnlocked.value = false
+        _adminRole.value = AdminRole.NONE
+        _currentLoggedInAdminName.value = "Guest"
         _currentScreen.value = AppScreen.HOME
+    }
+
+    // === Manager Management (Owner Only) ===
+    fun addManager(name: String, telegramIdOrUsername: String, passcode: String) {
+        if (_adminRole.value != AdminRole.OWNER) {
+            viewModelScope.launch {
+                _toastMessage.emit("⚠️ অনুমতি নেই! শুধুমাত্র আসল অনার নতুন ম্যানেজার যুক্ত করতে পারেন।")
+            }
+            return
+        }
+
+        if (name.isBlank() || telegramIdOrUsername.isBlank()) {
+            viewModelScope.launch {
+                _toastMessage.emit("ম্যানেজারের নাম এবং টেলিগ্রাম ইউজারনেম/আইডি লিখুন!")
+            }
+            return
+        }
+
+        viewModelScope.launch {
+            repository.addManager(name, telegramIdOrUsername, passcode)
+            _toastMessage.emit("✅ নতুন ম্যানেজার '$name' সফলভাবে যুক্ত হয়েছে!")
+        }
+    }
+
+    fun deleteManager(manager: AppManager) {
+        if (_adminRole.value != AdminRole.OWNER) {
+            viewModelScope.launch {
+                _toastMessage.emit("⚠️ অনুমতি নেই! শুধুমাত্র আসল অনার ম্যানেজার ডিলিট করতে পারেন।")
+            }
+            return
+        }
+
+        viewModelScope.launch {
+            repository.deleteManager(manager)
+            _toastMessage.emit("ম্যানেজার '${manager.name}' রিমুভ করা হয়েছে।")
+        }
+    }
+
+    // === Referral Operations ===
+    fun simulateNewReferral(name: String, telegram: String) {
+        viewModelScope.launch {
+            val validName = if (name.isBlank()) "মেম্বার ${System.currentTimeMillis().toString().takeLast(4)}" else name.trim()
+            val validTg = if (telegram.isBlank()) "@user_${System.currentTimeMillis().toString().takeLast(5)}" else telegram.trim()
+            val myRefCode = walletProfile.value.referralCode
+
+            val newEntry = ReferralEntry(
+                referrerCode = myRefCode,
+                referredUserName = validName,
+                referredUserTelegram = if (validTg.startsWith("@")) validTg else "@$validTg",
+                joinedTimestamp = System.currentTimeMillis(),
+                bonusAmount = 20,
+                status = "সক্রিয় মেম্বার (Active)",
+                commissionEarned = 0
+            )
+            repository.addReferralEntry(newEntry)
+            _toastMessage.emit("🎉 অভিনন্দন! '$validName' আপনার রেফার লিংকে জয়েন করেছে। ৳২০ বোনাস ওয়ালেটে যোগ হয়েছে!")
+        }
+    }
+
+    fun updateReferralBaseUrl(newBaseUrl: String) {
+        viewModelScope.launch {
+            if (newBaseUrl.isBlank()) {
+                _toastMessage.emit("সঠিক রেফারেল লিংক দিন!")
+                return@launch
+            }
+            repository.updateConfig("referral_base_url", newBaseUrl.trim())
+            _toastMessage.emit("✅ রেফারেল লিংক ফরম্যাট সফলভাবে আপডেট করা হয়েছে!")
+        }
     }
 
     fun placeOrder(
@@ -291,7 +421,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    // === Admin Actions ===
+    // === Admin & Manager Allowed Actions ===
 
     fun adminApproveOrder(order: GroupOrder, inviteLink: String) {
         viewModelScope.launch {

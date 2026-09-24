@@ -7,9 +7,11 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.data.model.AdminConfig
+import com.example.data.model.AppManager
 import com.example.data.model.FacebookSubmission
 import com.example.data.model.GmailSubmission
 import com.example.data.model.GroupOrder
+import com.example.data.model.ReferralEntry
 import com.example.data.model.TelegramGroup
 import com.example.data.model.WalletProfile
 import com.example.data.model.Withdrawal
@@ -96,4 +98,36 @@ interface AppDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun setConfig(config: AdminConfig)
+
+    // === App Managers ===
+    @Query("SELECT * FROM app_managers ORDER BY id ASC")
+    fun getAllManagers(): Flow<List<AppManager>>
+
+    @Query("SELECT * FROM app_managers ORDER BY id ASC")
+    suspend fun getAllManagersSync(): List<AppManager>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertManager(manager: AppManager): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertManagers(managers: List<AppManager>)
+
+    @Update
+    suspend fun updateManager(manager: AppManager)
+
+    @Delete
+    suspend fun deleteManager(manager: AppManager)
+
+    // === Referral History ===
+    @Query("SELECT * FROM referral_history ORDER BY joinedTimestamp DESC")
+    fun getAllReferrals(): Flow<List<ReferralEntry>>
+
+    @Query("SELECT * FROM referral_history WHERE referrerCode = :code ORDER BY joinedTimestamp DESC")
+    fun getReferralsByCode(code: String): Flow<List<ReferralEntry>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertReferral(entry: ReferralEntry): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertReferrals(entries: List<ReferralEntry>)
 }

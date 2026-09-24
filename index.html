@@ -2623,83 +2623,133 @@
       }
     }
 
-    // Add balance to specific user in Firebase (Realtime Database & Firestore)
+    // Add balance to specific user in Firebase (Realtime Database & Firestore) and update local state
     function fbAddBalanceToUser(userId, amount) {
-      if (!userId) return;
+      if (!userId || userId === 'N/A') return;
       const amt = Number(amount) || 0;
+      if (amt <= 0) return;
+
+      const uid = String(userId);
+
+      // 1. Update Realtime Database
       if (fbRtdb) {
-        const uRef = fbRtdb.ref("users/" + userId);
-        uRef.once("value").then(snap => {
-          const cur = snap.val() || {};
-          const curBal = Number(cur.balance || 0);
-          const curEarned = Number(cur.totalEarned || 0);
-          uRef.update({
-            balance: curBal + amt,
-            totalEarned: curEarned + amt,
-            updatedAt: Date.now()
+        try {
+          const uRef = fbRtdb.ref("users/" + uid);
+          uRef.once("value").then(snap => {
+            const cur = snap.val() || {};
+            const curBal = Number(cur.balance || 0);
+            const curEarned = Number(cur.totalEarned || 0);
+            const newBal = curBal + amt;
+            const newEarned = curEarned + amt;
+            uRef.update({
+              balance: newBal,
+              totalEarned: newEarned,
+              updatedAt: Date.now()
+            }).catch(e => console.warn(e));
           }).catch(e => console.warn(e));
-        }).catch(e => console.warn(e));
+        } catch (e) {
+          console.warn("RTDB fbAddBalanceToUser error:", e);
+        }
       }
+
+      // 2. Update Firestore
       if (fbDb) {
-        const userRef = fbDb.collection("users").doc(String(userId));
-        userRef.get().then(doc => {
-          const cur = doc.exists ? doc.data() : {};
-          const curBal = Number(cur.balance || 0);
-          const curEarned = Number(cur.totalEarned || 0);
-          userRef.set({
-            balance: curBal + amt,
-            totalEarned: curEarned + amt,
-            updatedAt: Date.now()
-          }, { merge: true }).catch(err => console.warn(err));
-        }).catch(err => console.warn(err));
+        try {
+          const userRef = fbDb.collection("users").doc(uid);
+          userRef.get().then(doc => {
+            const cur = doc.exists ? doc.data() : {};
+            const curBal = Number(cur.balance || 0);
+            const curEarned = Number(cur.totalEarned || 0);
+            userRef.set({
+              balance: curBal + amt,
+              totalEarned: curEarned + amt,
+              updatedAt: Date.now()
+            }, { merge: true }).catch(err => console.warn(err));
+          }).catch(err => console.warn(err));
+        } catch (e) {
+          console.warn("Firestore fbAddBalanceToUser error:", e);
+        }
       }
+
+      // 3. Update localStorage cache for this specific user
+      try {
+        const cacheKey = `slk_user_wallet_v4_${uid}`;
+        const localSaved = localStorage.getItem(cacheKey);
+        let walletObj = { balance: amt, totalEarned: amt, totalWithdrawn: 0 };
+        if (localSaved) {
+          const parsed = JSON.parse(localSaved);
+          walletObj.balance = (Number(parsed.balance) || 0) + amt;
+          walletObj.totalEarned = (Number(parsed.totalEarned) || 0) + amt;
+          walletObj.totalWithdrawn = Number(parsed.totalWithdrawn) || 0;
+        }
+        localStorage.setItem(cacheKey, JSON.stringify(walletObj));
+      } catch (e) {}
     }
 
     // Refund withdrawal back to specific user in Firebase
     function fbRefundWithdrawToUser(userId, amount) {
-      if (!userId) return;
+      if (!userId || userId === 'N/A') return;
       const amt = Number(amount) || 0;
+      if (amt <= 0) return;
+
+      const uid = String(userId);
+
       if (fbRtdb) {
-        const uRef = fbRtdb.ref("users/" + userId);
-        uRef.once("value").then(snap => {
-          const cur = snap.val() || {};
-          const curBal = Number(cur.balance || 0);
-          const curWithdrawn = Number(cur.totalWithdrawn || 0);
-          uRef.update({
-            balance: curBal + amt,
-            totalWithdrawn: Math.max(0, curWithdrawn - amt),
-            updatedAt: Date.now()
+        try {
+          const uRef = fbRtdb.ref("users/" + uid);
+          uRef.once("value").then(snap => {
+            const cur = snap.val() || {};
+            const curBal = Number(cur.balance || 0);
+            const curWithdrawn = Number(cur.totalWithdrawn || 0);
+            uRef.update({
+              balance: curBal + amt,
+              totalWithdrawn: Math.max(0, curWithdrawn - amt),
+              updatedAt: Date.now()
+            }).catch(e => console.warn(e));
           }).catch(e => console.warn(e));
-        }).catch(e => console.warn(e));
+        } catch (e) {
+          console.warn(e);
+        }
       }
+
       if (fbDb) {
-        const userRef = fbDb.collection("users").doc(String(userId));
-        userRef.get().then(doc => {
-          const cur = doc.exists ? doc.data() : {};
-          const curBal = Number(cur.balance || 0);
-          const curWithdrawn = Number(cur.totalWithdrawn || 0);
-          userRef.set({
-            balance: curBal + amt,
-            totalWithdrawn: Math.max(0, curWithdrawn - amt),
-            updatedAt: Date.now()
-          }, { merge: true }).catch(err => console.warn(err));
-        }).catch(err => console.warn(err));
+        try {
+          const userRef = fbDb.collection("users").doc(uid);
+          userRef.get().then(doc => {
+            const cur = doc.exists ? doc.data() : {};
+            const curBal = Number(cur.balance || 0);
+            const curWithdrawn = Number(cur.totalWithdrawn || 0);
+            userRef.set({
+              balance: curBal + amt,
+              totalWithdrawn: Math.max(0, curWithdrawn - amt),
+              updatedAt: Date.now()
+            }, { merge: true }).catch(err => console.warn(err));
+          }).catch(err => console.warn(err));
+        } catch (e) {
+          console.warn(e);
+        }
       }
+
+      try {
+        const cacheKey = `slk_user_wallet_v4_${uid}`;
+        const localSaved = localStorage.getItem(cacheKey);
+        if (localSaved) {
+          const parsed = JSON.parse(localSaved);
+          parsed.balance = (Number(parsed.balance) || 0) + amt;
+          parsed.totalWithdrawn = Math.max(0, (Number(parsed.totalWithdrawn) || 0) - amt);
+          localStorage.setItem(cacheKey, JSON.stringify(parsed));
+        }
+      } catch (e) {}
     }
 
     // Listen to user's isolated wallet from Firebase
     function listenUserWallet(userId) {
       if (!userId) return;
+      const uid = String(userId);
 
-      // Always reset current wallet to 0 before loading personal user account
-      appState.wallet.balance = 0;
-      appState.wallet.totalEarned = 0;
-      appState.wallet.totalWithdrawn = 0;
-      updateWalletDisplay();
-
-      // Check per-user local cache
+      // Check per-user local cache first
       try {
-        const localSaved = localStorage.getItem(`slk_user_wallet_v4_${userId}`);
+        const localSaved = localStorage.getItem(`slk_user_wallet_v4_${uid}`);
         if (localSaved) {
           const parsed = JSON.parse(localSaved);
           appState.wallet.balance = Number(parsed.balance || 0);
@@ -2711,75 +2761,252 @@
 
       // 1. Realtime Database Listener for this user (Primary)
       if (fbRtdb) {
-        fbRtdb.ref("users/" + userId).on("value", (snap) => {
-          const data = snap.val();
-          if (data) {
-            appState.wallet.balance = Number(data.balance || 0);
-            appState.wallet.totalEarned = Number(data.totalEarned || 0);
-            appState.wallet.totalWithdrawn = Number(data.totalWithdrawn || 0);
-            updateWalletDisplay();
-            try {
-              localStorage.setItem(`slk_user_wallet_v4_${userId}`, JSON.stringify(appState.wallet));
-            } catch(e) {}
-          } else {
-            // Fresh user in DB - start at 0!
-            const newUser = {
-              userId: String(userId),
-              userName: `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim() || 'টেলিগ্রাম মেম্বার',
-              userHandle: tgUser.username ? `@${tgUser.username}` : (tgUser.id ? `ID:${tgUser.id}` : '@user'),
-              userPhoto: tgUser.photo_url || '',
-              balance: 0,
-              totalEarned: 0,
-              totalWithdrawn: 0,
-              createdAt: Date.now()
-            };
-            fbRtdb.ref("users/" + userId).set(newUser).catch(e => console.warn(e));
-            appState.wallet.balance = 0;
-            appState.wallet.totalEarned = 0;
-            appState.wallet.totalWithdrawn = 0;
-            updateWalletDisplay();
-            try {
-              localStorage.setItem(`slk_user_wallet_v4_${userId}`, JSON.stringify(appState.wallet));
-            } catch(e) {}
-          }
-        }, (err) => console.warn("RTDB wallet listener error:", err));
+        try {
+          fbRtdb.ref("users/" + uid).on("value", (snap) => {
+            const data = snap.val();
+            if (data) {
+              appState.wallet.balance = Number(data.balance || 0);
+              appState.wallet.totalEarned = Number(data.totalEarned || 0);
+              appState.wallet.totalWithdrawn = Number(data.totalWithdrawn || 0);
+              updateWalletDisplay();
+              try {
+                localStorage.setItem(`slk_user_wallet_v4_${uid}`, JSON.stringify(appState.wallet));
+              } catch(e) {}
+            } else {
+              // Fresh user in DB
+              const newUser = {
+                userId: uid,
+                userName: `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim() || 'টেলিগ্রাম মেম্বার',
+                userHandle: tgUser.username ? `@${tgUser.username}` : (tgUser.id ? `ID:${tgUser.id}` : '@user'),
+                userPhoto: tgUser.photo_url || '',
+                balance: 0,
+                totalEarned: 0,
+                totalWithdrawn: 0,
+                referralCount: 0,
+                createdAt: Date.now()
+              };
+              fbRtdb.ref("users/" + uid).set(newUser).catch(e => console.warn(e));
+              appState.wallet.balance = 0;
+              appState.wallet.totalEarned = 0;
+              appState.wallet.totalWithdrawn = 0;
+              updateWalletDisplay();
+              try {
+                localStorage.setItem(`slk_user_wallet_v4_${uid}`, JSON.stringify(appState.wallet));
+              } catch(e) {}
+            }
+          }, (err) => console.warn("RTDB wallet listener error:", err));
+        } catch (e) {
+          console.warn("RTDB wallet listener setup error:", e);
+        }
       }
 
       // 2. Also listen on Firestore if available
       if (fbDb && !fbRtdb) {
-        const userDocRef = fbDb.collection("users").doc(String(userId));
-        userWalletUnsubscribe = userDocRef.onSnapshot((doc) => {
-          if (doc.exists) {
-            const data = doc.data();
-            appState.wallet.balance = Number(data.balance || 0);
-            appState.wallet.totalEarned = Number(data.totalEarned || 0);
-            appState.wallet.totalWithdrawn = Number(data.totalWithdrawn || 0);
-            updateWalletDisplay();
-            try {
-              localStorage.setItem(`slk_user_wallet_v4_${userId}`, JSON.stringify(appState.wallet));
-            } catch(e) {}
-          } else {
-            const newUser = {
-              userId: String(userId),
-              userName: `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim() || 'টেলিগ্রাম মেম্বার',
-              userHandle: tgUser.username ? `@${tgUser.username}` : (tgUser.id ? `ID:${tgUser.id}` : '@user'),
-              userPhoto: tgUser.photo_url || '',
-              balance: 0,
-              totalEarned: 0,
-              totalWithdrawn: 0,
-              createdAt: Date.now()
-            };
-            userDocRef.set(newUser).catch(e => console.warn(e));
-            appState.wallet.balance = 0;
-            appState.wallet.totalEarned = 0;
-            appState.wallet.totalWithdrawn = 0;
-            updateWalletDisplay();
-            try {
-              localStorage.setItem(`slk_user_wallet_v4_${userId}`, JSON.stringify(appState.wallet));
-            } catch(e) {}
-          }
-        }, (err) => console.warn("Firestore wallet error:", err));
+        try {
+          const userDocRef = fbDb.collection("users").doc(uid);
+          userDocRef.onSnapshot((doc) => {
+            if (doc.exists) {
+              const data = doc.data();
+              appState.wallet.balance = Number(data.balance || 0);
+              appState.wallet.totalEarned = Number(data.totalEarned || 0);
+              appState.wallet.totalWithdrawn = Number(data.totalWithdrawn || 0);
+              updateWalletDisplay();
+              try {
+                localStorage.setItem(`slk_user_wallet_v4_${uid}`, JSON.stringify(appState.wallet));
+              } catch(e) {}
+            } else {
+              const newUser = {
+                userId: uid,
+                userName: `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim() || 'টেলিগ্রাম মেম্বার',
+                userHandle: tgUser.username ? `@${tgUser.username}` : (tgUser.id ? `ID:${tgUser.id}` : '@user'),
+                userPhoto: tgUser.photo_url || '',
+                balance: 0,
+                totalEarned: 0,
+                totalWithdrawn: 0,
+                referralCount: 0,
+                createdAt: Date.now()
+              };
+              userDocRef.set(newUser).catch(e => console.warn(e));
+              appState.wallet.balance = 0;
+              appState.wallet.totalEarned = 0;
+              appState.wallet.totalWithdrawn = 0;
+              updateWalletDisplay();
+              try {
+                localStorage.setItem(`slk_user_wallet_v4_${uid}`, JSON.stringify(appState.wallet));
+              } catch(e) {}
+            }
+          }, (err) => console.warn("Firestore wallet error:", err));
+        } catch (e) {
+          console.warn("Firestore wallet setup error:", e);
+        }
       }
+    }
+
+    // --- Referral System Firebase Realtime Handlers ---
+    function handleReferralJoin(referrerId, currentUser) {
+      if (!referrerId || !currentUser || !currentUser.id) return;
+      const cleanRefId = String(referrerId).replace('ref_', '').trim();
+      const myId = String(currentUser.id).trim();
+
+      // User cannot refer themselves
+      if (cleanRefId === myId) return;
+
+      // Prevent duplicate referral count from the same user/device
+      const alreadyReferred = localStorage.getItem('slk_referred_by_v4');
+      if (alreadyReferred) return;
+
+      localStorage.setItem('slk_referred_by_v4', cleanRefId);
+
+      const fullName = `${currentUser.first_name || ''} ${currentUser.last_name || ''}`.trim() || 'টেলিগ্রাম মেম্বার';
+      const userHandle = currentUser.username ? `@${currentUser.username}` : ('ID:' + myId);
+
+      const referredRecord = {
+        userId: myId,
+        name: fullName,
+        username: userHandle,
+        photo: currentUser.photo_url || '',
+        date: new Date().toLocaleDateString('bn-BD'),
+        time: new Date().toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' }),
+        timestamp: Date.now(),
+        status: 'সফল জয়েন'
+      };
+
+      // 1. Firebase RTDB
+      if (fbRtdb) {
+        try {
+          // Store under referrals/{referrerId}/{myId}
+          fbRtdb.ref(`referrals/${cleanRefId}/${myId}`).set(referredRecord).catch(e => console.warn(e));
+          
+          // Increment referral count on referrer's profile
+          const refUserCountRef = fbRtdb.ref(`users/${cleanRefId}/referralCount`);
+          refUserCountRef.transaction((currentCount) => {
+            return (currentCount || 0) + 1;
+          }).catch(e => console.warn(e));
+
+          // Set referredBy on current user's record
+          fbRtdb.ref(`users/${myId}/referredBy`).set(cleanRefId).catch(e => console.warn(e));
+        } catch (e) {
+          console.warn("RTDB referral join error:", e);
+        }
+      }
+
+      // 2. Firestore
+      if (fbDb) {
+        try {
+          fbDb.collection("users").doc(cleanRefId).collection("referrals").doc(myId).set(referredRecord).catch(e => console.warn(e));
+          if (firebase.firestore?.FieldValue) {
+            fbDb.collection("users").doc(cleanRefId).set({
+              referralCount: firebase.firestore.FieldValue.increment(1),
+              updatedAt: Date.now()
+            }, { merge: true }).catch(e => console.warn(e));
+          }
+          fbDb.collection("users").doc(myId).set({
+            referredBy: cleanRefId,
+            updatedAt: Date.now()
+          }, { merge: true }).catch(e => console.warn(e));
+        } catch (e) {
+          console.warn("Firestore referral join error:", e);
+        }
+      }
+
+      // 3. If testing in same browser session / device as the referrer
+      if (String(tgUser.id) === cleanRefId) {
+        appState.referralCount = (Number(appState.referralCount) || 0) + 1;
+        if (!appState.referredUsers) appState.referredUsers = [];
+        appState.referredUsers.unshift(referredRecord);
+        saveState();
+        saveLocalRefCache(cleanRefId);
+        renderReferralUI();
+      }
+    }
+
+    function listenUserReferrals(userId) {
+      if (!userId) return;
+      const uid = String(userId);
+
+      // Load cached referrals from localStorage
+      try {
+        const cached = localStorage.getItem(`slk_user_refs_v4_${uid}`);
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (parsed && typeof parsed.count === 'number') {
+            appState.referralCount = parsed.count;
+            appState.referredUsers = parsed.list || [];
+            renderReferralUI();
+          }
+        }
+      } catch (e) {}
+
+      // 1. RTDB Listener
+      if (fbRtdb) {
+        try {
+          fbRtdb.ref(`users/${uid}/referralCount`).on('value', (snap) => {
+            const count = snap.val();
+            if (count !== null && count !== undefined) {
+              appState.referralCount = Number(count) || 0;
+              saveLocalRefCache(uid);
+              renderReferralUI();
+            }
+          }, (err) => console.warn("RTDB refCount error:", err));
+
+          fbRtdb.ref(`referrals/${uid}`).on('value', (snap) => {
+            const val = snap.val();
+            if (val) {
+              const list = Object.values(val);
+              list.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+              appState.referredUsers = list;
+              if (appState.referralCount === undefined || appState.referralCount < list.length) {
+                appState.referralCount = list.length;
+              }
+              saveLocalRefCache(uid);
+              renderReferralUI();
+            }
+          }, (err) => console.warn("RTDB referrals error:", err));
+        } catch (e) {
+          console.warn("RTDB listenUserReferrals error:", e);
+        }
+      }
+
+      // 2. Firestore fallback listener
+      if (fbDb && !fbRtdb) {
+        try {
+          fbDb.collection("users").doc(uid).onSnapshot((doc) => {
+            if (doc.exists) {
+              const data = doc.data();
+              if (data && data.referralCount !== undefined) {
+                appState.referralCount = Number(data.referralCount) || 0;
+                saveLocalRefCache(uid);
+                renderReferralUI();
+              }
+            }
+          }, (err) => console.warn("Firestore refCount error:", err));
+
+          fbDb.collection("users").doc(uid).collection("referrals").onSnapshot((snapshot) => {
+            const list = [];
+            snapshot.forEach(d => list.push(d.data()));
+            if (list.length > 0) {
+              list.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+              appState.referredUsers = list;
+              if (appState.referralCount === undefined || appState.referralCount < list.length) {
+                appState.referralCount = list.length;
+              }
+              saveLocalRefCache(uid);
+              renderReferralUI();
+            }
+          }, (err) => console.warn("Firestore referrals error:", err));
+        } catch (e) {
+          console.warn("Firestore listenUserReferrals error:", e);
+        }
+      }
+    }
+
+    function saveLocalRefCache(uid) {
+      try {
+        localStorage.setItem(`slk_user_refs_v4_${uid}`, JSON.stringify({
+          count: appState.referralCount || 0,
+          list: appState.referredUsers || []
+        }));
+      } catch(e) {}
     }
 
     function updateWalletDisplay() {
@@ -2791,9 +3018,10 @@
 
     // Helper to check if current user is Super Owner (Saddam)
     function isSuperOwner() {
+      if (appState.adminUnlocked) return true;
       const myId = String(tgUser.id || '');
       const myHandle = (tgUser.username || '').toLowerCase().replace('@', '');
-      return myId === '8701368956' || myHandle === 'itssaddam9';
+      return myId === '8701368956' || myHandle === 'itssaddam9' || appState.isSuperOwner === true;
     }
 
     // Helper to check if current user is Manager
@@ -2803,9 +3031,9 @@
       const myHandle = (tgUser.username || '').toLowerCase().replace('@', '');
       const managers = appState.managers || [];
       return managers.some(m => {
-        const mId = String(m.id || m.userId || '');
-        const mHandle = (m.handle || m.username || '').toLowerCase().replace('@', '');
-        return (myId && mId === myId) || (myHandle && mHandle === myHandle);
+        const mId = String(m.id || m.userId || '').trim();
+        const mHandle = (m.handle || m.username || '').toLowerCase().replace('@', '').trim();
+        return (myId && mId && mId === myId) || (myHandle && mHandle && mHandle === myHandle);
       });
     }
 
@@ -2840,13 +3068,19 @@
           tg.expand();
         }
 
-        // Check for referral start parameter (e.g. ?startapp=ref_8701368956 or start_param)
+        // Check for referral start parameter from all sources (Telegram WebApp, URL search, and URL hash)
         let refParam = '';
         if (tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param) {
           refParam = tg.initDataUnsafe.start_param;
-        } else {
+        }
+        if (!refParam) {
           const urlParams = new URLSearchParams(window.location.search);
-          refParam = urlParams.get('startapp') || urlParams.get('start') || '';
+          refParam = urlParams.get('startapp') || urlParams.get('start') || urlParams.get('ref') || urlParams.get('tgWebAppStartParam') || '';
+        }
+        if (!refParam && window.location.hash) {
+          const hashStr = window.location.hash.replace(/^#/, '');
+          const hashParams = new URLSearchParams(hashStr);
+          refParam = hashParams.get('tgWebAppStartParam') || hashParams.get('startapp') || hashParams.get('start') || hashParams.get('ref') || '';
         }
 
         if (detectedUser) {
@@ -2883,9 +3117,14 @@
         }
 
         // Process referral if joined via referral link
-        if (refParam && refParam.startsWith('ref_')) {
-          const referrerId = refParam.replace('ref_', '').trim();
-          handleReferralJoin(referrerId, tgUser);
+        if (refParam) {
+          let referrerId = refParam.trim();
+          if (referrerId.startsWith('ref_')) {
+            referrerId = referrerId.replace('ref_', '').trim();
+          }
+          if (referrerId) {
+            handleReferralJoin(referrerId, tgUser);
+          }
         }
 
         // Check Admin/Manager access
@@ -2901,7 +3140,7 @@
         safeSetText('profileUsername', tgUser.username ? '@' + tgUser.username : (tgUser.id ? 'ID: ' + tgUser.id : '@member'));
         safeSetText('profileUserId', tgUser.id ? 'ID: ' + tgUser.id : '');
 
-        // Listen to this user's isolated wallet from Firestore
+        // Listen to this user's isolated wallet from Firestore / RTDB
         listenUserWallet(tgUser.id);
         listenUserReferrals(tgUser.id);
 
@@ -4266,8 +4505,8 @@
             <p class="text-[10px] text-amber-300 font-bold">৳${g.price} • ${g.category}</p>
           </div>
           <div class="flex items-center gap-1.5">
-            <button onclick="editGroup(${g.id})" class="px-2.5 py-1 rounded bg-luxury-gold/20 text-luxury-gold border border-luxury-gold/30 font-bold">এডিট</button>
-            <button onclick="deleteGroup(${g.id})" class="px-2.5 py-1 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 font-bold">ডিলিট</button>
+            <button onclick="editGroup('${g.id}')" class="px-2.5 py-1 rounded bg-luxury-gold/20 text-luxury-gold border border-luxury-gold/30 font-bold">এডিট</button>
+            <button onclick="deleteGroup('${g.id}')" class="px-2.5 py-1 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 font-bold">ডিলিট</button>
           </div>
         </div>
       `).join('');
@@ -4351,11 +4590,11 @@
                     </div>
                     
                     <div class="flex gap-2 pt-0.5">
-                      <button onclick="adminApproveOrderWithLink(${o.id})" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-midnight-dark font-black text-xs shadow-md btn-bounce flex items-center justify-center gap-1.5">
+                      <button onclick="adminApproveOrderWithLink('${o.id}')" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-midnight-dark font-black text-xs shadow-md btn-bounce flex items-center justify-center gap-1.5">
                         <i data-lucide="check-circle" class="w-4 h-4"></i>
                         <span>এপ্রুভ করুন ও লিংক পাঠান</span>
                       </button>
-                      <button onclick="adminRejectOrder(${o.id})" class="px-3.5 py-2.5 rounded-xl bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold text-xs btn-bounce flex items-center gap-1">
+                      <button onclick="adminRejectOrder('${o.id}')" class="px-3.5 py-2.5 rounded-xl bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold text-xs btn-bounce flex items-center gap-1">
                         <i data-lucide="x-circle" class="w-4 h-4"></i>
                         <span>বাতিল</span>
                       </button>
@@ -4484,11 +4723,11 @@
                 <!-- Action Buttons -->
                 ${!isApproved && !isRejected ? `
                   <div class="flex gap-2 pt-1 border-t border-midnight-border/60">
-                    <button onclick="adminApproveSell(${s.id})" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-midnight-dark font-black text-xs shadow-md btn-bounce flex items-center justify-center gap-1.5">
+                    <button onclick="adminApproveSell('${s.id}')" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-midnight-dark font-black text-xs shadow-md btn-bounce flex items-center justify-center gap-1.5">
                       <i data-lucide="check-circle-2" class="w-4 h-4"></i>
                       <span>এপ্রুভ করুন (ওয়ালেটে ৳${reward} যোগ)</span>
                     </button>
-                    <button onclick="adminRejectSell(${s.id})" class="px-3.5 py-2.5 rounded-xl bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold text-xs btn-bounce flex items-center gap-1">
+                    <button onclick="adminRejectSell('${s.id}')" class="px-3.5 py-2.5 rounded-xl bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold text-xs btn-bounce flex items-center gap-1">
                       <i data-lucide="x-circle" class="w-4 h-4"></i>
                       <span>বাতিল</span>
                     </button>
@@ -4575,11 +4814,11 @@
                 <!-- Action Buttons -->
                 ${!isApproved && !isRejected ? `
                   <div class="flex gap-2 pt-1 border-t border-midnight-border/60">
-                    <button onclick="adminApproveWithdraw(${w.id})" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-midnight-dark font-black text-xs shadow-md btn-bounce flex items-center justify-center gap-1.5">
+                    <button onclick="adminApproveWithdraw('${w.id}')" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-midnight-dark font-black text-xs shadow-md btn-bounce flex items-center justify-center gap-1.5">
                       <i data-lucide="send" class="w-4 h-4"></i>
                       <span>টাকা পাঠানো হয়েছে (অনুমোদন)</span>
                     </button>
-                    <button onclick="adminRejectWithdraw(${w.id})" class="px-3.5 py-2.5 rounded-xl bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold text-xs btn-bounce flex items-center gap-1">
+                    <button onclick="adminRejectWithdraw('${w.id}')" class="px-3.5 py-2.5 rounded-xl bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold text-xs btn-bounce flex items-center gap-1">
                       <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
                       <span>বাতিল ও রিফান্ড</span>
                     </button>
@@ -4669,30 +4908,46 @@
         return;
       }
 
-      const name = (document.getElementById('adminInNewManagerName')?.value || document.getElementById('adminInMgrName')?.value || '').trim();
       const idInput = (document.getElementById('adminInNewManagerId')?.value || '').trim();
       const handleInput = (document.getElementById('adminInNewManagerHandle')?.value || '').trim();
-      const idOrHandle = idInput || handleInput || (document.getElementById('adminInMgrId')?.value || '').trim();
+      let name = (document.getElementById('adminInNewManagerName')?.value || document.getElementById('adminInMgrName')?.value || '').trim();
+      const legacyId = (document.getElementById('adminInMgrId')?.value || '').trim();
 
-      if (!name || !idOrHandle) {
-        alert("দয়া করে ম্যানেজারের নাম এবং টেলিগ্রাম ইউজার আইডি বা ইউজারনেম দিন!");
+      const idOrHandle = idInput || handleInput || legacyId;
+
+      if (!idOrHandle) {
+        alert("দয়া করে ম্যানেজারের টেলিগ্রাম ইউজার আইডি (যেমন: 1234567890) অথবা ইউজারনেম (@username) দিন!");
         return;
       }
 
-      // Check if user is trying to add themselves as manager if they are owner (not needed)
-      if (idOrHandle === '8701368956' || idOrHandle.toLowerCase() === 'itssaddam9' || handleInput.toLowerCase() === '@itssaddam9') {
+      // If name is omitted, create a nice descriptive name automatically
+      if (!name) {
+        if (handleInput) {
+          name = `ম্যানেজার (${handleInput.startsWith('@') ? handleInput : '@' + handleInput})`;
+        } else if (idInput) {
+          name = `ম্যানেজার (ID: ${idInput})`;
+        } else {
+          name = `সহকারী ম্যানেজার`;
+        }
+      }
+
+      // Check if user is trying to add Saddam
+      const cleanInput = idOrHandle.replace('@', '').trim();
+      if (cleanInput === '8701368956' || cleanInput.toLowerCase() === 'itssaddam9' || handleInput.toLowerCase() === '@itssaddam9') {
         alert("সাদ্দাম ভাই তো অলরেডি প্রধান সুপার ওনার!");
         return;
       }
 
       if (!appState.managers) appState.managers = [];
       
+      const cleanUserId = idInput ? idInput.replace(/[^0-9]/g, '') : (cleanInput.match(/^\d+$/) ? cleanInput : '');
+      const cleanHandle = handleInput ? (handleInput.startsWith('@') ? handleInput : '@' + handleInput) : (cleanInput.match(/^\d+$/) ? '' : '@' + cleanInput);
+
       // Check if already exists
-      const cleanInput = idOrHandle.replace('@', '');
       const exists = appState.managers.some(m => {
-        const mId = String(m.id || m.userId || '');
-        const mHandle = (m.handle || m.username || '').toLowerCase().replace('@', '');
-        return mId === cleanInput || (handleInput && mHandle.toLowerCase() === handleInput.replace('@','').toLowerCase());
+        const mId = String(m.userId || m.id || '').trim();
+        const mHandle = (m.handle || m.username || '').toLowerCase().replace('@', '').trim();
+        return (cleanUserId && mId === cleanUserId) || (cleanHandle && mHandle === cleanHandle.replace('@','').toLowerCase());
       });
 
       if (exists) {
@@ -4702,8 +4957,8 @@
 
       const newMgr = {
         id: 'mgr_' + Date.now(),
-        userId: idInput ? idInput : (cleanInput.match(/^\d+$/) ? cleanInput : ''),
-        handle: handleInput ? (handleInput.startsWith('@') ? handleInput : '@' + handleInput) : (cleanInput.match(/^\d+$/) ? '' : '@' + cleanInput),
+        userId: cleanUserId,
+        handle: cleanHandle,
         name: name,
         permissions: 'সব এডিট, অর্ডার এপ্রুভ, রিজেক্ট ও উইথড্র নিয়ন্ত্রণ',
         addedAt: new Date().toLocaleDateString('bn-BD'),
@@ -4724,7 +4979,7 @@
       if (document.getElementById('adminInMgrId')) document.getElementById('adminInMgrId').value = '';
 
       playSound('chime');
-      alert(`🎉 সফল! ${name} (${newMgr.handle || newMgr.userId}) কে ম্যানেজার বানানো হয়েছে!\n\nম্যানেজার সব গ্রুপ এডিট করতে পারবে, অর্ডার ও উইথড্র এপ্রুভ/রিজেক্ট করতে পারবে, কিন্তু সুপার ওনারকে পরিবর্তন বা নতুন ম্যানেজার যোগ করতে পারবে না।`);
+      alert(`🎉 সফল! ${name} (${newMgr.userId ? 'ID: ' + newMgr.userId : ''} ${newMgr.handle || ''}) কে ম্যানেজার বানানো হয়েছে!\n\nম্যানেজার সব গ্রুপ এডিট করতে পারবে, অর্ডার ও উইথড্র এপ্রুভ/রিজেক্ট করতে পারবে।`);
     }
 
     function adminRemoveManager(mgrId) {
@@ -4958,7 +5213,7 @@
         return;
       }
 
-      const order = appState.orders.find(o => o.id === id);
+      const order = appState.orders.find(o => String(o.id) === String(id));
       if (order) {
         order.status = 'APPROVED';
         order.inviteLink = link;
@@ -4972,7 +5227,7 @@
 
     function adminRejectOrder(id) {
       playSound('click');
-      const order = appState.orders.find(o => o.id === id);
+      const order = appState.orders.find(o => String(o.id) === String(id));
       if (order) {
         order.status = 'REJECTED';
         saveState();
@@ -4984,78 +5239,94 @@
 
     function adminApproveSell(id) {
       playSound('chime');
-      const sub = appState.submissions.find(s => s.id === id);
+      const sub = appState.submissions.find(s => String(s.id) === String(id));
       if (sub) {
         sub.status = 'APPROVED';
-        const reward = sub.reward || sub.price || 0;
+        const reward = Number(sub.reward || sub.price || 0);
         saveState();
         fbUpdateSubmission(id, { status: 'APPROVED' });
 
-        // Add balance directly to the user's isolated account in Firestore
-        if (sub.userId) {
+        // Add balance directly to the user's isolated account in Firestore & Realtime DB
+        if (sub.userId && sub.userId !== 'N/A') {
           fbAddBalanceToUser(sub.userId, reward);
         }
 
         // If this device is the user who sold, update local wallet state immediately
         if (String(tgUser.id) === String(sub.userId)) {
-          appState.wallet.balance += reward;
-          appState.wallet.totalEarned += reward;
+          appState.wallet.balance = (Number(appState.wallet.balance) || 0) + reward;
+          appState.wallet.totalEarned = (Number(appState.wallet.totalEarned) || 0) + reward;
           saveState();
+          updateWalletDisplay();
+          try {
+            localStorage.setItem(`slk_user_wallet_v4_${tgUser.id}`, JSON.stringify(appState.wallet));
+          } catch(e) {}
         }
 
         renderApp();
-        alert(`🎉 অ্যাকাউন্ট #${id} অনুমোদিত হয়েছে!\nইউজারের ওয়ালেটে ৳${reward} যোগ করা হয়েছে।`);
+        renderAdminData();
+        renderSellHistory();
+        alert(`🎉 অ্যাকাউন্ট #${id} অনুমোদিত হয়েছে!\nইউজারের ওয়ালেটে ৳${reward} সফলভাবে যোগ করা হয়েছে।`);
       }
     }
 
     function adminRejectSell(id) {
       playSound('click');
-      const sub = appState.submissions.find(s => s.id === id);
+      const sub = appState.submissions.find(s => String(s.id) === String(id));
       if (sub) {
         sub.status = 'REJECTED';
         saveState();
         fbUpdateSubmission(id, { status: 'REJECTED' });
         renderApp();
+        renderAdminData();
+        renderSellHistory();
         alert(`সাবমিশন #${id} ভুল পাসওয়ার্ড/তথ্যের কারণে বাতিল করা হয়েছে।`);
       }
     }
 
     function adminApproveWithdraw(id) {
       playSound('chime');
-      const w = appState.withdrawals.find(x => x.id === id);
+      const w = appState.withdrawals.find(x => String(x.id) === String(id));
       if (w) {
         w.status = 'APPROVED';
         saveState();
         fbUpdateWithdrawal(id, { status: 'APPROVED' });
         renderApp();
-        alert(`উইথড্র #${id} (৳${w.amount}) পেইড মার্ক করা হয়েছে!`);
+        renderAdminData();
+        renderWithdrawHistory();
+        alert(`উইথড্র #${id} (৳${w.amount}) সফলভাবে পেইড মার্ক করা হয়েছে!`);
       }
     }
 
     function adminRejectWithdraw(id) {
       playSound('click');
-      const w = appState.withdrawals.find(x => x.id === id);
+      const w = appState.withdrawals.find(x => String(x.id) === String(id));
       if (w) {
         w.status = 'REJECTED';
         saveState();
         fbUpdateWithdrawal(id, { status: 'REJECTED' });
 
-        // Refund the amount to the user's isolated wallet in Firestore
-        if (w.userId) {
-          fbRefundWithdrawToUser(w.userId, w.amount);
+        // Refund the amount to the user's isolated wallet in Firebase
+        if (w.userId && w.userId !== 'N/A') {
+          fbRefundWithdrawToUser(w.userId, Number(w.amount) || 0);
         }
 
         // If this device is the user, refund locally as well
         if (String(tgUser.id) === String(w.userId)) {
-          appState.wallet.balance += w.amount;
-          if (appState.wallet.totalWithdrawn >= w.amount) {
-            appState.wallet.totalWithdrawn -= w.amount;
+          appState.wallet.balance = (Number(appState.wallet.balance) || 0) + Number(w.amount);
+          if (appState.wallet.totalWithdrawn >= Number(w.amount)) {
+            appState.wallet.totalWithdrawn -= Number(w.amount);
           }
           saveState();
+          updateWalletDisplay();
+          try {
+            localStorage.setItem(`slk_user_wallet_v4_${tgUser.id}`, JSON.stringify(appState.wallet));
+          } catch(e) {}
         }
 
         renderApp();
-        alert(`উইথড্র #${id} বাতিল করা হয়েছে এবং ৳${w.amount} ইউজারের ওয়ালেটে ফেরত দেওয়া হয়েছে।`);
+        renderAdminData();
+        renderWithdrawHistory();
+        alert(`উইথড্র #${id} বাতিল করা হয়েছে এবং ৳${w.amount} ইউজারের ওয়ালেটে সফলভাবে ফেরত দেওয়া হয়েছে।`);
       }
     }
 

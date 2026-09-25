@@ -647,17 +647,23 @@
         <div class="flex items-center justify-between">
           <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
             <i data-lucide="users" class="w-4 h-4 text-amber-400"></i>
-            <span>রেফারেল হিস্টরি (আপনার লিংকে যারা জয়েন করেছে)</span>
+            <span>রেফারেল হিস্টরি (যারা জয়েন করেছে)</span>
           </h3>
-          <span id="badgeRefHistoryCount" class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full font-bold border border-amber-500/30">০ জন</span>
+          <div class="flex items-center gap-2">
+            <span id="badgeRefHistoryCount" class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full font-bold border border-amber-500/30">০ জন</span>
+            <button onclick="openReferralHistoryModal()" class="text-[11px] px-2.5 py-1 rounded-lg bg-luxury-gold/20 text-luxury-gold border border-luxury-gold/40 font-bold hover:bg-luxury-gold hover:text-midnight-dark transition btn-bounce flex items-center gap-1">
+              <i data-lucide="history" class="w-3.5 h-3.5"></i>
+              <span>হিস্টরি দেখুন</span>
+            </button>
+          </div>
         </div>
-        <p class="text-[11px] text-slate-400">আপনার রেফারেল লিংক ব্যবহার করে যারা অ্যাপে প্রবেশ করেছে তাদের নাম, ইউজারনেম, আইডি ও সময় নিচে প্রদর্শিত হচ্ছে:</p>
+        <p class="text-[11px] text-slate-400">আপনার রেফারেল লিংক দিয়ে যারা অ্যাপে প্রবেশ করেছে তাদের নাম, প্রোফাইল লোগো, সময় ও স্ট্যাটাস নিচে দেখুন:</p>
         
-        <div id="tabRefUsersHistoryList" class="space-y-2 max-h-56 overflow-y-auto custom-scrollbar">
+        <div id="tabRefUsersHistoryList" class="space-y-2 max-h-60 overflow-y-auto custom-scrollbar">
           <!-- Populated by JS -->
         </div>
 
-        <button id="btnClaimFreeGroupTab" onclick="claimFreeGroup()" disabled class="w-full py-3 rounded-2xl bg-slate-800/80 text-slate-500 font-bold text-xs cursor-not-allowed flex items-center justify-center gap-2 border border-white/5">
+        <button id="btnClaimFreeGroupTab" onclick="openClaimFreeGroupModal()" disabled class="w-full py-3 rounded-2xl bg-slate-800/80 text-slate-500 font-bold text-xs cursor-not-allowed flex items-center justify-center gap-2 border border-white/5 btn-bounce">
           <i data-lucide="lock" class="w-4 h-4"></i>
           <span>ফ্রি গ্রুপ আনলক করুন (২০ জন বাকি)</span>
         </button>
@@ -1053,13 +1059,14 @@
       <!-- Admin Sub Tabs -->
       <div class="flex items-center gap-1.5 overflow-x-auto pb-1 custom-scrollbar text-xs">
         <button onclick="switchAdminTab('groups')" class="admin-tab-btn active px-3 py-1.5 rounded-xl font-bold bg-luxury-gold text-midnight-dark whitespace-nowrap" data-tab="groups">গ্রুপ ম্যানেজ</button>
+        <button onclick="switchAdminTab('users-mgmt')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap flex items-center gap-1" data-tab="users-mgmt"><i data-lucide="users" class="w-3.5 h-3.5 text-amber-400"></i><span>ইউজার হিস্টরি ও কন্ট্রোল</span></button>
+        <button onclick="switchAdminTab('orders')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="orders">অর্ডার অনুমোদন</button>
+        <button onclick="switchAdminTab('sell-req')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="sell-req">জিমেইল/এফবি চেক</button>
+        <button onclick="switchAdminTab('withdrawals')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="withdrawals">উইথড্র রিকোয়েস্ট</button>
         <button onclick="switchAdminTab('payment-settings')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="payment-settings">পেমেন্ট গেটওয়ে সেটিংস</button>
         <button onclick="switchAdminTab('app-settings')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="app-settings">অ্যাপ ও বাটন সেটিংস</button>
         <button onclick="switchAdminTab('referral-settings')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="referral-settings">রেফারেল লিংক সেটিংস</button>
         <button id="adminTabManagersBtn" onclick="switchAdminTab('managers')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="managers">ম্যানেজার রোল (Owner Only)</button>
-        <button onclick="switchAdminTab('orders')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="orders">অর্ডার অনুমোদন</button>
-        <button onclick="switchAdminTab('sell-req')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="sell-req">জিমেইল/এফবি চেক</button>
-        <button onclick="switchAdminTab('withdrawals')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="withdrawals">উইথড্র রিকোয়েস্ট</button>
       </div>
 
       <!-- Admin Sub Tab 1: Group Manage (Add / Edit / Delete with Screenshot URL) -->
@@ -1603,6 +1610,54 @@
           <!-- Populated by JS -->
         </div>
       </div>
+
+      <!-- Admin Sub Tab 6: User History & Realtime Control (Search, Ban/Unban, Edit Balance, Send Notice & Gift) -->
+      <div id="admin-view-users-mgmt" class="space-y-4 hidden">
+        <!-- Stats Summary Counter Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
+          <div class="p-3 rounded-2xl bg-midnight-card border border-luxury-gold/30">
+            <span class="text-[10px] text-slate-400 block">মোট ইউজার</span>
+            <span id="statTotalUsersCount" class="text-sm font-black text-white">০ জন</span>
+          </div>
+          <div class="p-3 rounded-2xl bg-midnight-card border border-emerald-500/30">
+            <span class="text-[10px] text-slate-400 block">সক্রিয় ইউজার</span>
+            <span id="statActiveUsersCount" class="text-sm font-black text-emerald-400">০ জন</span>
+          </div>
+          <div class="p-3 rounded-2xl bg-midnight-card border border-amber-500/30">
+            <span class="text-[10px] text-slate-400 block">মোট রেফারেল</span>
+            <span id="statTotalReferralsCount" class="text-sm font-black text-amber-300">০ জন</span>
+          </div>
+          <div class="p-3 rounded-2xl bg-midnight-card border border-sky-500/30">
+            <span class="text-[10px] text-slate-400 block">মোট ওয়ালেট ব্যালেন্স</span>
+            <span id="statTotalBalanceSum" class="text-sm font-black text-luxury-gold">৳০</span>
+          </div>
+        </div>
+
+        <!-- Realtime Search Engine & Filter Bar -->
+        <div class="p-3.5 rounded-2xl bg-midnight-card border border-luxury-gold/40 space-y-2.5">
+          <div class="relative">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-3"></i>
+            <input id="adminUserSearchInput" type="text" oninput="filterAdminUsers()" placeholder="ইউজার আইডি (ID) বা @username বা নাম লিখে খুঁজুন..." class="w-full bg-midnight-dark border border-midnight-border rounded-xl pl-9 pr-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 font-medium" />
+          </div>
+          <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5 text-[11px]">
+            <button onclick="setUserMgmtFilter('ALL')" id="filterUsersAll" class="px-2.5 py-1 rounded-lg bg-luxury-gold text-midnight-dark font-bold whitespace-nowrap">সব ইউজার</button>
+            <button onclick="setUserMgmtFilter('ACTIVE')" id="filterUsersActive" class="px-2.5 py-1 rounded-lg bg-midnight-dark text-slate-300 border border-slate-700 font-bold whitespace-nowrap">সক্রিয়</button>
+            <button onclick="setUserMgmtFilter('BANNED')" id="filterUsersBanned" class="px-2.5 py-1 rounded-lg bg-midnight-dark text-slate-300 border border-slate-700 font-bold whitespace-nowrap">ব্যানড</button>
+            <button onclick="setUserMgmtFilter('BALANCE')" id="filterUsersBalance" class="px-2.5 py-1 rounded-lg bg-midnight-dark text-slate-300 border border-slate-700 font-bold whitespace-nowrap">ব্যালেন্সধারী (>৳০)</button>
+          </div>
+        </div>
+
+        <!-- Users List View -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between text-xs font-bold text-slate-300">
+            <span>সকল নিবন্ধিত ইউজারের তালিকা ও হিস্টরি</span>
+            <span id="badgeFilteredUsersCount" class="text-[10px] text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded">০ জন</span>
+          </div>
+          <div id="adminUsersList" class="space-y-3">
+            <!-- Populated dynamically by renderAdminUsers() -->
+          </div>
+        </div>
+      </div>
     </section>
 
   </main>
@@ -2100,6 +2155,269 @@
           পরে জয়েন করব
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: REFERRAL HISTORY DETAILED POPUP ================= -->
+  <div id="referralHistoryModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-midnight-card border border-luxury-gold/50 rounded-3xl p-5 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto custom-scrollbar">
+      <div class="flex items-center justify-between pb-2 border-b border-midnight-border">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-full bg-amber-500/20 text-amber-300 flex items-center justify-center font-black border border-amber-500/30">
+            <i data-lucide="users" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-black text-white">রেফারেল হিস্টরি ও জয়েন তালিকা</h3>
+            <p class="text-[10px] text-amber-300 font-bold">কে কখন কোন সময়ে প্রবেশ করেছে তার বিস্তারিত বিবরণ</p>
+          </div>
+        </div>
+        <button onclick="closeReferralHistoryModal()" class="p-1 rounded-lg text-slate-400 hover:text-white btn-bounce">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Quick summary badge -->
+      <div class="p-3 rounded-2xl bg-midnight-dark border border-white/10 flex items-center justify-between text-xs">
+        <div>
+          <span class="text-[10px] text-slate-400 block">মোট সফল রেফারেল:</span>
+          <span id="modalRefHistoryTotalBadge" class="text-sm font-black text-amber-300">০ জন</span>
+        </div>
+        <div class="text-right">
+          <span class="text-[10px] text-slate-400 block">ফ্রি গ্রুপের অগ্রগতি:</span>
+          <span id="modalRefHistoryProgressBadge" class="text-xs font-black text-emerald-400">০ / ২০</span>
+        </div>
+      </div>
+
+      <!-- Referred users list -->
+      <div id="modalRefUsersList" class="space-y-2.5">
+        <!-- Rendered dynamically by JS -->
+      </div>
+
+      <button onclick="closeReferralHistoryModal()" class="w-full py-2.5 rounded-xl bg-midnight-surface border border-slate-700 text-slate-300 text-xs font-bold btn-bounce">
+        বন্ধ করুন
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: CHOOSE FREE GROUP REWARD (20 REFS COMPLETED) ================= -->
+  <div id="claimFreeGroupModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-midnight-card border border-luxury-gold/60 rounded-3xl p-5 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto custom-scrollbar">
+      <div class="flex items-center justify-between pb-2 border-b border-midnight-border">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-full bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark flex items-center justify-center font-black shadow-md shadow-amber-500/30">
+            <i data-lucide="gift" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-black text-white">🎁 পছন্দের ফ্রি গ্রুপ বেছে নিন</h3>
+            <p class="text-[10px] text-amber-300 font-bold">২০ রেফারেল সফল হওয়ায় যেকোনো ১টি গ্রুপ সম্পূর্ণ ফ্রি!</p>
+          </div>
+        </div>
+        <button onclick="closeClaimFreeGroupModal()" class="p-1 rounded-lg text-slate-400 hover:text-white btn-bounce">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-3 rounded-xl bg-amber-500/15 border border-amber-500/30 text-xs text-amber-200 leading-relaxed">
+        <strong class="font-bold block text-amber-300 mb-0.5">কীভাবে পাবেন:</strong>
+        নিচের তালিকা থেকে আপনার পছন্দের গ্রুপটির <strong>"এই গ্রুপটি ফ্রিতে নিন"</strong> বাটনে ক্লিক করে রিকোয়েস্ট পাঠান। এডমিন ভেরিফাই করে সরাসরি আপনাকে সেই গ্রুপের ইনভাইট লিংক পাঠাবে।
+      </div>
+
+      <!-- Groups List to choose from -->
+      <div id="claimFreeGroupsGrid" class="space-y-3">
+        <!-- Rendered dynamically by openClaimFreeGroupModal() -->
+      </div>
+
+      <button onclick="closeClaimFreeGroupModal()" class="w-full py-2.5 rounded-xl bg-midnight-surface border border-slate-700 text-slate-300 text-xs font-bold btn-bounce">
+        বন্ধ করুন
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: ADMIN EDIT USER BALANCE ================= -->
+  <div id="adminEditBalanceModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-sm bg-midnight-card border border-luxury-gold/50 rounded-2xl p-5 shadow-2xl space-y-3.5">
+      <div class="flex items-center justify-between">
+        <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+          <i data-lucide="wallet" class="w-4 h-4 text-luxury-gold"></i>
+          <span>ইউজার ওয়ালেট ব্যালেন্স পরিবর্তন</span>
+        </h4>
+        <button onclick="adminCloseEditBalanceModal()" class="p-1 text-slate-400 hover:text-white btn-bounce">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      
+      <!-- Target User Badge -->
+      <div class="p-2.5 rounded-xl bg-midnight-dark border border-white/10 text-xs space-y-0.5">
+        <span class="text-[10px] text-slate-400 block">ইউজার:</span>
+        <p class="font-bold text-white text-xs truncate" id="adminTargetUserNameBalance">করিম ভাই (@username)</p>
+        <p class="text-[10px] text-amber-300 font-mono" id="adminTargetUserIdBalance">ID: 123456789</p>
+        <p class="text-[11px] text-emerald-400 font-bold mt-1">বর্তমান ব্যালেন্স: <span id="adminTargetUserCurBal">৳০</span></p>
+      </div>
+
+      <input type="hidden" id="adminTargetUserIdHidden" value="" />
+
+      <!-- Add or Deduct Selection -->
+      <div class="grid grid-cols-2 gap-2 text-xs font-bold">
+        <label class="cursor-pointer p-2.5 rounded-xl border border-emerald-500/40 bg-midnight-dark text-center has-[:checked]:bg-emerald-500/20 has-[:checked]:border-emerald-500 text-emerald-300">
+          <input type="radio" name="adminBalAction" value="ADD" checked class="hidden" />
+          <span>➕ টাকা যোগ করুন</span>
+        </label>
+        <label class="cursor-pointer p-2.5 rounded-xl border border-rose-500/40 bg-midnight-dark text-center has-[:checked]:bg-rose-500/20 has-[:checked]:border-rose-500 text-rose-300">
+          <input type="radio" name="adminBalAction" value="DEDUCT" class="hidden" />
+          <span>➖ টাকা কর্তন করুন</span>
+        </label>
+      </div>
+
+      <div>
+        <label class="text-[10px] text-slate-300 block mb-0.5">টাকার পরিমাণ (৳) *</label>
+        <input id="adminInEditBalAmount" type="number" placeholder="যেমন: 50" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400 font-bold" />
+      </div>
+
+      <div>
+        <label class="text-[10px] text-slate-300 block mb-0.5">কারণ / রেফারেন্স নোট (ঐচ্ছিক)</label>
+        <input id="adminInEditBalReason" type="text" placeholder="যেমন: রেফারেল বোনাস রিওয়ার্ড" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400" />
+      </div>
+
+      <button onclick="adminSubmitEditBalance()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark font-black text-xs btn-bounce shadow-md">
+        ব্যালেন্স আপডেট ও নোটিশ পাঠান
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: ADMIN SEND PERSONAL NOTICE ================= -->
+  <div id="adminSendNoticeModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-sm bg-midnight-card border border-luxury-gold/50 rounded-2xl p-5 shadow-2xl space-y-3.5">
+      <div class="flex items-center justify-between">
+        <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+          <i data-lucide="bell-ring" class="w-4 h-4 text-amber-400"></i>
+          <span>ইউজারকে ব্যক্তিগত নোটিশ পাঠান</span>
+        </h4>
+        <button onclick="adminCloseSendNoticeModal()" class="p-1 text-slate-400 hover:text-white btn-bounce">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="p-2.5 rounded-xl bg-midnight-dark border border-white/10 text-xs">
+        <p class="font-bold text-white text-xs truncate" id="adminTargetUserNameNotice">ইউজার নাম</p>
+        <p class="text-[10px] text-amber-300 font-mono" id="adminTargetUserIdNotice">ID: 123456789</p>
+      </div>
+
+      <input type="hidden" id="adminTargetUserIdNoticeHidden" value="" />
+
+      <div>
+        <label class="text-[10px] text-slate-300 block mb-0.5">নোটিশ শিরোনাম / টাইটেল *</label>
+        <input id="adminInNoticeTitle" type="text" placeholder="যেমন: অভিনন্দন! বা সতর্কবার্তা" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400 font-bold" />
+      </div>
+
+      <div>
+        <label class="text-[10px] text-slate-300 block mb-0.5">বার্তা / মেসেজ বডি *</label>
+        <textarea id="adminInNoticeBody" rows="3" placeholder="ইউজারের স্ক্রিনে যে বার্তাটি প্রদর্শিত হবে তা লিখুন..." class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400"></textarea>
+      </div>
+
+      <button onclick="adminSubmitSendNotice()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 text-midnight-dark font-black text-xs btn-bounce shadow-md">
+        নোটিশ পাঠান (ইউজারের স্ক্রিনে পপআপ হবে)
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: ADMIN SEND GIFT / REWARD ================= -->
+  <div id="adminSendGiftModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-sm bg-midnight-card border border-luxury-gold/50 rounded-2xl p-5 shadow-2xl space-y-3.5">
+      <div class="flex items-center justify-between">
+        <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+          <i data-lucide="gift" class="w-4 h-4 text-emerald-400"></i>
+          <span>ইউজারকে বিশেষ উপহার (Gift) প্রদান</span>
+        </h4>
+        <button onclick="adminCloseSendGiftModal()" class="p-1 text-slate-400 hover:text-white btn-bounce">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="p-2.5 rounded-xl bg-midnight-dark border border-white/10 text-xs">
+        <p class="font-bold text-white text-xs truncate" id="adminTargetUserNameGift">ইউজার নাম</p>
+        <p class="text-[10px] text-amber-300 font-mono" id="adminTargetUserIdGift">ID: 123456789</p>
+      </div>
+
+      <input type="hidden" id="adminTargetUserIdGiftHidden" value="" />
+
+      <div>
+        <label class="text-[10px] text-slate-300 block mb-0.5">উপহারের ধরন নির্বাচন করুন *</label>
+        <select id="adminInGiftType" onchange="toggleAdminGiftInputs()" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-xs text-white">
+          <option value="GROUP_LINK">টেলিগ্রাম প্রিমিয়াম গ্রুপ লিংক (Free Group Link)</option>
+          <option value="CASH_BONUS">ক্যাশ মানি উপহার (Direct Wallet Money)</option>
+          <option value="SPECIAL_BADGE">ভিআইপি স্পেশাল ব্যাজ ও সম্মাননা</option>
+        </select>
+      </div>
+
+      <div id="adminGiftInputGroupLink">
+        <label class="text-[10px] text-slate-300 block mb-0.5">টেলিগ্রাম গ্রুপ ইনভাইট লিংক URL *</label>
+        <input id="adminInGiftGroupLink" type="text" placeholder="https://t.me/+xxxxxx" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-xs text-white font-mono" />
+      </div>
+
+      <div id="adminGiftInputCash" class="hidden">
+        <label class="text-[10px] text-slate-300 block mb-0.5">উপহারের টাকা (৳) *</label>
+        <input id="adminInGiftCashAmount" type="number" placeholder="যেমন: 100" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-xs text-white font-bold" />
+      </div>
+
+      <div>
+        <label class="text-[10px] text-slate-300 block mb-0.5">অভিনন্দন বার্তা / শুভেচ্ছা মেসেজ</label>
+        <textarea id="adminInGiftMessage" rows="2" placeholder="অভিনন্দন! এডমিনের পক্ষ থেকে আপনার জন্য এই বিশেষ উপহার..." class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-xs text-white"></textarea>
+      </div>
+
+      <button onclick="adminSubmitSendGift()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-400 text-midnight-dark font-black text-xs btn-bounce shadow-lg">
+        উপহার পাঠান (ইউজারের স্ক্রিনে উদযাপন হবে)
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: USER-FACING GIFT / PERSONAL NOTICE RECEIVED POPUP ================= -->
+  <div id="userGiftReceivedModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-sm bg-midnight-card border-2 border-luxury-gold rounded-3xl p-5 shadow-2xl space-y-4 text-center relative overflow-hidden">
+      <!-- Glow effect -->
+      <div class="absolute -top-10 -right-10 w-36 h-36 bg-amber-500/25 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-10 -left-10 w-36 h-36 bg-emerald-500/25 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="w-16 h-16 mx-auto rounded-full bg-gradient-to-tr from-amber-400 to-yellow-500 text-midnight-dark flex items-center justify-center shadow-lg shadow-amber-500/40 animate-bounce">
+        <i data-lucide="gift" class="w-8 h-8"></i>
+      </div>
+
+      <div>
+        <span class="text-[10px] font-black text-amber-300 bg-amber-500/15 px-3 py-0.5 rounded-full border border-amber-500/30 uppercase tracking-wide">এডমিন উপহার / নোটিশ</span>
+        <h3 class="text-base font-black text-white mt-1.5" id="userGiftModalTitle">অভিনন্দন! আপনি একটি উপহার পেয়েছেন</h3>
+        <p class="text-xs text-slate-300 mt-1 leading-relaxed" id="userGiftModalBody">
+          এডমিনের পক্ষ থেকে আপনার অ্যাকাউন্টে একটি বিশেষ উপহার বা নোটিশ পাঠানো হয়েছে।
+        </p>
+      </div>
+
+      <!-- Action Button if link exists -->
+      <div id="userGiftActionContainer" class="space-y-2 pt-1">
+        <a id="userGiftJoinBtn" href="#" target="_blank" onclick="dismissUserGiftModal()" class="hidden w-full py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-midnight-dark font-black text-xs flex items-center justify-center gap-2 shadow-xl btn-bounce">
+          <i data-lucide="sparkles" class="w-4 h-4"></i>
+          <span>উপহারের গ্রুপে জয়েন করুন</span>
+        </a>
+        <button onclick="dismissUserGiftModal()" class="w-full py-2.5 rounded-xl bg-luxury-gold text-midnight-dark font-bold text-xs btn-bounce">
+          ধন্যবাদ, গ্রহণ করলাম
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: USER BANNED NOTICE ================= -->
+  <div id="userBannedModal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-lg hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-sm bg-midnight-card border-2 border-rose-500/80 rounded-3xl p-6 shadow-2xl space-y-4 text-center">
+      <div class="w-16 h-16 mx-auto rounded-full bg-rose-500/20 text-rose-400 border-2 border-rose-500 flex items-center justify-center animate-pulse">
+        <i data-lucide="shield-alert" class="w-8 h-8"></i>
+      </div>
+      <div>
+        <h3 class="text-base font-black text-rose-400">একাউন্ট সাময়িকভাবে স্থগিত</h3>
+        <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+          নিয়ম লঙ্ঘন বা ভুল তথ্য প্রদানের কারণে এডমিন কর্তৃক আপনার এই টেলিগ্রাম আইডিটি সাময়িকভাবে স্থগিত করা হয়েছে।
+        </p>
+      </div>
+      <a href="https://t.me/ItsSaddam9" target="_blank" class="w-full py-3 rounded-2xl bg-rose-500 text-white font-bold text-xs flex items-center justify-center gap-2 btn-bounce">
+        <i data-lucide="message-circle" class="w-4 h-4"></i>
+        <span>এডমিন সাপোর্টে যোগাযোগ করুন</span>
+      </a>
     </div>
   </div>
 
@@ -3143,6 +3461,7 @@
         // Listen to this user's isolated wallet from Firestore / RTDB
         listenUserWallet(tgUser.id);
         listenUserReferrals(tgUser.id);
+        listenUserPersonalNotices(tgUser.id);
 
         // Check if any order was approved while the user was away
         setTimeout(checkAndShowApprovedNotice, 1000);
@@ -3873,6 +4192,131 @@
       window.open(tgUrl, '_blank');
     }
 
+    // --- Referral History Modal Handlers ---
+    function openReferralHistoryModal() {
+      playSound('click');
+      renderReferralUI();
+      const modal = document.getElementById('referralHistoryModal');
+      if (modal) modal.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeReferralHistoryModal() {
+      const modal = document.getElementById('referralHistoryModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    // --- Choose Free Group Reward Modal (20 Referrals) ---
+    function openClaimFreeGroupModal() {
+      playSound('click');
+      const count = Number(appState.referralCount) || 0;
+      if (count < 20) {
+        alert(`⚠️ ফ্রি গ্রুপ পেতে কমপক্ষে ২০ জন মেম্বার রেফার করতে হবে!\n\nআপনার বর্তমান রেফারেল: ${count} জন\nআর মাত্র ${20 - count} জন রেফার প্রয়োজন।`);
+        return;
+      }
+
+      const grid = document.getElementById('claimFreeGroupsGrid');
+      if (grid) {
+        grid.innerHTML = (appState.groups || []).map(g => {
+          const screenshot = g.screenshotUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&auto=format&fit=crop&q=80';
+          return `
+            <div class="p-3.5 rounded-2xl bg-midnight-dark border border-luxury-gold/40 hover:border-luxury-gold transition space-y-2.5 shadow-lg">
+              <div class="flex items-center gap-3">
+                <div class="w-16 h-16 rounded-xl overflow-hidden bg-slate-900 border border-slate-700 flex-shrink-0 relative">
+                  <img src="${screenshot}" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200'" class="w-full h-full object-cover" />
+                  <span class="absolute top-1 left-1 text-[8px] bg-luxury-gold text-midnight-dark font-black px-1 rounded">${g.badge || 'VIP'}</span>
+                </div>
+                <div class="truncate flex-1">
+                  <h4 class="font-black text-white text-xs truncate">${g.title}</h4>
+                  <p class="text-[10px] text-amber-300 font-bold mt-0.5">${g.category} • ${g.membersCount} মেম্বার</p>
+                  <p class="text-[10px] text-slate-400 line-clamp-1 mt-0.5">${g.description || 'লাইফটাইম ভিআইপি এক্সেস'}</p>
+                  <div class="flex items-center gap-2 mt-1">
+                    <span class="text-[10px] text-slate-500 line-through">৳${g.originalPrice || (g.price + 200)}</span>
+                    <span class="text-xs font-black text-emerald-400 bg-emerald-500/20 px-2 py-0.2 rounded">সম্পূর্ণ ফ্রি (৳০)</span>
+                  </div>
+                </div>
+              </div>
+              <button onclick="submitClaimFreeGroup('${g.id}')" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark font-black text-xs shadow-md btn-bounce flex items-center justify-center gap-1.5 cursor-pointer">
+                <i data-lucide="gift" class="w-4 h-4"></i>
+                <span>এই গ্রুপটি ফ্রিতে রিকোয়েস্ট পাঠান</span>
+              </button>
+            </div>
+          `;
+        }).join('');
+      }
+
+      const modal = document.getElementById('claimFreeGroupModal');
+      if (modal) modal.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeClaimFreeGroupModal() {
+      const modal = document.getElementById('claimFreeGroupModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function submitClaimFreeGroup(groupId) {
+      playSound('click');
+      const count = Number(appState.referralCount) || 0;
+      if (count < 20) {
+        alert("ফ্রি গ্রুপ ক্লেইম করতে কমপক্ষে ২০ জন রেফার প্রয়োজন!");
+        return;
+      }
+
+      const selectedGroup = appState.groups.find(g => String(g.id) === String(groupId));
+      if (!selectedGroup) {
+        alert("গ্রুপটি খুঁজে পাওয়া যায়নি!");
+        return;
+      }
+
+      const fullName = `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim() || 'টেলিগ্রাম মেম্বার';
+      const userHandle = tgUser.username ? `@${tgUser.username}` : (tgUser.id ? `ID:${tgUser.id}` : '@user');
+
+      const claimOrder = {
+        id: Date.now(),
+        groupId: selectedGroup.id,
+        groupTitle: selectedGroup.title,
+        amount: 0,
+        method: 'REFERRAL_CLAIM',
+        isReferralClaim: true,
+        trxId: 'REF-20-CLAIM-' + Date.now().toString().slice(-4),
+        userPhoto: tgUser.photo_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80',
+        userName: fullName,
+        userId: tgUser.id || 'N/A',
+        userHandle: userHandle,
+        userTelegram: userHandle,
+        status: 'PENDING',
+        time: new Date().toLocaleString('bn-BD', { dateStyle: 'short', timeStyle: 'short' }),
+        timestamp: Date.now(),
+        screenshotUrl: selectedGroup.screenshotUrl,
+        inviteLink: selectedGroup.inviteLink || ''
+      };
+
+      // Deduct 20 referrals
+      appState.referralCount = Math.max(0, count - 20);
+      appState.orders.unshift(claimOrder);
+      saveState();
+
+      // Save to Firebase Cloud
+      fbSaveOrder(claimOrder);
+      if (fbRtdb && tgUser.id) {
+        fbRtdb.ref(`users/${tgUser.id}/referralCount`).set(appState.referralCount).catch(e => console.warn(e));
+      }
+      if (fbDb && tgUser.id) {
+        fbDb.collection("users").doc(String(tgUser.id)).set({
+          referralCount: appState.referralCount,
+          updatedAt: Date.now()
+        }, { merge: true }).catch(e => console.warn(e));
+      }
+
+      closeClaimFreeGroupModal();
+      closeReferralModal();
+      renderApp();
+      playSound('chime');
+
+      alert(`🎉 অভিনন্দন ${fullName}!\n\nআপনার ২০টি রেফারেল সফল হওয়ায় '${selectedGroup.title}' ফ্রিতে নেওয়ার রিকোয়েস্ট এডমিনের কাছে পাঠানো হয়েছে।\n\nএডমিন ভেরিফাই করে ইনভাইট লিংক প্রদান করলেই আপনার স্ক্রিনে স্বয়ংক্রিয় অভিনন্দন নোটিশ ও জয়েন লিংক চলে আসবে!`);
+    }
+
     function renderReferralUI() {
       const count = appState.referralCount || 0;
       const target = 20;
@@ -3905,12 +4349,18 @@
         remTextTab.innerText = remaining === 0 ? "🎉 অভিনন্দন! ২০ জন পূর্ণ হয়েছে!" : `আর মাত্র ${remaining} জন সফল রেফার প্রয়োজন`;
       }
 
+      // Badges
+      safeSetText('badgeRefHistoryCount', `${(appState.referredUsers || []).length} জন`);
+      safeSetText('modalRefHistoryTotalBadge', `${(appState.referredUsers || []).length} জন`);
+      safeSetText('modalRefHistoryProgressBadge', `${count} / ${target}`);
+
       const claimBtn = document.getElementById('btnClaimFreeGroup');
       if (claimBtn) {
         if (count >= 20) {
           claimBtn.disabled = false;
           claimBtn.className = "w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 text-midnight-dark font-black text-xs shadow-lg btn-bounce cursor-pointer";
-          claimBtn.innerText = "🎁 ফ্রি গ্রুপ আনলক করুন (এখনই ক্লেইম করুন)";
+          claimBtn.innerText = "🎁 ফ্রি গ্রুপ বেছে নিন (এখনই ক্লেইম করুন)";
+          claimBtn.onclick = openClaimFreeGroupModal;
         } else {
           claimBtn.disabled = true;
           claimBtn.className = "w-full py-2.5 rounded-xl bg-slate-800 text-slate-500 font-bold text-xs cursor-not-allowed";
@@ -3924,6 +4374,7 @@
           claimBtnTab.disabled = false;
           claimBtnTab.className = "w-full py-3 rounded-2xl bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark font-black text-sm shadow-xl btn-bounce cursor-pointer flex items-center justify-center gap-2";
           claimBtnTab.innerHTML = `<i data-lucide="gift" class="w-5 h-5"></i> <span>ফ্রি গ্রুপ এখনই ক্লেইম করুন!</span>`;
+          claimBtnTab.onclick = openClaimFreeGroupModal;
         } else {
           claimBtnTab.disabled = true;
           claimBtnTab.className = "w-full py-3 rounded-2xl bg-slate-800/80 text-slate-500 font-bold text-xs cursor-not-allowed flex items-center justify-center gap-2 border border-white/5";
@@ -3931,55 +4382,71 @@
         }
       }
 
-      // Render referred members list
-      const listContainer = document.getElementById('refUsersList');
-      if (listContainer) {
-        if (!appState.referredUsers || appState.referredUsers.length === 0) {
-          listContainer.innerHTML = `<p class="text-[11px] text-slate-500 py-2">এখনও কোনো রেফারেল জমা হয়নি। আপনার লিংক শেয়ার করুন!</p>`;
-        } else {
-          listContainer.innerHTML = appState.referredUsers.map(u => `
-            <div class="p-2 rounded-lg bg-midnight-surface border border-midnight-border flex items-center justify-between text-[11px]">
-              <div class="flex items-center gap-1.5">
-                <i data-lucide="user-check" class="w-3.5 h-3.5 text-emerald-400"></i>
-                <span class="font-bold text-white">${u.name}</span>
-                <span class="text-slate-400 text-[10px]">(${u.date})</span>
+      // Generate HTML for referred users with Logo Avatar, Name, Handle, ID, Joined Time, and Active/Inactive Badge
+      const refUsers = appState.referredUsers || [];
+      const renderUserItemHtml = (u) => {
+        const photo = u.photo || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80';
+        const name = u.name || 'টেলিগ্রাম মেম্বার';
+        const handle = u.username || (u.userId ? `ID:${u.userId}` : '@member');
+        const timeStr = (u.time ? `${u.date} ${u.time}` : u.date) || 'সম্প্রতি';
+        return `
+          <div class="p-3 rounded-xl bg-midnight-dark border border-white/10 flex items-center justify-between text-xs hover:border-amber-400/30 transition">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-full border border-luxury-gold/50 p-0.5 bg-slate-900 flex-shrink-0 overflow-hidden shadow">
+                <img src="${photo}" onerror="this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120'" class="w-full h-full object-cover rounded-full" />
               </div>
-              <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">${u.status}</span>
+              <div class="truncate">
+                <h4 class="font-bold text-white text-xs truncate flex items-center gap-1.5">
+                  <span>${name}</span>
+                </h4>
+                <div class="flex items-center gap-1.5 text-[10px] text-slate-400">
+                  <span class="text-sky-300 font-medium">${handle}</span>
+                  <span>•</span>
+                  <span class="text-slate-400">${timeStr}</span>
+                </div>
+              </div>
             </div>
-          `).join('');
+            <div class="flex items-center gap-1.5 flex-shrink-0">
+              <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>সক্রিয়</span>
+              </span>
+            </div>
+          </div>
+        `;
+      };
+
+      // 1. Dedicated tab list
+      const tabListContainer = document.getElementById('tabRefUsersHistoryList');
+      if (tabListContainer) {
+        if (refUsers.length === 0) {
+          tabListContainer.innerHTML = `<div class="p-4 text-center text-slate-500 bg-midnight-dark rounded-xl text-xs">এখনও কোনো রেফারেল জমা হয়নি। আপনার রেফারেল লিংক শেয়ার করে বন্ধুদের যুক্ত করুন।</div>`;
+        } else {
+          tabListContainer.innerHTML = refUsers.map(u => renderUserItemHtml(u)).join('');
         }
       }
-      lucide.createIcons();
-    }
 
-    function claimFreeGroup() {
-      if ((appState.referralCount || 0) < 20) {
-        alert("ফ্রি গ্রুপ পেতে কমপক্ষে ২০ জন মেম্বার রেফার করতে হবে!");
-        return;
+      // 2. Modal list
+      const modalListContainer = document.getElementById('modalRefUsersList');
+      if (modalListContainer) {
+        if (refUsers.length === 0) {
+          modalListContainer.innerHTML = `<div class="p-6 text-center text-slate-500 bg-midnight-dark rounded-2xl text-xs">এখনও কোনো মেম্বার আপনার লিংকে জয়েন করেনি। লিংক শেয়ার করুন!</div>`;
+        } else {
+          modalListContainer.innerHTML = refUsers.map(u => renderUserItemHtml(u)).join('');
+        }
       }
-      playSound('chime');
-      const freeGroup = appState.groups[0];
-      const order = {
-        id: Date.now(),
-        groupId: freeGroup.id,
-        groupTitle: `[FREE REFERRAL REWARD] ${freeGroup.title}`,
-        amount: 0,
-        method: 'REFERRAL_REWARD',
-        senderNumber: '20_REFS_COMPLETED',
-        trxId: 'REF-FREE-' + Date.now().toString().slice(-6),
-        userTelegram: document.getElementById('profileUsername')?.innerText || '@user',
-        status: 'APPROVED',
-        time: new Date().toLocaleTimeString(),
-        screenshotUrl: freeGroup.screenshotUrl,
-        inviteLink: freeGroup.inviteLink
-      };
-      appState.orders.unshift(order);
-      appState.referralCount = Math.max(0, appState.referralCount - 20);
-      saveState();
-      renderApp();
-      closeReferralModal();
-      alert(`🎉 অভিনন্দন! আপনি সফলভাবে ${freeGroup.title} সম্পূর্ণ ফ্রিতে আনলক করেছেন!\n\nইনভাইট লিংক: ${freeGroup.inviteLink}\nএখনই জয়েন করতে পারেন।`);
-      toggleMyPurchasesModal();
+
+      // 3. Compact list inside ref modal
+      const listContainer = document.getElementById('refUsersList');
+      if (listContainer) {
+        if (refUsers.length === 0) {
+          listContainer.innerHTML = `<p class="text-[11px] text-slate-500 py-2">এখনও কোনো রেফারেল জমা হয়নি। আপনার লিংক শেয়ার করুন!</p>`;
+        } else {
+          listContainer.innerHTML = refUsers.slice(0, 10).map(u => renderUserItemHtml(u)).join('');
+        }
+      }
+
+      lucide.createIcons();
     }
 
     // --- User Dashboard: My Purchased Groups ---
@@ -4524,6 +4991,9 @@
             const userHandle = o.userHandle || o.userTelegram || '@user';
             const isApproved = o.status === 'APPROVED';
             const isRejected = o.status === 'REJECTED';
+            const isRefClaim = Boolean(o.isReferralClaim || o.method === 'REFERRAL_CLAIM' || o.method === 'REFERRAL_REWARD');
+            const groupObj = (appState.groups || []).find(g => String(g.id) === String(o.groupId));
+            const displayGroupTitle = o.groupTitle || (groupObj ? groupObj.title : 'টেলিগ্রাম প্রিমিয়াম গ্রুপ');
 
             return `
               <div class="p-4 rounded-2xl bg-midnight-surface border ${isApproved ? 'border-emerald-500/40 bg-emerald-950/15' : isRejected ? 'border-rose-500/40 bg-rose-950/15' : 'border-midnight-border'} space-y-3 text-xs shadow-md">
@@ -4552,25 +5022,40 @@
 
                 <!-- Order Info: Group Name, Payment Method, Amount, TrxID with Copy -->
                 <div class="p-3.5 rounded-xl bg-midnight-dark/95 border border-white/5 space-y-2 text-[11px]">
-                  <div class="flex justify-between items-center font-bold">
-                    <span class="text-white text-xs flex items-center gap-1.5">
-                      <i data-lucide="folder" class="w-3.5 h-3.5 text-amber-400"></i>
-                      <span>${o.groupTitle}</span>
-                    </span>
+                  <div class="flex justify-between items-center font-bold flex-wrap gap-1">
+                    <div class="flex items-center gap-1.5">
+                      <span class="px-2 py-0.5 rounded font-black text-[10px] ${isRefClaim ? 'bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark shadow' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'}">
+                        ${isRefClaim ? '🎁 ২০ রেফারেল ফ্রি ক্লেইম' : '💳 পেইড অর্ডার (' + o.method + ')'}
+                      </span>
+                      <span class="text-white text-xs flex items-center gap-1 font-bold">
+                        <i data-lucide="folder" class="w-3.5 h-3.5 text-amber-400"></i>
+                        <span>${displayGroupTitle}</span>
+                      </span>
+                    </div>
                     <span class="text-emerald-400 font-black text-xs bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                      ${o.method} • ৳${o.amount}
+                      ${isRefClaim ? 'মূল্য: ৳০ (ফ্রি)' : '৳' + o.amount}
                     </span>
                   </div>
 
-                  <div class="flex items-center justify-between bg-black/40 p-2 rounded-lg border border-white/5">
-                    <div class="truncate mr-2">
-                      <span class="text-slate-400 text-[10px] block">TrxID:</span>
-                      <span class="text-amber-300 font-mono font-bold text-xs select-all">${o.trxId}</span>
+                  ${isRefClaim ? `
+                    <div class="flex items-center justify-between bg-black/40 p-2 rounded-lg border border-amber-500/20">
+                      <div>
+                        <span class="text-amber-300 text-[10px] font-bold block">রেফারেল ক্লেইম ভেরিফিকেশন:</span>
+                        <span class="text-slate-200 text-[11px] font-bold">ইউজার ২০টি রেফারেল পূর্ণ করে এই গ্রুপটি ক্লেইম করেছেন</span>
+                      </div>
+                      <span class="px-2 py-0.5 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded text-[10px] font-black">20 REFS</span>
                     </div>
-                    <button onclick="copyText('${o.trxId}')" class="px-2.5 py-1 bg-midnight-surface border border-slate-700 hover:border-slate-500 text-slate-200 rounded text-xs font-bold flex-shrink-0 flex items-center gap-1 btn-bounce">
-                      <i data-lucide="copy" class="w-3 h-3 text-luxury-gold"></i> কপি
-                    </button>
-                  </div>
+                  ` : `
+                    <div class="flex items-center justify-between bg-black/40 p-2 rounded-lg border border-white/5">
+                      <div class="truncate mr-2">
+                        <span class="text-slate-400 text-[10px] block">TrxID:</span>
+                        <span class="text-amber-300 font-mono font-bold text-xs select-all">${o.trxId}</span>
+                      </div>
+                      <button onclick="copyText('${o.trxId}')" class="px-2.5 py-1 bg-midnight-surface border border-slate-700 hover:border-slate-500 text-slate-200 rounded text-xs font-bold flex-shrink-0 flex items-center gap-1 btn-bounce">
+                        <i data-lucide="copy" class="w-3 h-3 text-luxury-gold"></i> কপি
+                      </button>
+                    </div>
+                  `}
 
                   <div class="flex justify-between items-center text-[10px] text-slate-400 pt-0.5">
                     <span>অর্ডার আইডি: #${o.id}</span>
@@ -4586,7 +5071,7 @@
                         <i data-lucide="link" class="w-3.5 h-3.5"></i>
                         <span>গ্রুপ লিংক বক্স (ইনভাইট লিংক দিন):</span>
                       </label>
-                      <input id="adminOrderInvite_${o.id}" type="text" value="${o.inviteLink || ''}" placeholder="যেমন: https://t.me/+xxxxxx (ইনভাইট লিংক পেস্ট করুন)" class="w-full bg-midnight-dark border border-amber-500/60 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400" />
+                      <input id="adminOrderInvite_${o.id}" type="text" value="${o.inviteLink || (groupObj ? groupObj.inviteLink : '') || ''}" placeholder="যেমন: https://t.me/+xxxxxx (ইনভাইট লিংক পেস্ট করুন)" class="w-full bg-midnight-dark border border-amber-500/60 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400" />
                     </div>
                     
                     <div class="flex gap-2 pt-0.5">
@@ -4839,6 +5324,16 @@
       }
     }
 
+      // Also refresh Users Management view if active
+      try {
+        renderAdminUsers();
+      } catch (e) {
+        console.warn("renderAdminUsers error:", e);
+      }
+    }
+
+    let currentUsersMgmtFilter = 'ALL';
+
     function switchAdminTab(tab) {
       playSound('click');
       document.querySelectorAll('.admin-tab-btn').forEach(b => {
@@ -4851,7 +5346,7 @@
         targetBtn.classList.add('bg-luxury-gold', 'text-midnight-dark');
       }
 
-      const views = ['groups', 'payment-settings', 'app-settings', 'orders', 'sell-req', 'withdrawals', 'referral-settings', 'managers'];
+      const views = ['groups', 'payment-settings', 'app-settings', 'orders', 'sell-req', 'withdrawals', 'users-mgmt', 'referral-settings', 'managers'];
       views.forEach(v => {
         const el = document.getElementById(`admin-view-${v}`);
         if (el) {
@@ -4859,7 +5354,744 @@
           else el.classList.add('hidden');
         }
       });
+
+      if (tab === 'users-mgmt') {
+        renderAdminUsers();
+      }
+
       lucide.createIcons();
+    }
+
+    // =========================================================================
+    // ADMIN USER HISTORY & REALTIME CONTROL ENGINE (SEARCH, BAN, BALANCE, NOTICE, GIFT)
+    // =========================================================================
+    function getAllAggregatedUsers() {
+      const userMap = new Map();
+
+      // 1. Current user
+      if (tgUser && tgUser.id) {
+        const uid = String(tgUser.id);
+        userMap.set(uid, {
+          userId: uid,
+          name: `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim() || 'টেলিগ্রাম মেম্বার',
+          username: tgUser.username ? `@${tgUser.username}` : ('ID:' + uid),
+          photo: tgUser.photo_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80',
+          balance: Number(appState.wallet?.balance || 0),
+          totalEarned: Number(appState.wallet?.totalEarned || 0),
+          totalWithdrawn: Number(appState.wallet?.totalWithdrawn || 0),
+          referralCount: Number(appState.referralCount || 0),
+          banned: Boolean(appState.bannedUsers && appState.bannedUsers[uid]),
+          joinedDate: 'আজকে / সক্রিয়',
+          isOnline: true
+        });
+      }
+
+      // 2. Extract from Referred Users
+      (appState.referredUsers || []).forEach(r => {
+        if (!r) return;
+        const uid = String(r.userId || r.id || '');
+        if (!uid) return;
+        if (!userMap.has(uid)) {
+          userMap.set(uid, {
+            userId: uid,
+            name: r.name || 'রেফারেল মেম্বার',
+            username: r.username || ('ID:' + uid),
+            photo: r.photo || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120',
+            balance: 0,
+            totalEarned: 0,
+            totalWithdrawn: 0,
+            referralCount: 0,
+            banned: Boolean(appState.bannedUsers && appState.bannedUsers[uid]),
+            joinedDate: r.time ? `${r.date} ${r.time}` : (r.date || 'সম্প্রতি'),
+            isOnline: true
+          });
+        }
+      });
+
+      // 3. Extract from Orders
+      (appState.orders || []).forEach(o => {
+        if (!o) return;
+        const uid = String(o.userId || '');
+        if (!uid || uid === 'N/A') return;
+        if (!userMap.has(uid)) {
+          userMap.set(uid, {
+            userId: uid,
+            name: o.userName || 'টেলিগ্রাম মেম্বার',
+            username: o.userHandle || o.userTelegram || ('ID:' + uid),
+            photo: o.userPhoto || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120',
+            balance: 0,
+            totalEarned: 0,
+            totalWithdrawn: 0,
+            referralCount: 0,
+            banned: Boolean(appState.bannedUsers && appState.bannedUsers[uid]),
+            joinedDate: o.time || 'সম্প্রতি',
+            isOnline: true
+          });
+        }
+      });
+
+      // 4. Extract from Submissions (Gmail / Facebook Sells)
+      (appState.submissions || []).forEach(s => {
+        if (!s) return;
+        const uid = String(s.userId || '');
+        if (!uid || uid === 'N/A') return;
+        if (!userMap.has(uid)) {
+          userMap.set(uid, {
+            userId: uid,
+            name: s.userName || 'টেলিগ্রাম মেম্বার',
+            username: s.userHandle || s.userTelegram || ('ID:' + uid),
+            photo: s.userPhoto || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120',
+            balance: 0,
+            totalEarned: 0,
+            totalWithdrawn: 0,
+            referralCount: 0,
+            banned: Boolean(appState.bannedUsers && appState.bannedUsers[uid]),
+            joinedDate: s.time || 'সম্প্রতি',
+            isOnline: true
+          });
+        }
+      });
+
+      // 5. Extract from Withdrawals
+      (appState.withdrawals || []).forEach(w => {
+        if (!w) return;
+        const uid = String(w.userId || '');
+        if (!uid || uid === 'N/A') return;
+        if (!userMap.has(uid)) {
+          userMap.set(uid, {
+            userId: uid,
+            name: w.userName || 'টেলিগ্রাম মেম্বার',
+            username: w.userHandle || ('ID:' + uid),
+            photo: w.userPhoto || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120',
+            balance: 0,
+            totalEarned: 0,
+            totalWithdrawn: 0,
+            referralCount: 0,
+            banned: Boolean(appState.bannedUsers && appState.bannedUsers[uid]),
+            joinedDate: w.time || 'সম্প্রতি',
+            isOnline: true
+          });
+        }
+      });
+
+      // 6. Merge cached/stored balances & user database if available
+      userMap.forEach((u, uid) => {
+        // Read local wallet cache if exists
+        try {
+          const wCache = localStorage.getItem(`slk_user_wallet_v4_${uid}`);
+          if (wCache) {
+            const parsed = JSON.parse(wCache);
+            u.balance = Number(parsed.balance || u.balance);
+            u.totalEarned = Number(parsed.totalEarned || u.totalEarned);
+            u.totalWithdrawn = Number(parsed.totalWithdrawn || u.totalWithdrawn);
+          }
+        } catch(e) {}
+
+        // Calculate Activity Breakdown
+        const myOrders = (appState.orders || []).filter(o => String(o.userId) === uid);
+        const mySubs = (appState.submissions || []).filter(s => String(s.userId) === uid);
+        const myWiths = (appState.withdrawals || []).filter(w => String(w.userId) === uid);
+
+        u.gmailSellsCount = mySubs.filter(s => s.category === 'GMAIL' || (s.type && s.type.includes('GMAIL'))).length;
+        u.fbSellsCount = mySubs.filter(s => s.category === 'FACEBOOK' || (s.type && s.type.includes('FACEBOOK'))).length;
+        u.groupsBoughtCount = myOrders.length;
+        u.withdrawCount = myWiths.length;
+        u.banned = Boolean(appState.bannedUsers && appState.bannedUsers[uid]);
+      });
+
+      return Array.from(userMap.values());
+    }
+
+    function renderAdminUsers(customList = null) {
+      const container = document.getElementById('adminUsersList');
+      if (!container) return;
+
+      let allUsers = customList || getAllAggregatedUsers();
+
+      // Update Top Stats Grid Counters
+      const fullList = getAllAggregatedUsers();
+      const totalUsers = fullList.length;
+      const activeUsers = fullList.filter(u => !u.banned).length;
+      const totalRefs = fullList.reduce((acc, u) => acc + (u.referralCount || 0), (appState.referralCount || 0));
+      const totalBal = fullList.reduce((acc, u) => acc + (u.balance || 0), 0);
+
+      safeSetText('statTotalUsersCount', `${totalUsers} জন`);
+      safeSetText('statActiveUsersCount', `${activeUsers} জন`);
+      safeSetText('statTotalReferralsCount', `${totalRefs} জন`);
+      safeSetText('statTotalBalanceSum', `৳${totalBal}`);
+      safeSetText('badgeFilteredUsersCount', `${allUsers.length} জন`);
+
+      if (allUsers.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center text-slate-500 bg-midnight-card border border-white/5 rounded-2xl text-xs space-y-2">
+            <i data-lucide="user-x" class="w-8 h-8 mx-auto text-slate-600"></i>
+            <p>কোনো ইউজার খুঁজে পাওয়া যায়নি।</p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      container.innerHTML = allUsers.map(u => {
+        const photo = u.photo || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80';
+        const isBanned = Boolean(u.banned);
+
+        return `
+          <div class="p-4 rounded-2xl bg-midnight-card border ${isBanned ? 'border-rose-500/50 bg-rose-950/15' : 'border-white/10 hover:border-luxury-gold/40'} space-y-3.5 text-xs shadow-lg transition-all">
+            
+            <!-- User Profile Header: Logo, Name, Username with copy, User ID with copy, Status Badge -->
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-full border-2 ${isBanned ? 'border-rose-500' : 'border-luxury-gold'} p-0.5 bg-slate-900 flex-shrink-0 overflow-hidden shadow relative">
+                  <img src="${photo}" onerror="this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120'" class="w-full h-full object-cover rounded-full" />
+                  <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full ${isBanned ? 'bg-rose-500' : 'bg-emerald-400 animate-pulse'} border-2 border-midnight-dark"></span>
+                </div>
+                <div>
+                  <h4 class="font-black text-white text-sm flex items-center gap-1.5">
+                    <span>${u.name}</span>
+                    ${isBanned ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-300 font-bold border border-rose-500/40">BANNED</span>' : ''}
+                  </h4>
+                  <div class="flex flex-wrap items-center gap-1.5 text-[11px] mt-0.5">
+                    <span class="text-sky-400 font-bold">${u.username}</span>
+                    <button onclick="copyText('${u.username}')" class="px-1.5 py-0.5 text-[10px] rounded bg-sky-500/20 text-sky-300 font-bold hover:bg-sky-500/30" title="কপি">কপি</button>
+                    <span class="text-slate-500">•</span>
+                    <span class="text-amber-300 font-mono font-bold">ID: ${u.userId}</span>
+                    <button onclick="copyText('${u.userId}')" class="px-1.5 py-0.5 text-[10px] rounded bg-amber-500/20 text-amber-300 font-mono font-bold hover:bg-amber-500/30" title="কপি">কপি</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Active Status Badge -->
+              <span class="text-[10px] px-2.5 py-1 rounded-full font-black ${isBanned ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1'}">
+                ${isBanned ? '🚫 নিষিদ্ধ / ব্যানড' : '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> সক্রিয় মেম্বার'}
+              </span>
+            </div>
+
+            <!-- Detailed Stats Grid: Balance, Total Earned, Referrals, Joined Time -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+              <div class="p-2.5 rounded-xl bg-midnight-dark/90 border border-white/5">
+                <span class="text-[10px] text-slate-400 block">বর্তমান ব্যালেন্স</span>
+                <span class="text-xs font-black text-luxury-gold">৳${u.balance || 0}</span>
+              </div>
+              <div class="p-2.5 rounded-xl bg-midnight-dark/90 border border-white/5">
+                <span class="text-[10px] text-slate-400 block">মোট রেফারেল</span>
+                <span class="text-xs font-black text-amber-300">${u.referralCount || 0} জন</span>
+              </div>
+              <div class="p-2.5 rounded-xl bg-midnight-dark/90 border border-white/5">
+                <span class="text-[10px] text-slate-400 block">মোট ইনকাম</span>
+                <span class="text-xs font-black text-emerald-400">৳${u.totalEarned || 0}</span>
+              </div>
+              <div class="p-2.5 rounded-xl bg-midnight-dark/90 border border-white/5">
+                <span class="text-[10px] text-slate-400 block">যোগদানের সময়</span>
+                <span class="text-[10px] font-bold text-slate-300 truncate block">${u.joinedDate || 'আজকে'}</span>
+              </div>
+            </div>
+
+            <!-- Activity Breakdown Summary Pills -->
+            <div class="flex items-center gap-2 flex-wrap text-[11px] pt-0.5">
+              <span class="px-2.5 py-1 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-300 font-bold flex items-center gap-1">
+                <i data-lucide="mail" class="w-3 h-3"></i> জিমেইল বিক্রি: <strong>${u.gmailSellsCount || 0}টি</strong>
+              </span>
+              <span class="px-2.5 py-1 rounded-lg bg-blue-500/15 border border-blue-500/30 text-blue-300 font-bold flex items-center gap-1">
+                <i data-lucide="facebook" class="w-3 h-3"></i> ফেসবুক বিক্রি: <strong>${u.fbSellsCount || 0}টি</strong>
+              </span>
+              <span class="px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 font-bold flex items-center gap-1">
+                <i data-lucide="shopping-cart" class="w-3 h-3"></i> গ্রুপ অর্ডার: <strong>${u.groupsBoughtCount || 0}টি</strong>
+              </span>
+            </div>
+
+            <!-- 4 Direct Admin Control Actions: Ban/Unban, Edit Balance, Send Notice, Send Gift -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-white/10 text-xs font-bold">
+              
+              <!-- Action 1: Ban / Unban -->
+              <button onclick="adminToggleBanUser('${u.userId}')" class="py-2 px-2 rounded-xl ${isBanned ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/30' : 'bg-rose-500/20 text-rose-300 border border-rose-500/40 hover:bg-rose-500/30'} flex items-center justify-center gap-1 btn-bounce transition">
+                <i data-lucide="${isBanned ? 'shield-check' : 'shield-ban'}" class="w-3.5 h-3.5"></i>
+                <span>${isBanned ? 'আনব্যান করুন' : 'ব্যান করুন'}</span>
+              </button>
+
+              <!-- Action 2: Edit Balance -->
+              <button onclick="adminOpenEditBalanceModal('${u.userId}')" class="py-2 px-2 rounded-xl bg-luxury-gold/20 text-luxury-gold border border-luxury-gold/40 hover:bg-luxury-gold/30 flex items-center justify-center gap-1 btn-bounce transition">
+                <i data-lucide="wallet" class="w-3.5 h-3.5"></i>
+                <span>ব্যালেন্স এডিট</span>
+              </button>
+
+              <!-- Action 3: Send Notice -->
+              <button onclick="adminOpenSendNoticeModal('${u.userId}')" class="py-2 px-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30 flex items-center justify-center gap-1 btn-bounce transition">
+                <i data-lucide="bell-ring" class="w-3.5 h-3.5"></i>
+                <span>নোটিশ পাঠান</span>
+              </button>
+
+              <!-- Action 4: Send Gift -->
+              <button onclick="adminOpenSendGiftModal('${u.userId}')" class="py-2 px-2 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-400 text-midnight-dark font-black flex items-center justify-center gap-1 btn-bounce shadow-md">
+                <i data-lucide="gift" class="w-3.5 h-3.5"></i>
+                <span>Gift দিন</span>
+              </button>
+            </div>
+
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    function filterAdminUsers() {
+      const searchInput = document.getElementById('adminUserSearchInput');
+      const query = (searchInput ? searchInput.value : '').toLowerCase().trim();
+      let users = getAllAggregatedUsers();
+
+      // 1. Text Search matching User ID, username, name
+      if (query) {
+        users = users.filter(u => {
+          const uid = String(u.userId || '').toLowerCase();
+          const uname = String(u.username || '').toLowerCase();
+          const name = String(u.name || '').toLowerCase();
+          return uid.includes(query) || uname.includes(query) || name.includes(query);
+        });
+      }
+
+      // 2. Filter tabs
+      if (currentUsersMgmtFilter === 'ACTIVE') {
+        users = users.filter(u => !u.banned);
+      } else if (currentUsersMgmtFilter === 'BANNED') {
+        users = users.filter(u => u.banned);
+      } else if (currentUsersMgmtFilter === 'BALANCE') {
+        users = users.filter(u => (u.balance || 0) > 0);
+      }
+
+      renderAdminUsers(users);
+    }
+
+    function setUserMgmtFilter(filterType) {
+      playSound('click');
+      currentUsersMgmtFilter = filterType;
+
+      const btnAll = document.getElementById('filterUsersAll');
+      const btnActive = document.getElementById('filterUsersActive');
+      const btnBanned = document.getElementById('filterUsersBanned');
+      const btnBal = document.getElementById('filterUsersBalance');
+
+      [btnAll, btnActive, btnBanned, btnBal].forEach(b => {
+        if (b) {
+          b.className = "px-2.5 py-1 rounded-lg bg-midnight-dark text-slate-300 border border-slate-700 font-bold whitespace-nowrap";
+        }
+      });
+
+      if (filterType === 'ALL' && btnAll) {
+        btnAll.className = "px-2.5 py-1 rounded-lg bg-luxury-gold text-midnight-dark font-bold whitespace-nowrap shadow";
+      } else if (filterType === 'ACTIVE' && btnActive) {
+        btnActive.className = "px-2.5 py-1 rounded-lg bg-emerald-500 text-midnight-dark font-bold whitespace-nowrap shadow";
+      } else if (filterType === 'BANNED' && btnBanned) {
+        btnBanned.className = "px-2.5 py-1 rounded-lg bg-rose-500 text-white font-bold whitespace-nowrap shadow";
+      } else if (filterType === 'BALANCE' && btnBal) {
+        btnBal.className = "px-2.5 py-1 rounded-lg bg-amber-400 text-midnight-dark font-bold whitespace-nowrap shadow";
+      }
+
+      filterAdminUsers();
+    }
+
+    // --- Admin Action: Toggle Ban / Unban ---
+    function adminToggleBanUser(userId) {
+      playSound('click');
+      if (!userId) return;
+      const uid = String(userId);
+
+      if (uid === '8701368956') {
+        alert("⚠️ সাদ্দাম ভাইকে (সুপার ওনার) ব্যান করা যাবে না!");
+        return;
+      }
+
+      if (!appState.bannedUsers) appState.bannedUsers = {};
+      const currentlyBanned = Boolean(appState.bannedUsers[uid]);
+      const newStatus = !currentlyBanned;
+
+      appState.bannedUsers[uid] = newStatus;
+      saveState();
+
+      // Cloud sync
+      if (fbRtdb) {
+        fbRtdb.ref(`users/${uid}/banned`).set(newStatus).catch(e => console.warn(e));
+      }
+      if (fbDb) {
+        fbDb.collection("users").doc(uid).set({ banned: newStatus, updatedAt: Date.now() }, { merge: true }).catch(e => console.warn(e));
+      }
+
+      // If banning the current testing session
+      if (String(tgUser.id) === uid) {
+        if (newStatus) {
+          document.getElementById('userBannedModal')?.classList.remove('hidden');
+        } else {
+          document.getElementById('userBannedModal')?.classList.add('hidden');
+        }
+      }
+
+      renderAdminUsers();
+      playSound('chime');
+      alert(`ইউজার ID: ${uid} সফলভাবে ${newStatus ? 'ব্যান (স্থগিত)' : 'আনব্যান (সক্রিয়)'} করা হয়েছে!`);
+    }
+
+    // --- Admin Action: Edit Balance Modal & Submit ---
+    function adminOpenEditBalanceModal(userId) {
+      playSound('click');
+      const all = getAllAggregatedUsers();
+      const u = all.find(x => String(x.userId) === String(userId)) || { userId, name: 'ইউজার', username: '@user', balance: 0 };
+
+      safeSetText('adminTargetUserNameBalance', `${u.name} (${u.username})`);
+      safeSetText('adminTargetUserIdBalance', `ID: ${u.userId}`);
+      safeSetText('adminTargetUserCurBal', `৳${u.balance || 0}`);
+      safeSetValue('adminTargetUserIdHidden', u.userId);
+      safeSetValue('adminInEditBalAmount', '');
+      safeSetValue('adminInEditBalReason', '');
+
+      const modal = document.getElementById('adminEditBalanceModal');
+      if (modal) modal.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function adminCloseEditBalanceModal() {
+      const modal = document.getElementById('adminEditBalanceModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function adminSubmitEditBalance() {
+      playSound('click');
+      const uid = document.getElementById('adminTargetUserIdHidden')?.value;
+      const amtInput = document.getElementById('adminInEditBalAmount')?.value;
+      const reason = (document.getElementById('adminInEditBalReason')?.value || 'এডমিন দ্বারা ওয়ালেট আপডেট').trim();
+      const actionRadio = document.querySelector('input[name="adminBalAction"]:checked');
+      const action = actionRadio ? actionRadio.value : 'ADD';
+
+      const amount = Number(amtInput);
+      if (isNaN(amount) || amount <= 0) {
+        alert("দয়া করে সঠিক টাকার পরিমাণ দিন!");
+        return;
+      }
+
+      if (!uid) {
+        alert("ইউজার নির্বাচন করা হয়নি!");
+        return;
+      }
+
+      const all = getAllAggregatedUsers();
+      const u = all.find(x => String(x.userId) === String(uid));
+      const curBal = Number(u ? u.balance : 0);
+      const newBal = action === 'ADD' ? (curBal + amount) : Math.max(0, curBal - amount);
+
+      // 1. Firebase RTDB
+      if (fbRtdb) {
+        fbRtdb.ref(`users/${uid}`).update({
+          balance: newBal,
+          updatedAt: Date.now()
+        }).catch(e => console.warn(e));
+
+        // Push celebratory notice to user
+        const notif = {
+          id: Date.now(),
+          type: 'BALANCE_UPDATE',
+          title: action === 'ADD' ? `🎉 ওয়ালেটে ৳${amount} যোগ করা হয়েছে!` : `⚠️ ওয়ালেট থেকে ৳${amount} কর্তন করা হয়েছে`,
+          body: `${reason} | আপনার নতুন ব্যালেন্স: ৳${newBal}`,
+          timestamp: Date.now()
+        };
+        fbRtdb.ref(`users/${uid}/personalNotices/${notif.id}`).set(notif).catch(e => console.warn(e));
+      }
+
+      // 2. Firestore
+      if (fbDb) {
+        fbDb.collection("users").doc(uid).set({
+          balance: newBal,
+          updatedAt: Date.now()
+        }, { merge: true }).catch(e => console.warn(e));
+      }
+
+      // 3. Local Cache
+      try {
+        const cacheKey = `slk_user_wallet_v4_${uid}`;
+        const localSaved = localStorage.getItem(cacheKey);
+        let walletObj = { balance: newBal, totalEarned: newBal, totalWithdrawn: 0 };
+        if (localSaved) {
+          const parsed = JSON.parse(localSaved);
+          walletObj = { ...parsed, balance: newBal };
+        }
+        localStorage.setItem(cacheKey, JSON.stringify(walletObj));
+      } catch(e) {}
+
+      // If modifying current device session
+      if (String(tgUser.id) === String(uid)) {
+        appState.wallet.balance = newBal;
+        saveState();
+        updateWalletDisplay();
+      }
+
+      adminCloseEditBalanceModal();
+      renderAdminUsers();
+      playSound('chime');
+      alert(`🎉 সফল! ইউজার ID: ${uid} এর ওয়ালেটে ${action === 'ADD' ? '৳' + amount + ' যোগ' : '৳' + amount + ' কর্তন'} করা হয়েছে!\nনতুন ব্যালেন্স: ৳${newBal}`);
+    }
+
+    // --- Admin Action: Send Personal Notice Modal & Submit ---
+    function adminOpenSendNoticeModal(userId) {
+      playSound('click');
+      const all = getAllAggregatedUsers();
+      const u = all.find(x => String(x.userId) === String(userId)) || { userId, name: 'ইউজার', username: '@user' };
+
+      safeSetText('adminTargetUserNameNotice', `${u.name} (${u.username})`);
+      safeSetText('adminTargetUserIdNotice', `ID: ${u.userId}`);
+      safeSetValue('adminTargetUserIdNoticeHidden', u.userId);
+      safeSetValue('adminInNoticeTitle', '');
+      safeSetValue('adminInNoticeBody', '');
+
+      const modal = document.getElementById('adminSendNoticeModal');
+      if (modal) modal.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function adminCloseSendNoticeModal() {
+      const modal = document.getElementById('adminSendNoticeModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function adminSubmitSendNotice() {
+      playSound('click');
+      const uid = document.getElementById('adminTargetUserIdNoticeHidden')?.value;
+      const title = (document.getElementById('adminInNoticeTitle')?.value || '').trim();
+      const body = (document.getElementById('adminInNoticeBody')?.value || '').trim();
+
+      if (!title || !body) {
+        alert("দয়া করে নোটিশের শিরোনাম ও বার্তা পূরণ করুন!");
+        return;
+      }
+
+      const notif = {
+        id: Date.now(),
+        type: 'NOTICE',
+        title: title,
+        body: body,
+        time: new Date().toLocaleString('bn-BD', { dateStyle: 'short', timeStyle: 'short' }),
+        timestamp: Date.now()
+      };
+
+      if (fbRtdb && uid) {
+        fbRtdb.ref(`users/${uid}/personalNotices/${notif.id}`).set(notif).catch(e => console.warn(e));
+      }
+      if (fbDb && uid) {
+        fbDb.collection("users").doc(uid).collection("personalNotices").doc(String(notif.id)).set(notif).catch(e => console.warn(e));
+      }
+
+      // If sent to current device session
+      if (String(tgUser.id) === String(uid)) {
+        showUserGiftOrNoticeModal(notif);
+      }
+
+      adminCloseSendNoticeModal();
+      playSound('chime');
+      alert(`🎉 নোটিশটি সফলভাবে ইউজার ID: ${uid} এর কাছে পাঠানো হয়েছে!\nইউজারের স্ক্রিনে সাথে সাথে নোটিশ পপআপ প্রদর্শিত হবে।`);
+    }
+
+    // --- Admin Action: Send Gift Modal & Submit ---
+    function adminOpenSendGiftModal(userId) {
+      playSound('click');
+      const all = getAllAggregatedUsers();
+      const u = all.find(x => String(x.userId) === String(userId)) || { userId, name: 'ইউজার', username: '@user' };
+
+      safeSetText('adminTargetUserNameGift', `${u.name} (${u.username})`);
+      safeSetText('adminTargetUserIdGift', `ID: ${u.userId}`);
+      safeSetValue('adminTargetUserIdGiftHidden', u.userId);
+      safeSetValue('adminInGiftGroupLink', '');
+      safeSetValue('adminInGiftCashAmount', '');
+      safeSetValue('adminInGiftMessage', '');
+
+      toggleAdminGiftInputs();
+
+      const modal = document.getElementById('adminSendGiftModal');
+      if (modal) modal.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function adminCloseSendGiftModal() {
+      const modal = document.getElementById('adminSendGiftModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function toggleAdminGiftInputs() {
+      const giftType = document.getElementById('adminInGiftType')?.value || 'GROUP_LINK';
+      const linkDiv = document.getElementById('adminGiftInputGroupLink');
+      const cashDiv = document.getElementById('adminGiftInputCash');
+
+      if (giftType === 'GROUP_LINK') {
+        if (linkDiv) linkDiv.classList.remove('hidden');
+        if (cashDiv) cashDiv.classList.add('hidden');
+      } else if (giftType === 'CASH_BONUS') {
+        if (linkDiv) linkDiv.classList.add('hidden');
+        if (cashDiv) cashDiv.classList.remove('hidden');
+      } else {
+        if (linkDiv) linkDiv.classList.add('hidden');
+        if (cashDiv) cashDiv.classList.add('hidden');
+      }
+    }
+
+    function adminSubmitSendGift() {
+      playSound('click');
+      const uid = document.getElementById('adminTargetUserIdGiftHidden')?.value;
+      const giftType = document.getElementById('adminInGiftType')?.value || 'GROUP_LINK';
+      const groupLink = (document.getElementById('adminInGiftGroupLink')?.value || '').trim();
+      const cashAmount = Number(document.getElementById('adminInGiftCashAmount')?.value || 0);
+      const customMsg = (document.getElementById('adminInGiftMessage')?.value || '').trim();
+
+      if (!uid) {
+        alert("ইউজার নির্বাচন করা হয়নি!");
+        return;
+      }
+
+      if (giftType === 'GROUP_LINK' && !groupLink) {
+        alert("দয়া করে টেলিগ্রাম গ্রুপ ইনভাইট লিংকটি দিন!");
+        return;
+      }
+      if (giftType === 'CASH_BONUS' && (!cashAmount || cashAmount <= 0)) {
+        alert("দয়া করে উপহারের টাকার পরিমাণ লিখুন!");
+        return;
+      }
+
+      let giftTitle = "🎁 এডমিনের পক্ষ থেকে বিশেষ উপহার!";
+      let giftBody = customMsg || "আপনার একাউন্টে একটি বিশেষ উপহার প্রদান করা হয়েছে।";
+
+      if (giftType === 'GROUP_LINK') {
+        giftTitle = "🎁 অভিনন্দন! প্রিমিয়াম গ্রুপ উপহার!";
+        giftBody = customMsg || `এডমিন আপনাকে একটি বিশেষ টেলিগ্রাম প্রিমিয়াম গ্রুপের ইনভাইট লিংক উপহার দিয়েছেন। নিচের বাটনে ক্লিক করে জয়েন করুন!`;
+      } else if (giftType === 'CASH_BONUS') {
+        giftTitle = `🎉 অভিনন্দন! ৳${cashAmount} ক্যাশ বোনাস উপহার!`;
+        giftBody = customMsg || `এডমিন আপনার ওয়ালেটে সরাসরি ৳${cashAmount} ক্যাশ বোনাস রিওয়ার্ড পাঠিয়েছেন।`;
+        // Automatically credit user's wallet
+        fbAddBalanceToUser(uid, cashAmount);
+      } else if (giftType === 'SPECIAL_BADGE') {
+        giftTitle = "⭐ ভিআইপি স্পেশাল ব্যাজ ও সম্মাননা!";
+        giftBody = customMsg || "সেরা সক্রিয় পারফরম্যান্সের জন্য এডমিন আপনাকে বিশেষ সম্মাননা প্রদান করেছেন!";
+      }
+
+      const giftRecord = {
+        id: Date.now(),
+        type: 'GIFT',
+        giftType: giftType,
+        title: giftTitle,
+        body: giftBody,
+        groupLink: groupLink || '',
+        cashAmount: cashAmount || 0,
+        time: new Date().toLocaleString('bn-BD', { dateStyle: 'short', timeStyle: 'short' }),
+        timestamp: Date.now()
+      };
+
+      // Save to Firebase
+      if (fbRtdb) {
+        fbRtdb.ref(`users/${uid}/personalNotices/${giftRecord.id}`).set(giftRecord).catch(e => console.warn(e));
+      }
+      if (fbDb) {
+        fbDb.collection("users").doc(uid).collection("personalNotices").doc(String(giftRecord.id)).set(giftRecord).catch(e => console.warn(e));
+      }
+
+      // If sending to current testing session
+      if (String(tgUser.id) === String(uid)) {
+        showUserGiftOrNoticeModal(giftRecord);
+      }
+
+      adminCloseSendGiftModal();
+      renderAdminUsers();
+      playSound('chime');
+      alert(`🎉 উপহার সফলভাবে ইউজার ID: ${uid} এর কাছে পাঠানো হয়েছে!\nইউজারের স্ক্রিনে উদযাপন ও উপহারের বার্তা প্রদর্শিত হবে।`);
+    }
+
+    // --- Client-side Listener for Realtime Personal Notices / Gifts & Ban Status ---
+    function listenUserPersonalNotices(userId) {
+      if (!userId) return;
+      const uid = String(userId);
+
+      // 1. Firebase RTDB listener for personalNotices
+      if (fbRtdb) {
+        fbRtdb.ref(`users/${uid}/personalNotices`).on("child_added", (snap) => {
+          const notif = snap.val();
+          if (notif && notif.id) {
+            const seenKey = `slk_seen_notif_${uid}_${notif.id}`;
+            if (!localStorage.getItem(seenKey)) {
+              localStorage.setItem(seenKey, '1');
+              showUserGiftOrNoticeModal(notif);
+            }
+          }
+        }, (err) => console.warn(err));
+
+        // Ban status listener
+        fbRtdb.ref(`users/${uid}/banned`).on("value", (snap) => {
+          const isBanned = Boolean(snap.val());
+          const modal = document.getElementById('userBannedModal');
+          if (modal) {
+            if (isBanned) modal.classList.remove('hidden');
+            else modal.classList.add('hidden');
+          }
+        }, (err) => console.warn(err));
+      }
+    }
+
+    function showUserGiftOrNoticeModal(notif) {
+      playSound('chime');
+      safeSetText('userGiftModalTitle', notif.title || 'অভিনন্দন! আপনি একটি উপহার পেয়েছেন');
+      safeSetText('userGiftModalBody', notif.body || 'এডমিন আপনার জন্য বিশেষ নোটিশ বা উপহার পাঠিয়েছেন।');
+
+      const joinBtn = document.getElementById('userGiftJoinBtn');
+      if (joinBtn) {
+        if (notif.groupLink) {
+          joinBtn.href = notif.groupLink;
+          joinBtn.classList.remove('hidden');
+          joinBtn.classList.add('flex');
+        } else {
+          joinBtn.classList.add('hidden');
+          joinBtn.classList.remove('flex');
+        }
+      }
+
+      const modal = document.getElementById('userGiftReceivedModal');
+      if (modal) modal.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function dismissUserGiftModal() {
+      playSound('click');
+      const modal = document.getElementById('userGiftReceivedModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function dismissApprovedModal() {
+      playSound('click');
+      const modal = document.getElementById('orderApprovedModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function checkAndShowApprovedNotice() {
+      const myId = String(tgUser.id || '');
+      const myHandle = tgUser.username ? `@${tgUser.username.toLowerCase()}` : '';
+
+      const approvedOrders = (appState.orders || []).filter(o => {
+        if (o.status !== 'APPROVED') return false;
+        const oUid = String(o.userId || '');
+        const oHandle = (o.userHandle || o.userTelegram || '').toLowerCase();
+        return (myId && oUid === myId) || (myHandle && oHandle === myHandle);
+      });
+
+      if (approvedOrders.length > 0) {
+        const latestApproved = approvedOrders[0];
+        const seenKey = `slk_order_approved_seen_${latestApproved.id}`;
+        if (!localStorage.getItem(seenKey)) {
+          localStorage.setItem(seenKey, '1');
+          
+          safeSetText('approvedModalTitle', latestApproved.isReferralClaim ? '🎁 অভিনন্দন! আপনার ফ্রি গ্রুপ প্রস্তুত' : 'অভিনন্দন! আপনার গ্রুপ প্রস্তুত');
+          safeSetText('approvedModalDesc', latestApproved.isReferralClaim 
+            ? 'এডমিন আপনার ২০টি রেফারেল ভেরিফাই করে ফ্রি গ্রুপের ভিআইপি জয়েন লিংক প্রদান করেছেন। নিচের বাটনে ক্লিক করে সরাসরি গ্রুপে জয়েন করুন!' 
+            : 'এডমিন আপনার পেমেন্ট ভেরিফাই করেছেন এবং ভিআইপি লিংক প্রদান করেছেন। নিচের বাটনে ক্লিক করে সরাসরি গ্রুপে জয়েন করুন!');
+          safeSetText('approvedModalGroupName', latestApproved.groupTitle || 'টেলিগ্রাম প্রিমিয়াম গ্রুপ');
+          safeSetHref('approvedModalJoinBtn', latestApproved.inviteLink || '#');
+
+          const modal = document.getElementById('orderApprovedModal');
+          if (modal) modal.classList.remove('hidden');
+          playSound('chime');
+          lucide.createIcons();
+        }
+      }
     }
 
     // --- Admin Referral Link Settings Handler ---

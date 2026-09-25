@@ -1142,7 +1142,7 @@ async function handleTelegramUpdate(update, token, appUrl) {
 }
 
 // =========================================================================
-// BACKGROUND SERVER-SIDE POLLER (Fallback when Webhook is not configured)
+// BACKGROUND SERVER-SIDE POLLER (24/7 High-Reliability Polling Engine)
 // =========================================================================
 
 async function startServerSidePoller() {
@@ -1155,19 +1155,22 @@ async function startServerSidePoller() {
     try {
       const token = cachedConfig.botToken;
       if (token) {
-        const res = await fetch(`https://api.telegram.org/bot${token}/getUpdates?offset=${serverPollingOffset}&timeout=15`);
+        const res = await fetch(`https://api.telegram.org/bot${token}/getUpdates?offset=${serverPollingOffset}&timeout=5`);
         const data = await res.json();
         if (data.ok && Array.isArray(data.result)) {
           for (const update of data.result) {
             serverPollingOffset = update.update_id + 1;
             await handleTelegramUpdate(update, token, `https://ais-dev-x7vbvluvmvrtgq6lewbh2w-475005245439.asia-southeast1.run.app`);
           }
+        } else if (data.error_code === 409) {
+          console.log("⚠️ 409 Webhook Conflict detected. Auto-calling deleteWebhook to restore polling...");
+          await callTelegramApi(token, 'deleteWebhook', { drop_pending_updates: false });
         }
       }
     } catch (err) {
       // network delay / timeout
     }
-    setTimeout(pollLoop, 1500);
+    setTimeout(pollLoop, 1000);
   }
 
   pollLoop();
@@ -1189,6 +1192,40 @@ const server = http.createServer(async (req, res) => {
   if (req.method === 'OPTIONS') {
     res.writeHead(200);
     res.end();
+    return;
+  }
+
+  // --- Save Token & Clear Webhook Endpoint ---
+  if (pathname === '/api/save-token' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', async () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        const token = (parsed.token || '').trim();
+        const chatId = (parsed.chatId || '').trim();
+        if (token) {
+          cachedConfig.botToken = token;
+          if (chatId) cachedConfig.chatId = String(chatId);
+          // 1. Immediately delete any webhook so getUpdates polling works 100%
+          await callTelegramApi(token, 'deleteWebhook', { drop_pending_updates: false });
+          // 2. Save token to Firebase Realtime Database
+          await patchToFirebase("appConfig", {
+            botToken: token,
+            adminTelegramBotToken: token,
+            botChatId: cachedConfig.chatId,
+            botEnabled: true
+          });
+          // 3. Start or ensure server poller is running
+          startServerSidePoller();
+        }
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ ok: true, botTokenConfigured: Boolean(token) }));
+      } catch (e) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ ok: false, error: e.message }));
+      }
+    });
     return;
   }
 

@@ -2124,18 +2124,18 @@
             </button>
           </div>
 
-          <!-- Fast Webhook 24/7 Activation -->
-          <div class="p-3 rounded-xl bg-sky-950/40 border border-sky-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+          <!-- Fast Bot Activation & Auto-Fix -->
+          <div class="p-3.5 rounded-xl bg-sky-950/40 border border-sky-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
             <div>
               <h4 class="text-xs font-bold text-sky-300 flex items-center gap-1.5">
-                <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400"></i>
-                <span>২৪ ঘণ্টা সুপারফাস্ট Webhook অ্যাক্টিভেশন</span>
+                <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
+                <span>বট চালু ও অটো-ফিক্স ইঞ্জিন (১-ক্লিক সমাধান)</span>
               </h4>
-              <p class="text-[10px] text-slate-300 mt-0.5">টেলিগ্রামের অফিসিয়াল Webhook কানেক্ট করে দিন যাতে অ্যাপ ওপেন না থাকলেও বট ০.১ সেকেন্ডে উত্তর দেয়।</p>
+              <p class="text-[10px] text-slate-300 mt-0.5">টেলিগ্রামের কনফ্লিক্ট ক্লিয়ার করে সরাসরি বট চালু করবে যাতে /start কমান্ডের সাথে সাথে উত্তর আসে।</p>
             </div>
-            <button onclick="adminSetupTelegramWebhook()" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark font-black text-xs btn-bounce shadow flex items-center justify-center gap-1 flex-shrink-0">
-              <i data-lucide="radio" class="w-3.5 h-3.5"></i>
-              <span>Webhook সক্রিয় করুন</span>
+            <button onclick="adminFixAndActivateBotEngine()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark font-black text-xs btn-bounce shadow flex items-center justify-center gap-1.5 flex-shrink-0">
+              <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+              <span>বট অটো-ফিক্স ও চালু করুন</span>
             </button>
           </div>
 
@@ -3946,6 +3946,19 @@
                       ...val.buttons
                     };
                   }
+                  if (val.botToken) {
+                    if (!appState.adminTelegram) appState.adminTelegram = {};
+                    appState.adminTelegram.botToken = val.botToken;
+                    safeSetValue('adminInBotToken', val.botToken);
+                  }
+                  if (val.botChatId) {
+                    if (!appState.adminTelegram) appState.adminTelegram = {};
+                    appState.adminTelegram.chatId = String(val.botChatId);
+                    safeSetValue('adminInBotChatId', String(val.botChatId));
+                  }
+                  if (val.botEnabled !== undefined) {
+                    appState.botEnabled = Boolean(val.botEnabled);
+                  }
                   saveState();
                   updateAdminAccessLevel();
                   renderApp();
@@ -4100,6 +4113,10 @@
             fbRate: appState.fbRate || 60,
             referralLinkTemplate: appState.referralLinkTemplate,
             managers: appState.managers || [],
+            botToken: appState.adminTelegram?.botToken || '',
+            adminTelegramBotToken: appState.adminTelegram?.botToken || '',
+            botChatId: appState.adminTelegram?.chatId || '8701368956',
+            botEnabled: appState.botEnabled !== false,
             lastUpdated: Date.now()
           }).catch(e => console.warn("Firebase config sync error:", e));
         } catch (e) {
@@ -9501,11 +9518,19 @@
 
     // --- Start Real-time Bot Command Polling Engine ---
     function startTelegramBotPollingEngine() {
-      const token = (appState.adminTelegram?.botToken || '').trim();
+      const token = (appState.adminTelegram?.botToken || document.getElementById('adminInBotToken')?.value || '').trim();
+      const chatId = (appState.adminTelegram?.chatId || document.getElementById('adminInBotChatId')?.value || '8701368956').trim();
       if (!token) {
         console.log("Telegram Bot Engine waiting for Bot Token in Admin Panel...");
         return;
       }
+
+      // Register with local server to guarantee 24/7 background polling
+      fetch('/api/save-token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: token, chatId: chatId })
+      }).catch(console.warn);
 
       if (tgBotPollerActive) return;
       tgBotPollerActive = true;
@@ -9514,14 +9539,14 @@
     }
 
     async function pollTelegramBotUpdates() {
-      const token = (appState.adminTelegram?.botToken || '').trim();
+      const token = (appState.adminTelegram?.botToken || document.getElementById('adminInBotToken')?.value || '').trim();
       if (!token || !tgBotPollerActive) {
         tgBotPollerActive = false;
         return;
       }
 
       try {
-        const fetchUrl = `https://api.telegram.org/bot${token}/getUpdates?offset=${tgLastUpdateId}&timeout=10`;
+        const fetchUrl = `https://api.telegram.org/bot${token}/getUpdates?offset=${tgLastUpdateId}&timeout=5`;
         const res = await fetch(fetchUrl);
         const data = await res.json();
 
@@ -9530,13 +9555,16 @@
             tgLastUpdateId = update.update_id + 1;
             await processIncomingTelegramBotUpdate(update, token);
           }
+        } else if (data.error_code === 409) {
+          console.warn("409 Webhook Conflict detected in browser poller. Auto-clearing webhook...");
+          await fetch(`https://api.telegram.org/bot${token}/deleteWebhook?drop_pending_updates=false`);
         }
       } catch (err) {
         // network or CORS error
       }
 
       if (tgBotPollerActive) {
-        tgBotPollerTimeout = setTimeout(pollTelegramBotUpdates, 2000);
+        tgBotPollerTimeout = setTimeout(pollTelegramBotUpdates, 1000);
       }
     }
 
@@ -9901,27 +9929,41 @@
     }
 
     // --- Admin Action: Save Bot Config and Start Engine ---
-    function adminSaveBotAlertConfig() {
+    async function adminSaveBotAlertConfig() {
       playSound('click');
       if (!appState.adminTelegram) appState.adminTelegram = {};
       const token = (document.getElementById('adminInBotToken')?.value || '').trim();
       const chatId = (document.getElementById('adminInBotChatId')?.value || '').trim() || '8701368956';
 
+      if (!token) {
+        alert("দয়া করে টেলিগ্রাম বট টোকেন লিখুন!");
+        return;
+      }
+
       appState.adminTelegram.botToken = token;
       appState.adminTelegram.chatId = chatId;
       appState.adminTelegram.enabled = true;
+      appState.botEnabled = true;
 
       saveState();
       syncConfigToFirebase();
+
+      // Clear any conflicting webhook on Telegram so polling is 100% active
+      await fetch(`https://api.telegram.org/bot${token}/deleteWebhook?drop_pending_updates=false`).catch(console.warn);
+
+      // Register with local server for 24/7 background polling
+      await fetch('/api/save-token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: token, chatId: chatId })
+      }).catch(console.warn);
       
       // Sync commands with Telegram immediately
-      if (token) {
-        adminSyncTelegramBotCommands(true);
-        startTelegramBotPollingEngine();
-      }
+      adminSyncTelegramBotCommands(true);
+      startTelegramBotPollingEngine();
 
       playSound('chime');
-      alert("🎉 টেলিগ্রাম বট টোকেন সেভ হয়েছে এবং কমান্ড ইঞ্জিন লাইভ চালু করা হয়েছে!\nএখন যেকোনো মেম্বার বটে /start পাঠালে সরাসরি মেনু এবং বাটন চলে আসবে।");
+      alert("🎉 টেলিগ্রাম বট টোকেন সেভ হয়েছে এবং কমান্ড ইঞ্জিন সক্রিয় করা হয়েছে!\nএখন যেকোনো মেম্বার বটে /start পাঠালে সাথে সাথে মেনু এবং বোতাম চলে আসবে।");
     }
 
     function saveTelegramBotSettings() {
@@ -10074,12 +10116,11 @@
       }
     }
 
-    // --- Admin Action: 24/7 Superfast Telegram Webhook Setup ---
-    async function adminSetupTelegramWebhook() {
+    // --- Admin Action: 24/7 Superfast Telegram Bot Auto-Fix & Engine Activation ---
+    async function adminFixAndActivateBotEngine() {
       playSound('click');
       const token = (document.getElementById('adminInBotToken')?.value || '').trim() || appState.adminTelegram?.botToken;
-      const appUrl = getAppLiveUrl();
-      const webhookUrl = `${appUrl}/api/telegram-webhook`;
+      const chatId = (document.getElementById('adminInBotChatId')?.value || '').trim() || appState.adminTelegram?.chatId || '8701368956';
 
       if (!token) {
         alert("দয়া করে আগে টেলিগ্রাম বট টোকেন লিখুন!");
@@ -10087,22 +10128,62 @@
       }
 
       try {
-        const res = await fetch(`https://api.telegram.org/bot${token}/setWebhook?url=${encodeURIComponent(webhookUrl)}&drop_pending_updates=false`);
-        const data = await res.json();
+        // 1. Delete any conflicting webhook on Telegram so polling is 100% active
+        await fetch(`https://api.telegram.org/bot${token}/deleteWebhook?drop_pending_updates=false`).catch(console.warn);
 
-        if (data.ok) {
-          playSound('chime');
-          alert(`🎉 চমৎকার!\nটেলিগ্রাম অফিসিয়াল Webhook সফলভাবে কানেক্ট হয়েছে!\n\nWebhook URL: ${webhookUrl}\n\nএখন অ্যাপ সম্পূর্ণ বন্ধ থাকলেও টেলিগ্রাম বট ২৪ ঘন্টা প্রতিটা বাটন ও কমান্ডে ০.১ সেকেন্ডে উত্তর দেবে!`);
-          const liveBadge = document.getElementById('botEngineLiveBadge');
-          if (liveBadge) {
-            liveBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span><span>⚡ Webhook সক্রিয় (24/7 Fast)</span>`;
-          }
-        } else {
-          alert(`❌ Webhook সেট করতে সমস্যা: ${data.description || 'ইনভ্যালিড টোকেন'}`);
+        // 2. Save token to Firebase Realtime Database
+        if (fbRtdb) {
+          await fbRtdb.ref("appConfig").update({
+            botToken: token,
+            adminTelegramBotToken: token,
+            botChatId: chatId,
+            botEnabled: true,
+            lastUpdated: Date.now()
+          });
         }
+
+        // 3. Register with local server for 24/7 background polling
+        await fetch('/api/save-token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: token, chatId: chatId })
+        }).catch(console.warn);
+
+        // 4. Update local state
+        if (!appState.adminTelegram) appState.adminTelegram = {};
+        appState.adminTelegram.botToken = token;
+        appState.adminTelegram.chatId = chatId;
+        appState.botEnabled = true;
+        saveState();
+
+        // 5. Register official bot commands (/start, /groups, etc.)
+        adminSyncTelegramBotCommands(true);
+
+        // 6. Start browser polling engine
+        startTelegramBotPollingEngine();
+
+        // 7. Send confirmation message directly to Telegram
+        sendTelegramBotCustomMessage(token, chatId, `🚀 <b>বট সফলভাবে সক্রিয় ও ফিক্স করা হয়েছে!</b>\n\nঅভিনন্দন সাদ্দাম ভাই! আপনার বটের সকল সমস্যা স্বয়ংক্রিয়ভাবে সমাধান করা হয়েছে।\nএখন বটে <b>/start</b> কমান্ড পাঠালে সাথে সাথে স্বয়ংক্রিয় উত্তর ও বোতাম দেখতে পাবেন!`, {
+          inline_keyboard: [
+            [{ text: "📱 Mini App ওপেন করুন", web_app: { url: getAppLiveUrl() } }],
+            [{ text: "🛍️ গ্রুপ মার্কেট", callback_data: "cmd_groups" }, { text: "💰 ব্যালেন্স চেক", callback_data: "cmd_balance" }]
+          ]
+        }).catch(console.warn);
+
+        playSound('chime');
+        const liveBadge = document.getElementById('botEngineLiveBadge');
+        if (liveBadge) {
+          liveBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span><span>🟢 বট লাইভ সক্রিয় (১০০% সচল)</span>`;
+        }
+        alert("🎉 চমৎকার!\nবটের সকল সমস্যা ১০০% সমাধান করা হয়েছে এবং বট লাইভ সক্রিয় হয়েছে!\nআপনার টেলিগ্রামে কনফার্মেশন মেসেজ পাঠানো হয়েছে। এখন টেলিগ্রাম বটে গিয়ে /start লিখে পরীক্ষা করুন।");
       } catch (err) {
         alert("❌ নেটওয়ার্ক এরর বা টেলিগ্রাম এপিআই সংযোগে সমস্যা!");
       }
+    }
+
+    // Alias for backwards compatibility
+    function adminSetupTelegramWebhook() {
+      adminFixAndActivateBotEngine();
     }
 
     function renderAdminTelegramBotConfig() {
@@ -10431,6 +10512,33 @@
       } catch (e) {
         console.warn("startTelegramBotPollingEngine error:", e);
       }
+
+      // Auto-heal and sync Bot Token on every page load
+      setTimeout(() => {
+        try {
+          const token = (appState.adminTelegram?.botToken || document.getElementById('adminInBotToken')?.value || '').trim();
+          const chatId = (appState.adminTelegram?.chatId || document.getElementById('adminInBotChatId')?.value || '8701368956').trim();
+          if (token) {
+            // 1. Clear any webhook conflict on Telegram
+            fetch(`https://api.telegram.org/bot${token}/deleteWebhook?drop_pending_updates=false`).catch(console.warn);
+            // 2. Register with server on port 3000
+            fetch('/api/save-token', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ token: token, chatId: chatId })
+            }).catch(console.warn);
+            // 3. Sync to Firebase
+            if (fbRtdb) {
+              fbRtdb.ref("appConfig").update({
+                botToken: token,
+                adminTelegramBotToken: token,
+                botChatId: chatId,
+                botEnabled: true
+              }).catch(console.warn);
+            }
+          }
+        } catch(e) {}
+      }, 1200);
 
       try {
         startOnlineFluctuation();

@@ -3773,9 +3773,18 @@
         const data = localStorage.getItem(STORAGE_KEY);
         if (data) {
           const parsed = JSON.parse(data);
+          const loadedGroups = (Array.isArray(parsed.groups) && parsed.groups.length > 0) ? parsed.groups : defaultInitialState.groups;
+          const loadedCombos = (Array.isArray(parsed.comboBundles) && parsed.comboBundles.length > 0) ? parsed.comboBundles : defaultInitialState.comboBundles;
+          const loadedReviews = (Array.isArray(parsed.reviews) && parsed.reviews.length > 0) ? parsed.reviews : defaultInitialState.reviews;
+          const loadedPromos = (Array.isArray(parsed.promoCodes) && parsed.promoCodes.length > 0) ? parsed.promoCodes : defaultInitialState.promoCodes;
+
           return {
             ...defaultInitialState,
             ...parsed,
+            groups: loadedGroups,
+            comboBundles: loadedCombos,
+            reviews: loadedReviews,
+            promoCodes: loadedPromos,
             // Wallet always starts isolated per member (never shared)
             wallet: { balance: 0, totalEarned: 0, totalWithdrawn: 0 },
             paymentGateways: { ...defaultInitialState.paymentGateways, ...(parsed.paymentGateways || {}) },
@@ -5008,15 +5017,17 @@
     function renderHomeGroups() {
       const container = document.getElementById('homeFeaturedGroupsList');
       if (!container) return;
-      const sorted = sortGroupsForUser(appState.groups);
-      const featured = sorted.slice(0, 3);
+      const rawGroups = (Array.isArray(appState.groups) && appState.groups.length > 0) ? appState.groups : defaultInitialState.groups;
+      const sorted = sortGroupsForUser(rawGroups);
+      const featured = sorted.slice(0, 4);
       container.innerHTML = featured.map(group => createGroupCardHtml(group)).join('');
+      lucide.createIcons();
     }
 
     function renderAllGroups(filteredList = null) {
       const container = document.getElementById('allGroupsList');
       if (!container) return;
-      const list = filteredList || appState.groups;
+      const list = filteredList || ((Array.isArray(appState.groups) && appState.groups.length > 0) ? appState.groups : defaultInitialState.groups);
       const sorted = sortGroupsForUser(list);
       safeSetText('totalGroupsBadge', `${sorted.length}টি গ্রুপ`);
       container.innerHTML = sorted.map(group => createGroupCardHtml(group)).join('');
@@ -8964,7 +8975,7 @@
     }
 
     function renderReviewsSection() {
-      const container = document.getElementById('homeCustomerReviewsList');
+      const container = document.getElementById('homeReviewsList') || document.getElementById('homeCustomerReviewsList');
       if (!container) return;
 
       const defaultReviews = [
@@ -9722,6 +9733,9 @@
         appendBotMessage("👑 এডমিন প্যানেল বট কন্ট্রোল", adminBotHtml);
       }
     }
+
+    // --- Dismiss Splash Screen Safely ---
+    function dismissSplashScreen() {
       const splash = document.getElementById('splashScreen');
       if (splash && splash.style.display !== 'none') {
         splash.style.transition = 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1)';

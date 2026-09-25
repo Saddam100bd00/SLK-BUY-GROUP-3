@@ -879,7 +879,7 @@
             <span>টাকা উত্তোলনের নিয়মাবলী ও সময়সীমা:</span>
           </div>
           <ul class="list-disc list-inside space-y-0.5 text-[11px] text-slate-300">
-            <li>সর্বনিম্ন উত্তোলন সীমা ৳১০০ টাকা।</li>
+            <li>সর্বনিম্ন উত্তোলন সীমা <strong id="lblMinWithdrawRuleText" class="text-amber-300 font-bold">৳১০০</strong>।</li>
             <li>বিকাশ, নগদ ও রকেটে প্রতিদিন সকাল ৯টা থেকে রাত ১২টা পর্যন্ত পেমেন্ট পাঠানো হয়।</li>
             <li>উইথড্র রিকোয়েস্ট দেওয়ার ১৫ থেকে ৩০ মিনিটের মধ্যে আপনার একাউন্টে টাকা যুক্ত হবে।</li>
             <li>ভুল নাম্বার দিলে টাকা উদ্ধার সম্ভব নাও হতে পারে, সাবধানে নাম্বার দিন।</li>
@@ -1462,25 +1462,78 @@
           </button>
         </div>
 
-        <!-- Rates & Minimum Withdraw -->
-        <div class="p-4 rounded-2xl bg-midnight-card border border-midnight-border space-y-3">
-          <h3 class="text-xs font-bold text-amber-400">রেট ও মিনিমাম উইথড্র লিমিট</h3>
-          <div class="grid grid-cols-3 gap-2">
-            <div>
-              <label class="text-[10px] text-slate-300 block mb-0.5">জিমেইল প্রাইস (৳)</label>
-              <input id="adminInGmailPrice" type="number" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-2.5 py-1.5 text-xs text-white" />
+        <!-- Rates & Minimum Withdraw (3 Tiers for Gmail & Facebook + Minimum Withdraw Limit) -->
+        <div class="p-4 rounded-2xl bg-midnight-card border border-luxury-gold/40 space-y-4">
+          <div class="flex items-center gap-2 text-amber-300">
+            <i data-lucide="badge-percent" class="w-4 h-4"></i>
+            <h3 class="text-xs font-bold">অ্যাকাউন্ট বিক্রয় রেট ও মিনিমাম উইথড্র লিমিট</h3>
+          </div>
+          <p class="text-[11px] text-slate-400 leading-relaxed">
+            এখানে নতুন, পুরাতন ও অনেক পুরাতন ক্যাটাগরির জন্য আলাদা আলাদা রেট এবং সর্বনিম্ন উইথড্র লিমিট সেট করুন। সেভ করলে ইউজার প্যানেলে সাথে সাথে নতুন রেট দেখাবে।
+          </p>
+
+          <!-- 1. Gmail Sell Rates (3 Tiers) -->
+          <div class="p-3 bg-midnight-dark rounded-xl border border-rose-500/20 space-y-2">
+            <div class="flex items-center gap-1.5 text-xs font-bold text-rose-400">
+              <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+              <span>জিমেইল বিক্রয় রেট (৩টি ক্যাটাগরি)</span>
             </div>
-            <div>
-              <label class="text-[10px] text-slate-300 block mb-0.5">ফেসবুক প্রাইস (৳)</label>
-              <input id="adminInFbPrice" type="number" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-2.5 py-1.5 text-xs text-white" />
-            </div>
-            <div>
-              <label class="text-[10px] text-slate-300 block mb-0.5">মিনিমাম উইথড্র (৳)</label>
-              <input id="adminInMinWithdraw" type="number" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-2.5 py-1.5 text-xs text-white" />
+            <div class="grid grid-cols-3 gap-2">
+              <div>
+                <label class="text-[10px] text-slate-300 block mb-0.5 font-medium">নতুন জিমেইল (৳)</label>
+                <input id="adminInGmailRateNew" type="number" placeholder="15" class="w-full bg-midnight-surface border border-rose-500/30 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-rose-400 font-bold" />
+              </div>
+              <div>
+                <label class="text-[10px] text-slate-300 block mb-0.5 font-medium">পুরাতন ৩+ মাস (৳)</label>
+                <input id="adminInGmailRateOld" type="number" placeholder="25" class="w-full bg-midnight-surface border border-rose-500/30 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-rose-400 font-bold" />
+              </div>
+              <div>
+                <label class="text-[10px] text-slate-300 block mb-0.5 font-medium">অনেক পুরাতন ১+ বছর (৳)</label>
+                <input id="adminInGmailRateAged" type="number" placeholder="40" class="w-full bg-midnight-surface border border-rose-500/30 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-rose-400 font-bold" />
+              </div>
             </div>
           </div>
-          <button onclick="adminSaveRatesConfig()" class="px-4 py-2 rounded-xl bg-luxury-gold text-midnight-dark font-bold text-xs btn-bounce">
-            রেট আপডেট করুন
+
+          <!-- 2. Facebook ID Sell Rates (3 Tiers) -->
+          <div class="p-3 bg-midnight-dark rounded-xl border border-blue-500/20 space-y-2">
+            <div class="flex items-center gap-1.5 text-xs font-bold text-blue-400">
+              <i data-lucide="facebook" class="w-3.5 h-3.5"></i>
+              <span>ফেসবুক আইডি বিক্রয় রেট (৩টি ক্যাটাগরি)</span>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <div>
+                <label class="text-[10px] text-slate-300 block mb-0.5 font-medium">নতুন ১-৬ মাস (৳)</label>
+                <input id="adminInFbRateNew" type="number" placeholder="20" class="w-full bg-midnight-surface border border-blue-500/30 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-400 font-bold" />
+              </div>
+              <div>
+                <label class="text-[10px] text-slate-300 block mb-0.5 font-medium">পুরাতন ১-২ বছর (৳)</label>
+                <input id="adminInFbRateOld" type="number" placeholder="60" class="w-full bg-midnight-surface border border-blue-500/30 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-400 font-bold" />
+              </div>
+              <div>
+                <label class="text-[10px] text-slate-300 block mb-0.5 font-medium">অনেক পুরাতন / 2FA (৳)</label>
+                <input id="adminInFbRateAged" type="number" placeholder="110" class="w-full bg-midnight-surface border border-blue-500/30 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-400 font-bold" />
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Minimum Withdraw Limit -->
+          <div class="p-3 bg-midnight-dark rounded-xl border border-emerald-500/20 space-y-2">
+            <div class="flex items-center gap-1.5 text-xs font-bold text-emerald-400">
+              <i data-lucide="wallet" class="w-3.5 h-3.5"></i>
+              <span>সর্বনিম্ন উইথড্র লিমিট কনফিগারেশন</span>
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-300 block mb-1">মিনিমাম উইথড্র পরিমাণ (BDT ৳) *</label>
+              <div class="flex items-center gap-2">
+                <input id="adminInMinWithdraw" type="number" placeholder="100" class="w-full bg-midnight-surface border border-emerald-500/30 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-400 font-bold font-mono" />
+                <span class="text-xs text-slate-400 flex-shrink-0">টাকা</span>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="adminSaveRatesConfig()" class="w-full py-3 rounded-xl bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark font-black text-xs shadow-lg btn-bounce flex items-center justify-center gap-2">
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+            <span>সকল রেট ও উইথড্র লিমিট আপডেট করুন</span>
           </button>
         </div>
 
@@ -2724,7 +2777,7 @@
               fbRtdb = firebase.database();
               console.log("Firebase Realtime Database connected successfully!");
 
-              // Realtime appConfig listener (AppName, AppLogo, Payment Gateways, Channels, Notice, Buttons, Referral Link Template, Managers)
+              // Realtime appConfig listener (AppName, AppLogo, Payment Gateways, Channels, Notice, Buttons, Rates, MinWithdraw, Referral Link Template, Managers)
               fbRtdb.ref("appConfig").on("value", (snap) => {
                 const val = snap.val();
                 if (val) {
@@ -2735,6 +2788,18 @@
                   if (val.supportLink) appState.supportLink = val.supportLink;
                   if (val.noticeText) appState.noticeText = val.noticeText;
                   if (val.referralLinkTemplate) appState.referralLinkTemplate = val.referralLinkTemplate;
+                  if (val.minWithdraw !== undefined && val.minWithdraw !== null) {
+                    appState.minWithdraw = Number(val.minWithdraw);
+                  }
+                  if (val.gmailRates) {
+                    appState.gmailRates = { ...appState.gmailRates, ...val.gmailRates };
+                  }
+                  if (val.fbRates) {
+                    appState.fbRates = { ...appState.fbRates, ...val.fbRates };
+                  }
+                  if (val.gmailRate) appState.gmailRate = Number(val.gmailRate);
+                  if (val.fbRate) appState.fbRate = Number(val.fbRate);
+
                   if (val.managers) {
                     appState.managers = Array.isArray(val.managers) ? val.managers : Object.values(val.managers);
                   }
@@ -2755,6 +2820,19 @@
                   renderApp();
                 }
               }, (err) => console.warn("RTDB appConfig listener:", err));
+
+              // Realtime ALL Registered Users listener (Tracks every member who ever opened the app)
+              fbRtdb.ref("users").on("value", (snap) => {
+                const val = snap.val();
+                if (val) {
+                  const cloudUsers = Object.values(val);
+                  appState.allRegisteredUsers = cloudUsers;
+                  saveState();
+                  try {
+                    renderAdminUsers();
+                  } catch(e) {}
+                }
+              }, (err) => console.warn("RTDB users listener:", err));
 
               // Realtime orders listener
               fbRtdb.ref("orders").on("value", (snap) => {
@@ -2805,6 +2883,21 @@
             try {
               fbDb = firebase.firestore();
               console.log("Firebase Firestore connected successfully!");
+
+              // Firestore users listener
+              fbDb.collection("users").onSnapshot((snapshot) => {
+                if (!fbRtdb) {
+                  let cloudUsers = [];
+                  snapshot.forEach(doc => cloudUsers.push(doc.data()));
+                  if (cloudUsers.length > 0) {
+                    appState.allRegisteredUsers = cloudUsers;
+                    saveState();
+                    try {
+                      renderAdminUsers();
+                    } catch(e) {}
+                  }
+                }
+              }, (err) => console.warn("Firestore users listener:", err));
 
               fbDb.collection("orders").onSnapshot((snapshot) => {
                 if (!fbRtdb) {
@@ -2869,6 +2962,11 @@
             supportLink: appState.supportLink,
             noticeText: appState.noticeText,
             buttons: appState.buttons,
+            minWithdraw: appState.minWithdraw || 100,
+            gmailRates: appState.gmailRates || { new: 15, old: 25, aged: 40 },
+            fbRates: appState.fbRates || { new: 20, old: 60, aged: 110 },
+            gmailRate: appState.gmailRate || 15,
+            fbRate: appState.fbRate || 60,
             referralLinkTemplate: appState.referralLinkTemplate,
             managers: appState.managers || [],
             lastUpdated: Date.now()
@@ -2876,6 +2974,20 @@
         } catch (e) {
           console.warn("RTDB sync error:", e);
         }
+      }
+      if (fbDb) {
+        try {
+          fbDb.collection("config").doc("appConfig").set({
+            appName: appState.appName,
+            appLogo: appState.appLogo,
+            minWithdraw: appState.minWithdraw || 100,
+            gmailRates: appState.gmailRates || { new: 15, old: 25, aged: 40 },
+            fbRates: appState.fbRates || { new: 20, old: 60, aged: 110 },
+            noticeText: appState.noticeText,
+            buttons: appState.buttons,
+            lastUpdated: Date.now()
+          }, { merge: true }).catch(e => console.warn(e));
+        } catch (e) {}
       }
     }
 
@@ -3208,7 +3320,22 @@
         }
       }
 
-      // 2. Firestore
+      // 2. Instant ৳1 Referral Cash Bonus to Referrer's Wallet
+      fbAddBalanceToUser(cleanRefId, 1);
+
+      const refBonusNotice = {
+        id: Date.now(),
+        type: 'GIFT',
+        giftType: 'CASH_BONUS',
+        title: "🎉 অভিনন্দন! নতুন রেফারেল বোনাস!",
+        body: `আপনার রেফারেল লিংকের মাধ্যমে ${fullName} (${userHandle}) জয়েন করায় আপনার ওয়ালেটে ৳১ রেফারেল বোনাস সফলভাবে যোগ করা হয়েছে!`,
+        cashAmount: 1,
+        time: new Date().toLocaleString('bn-BD', { dateStyle: 'short', timeStyle: 'short' }),
+        timestamp: Date.now()
+      };
+      if (fbRtdb) fbRtdb.ref(`users/${cleanRefId}/personalNotices/${refBonusNotice.id}`).set(refBonusNotice).catch(e => console.warn(e));
+
+      // 3. Firestore
       if (fbDb) {
         try {
           fbDb.collection("users").doc(cleanRefId).collection("referrals").doc(myId).set(referredRecord).catch(e => console.warn(e));
@@ -3222,18 +3349,22 @@
             referredBy: cleanRefId,
             updatedAt: Date.now()
           }, { merge: true }).catch(e => console.warn(e));
+          fbDb.collection("users").doc(cleanRefId).collection("personalNotices").doc(String(refBonusNotice.id)).set(refBonusNotice).catch(e => console.warn(e));
         } catch (e) {
           console.warn("Firestore referral join error:", e);
         }
       }
 
-      // 3. If testing in same browser session / device as the referrer
+      // 4. If testing in same browser session / device as the referrer
       if (String(tgUser.id) === cleanRefId) {
         appState.referralCount = (Number(appState.referralCount) || 0) + 1;
+        appState.wallet.balance = (Number(appState.wallet.balance) || 0) + 1;
+        appState.wallet.totalEarned = (Number(appState.wallet.totalEarned) || 0) + 1;
         if (!appState.referredUsers) appState.referredUsers = [];
         appState.referredUsers.unshift(referredRecord);
         saveState();
         saveLocalRefCache(cleanRefId);
+        updateWalletDisplay();
         renderReferralUI();
       }
     }
@@ -3458,6 +3589,32 @@
         safeSetText('profileUsername', tgUser.username ? '@' + tgUser.username : (tgUser.id ? 'ID: ' + tgUser.id : '@member'));
         safeSetText('profileUserId', tgUser.id ? 'ID: ' + tgUser.id : '');
 
+        // Register / sync this user in central Firebase users collection (Tracks ALL users in the app)
+        if (tgUser && tgUser.id) {
+          const userProfileData = {
+            userId: String(tgUser.id),
+            name: fullName,
+            username: tgUser.username ? `@${tgUser.username}` : ('ID:' + tgUser.id),
+            photo: tgUser.photo_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80',
+            lastActive: Date.now(),
+            joinedDate: new Date().toLocaleDateString('bn-BD'),
+            isOnline: true,
+            updatedAt: Date.now()
+          };
+          if (fbRtdb) {
+            fbRtdb.ref(`users/${tgUser.id}`).update(userProfileData).catch(e => console.warn(e));
+            fbRtdb.ref(`users/${tgUser.id}/hasClaimedFreeGroup`).on('value', (snap) => {
+              if (snap.val() !== null) {
+                appState.hasClaimedFreeGroup = Boolean(snap.val());
+                renderReferralUI();
+              }
+            }, (e) => console.warn(e));
+          }
+          if (fbDb) {
+            fbDb.collection("users").doc(String(tgUser.id)).set(userProfileData, { merge: true }).catch(e => console.warn(e));
+          }
+        }
+
         // Listen to this user's isolated wallet from Firestore / RTDB
         listenUserWallet(tgUser.id);
         listenUserReferrals(tgUser.id);
@@ -3673,10 +3830,14 @@
         safeSetText('marqueeNoticeText', appState.noticeText);
         safeSetText('noticeModalBody', appState.noticeText);
 
-        // Rates
-        safeSetText('btnSubmitGmailRate', `৳${appState.gmailRate}`);
-        safeSetText('btnSubmitFbRate', `৳${appState.fbRate}`);
-        safeSetText('lblMinWithdrawText', `৳${appState.minWithdraw}`);
+        // Rates & Min Withdraw
+        const minW = appState.minWithdraw || 100;
+        safeSetText('btnSubmitGmailRate', `৳${appState.gmailRate || 15}`);
+        safeSetText('btnSubmitFbRate', `৳${appState.fbRate || 60}`);
+        safeSetText('lblMinWithdrawText', `৳${minW}`);
+        safeSetText('lblMinWithdrawRuleText', `৳${minW}`);
+        const inWAmount = document.getElementById('inWithdrawAmount');
+        if (inWAmount) inWAmount.placeholder = `${minW}`;
 
         // 4 Main Buttons (Title, Subtitle, Corner Badge & Custom Logo)
         if (!appState.buttons) {
@@ -3690,20 +3851,22 @@
         renderButtonLogo('iconBox1', appState.buttons.btn1Logo, 'telegram');
 
         // Button 2: Sell Gmail
+        const gRates = appState.gmailRates || { new: 15, old: 25, aged: 40 };
         safeSetText('btnTitle2', appState.buttons.btn2Title || 'জিমেইল বিক্রি');
         safeSetText('btnSub2', appState.buttons.btn2Sub || 'ইনস্ট্যান্ট ক্যাশ পেমেন্ট');
-        safeSetText('badgeGmailRate', appState.buttons.btn2Badge || '১৫-২০৳');
+        safeSetText('badgeGmailRate', appState.buttons.btn2Badge || `৳${gRates.new}-${gRates.aged}`);
         renderButtonLogo('iconBox2', appState.buttons.btn2Logo, 'gmail');
 
         // Button 3: Sell Facebook
+        const fRates = appState.fbRates || { new: 20, old: 60, aged: 110 };
         safeSetText('btnTitle3', appState.buttons.btn3Title || 'ফেসবুক আইডি');
         safeSetText('btnSub3', appState.buttons.btn3Sub || 'পুরাতন আইডি বিক্রি');
-        safeSetText('badgeFbRate', appState.buttons.btn3Badge || '৫০-৭০৳');
+        safeSetText('badgeFbRate', appState.buttons.btn3Badge || `৳${fRates.new}-${fRates.aged}`);
         renderButtonLogo('iconBox3', appState.buttons.btn3Logo, 'facebook');
 
         // Button 4: Instant Withdraw
         safeSetText('btnTitle4', appState.buttons.btn4Title || 'ইনস্ট্যান্ট উইথড্র');
-        safeSetText('btnSub4', appState.buttons.btn4Sub || 'মিনিমাম ৳১০০ থেকে');
+        safeSetText('btnSub4', appState.buttons.btn4Sub || `মিনিমাম ৳${minW} থেকে`);
         safeSetText('badgeBtn4', appState.buttons.btn4Badge || 'বিকাশ/নগদ');
         renderButtonLogo('iconBox4', appState.buttons.btn4Logo, 'withdraw');
 
@@ -4206,9 +4369,14 @@
       if (modal) modal.classList.add('hidden');
     }
 
-    // --- Choose Free Group Reward Modal (20 Referrals) ---
+    // --- Choose Free Group Reward Modal (20 Referrals = 1 Free Group, 1 Time Claimable) ---
     function openClaimFreeGroupModal() {
       playSound('click');
+      if (appState.hasClaimedFreeGroup) {
+        alert("⚠️ আপনি ইতিমধ্যে ২০ রেফারেল সম্পন্ন করে আপনার ফ্রি গ্রুপ ক্লেইম করেছেন। এই অফারটি প্রতি ইউজারের জন্য শুধুমাত্র ১ বার প্রযোজ্য।");
+        return;
+      }
+
       const count = Number(appState.referralCount) || 0;
       if (count < 20) {
         alert(`⚠️ ফ্রি গ্রুপ পেতে কমপক্ষে ২০ জন মেম্বার রেফার করতে হবে!\n\nআপনার বর্তমান রেফারেল: ${count} জন\nআর মাত্র ${20 - count} জন রেফার প্রয়োজন।`);
@@ -4257,6 +4425,11 @@
 
     function submitClaimFreeGroup(groupId) {
       playSound('click');
+      if (appState.hasClaimedFreeGroup) {
+        alert("⚠️ আপনি ইতিমধ্যে ২০ রেফারেল সম্পন্ন করে আপনার ফ্রি গ্রুপ ক্লেইম করেছেন (১ বার প্রযোজ্য)!");
+        return;
+      }
+
       const count = Number(appState.referralCount) || 0;
       if (count < 20) {
         alert("ফ্রি গ্রুপ ক্লেইম করতে কমপক্ষে ২০ জন রেফার প্রয়োজন!");
@@ -4292,19 +4465,23 @@
         inviteLink: selectedGroup.inviteLink || ''
       };
 
-      // Deduct 20 referrals
-      appState.referralCount = Math.max(0, count - 20);
+      // Mark single claim complete
+      appState.hasClaimedFreeGroup = true;
       appState.orders.unshift(claimOrder);
       saveState();
 
       // Save to Firebase Cloud
       fbSaveOrder(claimOrder);
       if (fbRtdb && tgUser.id) {
-        fbRtdb.ref(`users/${tgUser.id}/referralCount`).set(appState.referralCount).catch(e => console.warn(e));
+        fbRtdb.ref(`users/${tgUser.id}`).update({
+          hasClaimedFreeGroup: true,
+          lastClaimedTime: Date.now()
+        }).catch(e => console.warn(e));
       }
       if (fbDb && tgUser.id) {
         fbDb.collection("users").doc(String(tgUser.id)).set({
-          referralCount: appState.referralCount,
+          hasClaimedFreeGroup: true,
+          lastClaimedTime: Date.now(),
           updatedAt: Date.now()
         }, { merge: true }).catch(e => console.warn(e));
       }
@@ -4356,7 +4533,11 @@
 
       const claimBtn = document.getElementById('btnClaimFreeGroup');
       if (claimBtn) {
-        if (count >= 20) {
+        if (appState.hasClaimedFreeGroup) {
+          claimBtn.disabled = true;
+          claimBtn.className = "w-full py-2.5 rounded-xl bg-emerald-950/40 text-emerald-400 border border-emerald-500/40 font-bold text-xs cursor-default";
+          claimBtn.innerText = "✓ ফ্রি গ্রুপ ক্লেইম সফল হয়েছে (১ বার প্রযোজ্য)";
+        } else if (count >= 20) {
           claimBtn.disabled = false;
           claimBtn.className = "w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 text-midnight-dark font-black text-xs shadow-lg btn-bounce cursor-pointer";
           claimBtn.innerText = "🎁 ফ্রি গ্রুপ বেছে নিন (এখনই ক্লেইম করুন)";
@@ -4370,7 +4551,11 @@
 
       const claimBtnTab = document.getElementById('btnClaimFreeGroupTab');
       if (claimBtnTab) {
-        if (count >= 20) {
+        if (appState.hasClaimedFreeGroup) {
+          claimBtnTab.disabled = true;
+          claimBtnTab.className = "w-full py-3 rounded-2xl bg-emerald-950/40 text-emerald-400 border border-emerald-500/40 font-bold text-xs cursor-default flex items-center justify-center gap-2";
+          claimBtnTab.innerHTML = `<i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i> <span>✓ আপনি ১টি ফ্রি গ্রুপ সফলভাবে ক্লেইম করেছেন (১ বার সম্পন্ন)</span>`;
+        } else if (count >= 20) {
           claimBtnTab.disabled = false;
           claimBtnTab.className = "w-full py-3 rounded-2xl bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark font-black text-sm shadow-xl btn-bounce cursor-pointer flex items-center justify-center gap-2";
           claimBtnTab.innerHTML = `<i data-lucide="gift" class="w-5 h-5"></i> <span>ফ্রি গ্রুপ এখনই ক্লেইম করুন!</span>`;
@@ -4799,24 +4984,42 @@
         timestamp: Date.now()
       };
 
-      appState.wallet.balance -= amount;
-      appState.wallet.totalWithdrawn = (appState.wallet.totalWithdrawn || 0) + amount;
+      appState.wallet.balance = Math.max(0, (Number(appState.wallet.balance) || 0) - amount);
+      appState.wallet.totalWithdrawn = (Number(appState.wallet.totalWithdrawn) || 0) + amount;
       appState.withdrawals.unshift(withdrawal);
 
       saveState();
       fbSaveWithdrawal(withdrawal);
-      if (fbDb && tgUser.id) {
-        fbDb.collection("users").doc(String(tgUser.id)).set({
-          balance: appState.wallet.balance,
-          totalWithdrawn: appState.wallet.totalWithdrawn,
-          updatedAt: Date.now()
-        }, { merge: true }).catch(err => console.warn(err));
+
+      const currentUid = String(tgUser.id || '');
+      if (currentUid && currentUid !== 'N/A') {
+        // 1. RTDB Update
+        if (fbRtdb) {
+          fbRtdb.ref(`users/${currentUid}`).update({
+            balance: appState.wallet.balance,
+            totalWithdrawn: appState.wallet.totalWithdrawn,
+            updatedAt: Date.now()
+          }).catch(err => console.warn("RTDB withdraw error:", err));
+        }
+        // 2. Firestore Update
+        if (fbDb) {
+          fbDb.collection("users").doc(currentUid).set({
+            balance: appState.wallet.balance,
+            totalWithdrawn: appState.wallet.totalWithdrawn,
+            updatedAt: Date.now()
+          }, { merge: true }).catch(err => console.warn("Firestore withdraw error:", err));
+        }
+        // 3. LocalStorage Cache Update
+        try {
+          localStorage.setItem(`slk_user_wallet_v4_${currentUid}`, JSON.stringify(appState.wallet));
+        } catch(e) {}
       }
 
       playSound('chime');
-      alert(`🎉 ৳${amount} উইথড্র রিকোয়েস্ট সফলভাবে গৃহীত হয়েছে!\nপেমেন্ট মেথড: ${selectedWithdrawMethodName}\nনাম্বার: ${num}\n\nসুপার এডমিন দ্রুত আপনার একাউন্টে টাকা পাঠিয়ে দেবে।`);
+      alert(`🎉 ৳${amount} উইথড্র রিকোয়েস্ট সফলভাবে গৃহীত হয়েছে!\nপেমেন্ট মেথড: ${selectedWithdrawMethodName}\nনাম্বার: ${num}\n\nআপনার ওয়ালেট থেকে ৳${amount} কেটে নেওয়া হয়েছে। সুপার এডমিন পেমেন্ট সম্পন্ন করলেই আপনার কাছে স্বয়ংক্রিয় অভিনন্দন নোটিশ আসবে।`);
       document.getElementById('inWithdrawAmount').value = '';
       document.getElementById('inWithdrawNumber').value = '';
+      updateWalletDisplay();
       renderApp();
     }
 
@@ -4880,11 +5083,20 @@
       document.getElementById('adminInChannelLink').value = appState.officialChannelLink;
       document.getElementById('adminInSupportLink').value = appState.supportLink;
 
-      // Rates
-      document.getElementById('adminInGmailPrice').value = appState.gmailRate;
-      document.getElementById('adminInFbPrice').value = appState.fbRate;
-      document.getElementById('adminInMinWithdraw').value = appState.minWithdraw;
-      document.getElementById('adminInNotice').value = appState.noticeText;
+      // Rates & Minimum Withdraw (3 Tiers for Gmail & Facebook)
+      const gRates = appState.gmailRates || { new: 15, old: 25, aged: 40 };
+      const fRates = appState.fbRates || { new: 20, old: 60, aged: 110 };
+
+      safeSetValue('adminInGmailRateNew', gRates.new || 15);
+      safeSetValue('adminInGmailRateOld', gRates.old || 25);
+      safeSetValue('adminInGmailRateAged', gRates.aged || 40);
+
+      safeSetValue('adminInFbRateNew', fRates.new || 20);
+      safeSetValue('adminInFbRateOld', fRates.old || 60);
+      safeSetValue('adminInFbRateAged', fRates.aged || 110);
+
+      safeSetValue('adminInMinWithdraw', appState.minWithdraw || 100);
+      safeSetValue('adminInNotice', appState.noticeText || '');
 
       // Payment Gateways Settings Inputs
       safeSetValue('adminInPgAppName', appState.appName || '');
@@ -5385,7 +5597,39 @@
         });
       }
 
-      // 2. Extract from Referred Users
+      // 2. Extract from ALL Registered Users across platform (Every user from any link or direct)
+      (appState.allRegisteredUsers || []).forEach(reg => {
+        if (!reg) return;
+        const uid = String(reg.userId || reg.id || '');
+        if (!uid || uid === 'N/A') return;
+        if (!userMap.has(uid)) {
+          userMap.set(uid, {
+            userId: uid,
+            name: reg.name || reg.userName || 'টেলিগ্রাম মেম্বার',
+            username: reg.username || reg.userHandle || ('ID:' + uid),
+            photo: reg.photo || reg.userPhoto || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120',
+            balance: Number(reg.balance || 0),
+            totalEarned: Number(reg.totalEarned || 0),
+            totalWithdrawn: Number(reg.totalWithdrawn || 0),
+            referralCount: Number(reg.referralCount || 0),
+            banned: Boolean(appState.bannedUsers && appState.bannedUsers[uid]),
+            joinedDate: reg.joinedDate || 'সম্প্রতি',
+            isOnline: true
+          });
+        } else {
+          const exist = userMap.get(uid);
+          if (reg.name && reg.name !== 'টেলিগ্রাম মেম্বার') exist.name = reg.name;
+          if (reg.username) exist.username = reg.username;
+          if (reg.photo) exist.photo = reg.photo;
+          if (reg.balance !== undefined) exist.balance = Number(reg.balance);
+          if (reg.totalEarned !== undefined) exist.totalEarned = Number(reg.totalEarned);
+          if (reg.totalWithdrawn !== undefined) exist.totalWithdrawn = Number(reg.totalWithdrawn);
+          if (reg.referralCount !== undefined) exist.referralCount = Math.max(exist.referralCount || 0, Number(reg.referralCount));
+          if (reg.joinedDate) exist.joinedDate = reg.joinedDate;
+        }
+      });
+
+      // 3. Extract from Referred Users
       (appState.referredUsers || []).forEach(r => {
         if (!r) return;
         const uid = String(r.userId || r.id || '');
@@ -5407,7 +5651,7 @@
         }
       });
 
-      // 3. Extract from Orders
+      // 4. Extract from Orders
       (appState.orders || []).forEach(o => {
         if (!o) return;
         const uid = String(o.userId || '');
@@ -6413,13 +6657,26 @@
 
     function adminSaveRatesConfig() {
       playSound('click');
-      appState.gmailRate = parseInt(document.getElementById('adminInGmailPrice').value) || 15;
-      appState.fbRate = parseInt(document.getElementById('adminInFbPrice').value) || 60;
-      appState.minWithdraw = parseInt(document.getElementById('adminInMinWithdraw').value) || 100;
+      if (!appState.gmailRates) appState.gmailRates = { new: 15, old: 25, aged: 40 };
+      if (!appState.fbRates) appState.fbRates = { new: 20, old: 60, aged: 110 };
+
+      appState.gmailRates.new = parseInt(document.getElementById('adminInGmailRateNew')?.value) || 15;
+      appState.gmailRates.old = parseInt(document.getElementById('adminInGmailRateOld')?.value) || 25;
+      appState.gmailRates.aged = parseInt(document.getElementById('adminInGmailRateAged')?.value) || 40;
+
+      appState.fbRates.new = parseInt(document.getElementById('adminInFbRateNew')?.value) || 20;
+      appState.fbRates.old = parseInt(document.getElementById('adminInFbRateOld')?.value) || 60;
+      appState.fbRates.aged = parseInt(document.getElementById('adminInFbRateAged')?.value) || 110;
+
+      appState.minWithdraw = parseInt(document.getElementById('adminInMinWithdraw')?.value) || 100;
+      appState.gmailRate = appState.gmailRates.new;
+      appState.fbRate = appState.fbRates.old;
+
       saveState();
       syncConfigToFirebase();
       renderApp();
-      alert("রেট ও মিনিমাম লিমিট সফলভাবে সেভ হয়েছে!");
+      playSound('chime');
+      alert("🎉 সকল রেট ও সর্বনিম্ন উইথড্র লিমিট সফলভাবে সেভ হয়েছে!\nইউজাররা এখন নতুন রেট দেখতে পাবে।");
     }
 
     function adminSaveNotice() {
@@ -6450,8 +6707,25 @@
         order.inviteLink = link;
         saveState();
         fbUpdateOrder(id, { status: 'APPROVED', inviteLink: link });
+
+        // Send Personal Notice with Join Group Link
+        if (order.userId && order.userId !== 'N/A') {
+          const groupNotice = {
+            id: Date.now(),
+            type: 'GIFT',
+            giftType: 'GROUP_LINK',
+            title: `🎉 অভিনন্দন! '${order.groupTitle}' অর্ডার অনুমোদিত!`,
+            body: `আপনার প্রিমিয়াম গ্রুপের এক্সেস সক্রিয় করা হয়েছে। নিচের বাটনে ক্লিক করে সরাসরি গ্রুপে জয়েন করুন!`,
+            groupLink: link,
+            time: new Date().toLocaleString('bn-BD', { dateStyle: 'short', timeStyle: 'short' }),
+            timestamp: Date.now()
+          };
+          if (fbRtdb) fbRtdb.ref(`users/${order.userId}/personalNotices/${groupNotice.id}`).set(groupNotice).catch(e => console.warn(e));
+          if (fbDb) fbDb.collection("users").doc(String(order.userId)).collection("personalNotices").doc(String(groupNotice.id)).set(groupNotice).catch(e => console.warn(e));
+        }
+
         playSound('chime');
-        alert(`🎉 অর্ডার #${id} সফলভাবে অনুমোদিত হয়েছে!\nগ্রুপ ইনভাইট লিংক: ${link}\n\nইউজারের স্ক্রিনে সুন্দর অভিনন্দন মেসেজ ও 'গ্রুপে জয়েন করুন' বাটন প্রদর্শিত হচ্ছে।`);
+        alert(`🎉 অর্ডার #${id} সফলভাবে অনুমোদিত হয়েছে!\nগ্রুপ ইনভাইট লিংক: ${link}\n\nইউজারের স্ক্রিনে সুন্দর অভিনন্দন মেসেজ ও 'গ্রুপে জয়েন করুন' বাটন চলে গেছে।`);
         renderApp();
       }
     }
@@ -6480,6 +6754,20 @@
         // Add balance directly to the user's isolated account in Firestore & Realtime DB
         if (sub.userId && sub.userId !== 'N/A') {
           fbAddBalanceToUser(sub.userId, reward);
+
+          // Send Personal Notice
+          const sellNotice = {
+            id: Date.now(),
+            type: 'GIFT',
+            giftType: 'CASH_BONUS',
+            title: `🎉 অভিনন্দন! ${sub.category === 'GMAIL' ? 'জিমেইল' : 'ফেসবুক আইডি'} বিক্রয় অনুমোদিত!`,
+            body: `আপনার সাবমিট করা অ্যাকাউন্টটি সফলভাবে ভেরিফাই করা হয়েছে এবং ওয়ালেটে ৳${reward} যোগ করা হয়েছে।`,
+            cashAmount: reward,
+            time: new Date().toLocaleString('bn-BD', { dateStyle: 'short', timeStyle: 'short' }),
+            timestamp: Date.now()
+          };
+          if (fbRtdb) fbRtdb.ref(`users/${sub.userId}/personalNotices/${sellNotice.id}`).set(sellNotice).catch(e => console.warn(e));
+          if (fbDb) fbDb.collection("users").doc(String(sub.userId)).collection("personalNotices").doc(String(sellNotice.id)).set(sellNotice).catch(e => console.warn(e));
         }
 
         // If this device is the user who sold, update local wallet state immediately
@@ -6507,6 +6795,21 @@
         sub.status = 'REJECTED';
         saveState();
         fbUpdateSubmission(id, { status: 'REJECTED' });
+
+        // Send Personal Notice
+        if (sub.userId && sub.userId !== 'N/A') {
+          const rejectNotice = {
+            id: Date.now(),
+            type: 'NOTICE',
+            title: "⚠️ অ্যাকাউন্ট সাবমিশন বাতিল নোটিশ",
+            body: `আপনার ${sub.category === 'GMAIL' ? 'জিমেইল' : 'ফেসবুক'} সাবমিশনটি ভুল তথ্য বা পাসওয়ার্ডের কারণে বাতিল করা হয়েছে। দয়া করে সঠিক তথ্য দিয়ে আবার জমা দিন।`,
+            time: new Date().toLocaleString('bn-BD', { dateStyle: 'short', timeStyle: 'short' }),
+            timestamp: Date.now()
+          };
+          if (fbRtdb) fbRtdb.ref(`users/${sub.userId}/personalNotices/${rejectNotice.id}`).set(rejectNotice).catch(e => console.warn(e));
+          if (fbDb) fbDb.collection("users").doc(String(sub.userId)).collection("personalNotices").doc(String(rejectNotice.id)).set(rejectNotice).catch(e => console.warn(e));
+        }
+
         renderApp();
         renderAdminData();
         renderSellHistory();
@@ -6521,10 +6824,29 @@
         w.status = 'APPROVED';
         saveState();
         fbUpdateWithdrawal(id, { status: 'APPROVED' });
+
+        // Send personal congratulatory payout notice to the user
+        if (w.userId && w.userId !== 'N/A') {
+          const notice = {
+            id: Date.now(),
+            type: 'GIFT',
+            giftType: 'PAYOUT_SUCCESS',
+            title: "🎉 অভিনন্দন! পেমেন্ট সফলভাবে পাঠানো হয়েছে!",
+            body: `আপনার ৳${w.amount} টাকার উইথড্র রিকোয়েস্ট অনুমোদিত হয়েছে এবং ${w.method} একাউন্ট (${w.number})-এ টাকা পাঠিয়ে দেওয়া হয়েছে।`,
+            time: new Date().toLocaleString('bn-BD', { dateStyle: 'short', timeStyle: 'short' }),
+            timestamp: Date.now()
+          };
+          if (fbRtdb) fbRtdb.ref(`users/${w.userId}/personalNotices/${notice.id}`).set(notice).catch(e => console.warn(e));
+          if (fbDb) fbDb.collection("users").doc(String(w.userId)).collection("personalNotices").doc(String(notice.id)).set(notice).catch(e => console.warn(e));
+          if (String(tgUser.id) === String(w.userId)) {
+            showUserGiftOrNoticeModal(notice);
+          }
+        }
+
         renderApp();
         renderAdminData();
         renderWithdrawHistory();
-        alert(`উইথড্র #${id} (৳${w.amount}) সফলভাবে পেইড মার্ক করা হয়েছে!`);
+        alert(`🎉 উইথড্র #${id} (৳${w.amount}) অনুমোদিত হয়েছে এবং ইউজারের কাছে অভিনন্দন নোটিশ পাঠানো হয়েছে!`);
       }
     }
 
@@ -6539,6 +6861,21 @@
         // Refund the amount to the user's isolated wallet in Firebase
         if (w.userId && w.userId !== 'N/A') {
           fbRefundWithdrawToUser(w.userId, Number(w.amount) || 0);
+
+          // Send personal rejection & refund notice to user
+          const notice = {
+            id: Date.now(),
+            type: 'NOTICE',
+            title: "⚠️ উইথড্র বাতিল ও রিফান্ড নোটিশ",
+            body: `আপনার ৳${w.amount} (${w.method}) উইথড্র রিকোয়েস্টটি বাতিল করা হয়েছে এবং পুরো ৳${w.amount} টাকা আপনার ওয়ালেটে ফেরত দেওয়া হয়েছে। অনুগ্রহ করে সঠিক একাউন্ট নাম্বার প্রদান করে আবার চেষ্টা করুন।`,
+            time: new Date().toLocaleString('bn-BD', { dateStyle: 'short', timeStyle: 'short' }),
+            timestamp: Date.now()
+          };
+          if (fbRtdb) fbRtdb.ref(`users/${w.userId}/personalNotices/${notice.id}`).set(notice).catch(e => console.warn(e));
+          if (fbDb) fbDb.collection("users").doc(String(w.userId)).collection("personalNotices").doc(String(notice.id)).set(notice).catch(e => console.warn(e));
+          if (String(tgUser.id) === String(w.userId)) {
+            showUserGiftOrNoticeModal(notice);
+          }
         }
 
         // If this device is the user, refund locally as well
@@ -6557,7 +6894,7 @@
         renderApp();
         renderAdminData();
         renderWithdrawHistory();
-        alert(`উইথড্র #${id} বাতিল করা হয়েছে এবং ৳${w.amount} ইউজারের ওয়ালেটে সফলভাবে ফেরত দেওয়া হয়েছে।`);
+        alert(`উইথড্র #${id} বাতিল করা হয়েছে এবং ৳${w.amount} ইউজারের ওয়ালেটে সফলভাবে ফেরত দিয়ে নোটিশ পাঠানো হয়েছে।`);
       }
     }
 

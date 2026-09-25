@@ -418,19 +418,19 @@
 
   <!-- ================= TOP BAR ================= -->
   <header class="sticky top-0 z-40 backdrop-blur-xl bg-midnight-card/95 border-b border-midnight-border/80 px-3.5 py-2.5 shadow-md">
-    <div class="max-w-md mx-auto flex items-center justify-between gap-2">
+    <div class="max-w-md mx-auto flex items-center justify-between gap-2.5">
       
-      <!-- Brand & Circular Logo -->
-      <div class="flex items-center gap-2.5 cursor-pointer min-w-0 flex-shrink" onclick="switchTab('home')">
+      <!-- Brand & Circular Logo (Full width, clear name visibility) -->
+      <div class="flex items-center gap-2.5 cursor-pointer flex-1 min-w-0" onclick="switchTab('home')">
         <div class="relative w-10 h-10 rounded-full p-0.5 bg-gradient-to-tr from-amber-400 via-yellow-300 to-amber-600 shadow-md shadow-amber-500/20 flex-shrink-0">
           <img id="headerLogo" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100&auto=format&fit=crop&q=80" class="w-full h-full object-cover rounded-full bg-midnight-dark" alt="Logo" />
           <span class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-midnight-card flex items-center justify-center">
             <i data-lucide="check" class="w-2 h-2 text-white"></i>
           </span>
         </div>
-        <div class="truncate">
+        <div class="min-w-0 flex-1">
           <div class="flex items-center gap-1.5">
-            <span id="headerAppName" class="font-black text-sm tracking-wide bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-300 bg-clip-text text-transparent glow-appname truncate">
+            <span id="headerAppName" class="font-black text-sm sm:text-base tracking-wide bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-300 bg-clip-text text-transparent glow-appname truncate">
               SLK BUY GROUP
             </span>
           </div>
@@ -441,7 +441,7 @@
         </div>
       </div>
 
-      <!-- Action Items: Online Counter + Telegram + Notice Bell + Settings -->
+      <!-- Action Items: Online Counter + Telegram Channel + Notice Bell + Settings -->
       <div class="flex items-center gap-1.5 flex-shrink-0">
         <!-- Live Auto-Fluctuating Online Counter Pill -->
         <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-950/40 border border-emerald-500/30 text-[10px] text-emerald-300 font-bold shadow-inner" title="বর্তমানে সক্রিয় ইউজার">
@@ -452,12 +452,6 @@
           <span id="dispOnlineUsers" class="font-mono">১,৪২৮</span>
           <span class="text-[9px] text-emerald-400/80 font-normal hidden xs:inline">অনলাইন</span>
         </div>
-
-        <!-- Telegram Bot Interactive Launcher Button -->
-        <button onclick="openTelegramBotModal()" class="px-2.5 py-1 rounded-full bg-gradient-to-r from-sky-500 to-blue-600 text-white text-[10px] font-black shadow-md flex items-center gap-1 btn-bounce border border-sky-400/40" title="ইন্টারঅ্যাক্টিভ টেলিগ্রাম বট">
-          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .37z"/></svg>
-          <span>বট মোড</span>
-        </button>
 
         <!-- Official Telegram Button (Settable Link from Admin) -->
         <a id="headerChannelBtn" href="https://t.me/ItsSaddam9" target="_blank" class="w-8 h-8 rounded-full bg-gradient-to-tr from-sky-400 to-[#0088cc] text-white flex items-center justify-center shadow-md shadow-sky-500/30 animate-tg hover:scale-105 active:scale-95 transition" title="অফিসিয়াল টেলিগ্রাম চ্যানেল">
@@ -2111,13 +2105,39 @@
             </div>
             <span id="botEngineLiveBadge" class="text-[10px] px-2.5 py-0.5 rounded-full font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
               <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-              <span>কমান্ড ইঞ্জিন সক্রিয়</span>
+              <span>২৪/৭ কমান্ড ইঞ্জিন সক্রিয়</span>
             </span>
           </div>
 
-          <p class="text-[11px] text-slate-300 leading-relaxed">
-            এখন ইউজাররা আপনার টেলিগ্রাম বটে <strong>/start</strong>, <strong>/groups</strong>, <strong>/balance</strong>, <strong>/deposit</strong>, <strong>/withdraw</strong>, <strong>/sell</strong> ইত্যাদি পাঠালে বট স্বয়ংক্রিয়ভাবে সরাসরি উত্তর দেবে এবং মিনি অ্যাপ ও বাটন প্রদান করবে।
-          </p>
+          <!-- Realtime Bot ON/OFF Engine Switch -->
+          <div class="p-3.5 rounded-2xl bg-gradient-to-r from-midnight-dark to-[#121c2e] border border-sky-500/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-black text-white">🤖 বট সার্বক্ষণিক ইঞ্জিন স্ট্যাটাস:</span>
+                <span id="botLiveStatusText" class="text-[11px] px-2.5 py-0.5 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">🟢 সক্রিয় (ON)</span>
+              </div>
+              <p class="text-[10px] text-slate-400 mt-0.5">বট অন থাকলে অ্যাপ বন্ধ থাকলেও টেলিগ্রামে স্বয়ংক্রিয়ভাবে ডিপোজিট, উইথড্র, জিমেইল/ফেসবুক বিক্রি ও গ্রুপ কেনা চলবে।</p>
+            </div>
+            <button id="btnToggleBotState" onclick="adminToggleBotPowerState()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-red-600 text-white font-black text-xs btn-bounce shadow flex items-center justify-center gap-1.5 flex-shrink-0">
+              <i data-lucide="power" class="w-3.5 h-3.5"></i>
+              <span id="btnToggleBotStateText">বট বন্ধ করুন</span>
+            </button>
+          </div>
+
+          <!-- Fast Webhook 24/7 Activation -->
+          <div class="p-3 rounded-xl bg-sky-950/40 border border-sky-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+            <div>
+              <h4 class="text-xs font-bold text-sky-300 flex items-center gap-1.5">
+                <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400"></i>
+                <span>২৪ ঘণ্টা সুপারফাস্ট Webhook অ্যাক্টিভেশন</span>
+              </h4>
+              <p class="text-[10px] text-slate-300 mt-0.5">টেলিগ্রামের অফিসিয়াল Webhook কানেক্ট করে দিন যাতে অ্যাপ ওপেন না থাকলেও বট ০.১ সেকেন্ডে উত্তর দেয়।</p>
+            </div>
+            <button onclick="adminSetupTelegramWebhook()" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark font-black text-xs btn-bounce shadow flex items-center justify-center gap-1 flex-shrink-0">
+              <i data-lucide="radio" class="w-3.5 h-3.5"></i>
+              <span>Webhook সক্রিয় করুন</span>
+            </button>
+          </div>
 
           <div class="space-y-2">
             <div>
@@ -2154,17 +2174,19 @@
           <div class="p-3 bg-midnight-dark/90 rounded-xl border border-white/5 space-y-1.5 text-[11px]">
             <h4 class="font-bold text-amber-300 flex items-center gap-1">
               <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
-              <span>বটে যেসব কমান্ড লাইভ কাজ করবে:</span>
+              <span>বটে যেসব কমান্ড সরাসরি কাজ করবে (অ্যাপের সাথে সিঙ্ক):</span>
             </h4>
-            <div class="grid grid-cols-2 gap-1 text-[10px] font-mono text-slate-300">
-              <div class="p-1 rounded bg-white/5"><code>/start</code> - ওপেন অ্যাপ ও বাটন</div>
-              <div class="p-1 rounded bg-white/5"><code>/groups</code> - গ্রুপ তালিকা ও দাম</div>
-              <div class="p-1 rounded bg-white/5"><code>/balance</code> - ওয়ালেট ব্যালেন্স চেক</div>
-              <div class="p-1 rounded bg-white/5"><code>/deposit</code> - টাকা রিচার্জ নিয়ম</div>
-              <div class="p-1 rounded bg-white/5"><code>/withdraw</code> - টাকা উত্তোলন লিংক</div>
-              <div class="p-1 rounded bg-white/5"><code>/sell</code> - জিমেইল বিক্রির রেট</div>
-              <div class="p-1 rounded bg-white/5"><code>/combo</code> - মেগা কম্বো অফার</div>
-              <div class="p-1 rounded bg-white/5"><code>/help</code> - সাপোর্ট হেল্পলাইন</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[10px] font-mono text-slate-300">
+              <div class="p-1.5 rounded bg-white/5"><code>/start</code> - ওপেন অ্যাপ ও বাটন মেনু</div>
+              <div class="p-1.5 rounded bg-white/5"><code>/groups</code> - সকল গ্রুপ তালিকা ও ১-ক্লিক ক্রয়</div>
+              <div class="p-1.5 rounded bg-white/5"><code>/balance</code> - ওয়ালেট ব্যালেন্স ও আয় চেক</div>
+              <div class="p-1.5 rounded bg-white/5"><code>/deposit</code> - বিকাশ/নগদে টাকা জমা সাবমিট</div>
+              <div class="p-1.5 rounded bg-white/5"><code>/withdraw</code> - টাকা উত্তোলন (ব্যালেন্স থেকে কাটবে)</div>
+              <div class="p-1.5 rounded bg-white/5"><code>/sell_gmail</code> - জিমেইল বিক্রয় সাবমিশন</div>
+              <div class="p-1.5 rounded bg-white/5"><code>/sell_fb</code> - ফেসবুক আইডি বিক্রয় সাবমিশন</div>
+              <div class="p-1.5 rounded bg-white/5"><code>/combo</code> - মেগা কম্বো বান্ডেল অফার</div>
+              <div class="p-1.5 rounded bg-white/5"><code>/ref</code> - রেফারেল লিংক ও ফ্রেন্ড বোনাস</div>
+              <div class="p-1.5 rounded bg-white/5"><code>/admin</code> - এডমিন অনুমোদন ড্যাশবোর্ড</div>
             </div>
           </div>
 
@@ -10020,10 +10042,95 @@
       adminTestBotAlert();
     }
 
+    // --- Admin Action: Toggle Bot ON/OFF Power State ---
+    async function adminToggleBotPowerState() {
+      playSound('click');
+      if (appState.botEnabled === undefined) appState.botEnabled = true;
+      appState.botEnabled = !appState.botEnabled;
+
+      // Sync with Firebase
+      if (fbRtdb) {
+        fbRtdb.ref("appConfig/botEnabled").set(appState.botEnabled).catch(console.warn);
+      }
+      if (fbDb) {
+        fbDb.collection("config").doc("appConfig").set({ botEnabled: appState.botEnabled }, { merge: true }).catch(console.warn);
+      }
+
+      // Sync with local server if running
+      fetch('/api/toggle-bot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ enabled: appState.botEnabled })
+      }).catch(e => console.log("Local server toggle:", e.message));
+
+      saveState();
+      renderAdminTelegramBotConfig();
+      playSound('chime');
+
+      if (appState.botEnabled) {
+        alert("🟢 টেলিগ্রাম বট সফলভাবে চালু করা হয়েছে!\nএখন ইউজাররা যেকোনো সময় মেসেজ দিলে ২৪/৭ অটো উত্তর ও সেবা পাবে।");
+      } else {
+        alert("🔴 টেলিগ্রাম বট সাময়িকভাবে বন্ধ করা হয়েছে!\nইউজাররা মেসেজ দিলে মেইনটেন্যান্স নোটিশ দেখতে পাবে। আপনি যেকোনো সময় আবার চালু করতে পারবেন।");
+      }
+    }
+
+    // --- Admin Action: 24/7 Superfast Telegram Webhook Setup ---
+    async function adminSetupTelegramWebhook() {
+      playSound('click');
+      const token = (document.getElementById('adminInBotToken')?.value || '').trim() || appState.adminTelegram?.botToken;
+      const appUrl = getAppLiveUrl();
+      const webhookUrl = `${appUrl}/api/telegram-webhook`;
+
+      if (!token) {
+        alert("দয়া করে আগে টেলিগ্রাম বট টোকেন লিখুন!");
+        return;
+      }
+
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${token}/setWebhook?url=${encodeURIComponent(webhookUrl)}&drop_pending_updates=false`);
+        const data = await res.json();
+
+        if (data.ok) {
+          playSound('chime');
+          alert(`🎉 চমৎকার!\nটেলিগ্রাম অফিসিয়াল Webhook সফলভাবে কানেক্ট হয়েছে!\n\nWebhook URL: ${webhookUrl}\n\nএখন অ্যাপ সম্পূর্ণ বন্ধ থাকলেও টেলিগ্রাম বট ২৪ ঘন্টা প্রতিটা বাটন ও কমান্ডে ০.১ সেকেন্ডে উত্তর দেবে!`);
+          const liveBadge = document.getElementById('botEngineLiveBadge');
+          if (liveBadge) {
+            liveBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span><span>⚡ Webhook সক্রিয় (24/7 Fast)</span>`;
+          }
+        } else {
+          alert(`❌ Webhook সেট করতে সমস্যা: ${data.description || 'ইনভ্যালিড টোকেন'}`);
+        }
+      } catch (err) {
+        alert("❌ নেটওয়ার্ক এরর বা টেলিগ্রাম এপিআই সংযোগে সমস্যা!");
+      }
+    }
+
     function renderAdminTelegramBotConfig() {
       const tgConf = appState.adminTelegram || {};
       safeSetValue('adminInBotToken', tgConf.botToken || '');
       safeSetValue('adminInBotChatId', tgConf.chatId || '8701368956');
+
+      const isEnabled = appState.botEnabled !== false;
+      const statusText = document.getElementById('botLiveStatusText');
+      const btnText = document.getElementById('btnToggleBotStateText');
+      const btnToggle = document.getElementById('btnToggleBotState');
+
+      if (statusText) {
+        statusText.innerText = isEnabled ? "🟢 সক্রিয় (ON)" : "🔴 সাময়িক বন্ধ (OFF)";
+        statusText.className = isEnabled 
+          ? "text-[11px] px-2.5 py-0.5 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
+          : "text-[11px] px-2.5 py-0.5 rounded-full font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40";
+      }
+
+      if (btnText) {
+        btnText.innerText = isEnabled ? "বট বন্ধ করুন" : "বট চালু করুন";
+      }
+
+      if (btnToggle) {
+        btnToggle.className = isEnabled
+          ? "px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-red-600 text-white font-black text-xs btn-bounce shadow flex items-center justify-center gap-1.5 flex-shrink-0"
+          : "px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-midnight-dark font-black text-xs btn-bounce shadow flex items-center justify-center gap-1.5 flex-shrink-0";
+      }
     }
 
     // =========================================================================

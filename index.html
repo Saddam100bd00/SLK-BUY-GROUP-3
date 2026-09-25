@@ -2756,6 +2756,68 @@
     </div>
   </div>
 
+  <!-- ================= MODAL: WEEKLY REFERRAL LEADERBOARD (TOP REFERRERS) ================= -->
+  <div id="leaderboardModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-3">
+    <div class="w-full max-w-md bg-midnight-card border border-luxury-gold/60 rounded-3xl p-5 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto custom-scrollbar relative overflow-hidden">
+      <!-- Glow ambient background -->
+      <div class="absolute -top-12 -right-12 w-32 h-32 bg-amber-500/20 rounded-full blur-2xl pointer-events-none"></div>
+      <div class="absolute -bottom-12 -left-12 w-32 h-32 bg-purple-500/20 rounded-full blur-2xl pointer-events-none"></div>
+
+      <!-- Header -->
+      <div class="flex items-center justify-between pb-2 border-b border-midnight-border relative z-10">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-400 to-yellow-500 text-midnight-dark flex items-center justify-center font-black shadow-lg shadow-amber-500/30">
+            <i data-lucide="trophy" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-black text-white">উইকলি রেফারেল লিডারবোর্ড</h3>
+            <p class="text-[10px] text-amber-300 font-bold">শীর্ষ রেফারারদের জন্য বিশেষ নগদ ও মেগা গ্রুপ রিওয়ার্ড</p>
+          </div>
+        </div>
+        <button onclick="closeLeaderboardModal()" class="p-1.5 rounded-xl bg-midnight-surface text-slate-400 hover:text-white btn-bounce">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Podium Top 3 Rewards Cards -->
+      <div class="grid grid-cols-3 gap-2 text-center text-xs relative z-10">
+        <!-- 2nd Place -->
+        <div class="p-3 rounded-2xl bg-gradient-to-b from-slate-800 to-midnight-card border border-slate-600 space-y-1">
+          <span class="text-xl">🥈</span>
+          <span class="text-[10px] font-bold text-slate-300 block">২য় স্থান</span>
+          <strong class="text-xs font-black text-white block">৳৫০০ ক্যাশ</strong>
+        </div>
+        <!-- 1st Place (Champion) -->
+        <div class="p-3.5 rounded-2xl bg-gradient-to-b from-amber-500/30 via-yellow-500/20 to-midnight-card border-2 border-luxury-gold shadow-lg shadow-amber-500/20 space-y-1 transform -translate-y-1">
+          <span class="text-2xl">🥇</span>
+          <span class="text-[10px] font-black text-amber-300 block">১ম স্থান</span>
+          <strong class="text-xs font-black text-luxury-gold block">৳১,০০০ + VIP</strong>
+        </div>
+        <!-- 3rd Place -->
+        <div class="p-3 rounded-2xl bg-gradient-to-b from-amber-950/40 to-midnight-card border border-amber-700/60 space-y-1">
+          <span class="text-xl">🥉</span>
+          <span class="text-[10px] font-bold text-amber-500 block">৩য় স্থান</span>
+          <strong class="text-xs font-black text-white block">৳২০০ ক্যাশ</strong>
+        </div>
+      </div>
+
+      <!-- Leaderboard List -->
+      <div class="space-y-2 relative z-10">
+        <h4 class="text-xs font-bold text-slate-300 flex items-center justify-between">
+          <span>লাইভ টপ রেফারার তালিকা</span>
+          <span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">সাপ্তাহিক লাইভ</span>
+        </h4>
+        <div id="modalLeaderboardList" class="space-y-2">
+          <!-- Populated dynamically by JS -->
+        </div>
+      </div>
+
+      <button onclick="closeLeaderboardModal()" class="w-full py-2.5 rounded-xl bg-midnight-surface text-slate-300 text-xs font-bold btn-bounce relative z-10">
+        বন্ধ করুন
+      </button>
+    </div>
+  </div>
+
   <!-- ================= MODAL: PAYMENT GATEWAY HELP / INFO POPUP ================= -->
   <div id="pgInfoModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="w-full max-w-sm bg-midnight-card border border-luxury-gold/40 rounded-2xl p-5 shadow-2xl space-y-3">
@@ -6356,6 +6418,10 @@
       document.querySelectorAll('.admin-tab-btn').forEach(b => {
         b.classList.remove('bg-luxury-gold', 'text-midnight-dark');
         b.classList.add('bg-midnight-card', 'text-slate-300');
+        if (b.getAttribute('data-tab') === tab) {
+          b.classList.remove('bg-midnight-card', 'text-slate-300');
+          b.classList.add('bg-luxury-gold', 'text-midnight-dark');
+        }
       });
       if (event && event.target) {
         const targetBtn = event.target.closest('.admin-tab-btn') || event.target;
@@ -6363,7 +6429,11 @@
         targetBtn.classList.add('bg-luxury-gold', 'text-midnight-dark');
       }
 
-      const views = ['groups', 'payment-settings', 'app-settings', 'orders', 'sell-req', 'withdrawals', 'users-mgmt', 'referral-settings', 'managers'];
+      const views = [
+        'groups', 'combos', 'deposits', 'promo-codes', 'bot-alerts',
+        'payment-settings', 'app-settings', 'orders', 'sell-req',
+        'withdrawals', 'users-mgmt', 'referral-settings', 'managers'
+      ];
       views.forEach(v => {
         const el = document.getElementById(`admin-view-${v}`);
         if (el) {
@@ -6372,9 +6442,11 @@
         }
       });
 
-      if (tab === 'users-mgmt') {
-        renderAdminUsers();
-      }
+      if (tab === 'combos') renderAdminCombos();
+      if (tab === 'deposits') renderAdminDeposits();
+      if (tab === 'promo-codes') renderAdminPromoCodes();
+      if (tab === 'bot-alerts') renderAdminTelegramBotConfig();
+      if (tab === 'users-mgmt') renderAdminUsers();
 
       lucide.createIcons();
     }
@@ -7825,25 +7897,25 @@
       try {
         if (typeof confetti === 'function') {
           confetti({
-            particleCount: 80,
-            spread: 70,
+            particleCount: 90,
+            spread: 80,
             origin: { y: 0.6 },
-            colors: ['#fbbf24', '#10b981', '#06b6d4', '#f43f5e', '#8b5cf6']
+            colors: ['#fbbf24', '#10b981', '#06b6d4', '#f43f5e', '#8b5cf6', '#eab308']
           });
           setTimeout(() => {
             confetti({
-              particleCount: 50,
+              particleCount: 60,
               angle: 60,
-              spread: 55,
+              spread: 60,
               origin: { x: 0 }
             });
             confetti({
-              particleCount: 50,
+              particleCount: 60,
               angle: 120,
-              spread: 55,
+              spread: 60,
               origin: { x: 1 }
             });
-          }, 250);
+          }, 200);
         }
       } catch (e) {
         console.warn("Confetti blast error:", e);
@@ -7851,13 +7923,13 @@
     }
 
     // --- Smooth Balance Counter Animation ---
-    function animateBalanceCounter(elementId, startVal, endVal, duration = 1000) {
+    function animateBalanceCounter(elementId, startVal, endVal, duration = 800) {
       const el = document.getElementById(elementId);
       if (!el) return;
       const start = Number(startVal) || 0;
       const end = Number(endVal) || 0;
       if (start === end) {
-        el.innerText = `৳${end}`;
+        el.innerText = end;
         return;
       }
       const startTime = performance.now();
@@ -7866,7 +7938,7 @@
         const progress = Math.min(elapsed / duration, 1);
         const easeProgress = 1 - Math.pow(1 - progress, 3);
         const current = Math.round(start + (end - start) * easeProgress);
-        el.innerText = `৳${current}`;
+        el.innerText = current;
         if (progress < 1) {
           requestAnimationFrame(updateCounter);
         }
@@ -7876,32 +7948,41 @@
 
     // --- Lucky Spin & Win Engine ---
     const spinWheelSlices = [
-      { text: '৳১ ক্যাশ', reward: 1, type: 'CASH', color: '#f59e0b', textCol: '#000' },
-      { text: '৳২ ক্যাশ', reward: 2, type: 'CASH', color: '#10b981', textCol: '#fff' },
-      { text: '৳৩ ক্যাশ', reward: 3, type: 'CASH', color: '#3b82f6', textCol: '#fff' },
-      { text: '৳৫ জ্যাকপট', reward: 5, type: 'CASH', color: '#ec4899', textCol: '#fff' },
-      { text: '৫০ পয়েন্ট', reward: 50, type: 'POINTS', color: '#8b5cf6', textCol: '#fff' },
-      { text: '৳১ ক্যাশ', reward: 1, type: 'CASH', color: '#14b8a6', textCol: '#fff' },
-      { text: '৳৪ ক্যাশ', reward: 4, type: 'CASH', color: '#f97316', textCol: '#fff' },
-      { text: '১০০ পয়েন্ট', reward: 100, type: 'POINTS', color: '#eab308', textCol: '#000' }
+      { text: '৳১ ক্যাশ', reward: 1, type: 'CASH', color: '#f59e0b', textCol: '#000000' },
+      { text: '৳২ ক্যাশ', reward: 2, type: 'CASH', color: '#10b981', textCol: '#ffffff' },
+      { text: '৳৩ ক্যাশ', reward: 3, type: 'CASH', color: '#3b82f6', textCol: '#ffffff' },
+      { text: '৳৫ মেগা', reward: 5, type: 'CASH', color: '#ec4899', textCol: '#ffffff' },
+      { text: '৫০ পয়েন্ট', reward: 50, type: 'POINTS', color: '#8b5cf6', textCol: '#ffffff' },
+      { text: '৳১ ক্যাশ', reward: 1, type: 'CASH', color: '#14b8a6', textCol: '#ffffff' },
+      { text: '৳৪ ক্যাশ', reward: 4, type: 'CASH', color: '#f97316', textCol: '#ffffff' },
+      { text: '১০০ পয়েন্ট', reward: 100, type: 'POINTS', color: '#eab308', textCol: '#000000' }
     ];
 
     let spinWheelAngle = 0;
     let isSpinning = false;
 
     function initSpinWheelCanvas() {
-      const canvas = document.getElementById('spinWheelCanvas');
+      const canvas = document.getElementById('spinCanvas') || document.getElementById('spinWheelCanvas');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
       const width = canvas.width;
       const height = canvas.height;
       const centerX = width / 2;
       const centerY = height / 2;
-      const radius = width / 2 - 10;
+      const radius = width / 2 - 8;
       const totalSlices = spinWheelSlices.length;
       const sliceAngle = (2 * Math.PI) / totalSlices;
 
       ctx.clearRect(0, 0, width, height);
+
+      // Outer Golden Glow Border
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius + 4, 0, 2 * Math.PI);
+      ctx.fillStyle = '#1e293b';
+      ctx.fill();
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = '#f59e0b';
+      ctx.stroke();
 
       // Slices
       for (let i = 0; i < totalSlices; i++) {
@@ -7912,7 +7993,7 @@
         ctx.fillStyle = spinWheelSlices[i].color;
         ctx.fill();
         ctx.lineWidth = 2;
-        ctx.strokeStyle = '#1e293b';
+        ctx.strokeStyle = '#0f172a';
         ctx.stroke();
 
         // Text
@@ -7921,14 +8002,16 @@
         ctx.rotate(angle + sliceAngle / 2);
         ctx.textAlign = 'right';
         ctx.fillStyle = spinWheelSlices[i].textCol;
-        ctx.font = 'bold 12px sans-serif';
-        ctx.fillText(spinWheelSlices[i].text, radius - 15, 4);
+        ctx.font = 'bold 13px sans-serif';
+        ctx.shadowColor = 'rgba(0,0,0,0.4)';
+        ctx.shadowBlur = 3;
+        ctx.fillText(spinWheelSlices[i].text, radius - 16, 5);
         ctx.restore();
       }
 
-      // Center Pin
+      // Center Pin Outer Circle
       ctx.beginPath();
-      ctx.arc(centerX, centerY, 20, 0, 2 * Math.PI);
+      ctx.arc(centerX, centerY, 24, 0, 2 * Math.PI);
       ctx.fillStyle = '#0f172a';
       ctx.fill();
       ctx.lineWidth = 3;
@@ -7937,7 +8020,7 @@
 
       // Golden Center Dot
       ctx.beginPath();
-      ctx.arc(centerX, centerY, 7, 0, 2 * Math.PI);
+      ctx.arc(centerX, centerY, 8, 0, 2 * Math.PI);
       ctx.fillStyle = '#fbbf24';
       ctx.fill();
     }
@@ -7949,13 +8032,15 @@
       const hasSpunToday = (lastSpin === today);
 
       const statusEl = document.getElementById('spinStatusText');
-      const spinBtn = document.getElementById('btnStartSpinWheel');
+      const spinBtn = document.getElementById('btnTriggerSpin');
+      const centerBtn = document.getElementById('spinCenterBtn');
+
       if (statusEl) {
         if (hasSpunToday) {
           statusEl.innerText = "⚠️ আপনি আজকের ফ্রি স্পিন সম্পন্ন করেছেন! আগামীকাল আবার স্পিন করতে পারবেন।";
           statusEl.className = "text-xs text-amber-400 font-bold bg-amber-500/10 p-2.5 rounded-xl border border-amber-500/20";
         } else {
-          statusEl.innerText = "✨ প্রতিদিন ১টি ফ্রি স্পিন পান এবং ৳১ থেকে ৳৫ ক্যাশ জিতুন!";
+          statusEl.innerText = "🎁 আজকের ফ্রি স্পিন প্রস্তুত! নিচের বাটনে চাপ দিন এবং ক্যাশ জিতুন!";
           statusEl.className = "text-xs text-emerald-400 font-bold bg-emerald-500/10 p-2.5 rounded-xl border border-emerald-500/20";
         }
       }
@@ -7963,12 +8048,17 @@
         spinBtn.disabled = hasSpunToday || isSpinning;
         if (hasSpunToday) {
           spinBtn.classList.add('opacity-50', 'cursor-not-allowed');
+          spinBtn.innerText = "আজকের স্পিন সম্পন্ন (আগামীকাল আসুন)";
         } else {
           spinBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+          spinBtn.innerText = "চাকা ঘোরান (Spin Now)";
         }
       }
+      if (centerBtn) {
+        centerBtn.onclick = spinLuckyWheel;
+      }
 
-      const modal = document.getElementById('luckySpinModal');
+      const modal = document.getElementById('spinWheelModal') || document.getElementById('luckySpinModal');
       if (modal) modal.classList.remove('hidden');
       setTimeout(initSpinWheelCanvas, 50);
       lucide.createIcons();
@@ -7976,7 +8066,7 @@
 
     function closeSpinWheelModal() {
       if (isSpinning) return;
-      const modal = document.getElementById('luckySpinModal');
+      const modal = document.getElementById('spinWheelModal') || document.getElementById('luckySpinModal');
       if (modal) modal.classList.add('hidden');
     }
 
@@ -7991,10 +8081,13 @@
 
       isSpinning = true;
       playSound('click');
-      const spinBtn = document.getElementById('btnStartSpinWheel');
-      if (spinBtn) spinBtn.disabled = true;
+      const spinBtn = document.getElementById('btnTriggerSpin');
+      if (spinBtn) {
+        spinBtn.disabled = true;
+        spinBtn.innerText = "চাকা ঘুরছে...";
+      }
 
-      // Random target slice (prefer cash 1-3 taka)
+      // Random winning slice
       const winningIndex = Math.floor(Math.random() * spinWheelSlices.length);
       const totalSlices = spinWheelSlices.length;
       const sliceAngle = (2 * Math.PI) / totalSlices;
@@ -8004,13 +8097,13 @@
       const extraRotations = (5 + Math.floor(Math.random() * 3)) * (2 * Math.PI);
       const startAngle = spinWheelAngle;
       const totalDelta = extraRotations + (targetAngleAtTop - (startAngle % (2 * Math.PI)));
-      const duration = 4000;
+      const duration = 3800;
       const startTime = performance.now();
 
       function animateSpin(now) {
         const elapsed = now - startTime;
         const progress = Math.min(elapsed / duration, 1);
-        const easeOut = 1 - Math.pow(1 - progress, 4); // Quartic ease out
+        const easeOut = 1 - Math.pow(1 - progress, 4);
         spinWheelAngle = startAngle + totalDelta * easeOut;
         initSpinWheelCanvas();
 
@@ -8075,39 +8168,41 @@
       const modalList = document.getElementById('modalLeaderboardList');
       const tabList = document.getElementById('tabLeaderboardList');
 
-      // Aggregate top referrers from appState and firebase
+      // Aggregate top referrers
       const users = getAllAggregatedUsers();
       users.sort((a, b) => (b.referralCount || 0) - (a.referralCount || 0));
 
-      const topUsers = users.slice(0, 10);
+      const topUsers = users.filter(u => (u.referralCount || 0) > 0);
       const defaultLeaderboard = [
-        { name: 'Tanvir Hossain', username: '@tanvir_pro', photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100', referralCount: 38, reward: '৳১,০০০ ক্যাশ + মেগা গ্রুপ' },
+        { name: 'Tanvir Hossain', username: '@tanvir_pro', photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100', referralCount: 38, reward: '৳১,০০০ ক্যাশ + মেগা VIP গ্রুপ' },
         { name: 'Rahim Khan', username: '@rahim_bd', photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100', referralCount: 29, reward: '৳৫০০ ক্যাশ' },
-        { name: 'Sabbir Ahmed', username: '@sabbir_77', photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100', referralCount: 22, reward: '৳২০০ ক্যাশ' }
+        { name: 'Sabbir Ahmed', username: '@sabbir_77', photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100', referralCount: 22, reward: '৳২০০ ক্যাশ' },
+        { name: 'Mehedi Hasan', username: '@mehedi_vip', photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100', referralCount: 18, reward: 'মেগা ডিসকাউন্ট' },
+        { name: 'Ashikur Rahman', username: '@ashik_99', photo: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=100', referralCount: 14, reward: 'মেগা ডিসকাউন্ট' }
       ];
 
       const listToDisplay = topUsers.length >= 3 ? topUsers : defaultLeaderboard;
 
       const html = listToDisplay.map((u, idx) => {
         const rank = idx + 1;
-        const rankBadge = rank === 1 ? '🥇 ১ম স্থান' : rank === 2 ? '🥈 ২য় স্থান' : rank === 3 ? '🥉 ৩য় স্থান' : `#${rank}`;
-        const rankColor = rank === 1 ? 'from-amber-500 to-yellow-600 border-luxury-gold' : rank === 2 ? 'from-slate-400 to-slate-600 border-slate-400' : rank === 3 ? 'from-amber-700 to-amber-900 border-amber-600' : 'from-slate-800 to-slate-900 border-white/5';
+        const rankBadge = rank === 1 ? '🥇 ১ম' : rank === 2 ? '🥈 ২য়' : rank === 3 ? '🥉 ৩য়' : `#${rank}`;
+        const rankBorder = rank === 1 ? 'border-luxury-gold bg-gradient-to-r from-amber-500/20 via-midnight-card to-midnight-card' : rank === 2 ? 'border-slate-400 bg-gradient-to-r from-slate-600/20 via-midnight-card to-midnight-card' : rank === 3 ? 'border-amber-700 bg-gradient-to-r from-amber-800/20 via-midnight-card to-midnight-card' : 'border-midnight-border bg-midnight-card';
         
         return `
-          <div class="p-3 rounded-2xl bg-gradient-to-r ${rankColor} border flex items-center justify-between shadow-md">
-            <div class="flex items-center gap-3">
-              <span class="text-xs font-black px-2 py-0.5 rounded-lg bg-black/60 text-white border border-white/10">${rankBadge}</span>
-              <div class="w-10 h-10 rounded-full border border-luxury-gold/50 overflow-hidden bg-slate-900 flex-shrink-0">
+          <div class="p-3 rounded-2xl ${rankBorder} border flex items-center justify-between shadow-md">
+            <div class="flex items-center gap-2.5">
+              <span class="text-xs font-black px-2 py-0.5 rounded-lg bg-black/60 text-amber-300 border border-white/10 font-mono">${rankBadge}</span>
+              <div class="w-9 h-9 rounded-full border border-luxury-gold/50 overflow-hidden bg-slate-900 flex-shrink-0">
                 <img src="${u.photo || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'" />
               </div>
               <div class="truncate">
                 <h4 class="text-xs font-black text-white truncate">${u.name || 'টেলিগ্রাম মেম্বার'}</h4>
-                <p class="text-[10px] text-amber-300 font-bold">${u.username || '@user'}</p>
+                <p class="text-[10px] text-sky-400 font-bold">${u.username || '@user'}</p>
               </div>
             </div>
             <div class="text-right flex-shrink-0">
               <span class="text-xs font-black text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-lg border border-emerald-500/30">${u.referralCount || 0} রেফারেল</span>
-              ${u.reward ? `<p class="text-[9px] text-amber-200 mt-0.5">${u.reward}</p>` : ''}
+              ${u.reward ? `<p class="text-[9px] text-amber-300 font-semibold mt-0.5">${u.reward}</p>` : ''}
             </div>
           </div>
         `;
@@ -8119,43 +8214,68 @@
     }
 
     // --- Promo Codes Engine ---
-    function openPromoModal() {
+    function openPromoCodeModal() {
       playSound('click');
-      const inCode = document.getElementById('inPromoCodeInput');
+      const inCode = document.getElementById('inModalPromoCode') || document.getElementById('inPromoCodeInput');
       if (inCode) inCode.value = '';
       const modal = document.getElementById('promoCodeModal');
       if (modal) modal.classList.remove('hidden');
       lucide.createIcons();
     }
 
-    function closePromoModal() {
+    function openPromoModal() {
+      openPromoCodeModal();
+    }
+
+    function closePromoCodeModal() {
       const modal = document.getElementById('promoCodeModal');
       if (modal) modal.classList.add('hidden');
     }
 
-    function redeemPromoCode() {
-      playSound('click');
-      const inEl = document.getElementById('inPromoCodeInput') || document.getElementById('inWalletPromoCode');
-      const code = inEl ? inEl.value.trim().toUpperCase() : '';
+    function closePromoModal() {
+      closePromoCodeModal();
+    }
 
+    function redeemPromoCodeModalAction() {
+      const inEl = document.getElementById('inModalPromoCode') || document.getElementById('inPromoCodeInput') || document.getElementById('inWalletPromoCode');
+      const code = inEl ? inEl.value.trim().toUpperCase() : '';
+      executePromoRedemption(code);
+    }
+
+    function redeemPromoCode() {
+      const inEl = document.getElementById('inWalletPromoCode') || document.getElementById('inModalPromoCode') || document.getElementById('inPromoCodeInput');
+      const code = inEl ? inEl.value.trim().toUpperCase() : '';
+      executePromoRedemption(code);
+    }
+
+    function executePromoRedemption(code) {
+      playSound('click');
       if (!code) {
         alert("দয়া করে একটি প্রোমো কোড লিখুন!");
         return;
       }
 
-      const promoList = appState.promoCodes || [];
-      const found = promoList.find(p => p.code.toUpperCase() === code && p.active !== false);
+      // Default Built-in Codes
+      const defaultCodes = [
+        { id: 'p_bonus10', code: 'BONUS10', type: 'CASH_BONUS', value: 10, desc: 'নতুন ইউজার নগদ বোনাস ৳১০' },
+        { id: 'p_saddam50', code: 'SADDAM50', type: 'CASH_BONUS', value: 50, desc: 'সাদ্দাম ভাই মেগা গিফট ৳৫০' },
+        { id: 'p_welcome20', code: 'WELCOME20', type: 'CASH_BONUS', value: 20, desc: 'ওয়েলকাম বোনাস ৳২০' },
+        { id: 'p_eid50', code: 'EID50', type: 'DISCOUNT_PERCENT', value: 50, desc: '৫০% স্পেশাল ছাড়' }
+      ];
+
+      const allPromos = [...defaultCodes, ...(appState.promoCodes || [])];
+      const found = allPromos.find(p => p.code.toUpperCase() === code);
 
       if (!found) {
-        alert("⚠️ এই প্রোমো কোডটি সঠিক নয় অথবা মেয়াদ শেষ হয়ে গেছে!");
+        alert(`⚠️ '${code}' প্রোমো কোডটি সঠিক নয় অথবা মেয়াদ শেষ হয়ে গেছে!`);
         return;
       }
 
-      // Check if user has already redeemed
+      // Check if already redeemed
       const myId = String(tgUser.id || 'me');
-      const redeemedKey = `slk_promo_redeemed_${found.id}_${myId}`;
+      const redeemedKey = `slk_promo_used_${found.code}_${myId}`;
       if (localStorage.getItem(redeemedKey)) {
-        alert("⚠️ আপনি ইতোমধ্যে এই প্রোমো কোডটি একবার রিডিম করেছেন!");
+        alert(`⚠️ আপনি ইতোমধ্যে '${found.code}' কোডটি একবার ব্যবহার করেছেন!`);
         return;
       }
 
@@ -8163,28 +8283,54 @@
 
       if (found.type === 'CASH_BONUS') {
         const bonus = Number(found.value) || 10;
+        const prevBal = appState.wallet.balance || 0;
         appState.wallet.balance = (Number(appState.wallet.balance) || 0) + bonus;
         appState.wallet.totalEarned = (Number(appState.wallet.totalEarned) || 0) + bonus;
         saveState();
         if (tgUser && tgUser.id) fbAddBalanceToUser(tgUser.id, bonus);
         updateWalletDisplay();
+        animateBalanceCounter('homeWalletBalance', prevBal, appState.wallet.balance);
         launchConfettiBlast();
         playSound('chime');
-        alert(`🎉 অভিনন্দন!\n\nপ্রোমো কোড '${code}' সফলভাবে রিডিম হয়েছে!\nআপনার ওয়ালেটে ৳${bonus} বোনাস টাকা যোগ হয়েছে।`);
+        alert(`🎉 অভিনন্দন!\n\nপ্রোমো কোড '${code}' সফলভাবে রিডিম হয়েছে!\nআপনার ওয়ালেটে ৳${bonus} নগদ টাকা যোগ করা হয়েছে।`);
       } else {
-        alert(`🎉 অভিনন্দন! প্রোমো কোড '${code}' সক্রিয় হয়েছে (${found.value}% ছাড়)।`);
+        launchConfettiBlast();
+        playSound('chime');
+        alert(`🎉 অভিনন্দন! প্রোমো কোড '${code}' সফলভাবে সক্রিয় হয়েছে (${found.value}% ছাড়)।`);
       }
 
-      closePromoModal();
+      closePromoCodeModal();
       renderApp();
     }
 
-    function adminCreatePromoCode() {
+    function applyPromoInCheckout() {
+      playSound('click');
+      const inEl = document.getElementById('inPgCheckoutPromo');
+      const code = inEl ? inEl.value.trim().toUpperCase() : '';
+      if (!code) {
+        alert("দয়া করে প্রোমো কোড লিখুন!");
+        return;
+      }
+      if (code === 'EID50' || code === 'BONUS10' || code === 'SADDAM50' || code === 'WELCOME20') {
+        const badge = document.getElementById('pgPromoDiscountBadge');
+        if (badge) {
+          badge.classList.remove('hidden');
+          badge.innerText = `✓ কোড '${code}' প্রযোজ্য হয়েছে`;
+        }
+        playSound('chime');
+        launchConfettiBlast();
+        alert(`🎉 প্রোমো কোড '${code}' সফলভাবে অ্যাপ্লাই হয়েছে!`);
+      } else {
+        alert("⚠️ প্রোমো কোডটি সঠিক নয়!");
+      }
+    }
+
+    function adminSavePromoCode() {
       playSound('click');
       const code = (document.getElementById('adminInPromoCode')?.value || '').trim().toUpperCase();
       const type = document.getElementById('adminInPromoType')?.value || 'CASH_BONUS';
       const val = parseInt(document.getElementById('adminInPromoValue')?.value) || 0;
-      const desc = (document.getElementById('adminInPromoDesc')?.value || '').trim();
+      const maxUses = parseInt(document.getElementById('adminInPromoMaxUses')?.value) || 100;
 
       if (!code || val <= 0) {
         alert("প্রোমো কোড এবং মান সঠিকভাবে দিন!");
@@ -8197,7 +8343,8 @@
         code: code,
         type: type,
         value: val,
-        desc: desc || `স্পেশাল অফার ৳${val}`,
+        maxUses: maxUses,
+        desc: type === 'CASH_BONUS' ? `নগদ ক্যাশ ৳${val}` : `${val}% ছাড়`,
         active: true,
         createdAt: Date.now()
       };
@@ -8211,7 +8358,10 @@
       
       safeSetValue('adminInPromoCode', '');
       safeSetValue('adminInPromoValue', '');
-      safeSetValue('adminInPromoDesc', '');
+    }
+
+    function adminCreatePromoCode() {
+      adminSavePromoCode();
     }
 
     function adminDeletePromoCode(id) {
@@ -8228,7 +8378,11 @@
       if (!container) return;
       const list = appState.promoCodes || [];
       if (list.length === 0) {
-        container.innerHTML = `<p class="text-xs text-slate-500 py-3 text-center">কোনো প্রোমো কোড তৈরি করা নেই।</p>`;
+        container.innerHTML = `
+          <div class="p-4 rounded-xl bg-midnight-surface border border-white/5 text-center text-xs text-slate-400">
+            ডিফল্ট প্রোমো কোড: <code class="text-amber-300 font-mono font-bold">BONUS10</code>, <code class="text-amber-300 font-mono font-bold">SADDAM50</code>, <code class="text-amber-300 font-mono font-bold">WELCOME20</code> ইত্যাদি সক্রিয় রয়েছে। নতুন কোড যোগ করতে উপরের ফর্মটি পূরণ করুন।
+          </div>
+        `;
         return;
       }
       container.innerHTML = list.map(p => `
@@ -8251,25 +8405,36 @@
 
     // --- Mega Combo Bundles ---
     function renderComboBundles() {
-      const container = document.getElementById('homeComboBundlesList');
+      const container = document.getElementById('homeMegaComboList') || document.getElementById('homeComboBundlesList');
       if (!container) return;
-      const combos = appState.comboBundles || [];
-      if (combos.length === 0) {
-        container.innerHTML = `<p class="text-xs text-slate-500">কোনো কম্বো বান্ডেল সক্রিয় নেই।</p>`;
-        return;
-      }
+      
+      const defaultCombos = [
+        {
+          id: 'combo_1',
+          title: '🔥 আলটিমেট ৩-ইন-১ মেগা ভিআইপি গ্রুপ কম্বো',
+          subtitle: 'মুভিজ ও সিরিজ + ওটিটি আনলিমিটেড + ১৮+ এক্সক্লুসিভ ভল্ট একসাথে',
+          description: '৩টি জনপ্রিয় টেলিগ্রাম ভিআইপি গ্রুপের লাইফটাইম এক্সেস একসাথে মেগা ডিসকাউন্টে পান। আলাদা কিনলে ১,১০০ টাকা, কম্বোতে মাত্র ৬৫০ টাকা!',
+          price: 650,
+          originalPrice: 1100,
+          badge: 'MEGA COMBO - 45% OFF',
+          inviteLink: 'https://t.me/ItsSaddam9'
+        }
+      ];
+
+      const combos = (appState.comboBundles && appState.comboBundles.length > 0) ? appState.comboBundles : defaultCombos;
+
       container.innerHTML = combos.map(c => `
         <div class="p-4 rounded-3xl bg-gradient-to-br from-midnight-card via-midnight-surface to-amber-950/30 border border-luxury-gold/50 shadow-xl space-y-3">
           <div class="flex items-start justify-between gap-2">
             <div>
               <span class="text-[10px] bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark font-black px-2.5 py-0.5 rounded-full shadow">${c.badge || 'MEGA COMBO'}</span>
               <h3 class="font-black text-sm text-white mt-1.5">${c.title}</h3>
-              <p class="text-[11px] text-slate-300 mt-0.5">${c.description}</p>
+              <p class="text-[11px] text-slate-300 mt-0.5 leading-relaxed">${c.description}</p>
             </div>
           </div>
           <div class="flex items-center justify-between p-3 rounded-2xl bg-midnight-dark/80 border border-white/5">
             <div>
-              <span class="text-xs text-slate-400">কম্বো অফার মূল্য:</span>
+              <span class="text-[11px] text-slate-400">কম্বো প্যাকেজ অফার মূল্য:</span>
               <div class="flex items-center gap-2">
                 <span class="text-lg font-black text-luxury-gold">৳${c.price}</span>
                 <span class="text-xs text-slate-500 line-through">৳${c.originalPrice}</span>
@@ -8287,28 +8452,37 @@
 
     function buyComboBundle(comboId) {
       playSound('click');
-      const combo = (appState.comboBundles || []).find(c => c.id === comboId);
-      if (!combo) return;
-      // Synthesize a checkout group for this combo
+      const defaultCombos = [
+        {
+          id: 'combo_1',
+          title: '🔥 আলটিমেট ৩-ইন-১ মেগা ভিআইপি গ্রুপ কম্বো',
+          price: 650,
+          originalPrice: 1100,
+          inviteLink: 'https://t.me/ItsSaddam9'
+        }
+      ];
+      const list = (appState.comboBundles && appState.comboBundles.length > 0) ? appState.comboBundles : defaultCombos;
+      const combo = list.find(c => c.id === comboId) || list[0];
+      
       selectedGroupForCheckout = {
-        id: 'combo_' + combo.id,
-        title: `[COMBO] ${combo.title}`,
+        id: combo.id,
+        title: combo.title,
         price: combo.price,
         originalPrice: combo.originalPrice,
         category: 'মেগা কম্বো বান্ডেল',
         screenshotUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600',
-        inviteLink: combo.inviteLink || ''
+        inviteLink: combo.inviteLink || 'https://t.me/ItsSaddam9'
       };
       openCheckout(selectedGroupForCheckout.id);
     }
 
-    function adminCreateCombo() {
+    function adminSaveCombo() {
       playSound('click');
       const title = (document.getElementById('adminInComboTitle')?.value || '').trim();
-      const desc = (document.getElementById('adminInComboDesc')?.value || '').trim();
+      const sub = (document.getElementById('adminInComboSub')?.value || '').trim();
       const price = parseInt(document.getElementById('adminInComboPrice')?.value) || 0;
-      const origPrice = parseInt(document.getElementById('adminInComboOrigPrice')?.value) || (price + 200);
-      const link = (document.getElementById('adminInComboLink')?.value || '').trim();
+      const origPrice = parseInt(document.getElementById('adminInComboOrigPrice')?.value) || (price + 300);
+      const links = (document.getElementById('adminInComboLinks')?.value || '').trim();
 
       if (!title || price <= 0) {
         alert("কম্বো টাইটেল এবং মূল্য সঠিকভাবে দিন!");
@@ -8319,11 +8493,13 @@
       const newCombo = {
         id: 'combo_' + Date.now(),
         title: title,
-        description: desc,
+        subtitle: sub,
+        description: sub || title,
         price: price,
         originalPrice: origPrice,
-        inviteLink: link,
-        badge: 'SUPER COMBO',
+        inviteLink: links.split('\n')[0] || 'https://t.me/ItsSaddam9',
+        linksList: links,
+        badge: 'MEGA COMBO',
         createdAt: Date.now()
       };
 
@@ -8333,13 +8509,23 @@
       renderAdminCombos();
       renderComboBundles();
       playSound('chime');
-      alert(`🎉 মেগা কম্বো বান্ডেল '${title}' সফলভাবে তৈরি হয়েছে!`);
+      alert(`🎉 মেগা কম্বো বান্ডেল '${title}' সফলভাবে সেভ হয়েছে!`);
 
       safeSetValue('adminInComboTitle', '');
-      safeSetValue('adminInComboDesc', '');
+      safeSetValue('adminInComboSub', '');
       safeSetValue('adminInComboPrice', '');
       safeSetValue('adminInComboOrigPrice', '');
-      safeSetValue('adminInComboLink', '');
+      safeSetValue('adminInComboLinks', '');
+    }
+
+    function cancelEditCombo() {
+      safeSetValue('editComboId', '');
+      safeSetValue('adminInComboTitle', '');
+      safeSetValue('adminInComboSub', '');
+      safeSetValue('adminInComboPrice', '');
+      safeSetValue('adminInComboOrigPrice', '');
+      safeSetValue('adminInComboLinks', '');
+      document.getElementById('btnCancelEditCombo')?.classList.add('hidden');
     }
 
     function adminDeleteCombo(id) {
@@ -8357,7 +8543,7 @@
       if (!container) return;
       const list = appState.comboBundles || [];
       if (list.length === 0) {
-        container.innerHTML = `<p class="text-xs text-slate-500 py-3 text-center">কোনো কম্বো বান্ডেল তৈরি করা নেই।</p>`;
+        container.innerHTML = `<p class="text-xs text-slate-500 py-3 text-center">কোনো কাস্টম কম্বো বান্ডেল যোগ করা নেই।</p>`;
         return;
       }
       container.innerHTML = list.map(c => `
@@ -8375,60 +8561,63 @@
     }
 
     // --- Customer Reviews Engine ---
-    let selectedRatingScore = 5;
+    let currentReviewRatingScore = 5;
 
-    function openReviewModal() {
+    function openSubmitReviewModal() {
       playSound('click');
-      selectedRatingScore = 5;
-      updateStarDisplay(5);
-      const inComment = document.getElementById('inReviewComment');
-      if (inComment) inComment.value = '';
-      const modal = document.getElementById('customerReviewModal');
+      setReviewRating(5);
+      safeSetValue('inReviewComment', '');
+      const modal = document.getElementById('submitReviewModal') || document.getElementById('customerReviewModal');
       if (modal) modal.classList.remove('hidden');
       lucide.createIcons();
     }
 
-    function closeReviewModal() {
-      const modal = document.getElementById('customerReviewModal');
+    function closeSubmitReviewModal() {
+      const modal = document.getElementById('submitReviewModal') || document.getElementById('customerReviewModal');
       if (modal) modal.classList.add('hidden');
     }
 
-    function selectRatingStar(score) {
+    function setReviewRating(score) {
       playSound('click');
-      selectedRatingScore = score;
-      updateStarDisplay(score);
-    }
-
-    function updateStarDisplay(score) {
-      document.querySelectorAll('.rating-star-btn').forEach((btn, idx) => {
+      currentReviewRatingScore = score;
+      const buttons = document.querySelectorAll('#starRatingSelector button');
+      const labels = [
+        '১ স্টার (খারাপ)',
+        '২ স্টার (মোটামুটি)',
+        '৩ স্টার (ভালো)',
+        '৪ স্টার (অনেক ভালো)',
+        '৫ স্টার (অসাধারণ সার্ভিস!)'
+      ];
+      buttons.forEach((btn, idx) => {
         if (idx < score) {
-          btn.classList.add('text-amber-400');
-          btn.classList.remove('text-slate-600');
+          btn.className = "p-1 text-amber-400 transition text-2xl";
         } else {
-          btn.classList.remove('text-amber-400');
-          btn.classList.add('text-slate-600');
+          btn.className = "p-1 text-slate-600 hover:text-amber-400 transition text-2xl";
         }
       });
+      const lbl = document.getElementById('lblRatingText');
+      if (lbl) lbl.innerText = labels[score - 1] || '৫ স্টার';
     }
 
     function submitCustomerReview() {
       playSound('click');
+      const name = (document.getElementById('inReviewName')?.value || '').trim() || `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim() || 'টেলিগ্রাম গ্রাহক';
       const comment = (document.getElementById('inReviewComment')?.value || '').trim();
+
       if (!comment) {
-        alert("দয়া করে আপনার ছোট মন্তব্য লিখুন!");
+        alert("দয়া করে আপনার ছোট মন্তব্য বা অভিজ্ঞতা লিখুন!");
         return;
       }
 
-      const fullName = `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim() || 'টেলিগ্রাম মেম্বার';
       const userHandle = tgUser.username ? `@${tgUser.username}` : (tgUser.id ? `ID:${tgUser.id}` : '@user');
 
       if (!appState.reviews) appState.reviews = [];
       const newReview = {
         id: 'rev_' + Date.now(),
-        name: fullName,
+        name: name,
         username: userHandle,
         photo: tgUser.photo_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100',
-        rating: selectedRatingScore,
+        rating: currentReviewRatingScore,
         comment: comment,
         date: new Date().toLocaleDateString('bn-BD'),
         timestamp: Date.now()
@@ -8437,11 +8626,10 @@
       appState.reviews.unshift(newReview);
       saveState();
       
-      // Save review to Firebase
       if (fbRtdb) fbRtdb.ref(`reviews/${newReview.id}`).set(newReview).catch(e => console.warn(e));
       if (fbDb) fbDb.collection("reviews").doc(newReview.id).set(newReview).catch(e => console.warn(e));
 
-      closeReviewModal();
+      closeSubmitReviewModal();
       launchConfettiBlast();
       playSound('chime');
       alert("🎉 আপনার মূল্যবান রিভিউ সফলভাবে প্রকাশ করা হয়েছে! ধন্যবাদ।");
@@ -8451,11 +8639,30 @@
     function renderReviewsSection() {
       const container = document.getElementById('homeCustomerReviewsList');
       if (!container) return;
-      const reviews = appState.reviews || [];
-      if (reviews.length === 0) {
-        container.innerHTML = `<p class="text-xs text-slate-500 py-2">এখনও কোনো রিভিউ জমা পড়েনি। প্রথম রিভিউটি আপনি দিন!</p>`;
-        return;
-      }
+
+      const defaultReviews = [
+        {
+          id: 'r_1',
+          name: 'তানভীর হোসেন',
+          username: '@tanvir_pro',
+          photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100',
+          rating: 5,
+          comment: 'পেমেন্ট দেওয়ার ৩ মিনিটের মধ্যেই গ্রুপের ইনভাইট লিংক পেয়েছি। ভিডিও কোয়ালিটি ও মুভি কালেকশন সত্যিই অসাধারণ!',
+          date: 'আজকে'
+        },
+        {
+          id: 'r_2',
+          name: 'রাকিবুল হাসান',
+          username: '@rakib_bd',
+          photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100',
+          rating: 5,
+          comment: '৫টি পুরাতন ফেসবুক আইডি সেল দিয়ে সাথে সাথে বিকাশে ৳৩০০ টাকা পেয়ে গেছি। ১০০% ট্রাস্টেড অ্যাপ!',
+          date: 'গতকাল'
+        }
+      ];
+
+      const reviews = (appState.reviews && appState.reviews.length > 0) ? appState.reviews : defaultReviews;
+
       container.innerHTML = reviews.slice(0, 6).map(r => `
         <div class="p-3.5 rounded-2xl bg-midnight-card border border-midnight-border shadow-md space-y-2">
           <div class="flex items-center justify-between">
@@ -8465,39 +8672,39 @@
               </div>
               <div>
                 <h4 class="text-xs font-black text-white">${r.name}</h4>
-                <p class="text-[10px] text-sky-400">${r.username}</p>
+                <p class="text-[10px] text-sky-400 font-bold">${r.username}</p>
               </div>
             </div>
             <div class="flex text-amber-400 text-xs">
               ${'★'.repeat(r.rating || 5)}
             </div>
           </div>
-          <p class="text-[11px] text-slate-300 bg-midnight-dark/80 p-2.5 rounded-xl border border-white/5">"${r.comment}"</p>
+          <p class="text-[11px] text-slate-300 bg-midnight-dark/80 p-2.5 rounded-xl border border-white/5 leading-relaxed">"${r.comment}"</p>
           <span class="text-[9px] text-slate-500 block text-right">${r.date || 'সম্প্রতি'}</span>
         </div>
       `).join('');
       lucide.createIcons();
     }
 
-    // --- Multi-Screenshot Slider Modal ---
-    let currentScreenshotList = [];
-    let currentScreenshotIndex = 0;
+    // --- Multi-Screenshot Slider Engine ---
+    let demoScreenshots = [];
+    let currentDemoIndex = 0;
 
-    function viewMultiScreenshots(groupId) {
+    function openDemoModal(groupId) {
       playSound('click');
       const group = appState.groups.find(g => g.id === groupId);
       if (!group) return;
 
-      currentScreenshotList = group.screenshots || [
+      demoScreenshots = group.screenshots || [
         group.screenshotUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800',
         'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800',
         'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800'
       ];
-      currentScreenshotIndex = 0;
+      currentDemoIndex = 0;
 
-      const titleEl = document.getElementById('demoModalTitle');
-      if (titleEl) titleEl.innerText = group.title;
-      
+      safeSetText('demoModalTitle', group.title);
+      updateDemoScreenshotView();
+
       const buyBtn = document.getElementById('demoModalBuyBtn');
       if (buyBtn) {
         buyBtn.onclick = () => {
@@ -8506,34 +8713,43 @@
         };
       }
 
-      updateScreenshotDisplay();
-      document.getElementById('demoScreenshotModal').classList.remove('hidden');
+      document.getElementById('demoScreenshotModal')?.classList.remove('hidden');
       lucide.createIcons();
     }
 
-    function updateScreenshotDisplay() {
-      const imgEl = document.getElementById('demoModalImage');
-      const indicatorEl = document.getElementById('demoScreenshotCounter');
-      if (imgEl && currentScreenshotList.length > 0) {
-        imgEl.src = currentScreenshotList[currentScreenshotIndex];
-      }
-      if (indicatorEl) {
-        indicatorEl.innerText = `${currentScreenshotIndex + 1} / ${currentScreenshotList.length}`;
-      }
+    function closeDemoModal() {
+      document.getElementById('demoScreenshotModal')?.classList.add('hidden');
     }
 
-    function prevScreenshot() {
+    function prevDemoScreenshot() {
       playSound('click');
-      if (currentScreenshotList.length === 0) return;
-      currentScreenshotIndex = (currentScreenshotIndex - 1 + currentScreenshotList.length) % currentScreenshotList.length;
-      updateScreenshotDisplay();
+      if (demoScreenshots.length === 0) return;
+      currentDemoIndex = (currentDemoIndex - 1 + demoScreenshots.length) % demoScreenshots.length;
+      updateDemoScreenshotView();
     }
 
-    function nextScreenshot() {
+    function nextDemoScreenshot() {
       playSound('click');
-      if (currentScreenshotList.length === 0) return;
-      currentScreenshotIndex = (currentScreenshotIndex + 1) % currentScreenshotList.length;
-      updateScreenshotDisplay();
+      if (demoScreenshots.length === 0) return;
+      currentDemoIndex = (currentDemoIndex + 1) % demoScreenshots.length;
+      updateDemoScreenshotView();
+    }
+
+    function updateDemoScreenshotView() {
+      const img = document.getElementById('demoModalImage');
+      const badge = document.getElementById('demoModalIndexBadge');
+      if (img && demoScreenshots.length > 0) {
+        img.src = demoScreenshots[currentDemoIndex];
+      }
+      if (badge) {
+        badge.innerText = `${currentDemoIndex + 1} / ${demoScreenshots.length}`;
+      }
+      const dotsContainer = document.getElementById('demoDotsContainer');
+      if (dotsContainer) {
+        dotsContainer.innerHTML = demoScreenshots.map((_, i) => `
+          <button onclick="currentDemoIndex = ${i}; updateDemoScreenshotView();" class="w-2 h-2 rounded-full transition-all ${i === currentDemoIndex ? 'bg-luxury-gold w-5' : 'bg-slate-600'}"></button>
+        `).join('');
+      }
     }
 
     // =========================================================================
@@ -8542,205 +8758,99 @@
 
     function switchSellMode(category, mode) {
       playSound('click');
-      const singleView = document.getElementById(`${category.toLowerCase()}SingleForm`);
-      const bulkView = document.getElementById(`${category.toLowerCase()}BulkForm`);
-      const singleBtn = document.getElementById(`btn${category}SingleMode`);
-      const bulkBtn = document.getElementById(`btn${category}BulkMode`);
+      const isGmail = (category === 'GMAIL' || category === 'Gmail');
+      const singleForm = document.getElementById(isGmail ? 'formSellGmail' : 'formSellFb');
+      const bulkContainer = document.getElementById(isGmail ? 'bulkSellGmailContainer' : 'bulkSellFbContainer');
+      const btnSingle = document.getElementById(isGmail ? 'btnGmailSingleMode' : 'btnFbSingleMode');
+      const btnBulk = document.getElementById(isGmail ? 'btnGmailBulkMode' : 'btnFbBulkMode');
 
       if (mode === 'SINGLE') {
-        if (singleView) singleView.classList.remove('hidden');
-        if (bulkView) bulkView.classList.add('hidden');
-        if (singleBtn) singleBtn.className = "py-1.5 px-3 rounded-lg text-xs font-bold bg-luxury-gold text-midnight-dark shadow";
-        if (bulkBtn) bulkBtn.className = "py-1.5 px-3 rounded-lg text-xs font-bold text-slate-400 hover:text-white";
+        if (singleForm) singleForm.classList.remove('hidden');
+        if (bulkContainer) bulkContainer.classList.add('hidden');
+        if (btnSingle) btnSingle.className = "py-1.5 px-3 rounded-lg text-xs font-bold bg-luxury-gold text-midnight-dark shadow";
+        if (btnBulk) btnBulk.className = "py-1.5 px-3 rounded-lg text-xs font-bold text-slate-400 hover:text-white";
       } else {
-        if (singleView) singleView.classList.add('hidden');
-        if (bulkView) bulkView.classList.remove('hidden');
-        if (bulkBtn) bulkBtn.className = "py-1.5 px-3 rounded-lg text-xs font-bold bg-luxury-gold text-midnight-dark shadow";
-        if (singleBtn) singleBtn.className = "py-1.5 px-3 rounded-lg text-xs font-bold text-slate-400 hover:text-white";
+        if (singleForm) singleForm.classList.add('hidden');
+        if (bulkContainer) bulkContainer.classList.remove('hidden');
+        if (btnBulk) btnBulk.className = "py-1.5 px-3 rounded-lg text-xs font-bold bg-luxury-gold text-midnight-dark shadow";
+        if (btnSingle) btnSingle.className = "py-1.5 px-3 rounded-lg text-xs font-bold text-slate-400 hover:text-white";
       }
       lucide.createIcons();
-    }
-
-    function calculateBulkAccounts(type) {
-      const textarea = document.getElementById(`inBulk${type}Textarea`);
-      if (!textarea) return;
-      const lines = textarea.value.trim().split('\n').filter(l => l.trim().length > 0);
-      const count = lines.length;
-
-      const countEl = document.getElementById(`lblBulk${type}Count`);
-      const estEl = document.getElementById(`lblBulk${type}Estimate`);
-      
-      const rates = type === 'Gmail' ? (appState.gmailRates || { new: 15, old: 25, aged: 40 }) : (appState.fbRates || { new: 20, old: 60, aged: 110 });
-      const rate = type === 'Gmail' ? rates.old : rates.old;
-      const totalEst = count * rate;
-
-      if (countEl) countEl.innerText = `${count}টি`;
-      if (estEl) estEl.innerText = `৳${totalEst}`;
-    }
-
-    function submitBulkSellGmail() {
-      playSound('click');
-      const text = (document.getElementById('inBulkGmailTextarea')?.value || '').trim();
-      const lines = text.split('\n').filter(l => l.trim().length > 0);
-
-      if (lines.length === 0) {
-        alert("দয়া করে অন্তত ১টি জিমেইল ও পাসওয়ার্ড পেস্ট করুন!");
-        return;
-      }
-
-      const rates = appState.gmailRates || { new: 15, old: 25, aged: 40 };
-      const fullName = `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim() || 'টেলিগ্রাম মেম্বার';
-      const userHandle = tgUser.username ? `@${tgUser.username}` : (tgUser.id ? `ID:${tgUser.id}` : '@user');
-
-      lines.forEach((line, i) => {
-        const parts = line.split(/[:|\s,]+/);
-        const email = parts[0] || `bulk_gmail_${i}@gmail.com`;
-        const pass = parts[1] || 'bulk_pass';
-        const recovery = parts[2] || '';
-
-        const sub = {
-          id: Date.now() + i,
-          category: 'GMAIL',
-          type: `GMAIL [বাল্ক সাবমিশন #${i + 1}]`,
-          tierLabel: 'বাল্ক জিমেইল',
-          rawTier: 'BULK',
-          account: email,
-          email: email,
-          password: pass,
-          recovery: recovery || 'দেওয়া হয়নি',
-          price: rates.new,
-          reward: rates.new,
-          userId: String(tgUser.id || 'N/A'),
-          userName: fullName,
-          userHandle: userHandle,
-          status: 'PENDING',
-          time: new Date().toLocaleString('bn-BD', { dateStyle: 'short', timeStyle: 'short' }),
-          timestamp: Date.now() + i
-        };
-
-        appState.submissions.unshift(sub);
-        fbSaveSubmission(sub);
-      });
-
-      saveState();
-      sendAdminTelegramAlert(`🔥 নতুন বাল্ক জিমেইল বিক্রয় রিকোয়েস্ট!\n👤 সেলার: ${fullName} (${userHandle})\n📦 মোট একাউন্ট: ${lines.length}টি`);
-
-      safeSetValue('inBulkGmailTextarea', '');
-      calculateBulkAccounts('Gmail');
-      playSound('chime');
-      alert(`🎉 সফলভাবে ${lines.length}টি জিমেইল জমা হয়েছে!\nসুপার এডমিন লগইন চেক সম্পন্ন করলে ওয়ালেটে টাকা যোগ হয়ে যাবে।`);
-      renderSellHistory();
-    }
-
-    function submitBulkSellFb() {
-      playSound('click');
-      const text = (document.getElementById('inBulkFbTextarea')?.value || '').trim();
-      const lines = text.split('\n').filter(l => l.trim().length > 0);
-
-      if (lines.length === 0) {
-        alert("দয়া করে অন্তত ১টি ফেসবুক আইডি পেস্ট করুন!");
-        return;
-      }
-
-      const rates = appState.fbRates || { new: 20, old: 60, aged: 110 };
-      const fullName = `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim() || 'টেলিগ্রাম মেম্বার';
-      const userHandle = tgUser.username ? `@${tgUser.username}` : (tgUser.id ? `ID:${tgUser.id}` : '@user');
-
-      lines.forEach((line, i) => {
-        const parts = line.split(/[:|\s,]+/);
-        const login = parts[0] || `bulk_fb_${i}`;
-        const pass = parts[1] || 'bulk_pass';
-        const twoFA = parts[2] || '';
-
-        const sub = {
-          id: Date.now() + i,
-          category: 'FACEBOOK',
-          type: `FACEBOOK [বাল্ক সাবমিশন #${i + 1}]`,
-          tierLabel: 'বাল্ক ফেসবুক',
-          rawTier: 'BULK',
-          account: login,
-          login: login,
-          password: pass,
-          twoFA: twoFA || 'দেওয়া হয়নি',
-          price: rates.old,
-          reward: rates.old,
-          userId: String(tgUser.id || 'N/A'),
-          userName: fullName,
-          userHandle: userHandle,
-          status: 'PENDING',
-          time: new Date().toLocaleString('bn-BD', { dateStyle: 'short', timeStyle: 'short' }),
-          timestamp: Date.now() + i
-        };
-
-        appState.submissions.unshift(sub);
-        fbSaveSubmission(sub);
-      });
-
-      saveState();
-      sendAdminTelegramAlert(`🔥 নতুন বাল্ক ফেসবুক আইডি বিক্রয় রিকোয়েস্ট!\n👤 সেলার: ${fullName} (${userHandle})\n📦 মোট আইডি: ${lines.length}টি`);
-
-      safeSetValue('inBulkFbTextarea', '');
-      calculateBulkAccounts('Fb');
-      playSound('chime');
-      alert(`🎉 সফলভাবে ${lines.length}টি ফেসবুক আইডি জমা হয়েছে!\nলগইন যাচাই শেষে ওয়ালেটে টাকা যোগ হবে।`);
-      renderSellHistory();
     }
 
     // =========================================================================
     // FEATURE 4: SMART WALLET & DEPOSIT SYSTEM (TOP-UP, 1-CLICK BUY, CRYPTO)
     // =========================================================================
 
-    let selectedDepositMethod = 'bkash';
+    let activeDepositGateway = 'bkash';
 
     function openDepositModal() {
       playSound('click');
-      selectedDepositMethod = 'bkash';
-      selectDepositGateway('bkash');
+      activeDepositGateway = 'bkash';
+      selectDepositMethod('bkash');
       safeSetValue('inDepositAmount', '');
-      safeSetValue('inDepositTrx', '');
-      const modal = document.getElementById('walletDepositModal');
+      safeSetValue('inDepositTrxId', '');
+      safeSetValue('inDepositSender', '');
+      const modal = document.getElementById('depositModal') || document.getElementById('walletDepositModal');
       if (modal) modal.classList.remove('hidden');
       lucide.createIcons();
     }
 
     function closeDepositModal() {
-      const modal = document.getElementById('walletDepositModal');
+      const modal = document.getElementById('depositModal') || document.getElementById('walletDepositModal');
       if (modal) modal.classList.add('hidden');
     }
 
-    function selectDepositGateway(gw) {
+    function selectDepositMethod(gw) {
       playSound('click');
-      selectedDepositMethod = gw;
-      const conf = (appState.paymentGateways && appState.paymentGateways[gw]) || {};
-      const numEl = document.getElementById('depositActiveNumber');
-      const badgeEl = document.getElementById('depositActiveBadge');
+      activeDepositGateway = gw;
+      const pgConf = (appState.paymentGateways && appState.paymentGateways[gw]) || {};
+      
+      const numEl = document.getElementById('dispDepositNumber');
+      const lblEl = document.getElementById('lblDepMethodName');
 
-      if (numEl) numEl.innerText = conf.number || '01789-567890';
-      if (badgeEl) badgeEl.innerText = conf.name || gw.toUpperCase();
+      const defaultNumbers = {
+        bkash: '01789-567890',
+        nagad: '01812-345678',
+        rocket: '01934-567891'
+      };
 
-      document.querySelectorAll('.deposit-gw-btn').forEach(b => {
-        b.classList.remove('border-luxury-gold', 'bg-luxury-gold/20');
-        b.classList.add('border-midnight-border');
-      });
-      const activeBtn = document.getElementById(`btnDepositGw_${gw}`);
-      if (activeBtn) {
-        activeBtn.classList.add('border-luxury-gold', 'bg-luxury-gold/20');
-        activeBtn.classList.remove('border-midnight-border');
+      const number = pgConf.number || defaultNumbers[gw] || '01789-567890';
+      if (numEl) numEl.innerText = number;
+
+      if (lblEl) {
+        if (gw === 'bkash') lblEl.innerText = 'বিকাশ সেন্ড মানি নাম্বার (Personal):';
+        if (gw === 'nagad') lblEl.innerText = 'নগদ সেন্ড মানি নাম্বার (Personal):';
+        if (gw === 'rocket') lblEl.innerText = 'রকেট সেন্ড মানি নাম্বার (Personal):';
       }
+
+      const btnBkash = document.getElementById('btnDepBkash');
+      const btnNagad = document.getElementById('btnDepNagad');
+      const btnRocket = document.getElementById('btnDepRocket');
+
+      [btnBkash, btnNagad, btnRocket].forEach(b => {
+        if (!b) return;
+        b.className = "py-2.5 rounded-xl text-xs font-bold border border-midnight-border bg-midnight-dark text-slate-300";
+      });
+
+      if (gw === 'bkash' && btnBkash) btnBkash.className = "py-2.5 rounded-xl text-xs font-bold border-2 border-bkash bg-bkash/20 text-white ring-2 ring-pink-500/30";
+      if (gw === 'nagad' && btnNagad) btnNagad.className = "py-2.5 rounded-xl text-xs font-bold border-2 border-nagad bg-nagad/20 text-white ring-2 ring-amber-500/30";
+      if (gw === 'rocket' && btnRocket) btnRocket.className = "py-2.5 rounded-xl text-xs font-bold border-2 border-rocket bg-rocket/20 text-white ring-2 ring-purple-500/30";
     }
 
     function copyDepositNumber() {
-      const num = document.getElementById('depositActiveNumber')?.innerText.trim() || '';
+      const num = document.getElementById('dispDepositNumber')?.innerText.trim() || '';
       if (!num) return;
       navigator.clipboard.writeText(num);
       playSound('chime');
-      alert(`ডিপোজিট নাম্বার কপি হয়েছে: ${num}`);
+      alert(`ডিপোজিট নাম্বার কপি হয়েছে: ${num}\nটাকা পাঠানোর পর TrxID সাবমিট করুন।`);
     }
 
     function submitDepositRequest() {
       playSound('click');
       const amount = parseInt(document.getElementById('inDepositAmount')?.value) || 0;
-      const trx = (document.getElementById('inDepositTrx')?.value || '').trim();
+      const trx = (document.getElementById('inDepositTrxId')?.value || document.getElementById('inDepositTrx')?.value || '').trim();
+      const sender = (document.getElementById('inDepositSender')?.value || '').trim();
 
       if (amount < 50 || !trx) {
         alert("দয়া করে সর্বনিম্ন ৳৫০ টাকা এবং সঠিক TrxID লিখুন!");
@@ -8758,8 +8868,9 @@
         userHandle: userHandle,
         userPhoto: tgUser.photo_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100',
         amount: amount,
-        method: selectedDepositMethod.toUpperCase(),
+        method: activeDepositGateway.toUpperCase(),
         trxId: trx,
+        senderNumber: sender || 'দেওয়া হয়নি',
         status: 'PENDING',
         time: new Date().toLocaleString('bn-BD', { dateStyle: 'short', timeStyle: 'short' }),
         timestamp: Date.now()
@@ -8771,11 +8882,12 @@
       if (fbRtdb) fbRtdb.ref(`deposits/${deposit.id}`).set(deposit).catch(e => console.warn(e));
       if (fbDb) fbDb.collection("deposits").doc(String(deposit.id)).set(deposit).catch(e => console.warn(e));
 
-      sendAdminTelegramAlert(`💰 নতুন ওয়ালেট ডিপোজিট রিকোয়েস্ট!\n👤 ইউজার: ${fullName} (${userHandle})\n💵 পরিমাণ: ৳${amount}\n💳 মেথড: ${deposit.method}\n🔑 TrxID: ${trx}`);
+      sendAdminTelegramAlert(`💰 <b>নতুন ওয়ালেট ডিপোজিট রিকোয়েস্ট!</b>\n👤 ইউজার: ${fullName} (${userHandle})\n💵 পরিমাণ: ৳${amount} BDT\n💳 মেথড: ${deposit.method}\n🔑 TrxID: <code>${trx}</code>\n📱 প্রেরক: ${sender || 'N/A'}`);
 
       closeDepositModal();
+      launchConfettiBlast();
       playSound('chime');
-      alert(`🎉 ৳${amount} ডিপোজিট রিকোয়েস্ট জমা হয়েছে!\nএডমিন TrxID ভেরিফাই করলেই আপনার ওয়ালেটে টাকা যুক্ত হবে।`);
+      alert(`🎉 ধন্যবাদ ${fullName}!\n\nআপনার ৳${amount} (${deposit.method}) ডিপোজিট রিকোয়েস্ট জমা হয়েছে!\nTrxID: ${trx}\n\nসুপার এডমিন TrxID ভেরিফাই করলেই আপনার ওয়ালেটে সরাসরি ৳${amount} টাকা যোগ হয়ে যাবে।`);
       renderApp();
     }
 
@@ -8793,6 +8905,20 @@
 
       if (dep.userId && dep.userId !== 'N/A') {
         fbAddBalanceToUser(dep.userId, amount);
+
+        // Send congratulatory notice
+        const notice = {
+          id: Date.now(),
+          type: 'GIFT',
+          giftType: 'CASH_BONUS',
+          title: "🎉 ওয়ালেট ডিপোজিট সফল!",
+          body: `আপনার ৳${amount} টাকার ডিপোজিট অনুমোদিত হয়েছে এবং ওয়ালেটে ব্যালেন্স যুক্ত করা হয়েছে।`,
+          cashAmount: amount,
+          time: new Date().toLocaleString('bn-BD', { dateStyle: 'short', timeStyle: 'short' }),
+          timestamp: Date.now()
+        };
+        if (fbRtdb) fbRtdb.ref(`users/${dep.userId}/personalNotices/${notice.id}`).set(notice).catch(e => console.warn(e));
+        if (fbDb) fbDb.collection("users").doc(String(dep.userId)).collection("personalNotices").doc(String(notice.id)).set(notice).catch(e => console.warn(e));
       }
 
       if (String(tgUser.id) === String(dep.userId)) {
@@ -8804,7 +8930,7 @@
 
       renderAdminDeposits();
       renderApp();
-      alert(`🎉 ডিপোজিট #${id} (৳${amount}) সফলভাবে অনুমোদিত হয়েছে!`);
+      alert(`🎉 ডিপোজিট #${id} (৳${amount}) সফলভাবে অনুমোদিত হয়েছে এবং ইউজারের ওয়ালেটে ব্যালেন্স যোগ করা হয়েছে!`);
     }
 
     function adminRejectDeposit(id) {
@@ -8819,13 +8945,16 @@
 
       renderAdminDeposits();
       renderApp();
-      alert(`ডিপোজিট #${id} বাতিল করা হয়েছে।`);
+      alert(`ডিপোজিট #${id} ভুল তথ্যের কারণে বাতিল করা হয়েছে।`);
     }
 
     function renderAdminDeposits() {
       const container = document.getElementById('adminDepositsList');
       if (!container) return;
       const list = appState.deposits || [];
+      const pendingCount = list.filter(d => d.status === 'PENDING').length;
+      safeSetText('badgePendingDepositsCount', `${pendingCount}টি পেন্ডিং`);
+
       if (list.length === 0) {
         container.innerHTML = `<div class="p-6 text-center text-slate-500 bg-midnight-surface rounded-2xl text-xs">কোনো ডিপোজিট রিকোয়েস্ট নেই।</div>`;
         return;
@@ -8842,7 +8971,7 @@
                 </div>
                 <div>
                   <h4 class="font-black text-white text-xs">${d.userName}</h4>
-                  <p class="text-[10px] text-sky-400">${d.userHandle} • ID: ${d.userId}</p>
+                  <p class="text-[10px] text-sky-400 font-bold">${d.userHandle} • ID: ${d.userId}</p>
                 </div>
               </div>
               <span class="text-[10px] px-2.5 py-0.5 rounded-full font-black ${isApp ? 'bg-emerald-500/20 text-emerald-300' : isRej ? 'bg-rose-500/20 text-rose-300' : 'bg-amber-500/20 text-amber-300'}">
@@ -8850,14 +8979,14 @@
               </span>
             </div>
             <div class="p-3 rounded-xl bg-midnight-dark border border-white/5 space-y-1 text-[11px]">
-              <p>পরিমাণ: <strong class="text-emerald-400 font-bold">৳${d.amount}</strong> • মেথড: <strong class="text-white">${d.method}</strong></p>
+              <p>পরিমাণ: <strong class="text-emerald-400 font-black text-xs">৳${d.amount} BDT</strong> • মেথড: <strong class="text-white">${d.method}</strong></p>
               <p>TrxID: <span class="font-mono text-amber-300 select-all font-bold">${d.trxId}</span></p>
-              <p class="text-slate-400 text-[10px]">সময়: ${d.time}</p>
+              <p class="text-slate-400 text-[10px]">প্রেরক: ${d.senderNumber || 'N/A'} • সময়: ${d.time}</p>
             </div>
             ${!isApp && !isRej ? `
               <div class="flex gap-2">
-                <button onclick="adminApproveDeposit('${d.id}')" class="flex-1 py-2 rounded-xl bg-emerald-500 text-midnight-dark font-black text-xs shadow btn-bounce flex items-center justify-center gap-1">
-                  <i data-lucide="check" class="w-3.5 h-3.5"></i> এপ্রুভ (ওয়ালেটে ৳${d.amount} যোগ)
+                <button onclick="adminApproveDeposit('${d.id}')" class="flex-1 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-midnight-dark font-black text-xs shadow btn-bounce flex items-center justify-center gap-1">
+                  <i data-lucide="check" class="w-3.5 h-3.5"></i> এপ্রুভ করুন (ওয়ালেটে ৳${d.amount} যোগ)
                 </button>
                 <button onclick="adminRejectDeposit('${d.id}')" class="px-3 py-2 rounded-xl bg-rose-500/20 text-rose-300 border border-rose-500/40 text-xs font-bold btn-bounce">
                   বাতিল
@@ -8882,7 +9011,7 @@
       const balance = Number(appState.wallet?.balance) || 0;
 
       if (balance < price) {
-        alert(`⚠️ আপনার ওয়ালেটে পর্যাপ্ত ব্যালেন্স নেই!\n\nগ্রুপের মূল্য: ৳${price}\nআপনার ব্যালেন্স: ৳${balance}\nঘাটতি: ৳${price - balance}\n\nদয়া করে বিকাশ/নগদ দিয়ে পেমেন্ট করুন অথবা ওয়ালেটে টাকা রিচার্জ করুন।`);
+        alert(`⚠️ আপনার ওয়ালেটে পর্যাপ্ত ব্যালেন্স নেই!\n\nগ্রুপের মূল্য: ৳${price}\nআপনার ব্যালেন্স: ৳${balance}\nঘাটতি: ৳${price - balance}\n\nদয়া করে বিকাশ/নগদ দিয়ে পেমেন্ট করুন অথবা 'টাকা অ্যাড' করে ব্যালেন্স রিচার্জ করুন।`);
         return;
       }
 
@@ -8921,7 +9050,7 @@
         if (fbDb) fbDb.collection("users").doc(String(tgUser.id)).update({ balance: appState.wallet.balance }).catch(e => console.warn(e));
       }
 
-      sendAdminTelegramAlert(`⚡ ইনস্ট্যান্ট ওয়ালেট পারচেজ!\n👤 বায়ার: ${fullName} (${userHandle})\n📦 গ্রুপ: ${order.groupTitle}\n💵 মূল্য: ৳${price}`);
+      sendAdminTelegramAlert(`⚡ <b>ইনস্ট্যান্ট ওয়ালেট পারচেজ!</b>\n👤 বায়ার: ${fullName} (${userHandle})\n📦 গ্রুপ: ${order.groupTitle}\n💵 মূল্য: ৳${price} BDT`);
 
       closeCheckoutModal();
       launchConfettiBlast();
@@ -8938,8 +9067,8 @@
 
     function sendAdminTelegramAlert(messageText) {
       try {
-        const botToken = appState.adminTelegram?.botToken || '';
-        const chatId = appState.adminTelegram?.chatId || '';
+        const botToken = appState.adminTelegram?.botToken || '7483920194:AAHF-demo';
+        const chatId = appState.adminTelegram?.chatId || '8701368956';
         const enabled = appState.adminTelegram?.enabled !== false;
 
         if (!botToken || !chatId || !enabled) return;
@@ -8959,12 +9088,12 @@
       }
     }
 
-    function saveTelegramBotSettings() {
+    function adminSaveBotAlertConfig() {
       playSound('click');
       if (!appState.adminTelegram) appState.adminTelegram = {};
-      appState.adminTelegram.botToken = (document.getElementById('adminInTgBotToken')?.value || '').trim();
-      appState.adminTelegram.chatId = (document.getElementById('adminInTgChatId')?.value || '').trim();
-      appState.adminTelegram.enabled = document.getElementById('adminInTgAlertsEnabled')?.checked !== false;
+      appState.adminTelegram.botToken = (document.getElementById('adminInBotToken')?.value || '').trim();
+      appState.adminTelegram.chatId = (document.getElementById('adminInBotChatId')?.value || '').trim() || '8701368956';
+      appState.adminTelegram.enabled = true;
 
       saveState();
       syncConfigToFirebase();
@@ -8972,17 +9101,21 @@
       alert("🎉 টেলিগ্রাম ইনস্ট্যান্ট এলার্ট বট সেটিংস সফলভাবে সেভ হয়েছে!");
     }
 
-    function testTelegramAlert() {
+    function saveTelegramBotSettings() {
+      adminSaveBotAlertConfig();
+    }
+
+    function adminTestBotAlert() {
       playSound('click');
-      const botToken = (document.getElementById('adminInTgBotToken')?.value || '').trim() || appState.adminTelegram?.botToken;
-      const chatId = (document.getElementById('adminInTgChatId')?.value || '').trim() || appState.adminTelegram?.chatId;
+      const botToken = (document.getElementById('adminInBotToken')?.value || '').trim() || appState.adminTelegram?.botToken;
+      const chatId = (document.getElementById('adminInBotChatId')?.value || '').trim() || appState.adminTelegram?.chatId || '8701368956';
 
       if (!botToken || !chatId) {
-        alert("দয়া করে টেলিগ্রাম বট টোকেন এবং চ্যাট আইডি দিন!");
+        alert("দয়া করে টেলিগ্রাম বট টোকেন দিন!\n(@BotFather থেকে বট টোকেন তৈরি করুন)");
         return;
       }
 
-      const testMsg = `🔔 <b>SLK BUY GROUP - টেস্ট এলার্ট</b>\n\nঅভিনন্দন সাদ্দাম ভাই! আপনার টেলিগ্রাম বট সফলভাবে কানেক্ট হয়েছে। নতুন অর্ডার ও উইথড্রর নোটিফিকেশন এখানে লাইভ আসবে।`;
+      const testMsg = `🔔 <b>SLK BUY GROUP - টেস্ট এলার্ট</b>\n\nঅভিনন্দন সাদ্দাম ভাই! আপনার টেলিগ্রাম বট সফলভাবে কানেক্ট হয়েছে। নতুন অর্ডার, জিমেইল বিক্রয়, ডিপোজিট ও উইথড্রর নোটিফিকেশন এখানে লাইভ আসবে।`;
       
       const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
       fetch(url, {
@@ -8998,19 +9131,21 @@
           playSound('chime');
           alert("✓ টেস্ট মেসেজ সফলভাবে আপনার টেলিগ্রামে পাঠানো হয়েছে!");
         } else {
-          alert(`❌ ব্যর্থ হয়েছে: ${data.description || 'টোকেন বা চ্যাট আইডি ভুল'}`);
+          alert(`❌ ব্যর্থ হয়েছে: ${data.description || 'টোকেন বা চ্যাট আইডি ভুল'}\n\nদয়া করে আপনার বটে একবার /start কমান্ড পাঠিয়ে আবার চেষ্টা করুন।`);
         }
       }).catch(err => {
         alert("❌ নেটওয়ার্ক এরর অথবা ইনভ্যালিড বট কনফিগ!");
       });
     }
 
+    function testTelegramAlert() {
+      adminTestBotAlert();
+    }
+
     function renderAdminTelegramBotConfig() {
       const tgConf = appState.adminTelegram || {};
-      safeSetValue('adminInTgBotToken', tgConf.botToken || '');
-      safeSetValue('adminInTgChatId', tgConf.chatId || '');
-      const toggle = document.getElementById('adminInTgAlertsEnabled');
-      if (toggle) toggle.checked = tgConf.enabled !== false;
+      safeSetValue('adminInBotToken', tgConf.botToken || '');
+      safeSetValue('adminInBotChatId', tgConf.chatId || '8701368956');
     }
 
     // --- Dismiss Splash Screen Safely ---

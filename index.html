@@ -453,6 +453,12 @@
           <span class="text-[9px] text-emerald-400/80 font-normal hidden xs:inline">অনলাইন</span>
         </div>
 
+        <!-- Telegram Bot Interactive Launcher Button -->
+        <button onclick="openTelegramBotModal()" class="px-2.5 py-1 rounded-full bg-gradient-to-r from-sky-500 to-blue-600 text-white text-[10px] font-black shadow-md flex items-center gap-1 btn-bounce border border-sky-400/40" title="ইন্টারঅ্যাক্টিভ টেলিগ্রাম বট">
+          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .37z"/></svg>
+          <span>বট মোড</span>
+        </button>
+
         <!-- Official Telegram Button (Settable Link from Admin) -->
         <a id="headerChannelBtn" href="https://t.me/ItsSaddam9" target="_blank" class="w-8 h-8 rounded-full bg-gradient-to-tr from-sky-400 to-[#0088cc] text-white flex items-center justify-center shadow-md shadow-sky-500/30 animate-tg hover:scale-105 active:scale-95 transition" title="অফিসিয়াল টেলিগ্রাম চ্যানেল">
           <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -1363,8 +1369,9 @@
         <button onclick="switchAdminTab('deposits')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="deposits">ডিপোজিট অনুমোদন</button>
         <button onclick="switchAdminTab('sell-req')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="sell-req">জিমেইল/এফবি চেক</button>
         <button onclick="switchAdminTab('withdrawals')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="withdrawals">উইথড্র রিকোয়েস্ট</button>
+        <button onclick="switchAdminTab('leaderboard-prizes')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap flex items-center gap-1" data-tab="leaderboard-prizes"><i data-lucide="trophy" class="w-3.5 h-3.5 text-amber-400"></i><span>লিডারবোর্ড প্রাইজ</span></button>
         <button onclick="switchAdminTab('promo-codes')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="promo-codes">প্রোমো কোড</button>
-        <button onclick="switchAdminTab('bot-alerts')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="bot-alerts">টেলিগ্রাম এলার্ট বট</button>
+        <button onclick="switchAdminTab('bot-alerts')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="bot-alerts">টেলিগ্রাম বট ও এলার্ট</button>
         <button onclick="switchAdminTab('payment-settings')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="payment-settings">পেমেন্ট গেটওয়ে সেটিংস</button>
         <button onclick="switchAdminTab('app-settings')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="app-settings">অ্যাপ ও বাটন সেটিংস</button>
         <button onclick="switchAdminTab('referral-settings')" class="admin-tab-btn px-3 py-1.5 rounded-xl font-medium bg-midnight-card border border-midnight-border text-slate-300 whitespace-nowrap" data-tab="referral-settings">রেফারেল লিংক সেটিংস</button>
@@ -2045,15 +2052,64 @@
         </div>
       </div>
 
-      <!-- Admin Sub Tab: Telegram Bot Instant Alert Settings -->
+      <!-- Admin Sub Tab: Leaderboard Prize Settings (1st, 2nd, 3rd Prizes) -->
+      <div id="admin-view-leaderboard-prizes" class="space-y-4 hidden">
+        <div class="p-4 rounded-2xl bg-midnight-card border border-luxury-gold/50 space-y-3.5 shadow-xl">
+          <div class="flex items-center gap-2 text-amber-400">
+            <i data-lucide="trophy" class="w-5 h-5"></i>
+            <h3 class="text-xs font-bold">উইকলি লিডারবোর্ড প্রাইজ সেটিংস (১ম, ২য় ও ৩য় স্থান)</h3>
+          </div>
+          <p class="text-[11px] text-slate-300 leading-relaxed">
+            শীর্ষ রেফারারদের জন্য যে আকর্ষণীয় পুরস্কার ঘোষণা করতে চান তা এখানে লিখুন। এটি ইউজারের লিডারবোর্ড পপআপ এবং হোম পেজে লাইভ প্রদর্শিত হবে।
+          </p>
+
+          <div class="space-y-3">
+            <!-- 1st Prize -->
+            <div class="p-3 rounded-xl bg-amber-500/10 border border-luxury-gold/40 space-y-1">
+              <label class="text-[11px] font-bold text-amber-300 flex items-center gap-1.5">
+                <span>🥇 ১ম স্থান পুরস্কার (Champion Prize) *</span>
+              </label>
+              <input id="adminInPrize1" type="text" placeholder="যেমন: ৳১,০০০ ক্যাশ + ৩টি মেগা VIP গ্রুপ" value="৳১,০০০ ক্যাশ + মেগা VIP গ্রুপ" class="w-full bg-midnight-dark border border-amber-500/30 rounded-xl px-3 py-2 text-xs text-white font-bold" />
+            </div>
+
+            <!-- 2nd Prize -->
+            <div class="p-3 rounded-xl bg-slate-700/20 border border-slate-500/40 space-y-1">
+              <label class="text-[11px] font-bold text-slate-300 flex items-center gap-1.5">
+                <span>🥈 ২য় স্থান পুরস্কার (Runner-up Prize) *</span>
+              </label>
+              <input id="adminInPrize2" type="text" placeholder="যেমন: ৳৫০০ ক্যাশ বোনাস" value="৳৫০০ ক্যাশ" class="w-full bg-midnight-dark border border-slate-500/30 rounded-xl px-3 py-2 text-xs text-white font-bold" />
+            </div>
+
+            <!-- 3rd Prize -->
+            <div class="p-3 rounded-xl bg-amber-950/30 border border-amber-700/40 space-y-1">
+              <label class="text-[11px] font-bold text-amber-500 flex items-center gap-1.5">
+                <span>🥉 ৩য় স্থান পুরস্কার (3rd Prize) *</span>
+              </label>
+              <input id="adminInPrize3" type="text" placeholder="যেমন: ৳২০০ ক্যাশ বোনাস" value="৳২০০ ক্যাশ" class="w-full bg-midnight-dark border border-amber-700/30 rounded-xl px-3 py-2 text-xs text-white font-bold" />
+            </div>
+
+            <!-- Weekly Duration / Rules Note -->
+            <div>
+              <label class="text-[11px] text-slate-300 block mb-0.5">লিডারবোর্ড শর্ত ও নোটিশ</label>
+              <input id="adminInPrizeNote" type="text" placeholder="যেমন: প্রতি শুক্রবার রাত ১০টায় বিজয়ী ঘোষণা করা হবে এবং এডমিন সরাসরি ক্যাশ প্রদান করবে।" value="প্রতি শুক্রবার রাত ১০টায় শীর্ষ ৩ জনকে এডমিন ইনবক্সে নগদ প্রাইজ প্রদান করবে।" class="w-full bg-midnight-dark border border-midnight-border rounded-xl px-3 py-2 text-xs text-white" />
+            </div>
+          </div>
+
+          <button onclick="adminSaveLeaderboardPrizes()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark font-black text-xs btn-bounce shadow-lg">
+            লিডারবোর্ড প্রাইজ সংরক্ষণ করুন
+          </button>
+        </div>
+      </div>
+
+      <!-- Admin Sub Tab: Telegram Bot Instant Alert & Zero-Command Bot Engine -->
       <div id="admin-view-bot-alerts" class="space-y-4 hidden">
         <div class="p-4 rounded-2xl bg-midnight-card border border-sky-500/40 space-y-3">
           <div class="flex items-center gap-2 text-sky-400">
             <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .37z"/></svg>
-            <h3 class="text-xs font-bold">টেলিগ্রাম ইনস্ট্যান্ট এলার্ট বট কনফিগারেশন</h3>
+            <h3 class="text-xs font-bold">টেলিগ্রাম ইনস্ট্যান্ট এলার্ট ও বাটন চালিত বট</h3>
           </div>
           <p class="text-[11px] text-slate-300 leading-relaxed">
-            কোনো ইউজার নতুন গ্রুপ অর্ডার, ব্যালেন্স ডিপোজিট, জিমেইল/ফেসবুক বিক্রি বা উইথড্র দিলে সাথে সাথে আপনার টেলিগ্রাম ইনবক্সে বটের মাধ্যমে মেসেজ আসবে।
+            কোনো ইউজার নতুন গ্রুপ অর্ডার, ব্যালেন্স ডিপোজিট, জিমেইল/ফেসবুক বিক্রি বা উইথড্র দিলে সাথে সাথে আপনার টেলিগ্রাম ইনবক্সে বটের মাধ্যমে মেসেজ আসবে। এছাড়া ইউজাররা সরাসরি বটে বাটন টিপে সব কাজ করতে পারবে।
           </p>
 
           <div class="space-y-2">
@@ -2074,6 +2130,14 @@
             <button onclick="adminTestBotAlert()" class="px-3.5 py-2.5 rounded-xl bg-midnight-surface border border-slate-700 text-amber-300 font-bold text-xs btn-bounce flex items-center gap-1">
               <i data-lucide="send" class="w-3.5 h-3.5"></i>
               <span>টেস্ট এলার্ট পাঠান</span>
+            </button>
+          </div>
+
+          <!-- Open Interactive Bot Mode inside App -->
+          <div class="pt-2 border-t border-white/10">
+            <button onclick="openTelegramBotModal()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-sky-600 text-white font-black text-xs btn-bounce shadow flex items-center justify-center gap-1.5">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .37z"/></svg>
+              <span>লাইভ টেলিগ্রাম বাটন বট ভিউ ওপেন করুন</span>
             </button>
           </div>
         </div>
@@ -2779,42 +2843,183 @@
         </button>
       </div>
 
-      <!-- Podium Top 3 Rewards Cards -->
+      <!-- Current User Ranking Status Header Card -->
+      <div id="userLeaderboardRankCard" class="p-3.5 rounded-2xl bg-gradient-to-r from-emerald-950/60 via-midnight-dark to-teal-950/50 border border-emerald-500/40 flex items-center justify-between shadow-md relative z-10">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-full border border-emerald-400 p-0.5 overflow-hidden bg-slate-900">
+            <img id="myLeaderboardAvatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100" class="w-full h-full object-cover rounded-full" />
+          </div>
+          <div>
+            <span class="text-[10px] text-emerald-300 font-bold block">আপনার বর্তমান লাইভ অবস্থান</span>
+            <h4 id="myLeaderboardRankTitle" class="text-xs font-black text-white">১ম স্থান (০ রেফারেল)</h4>
+          </div>
+        </div>
+        <button onclick="switchTab('referral'); closeLeaderboardModal();" class="px-3 py-1.5 rounded-xl bg-luxury-gold text-midnight-dark font-black text-[11px] btn-bounce shadow flex items-center gap-1">
+          <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
+          <span>রেফার করুন</span>
+        </button>
+      </div>
+
+      <!-- Podium Top 3 Rewards Cards (Dynamic from Admin Settings) -->
       <div class="grid grid-cols-3 gap-2 text-center text-xs relative z-10">
         <!-- 2nd Place -->
         <div class="p-3 rounded-2xl bg-gradient-to-b from-slate-800 to-midnight-card border border-slate-600 space-y-1">
           <span class="text-xl">🥈</span>
           <span class="text-[10px] font-bold text-slate-300 block">২য় স্থান</span>
-          <strong class="text-xs font-black text-white block">৳৫০০ ক্যাশ</strong>
+          <strong id="dispPodiumPrize2" class="text-[11px] font-black text-white block truncate">৳৫০০ ক্যাশ</strong>
         </div>
         <!-- 1st Place (Champion) -->
         <div class="p-3.5 rounded-2xl bg-gradient-to-b from-amber-500/30 via-yellow-500/20 to-midnight-card border-2 border-luxury-gold shadow-lg shadow-amber-500/20 space-y-1 transform -translate-y-1">
           <span class="text-2xl">🥇</span>
           <span class="text-[10px] font-black text-amber-300 block">১ম স্থান</span>
-          <strong class="text-xs font-black text-luxury-gold block">৳১,০০০ + VIP</strong>
+          <strong id="dispPodiumPrize1" class="text-[11px] font-black text-luxury-gold block truncate">৳১,০০০ + VIP</strong>
         </div>
         <!-- 3rd Place -->
         <div class="p-3 rounded-2xl bg-gradient-to-b from-amber-950/40 to-midnight-card border border-amber-700/60 space-y-1">
           <span class="text-xl">🥉</span>
           <span class="text-[10px] font-bold text-amber-500 block">৩য় স্থান</span>
-          <strong class="text-xs font-black text-white block">৳২০০ ক্যাশ</strong>
+          <strong id="dispPodiumPrize3" class="text-[11px] font-black text-white block truncate">৳২০০ ক্যাশ</strong>
         </div>
+      </div>
+
+      <!-- Leaderboard Rule Note -->
+      <div class="p-2.5 rounded-xl bg-midnight-dark/90 border border-white/5 text-[11px] text-amber-200/90 leading-relaxed text-center relative z-10">
+        <span id="dispLeaderboardPrizeNote">📢 প্রতি শুক্রবার রাত ১০টায় শীর্ষ ৩ জনকে এডমিন সরাসরি ইনবক্সে নগদ প্রাইজ প্রদান করবে।</span>
       </div>
 
       <!-- Leaderboard List -->
       <div class="space-y-2 relative z-10">
         <h4 class="text-xs font-bold text-slate-300 flex items-center justify-between">
-          <span>লাইভ টপ রেফারার তালিকা</span>
-          <span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">সাপ্তাহিক লাইভ</span>
+          <span>লাইভ টপ রেফারার তালিকা (আসল ইউজার)</span>
+          <span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">রিয়েল-টাইম লাইভ</span>
         </h4>
         <div id="modalLeaderboardList" class="space-y-2">
-          <!-- Populated dynamically by JS -->
+          <!-- Populated dynamically by JS with REAL users -->
         </div>
       </div>
 
       <button onclick="closeLeaderboardModal()" class="w-full py-2.5 rounded-xl bg-midnight-surface text-slate-300 text-xs font-bold btn-bounce relative z-10">
         বন্ধ করুন
       </button>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: INTERACTIVE ZERO-COMMAND TELEGRAM BOT SIMULATOR & WEAPP ================= -->
+  <div id="telegramBotModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-2.5">
+    <div class="w-full max-w-md bg-[#17212b] border border-sky-500/50 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[94vh]">
+      <!-- Bot Telegram Chat Header -->
+      <div class="px-4 py-3 bg-[#0e1621] border-b border-[#242f3d] flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-sky-400 to-blue-600 p-0.5 flex items-center justify-center overflow-hidden shadow">
+            <svg class="w-6 h-6 fill-white" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .37z"/></svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <h3 class="text-sm font-black text-white">SLK BUY GROUP BOT</h3>
+              <span class="text-[9px] bg-sky-500/20 text-sky-300 font-mono px-1.5 py-0.2 rounded font-bold">bot</span>
+            </div>
+            <p class="text-[10px] text-emerald-400 font-semibold">● সবসময় সক্রিয় (Inline Button Mode)</p>
+          </div>
+        </div>
+        <button onclick="closeTelegramBotModal()" class="p-1.5 rounded-xl bg-[#242f3d] text-slate-300 hover:text-white btn-bounce">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Telegram Bot Chat Scroll Area -->
+      <div id="botChatMessagesArea" class="flex-1 p-3.5 overflow-y-auto custom-scrollbar space-y-3 bg-[#0e1621]/95 text-xs text-slate-100">
+        <!-- Message bubble 1: Welcome -->
+        <div class="flex items-start gap-2 max-w-[95%]">
+          <div class="w-7 h-7 rounded-full bg-sky-500 text-white flex items-center justify-center font-bold flex-shrink-0 text-[10px]">BOT</div>
+          <div class="p-3.5 rounded-2xl rounded-tl-none bg-[#182533] border border-[#2b3a4a] space-y-2 shadow-md">
+            <p class="font-bold text-white text-xs">
+              👋 স্বাগতম <span id="botDispUserName" class="text-amber-300">মেম্বার</span>!
+            </p>
+            <p class="text-slate-300 text-[11px] leading-relaxed">
+              SLK BUY GROUP এর অফিসিয়াল স্মার্ট ইন্টারেক্টিভ বটে আপনাকে স্বাগতম। এখানে কোনো টাইপ বা কমান্ড লিখতে হবে না—নিচের যেকোনো বাটনে ক্লিক করে সরাসরি কাজ করুন:
+            </p>
+            
+            <!-- Quick Stats in Bubble -->
+            <div class="p-2.5 rounded-xl bg-[#0e1621] border border-[#2b3a4a] grid grid-cols-2 gap-2 text-[11px]">
+              <div>💰 ব্যালেন্স: <strong id="botDispBalance" class="text-emerald-400 font-black">৳০</strong></div>
+              <div>🎁 রেফারেল: <strong id="botDispRefs" class="text-amber-300 font-black">০ জন</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inline Keyboard Action Buttons Grid (ZERO COMMANDS NEEDED) -->
+        <div class="space-y-1.5 pl-9">
+          <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">🔘 ইন্টারেক্টিভ বাটন কিবোর্ড (Inline Buttons):</span>
+          
+          <div class="grid grid-cols-2 gap-1.5">
+            <!-- 1: Group Shop -->
+            <button onclick="botAction('GROUPS')" class="p-2.5 rounded-xl bg-[#2b5278] hover:bg-[#346392] text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow btn-bounce">
+              <span>🛍️ গ্রুপ মার্কেট</span>
+            </button>
+            
+            <!-- 2: Mega Combo -->
+            <button onclick="botAction('COMBOS')" class="p-2.5 rounded-xl bg-[#2b5278] hover:bg-[#346392] text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow btn-bounce">
+              <span>🎁 কম্বো বান্ডেল</span>
+            </button>
+            
+            <!-- 3: Add Money / Deposit -->
+            <button onclick="botAction('DEPOSIT')" class="p-2.5 rounded-xl bg-[#1e4d38] hover:bg-[#256348] text-emerald-300 font-bold text-xs flex items-center justify-center gap-1.5 shadow btn-bounce border border-emerald-500/30">
+              <span>💳 টাকা ডিপোজিট</span>
+            </button>
+            
+            <!-- 4: Withdraw -->
+            <button onclick="botAction('WITHDRAW')" class="p-2.5 rounded-xl bg-[#1e4d38] hover:bg-[#256348] text-emerald-300 font-bold text-xs flex items-center justify-center gap-1.5 shadow btn-bounce border border-emerald-500/30">
+              <span>📥 টাকা উত্তোলন</span>
+            </button>
+
+            <!-- 5: Lucky Spin -->
+            <button onclick="botAction('SPIN')" class="p-2.5 rounded-xl bg-[#593922] hover:bg-[#6e4629] text-amber-300 font-bold text-xs flex items-center justify-center gap-1.5 shadow btn-bounce border border-amber-500/30">
+              <span>🎡 লাকি স্পিন</span>
+            </button>
+
+            <!-- 6: Leaderboard -->
+            <button onclick="botAction('LEADERBOARD')" class="p-2.5 rounded-xl bg-[#442c63] hover:bg-[#53377a] text-purple-300 font-bold text-xs flex items-center justify-center gap-1.5 shadow btn-bounce border border-purple-500/30">
+              <span>🏆 লিডারবোর্ড</span>
+            </button>
+
+            <!-- 7: Sell Gmail -->
+            <button onclick="botAction('SELL_GMAIL')" class="p-2.5 rounded-xl bg-[#2b5278] hover:bg-[#346392] text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow btn-bounce">
+              <span>📧 জিমেইল বিক্রি</span>
+            </button>
+
+            <!-- 8: Sell Facebook -->
+            <button onclick="botAction('SELL_FB')" class="p-2.5 rounded-xl bg-[#2b5278] hover:bg-[#346392] text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow btn-bounce">
+              <span>👤 ফেসবুক আইডি</span>
+            </button>
+
+            <!-- 9: Promo Code -->
+            <button onclick="botAction('PROMO')" class="p-2.5 rounded-xl bg-[#242f3d] hover:bg-[#2d3a4b] text-slate-200 font-bold text-xs flex items-center justify-center gap-1.5 shadow btn-bounce border border-slate-600">
+              <span>🎟️ প্রোমো কোড</span>
+            </button>
+
+            <!-- 10: My Purchases -->
+            <button onclick="botAction('MY_PURCHASES')" class="p-2.5 rounded-xl bg-[#242f3d] hover:bg-[#2d3a4b] text-slate-200 font-bold text-xs flex items-center justify-center gap-1.5 shadow btn-bounce border border-slate-600">
+              <span>📦 আমার গ্রুপসমূহ</span>
+            </button>
+          </div>
+
+          <!-- Secret Admin Dashboard Button (Only if authorized) -->
+          <div id="botAdminAccessBtnBlock" class="pt-1">
+            <button onclick="botAction('ADMIN')" class="w-full p-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-600 text-midnight-dark font-black text-xs flex items-center justify-center gap-1.5 shadow-lg btn-bounce">
+              <i data-lucide="shield-check" class="w-4 h-4"></i>
+              <span>👑 এডমিন ড্যাশবোর্ড (Owner Only)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Chat Bar -->
+      <div class="p-3 bg-[#0e1621] border-t border-[#242f3d] flex items-center justify-between gap-2">
+        <span class="text-[11px] text-slate-400">💡 কোনো কমান্ড লাগবে না, শুধু বাটনে ক্লিক করুন</span>
+        <button onclick="closeTelegramBotModal()" class="px-3.5 py-1.5 rounded-xl bg-[#242f3d] text-white font-bold text-xs btn-bounce">
+          অ্যাপে ফিরুন
+        </button>
+      </div>
     </div>
   </div>
 
@@ -4327,23 +4532,30 @@
 
     // Helper to check if current user is Super Owner (Saddam)
     function isSuperOwner() {
-      if (appState.adminUnlocked) return true;
-      const myId = String(tgUser.id || '');
-      const myHandle = (tgUser.username || '').toLowerCase().replace('@', '');
-      return myId === '8701368956' || myHandle === 'itssaddam9' || appState.isSuperOwner === true;
+      const myId = String(tgUser.id || '').trim();
+      const myHandle = (tgUser.username || '').toLowerCase().replace('@', '').trim();
+      const isOwnerIdentity = (myId === '8701368956' || myHandle === 'itssaddam9');
+      const hasVerifiedSession = (sessionStorage.getItem('slk_admin_owner_auth') === 'true');
+      return isOwnerIdentity || hasVerifiedSession;
     }
 
     // Helper to check if current user is Manager
     function isManager() {
       if (isSuperOwner()) return true;
-      const myId = String(tgUser.id || '');
-      const myHandle = (tgUser.username || '').toLowerCase().replace('@', '');
+      const myId = String(tgUser.id || '').trim();
+      const myHandle = (tgUser.username || '').toLowerCase().replace('@', '').trim();
       const managers = appState.managers || [];
-      return managers.some(m => {
+      const isRegisteredMgr = managers.some(m => {
         const mId = String(m.id || m.userId || '').trim();
         const mHandle = (m.handle || m.username || '').toLowerCase().replace('@', '').trim();
         return (myId && mId && mId === myId) || (myHandle && mHandle && mHandle === myHandle);
       });
+      const hasVerifiedMgrSession = (sessionStorage.getItem('slk_admin_mgr_auth') === 'true');
+      return isRegisteredMgr || hasVerifiedMgrSession;
+    }
+
+    function isUserAuthorizedAdmin() {
+      return isSuperOwner() || isManager();
     }
 
     function updateAdminAccessLevel() {
@@ -4585,18 +4797,20 @@
 
     function promptAdminLogin() {
       playSound('click');
-      if (appState.adminUnlocked) {
+      if (isUserAuthorizedAdmin()) {
+        appState.adminUnlocked = true;
+        updateAdminVisibility();
         switchTab('admin');
         return;
       }
-      const code = prompt("এডমিন / ম্যানেজার পাসকোড বা টেলিগ্রাম আইডি দিন:");
+      const code = prompt("এডমিন / ম্যানেজার সিক্রেট পাসকোড বা টেলিগ্রাম আইডি দিন:");
       if (!code) return;
       const clean = code.trim();
       
       // Super Owner check
-      if (clean === "8701368956" || clean.toLowerCase() === "itssaddam9" || clean === "@ItsSaddam9" || clean === "saddam8701") {
+      if (clean === "8701368956" || clean.toLowerCase() === "itssaddam9" || clean === "@ItsSaddam9" || clean === "saddam8701" || clean === "saddam1234568") {
+        sessionStorage.setItem('slk_admin_owner_auth', 'true');
         appState.adminUnlocked = true;
-        saveState();
         updateAdminAccessLevel();
         playSound('chime');
         alert("স্বাগতম সাদ্দাম ভাই! সুপার ওনার কন্ট্রোল প্যানেল সফলভাবে আনলক হয়েছে।");
@@ -4610,27 +4824,29 @@
         const mId = String(m.id || m.userId || '').trim();
         const mHandle = (m.handle || m.username || '').toLowerCase().replace('@', '').trim();
         const c = clean.toLowerCase().replace('@', '');
-        return mId === clean || mHandle === c;
+        return (mId && mId === clean) || (mHandle && mHandle === c);
       });
 
       if (matchedMgr) {
+        sessionStorage.setItem('slk_admin_mgr_auth', 'true');
         appState.adminUnlocked = true;
-        saveState();
         updateAdminAccessLevel();
         playSound('chime');
-        alert(`স্বাগতম ${matchedMgr.name || 'ম্যানেজার'}! ম্যানেজার প্যানেল আনলক হয়েছে।`);
+        alert(`স্বাগতম ${matchedMgr.name || 'ম্যানেজার'}! আপনার নির্ধারিত ম্যানেজার প্যানেল আনলক হয়েছে।`);
         switchTab('admin');
       } else {
-        alert("ভুল পাসকোড! শুধুমাত্র ওনার ও নির্ধারিত ম্যানেজারদের জন্য এই সুবিধা সংরক্ষিত।");
+        alert("⛔ ভুল পাসকোড!\nশুধুমাত্র ওনার (সাদ্দাম ভাই) ও অনুমোদিত ম্যানেজারদের জন্য এই প্যানেল সংরক্ষিত।");
       }
     }
 
     function lockAdmin() {
+      sessionStorage.removeItem('slk_admin_owner_auth');
+      sessionStorage.removeItem('slk_admin_mgr_auth');
       appState.adminUnlocked = false;
       saveState();
       updateAdminVisibility();
       switchTab('home');
-      alert("এডমিন প্যানেল লক করা হয়েছে।");
+      alert("এডমিন প্যানেল সফলভাবে লক করা হয়েছে।");
     }
 
     // --- Button Logo Renderer (SVG or Admin Custom Image URL) ---
@@ -4926,14 +5142,56 @@
 
     function openCheckout(groupId) {
       playSound('click');
-      const group = appState.groups.find(g => g.id === groupId);
-      if (!group) return;
-      selectedGroupForCheckout = group;
+      let target = null;
+      
+      // 1. If groupId is already an object
+      if (typeof groupId === 'object' && groupId !== null) {
+        target = groupId;
+      }
+      // 2. Check in appState.groups
+      else if (groupId !== undefined && groupId !== null) {
+        target = (appState.groups || []).find(g => String(g.id) === String(groupId));
+      }
+      
+      // 3. Check in appState.comboBundles if not found
+      if (!target && groupId !== undefined && groupId !== null) {
+        const foundCombo = (appState.comboBundles || []).find(c => String(c.id) === String(groupId));
+        if (foundCombo) {
+          target = {
+            id: foundCombo.id,
+            title: foundCombo.title,
+            price: foundCombo.price,
+            originalPrice: foundCombo.originalPrice,
+            category: 'মেগা কম্বো বান্ডেল',
+            screenshotUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600',
+            inviteLink: foundCombo.inviteLink || 'https://t.me/ItsSaddam9',
+            description: foundCombo.description || foundCombo.subtitle
+          };
+        }
+      }
+
+      // 4. Fallback to existing selectedGroupForCheckout if available
+      if (!target && selectedGroupForCheckout) {
+        target = selectedGroupForCheckout;
+      }
+
+      // 5. Default fallback if still nothing
+      if (!target) {
+        target = (appState.groups && appState.groups.length > 0) ? appState.groups[0] : {
+          id: 'grp_default',
+          title: 'টেলিগ্রাম প্রিমিয়াম গ্রুপ',
+          price: 350,
+          originalPrice: 550,
+          inviteLink: 'https://t.me/ItsSaddam9'
+        };
+      }
+
+      selectedGroupForCheckout = target;
 
       // Group Details Header
-      safeSetText('pgSummaryGroupTitle', group.title);
-      safeSetText('pgDisplayAmount', `৳${group.price} BDT`);
-      safeSetText('pgInstructionAmount', group.price);
+      safeSetText('pgSummaryGroupTitle', target.title || 'টেলিগ্রাম প্রিমিয়াম গ্রুপ');
+      safeSetText('pgDisplayAmount', `৳${target.price} BDT`);
+      safeSetText('pgInstructionAmount', target.price);
 
       // App Identity in Payment Gateway
       safeSetText('pgAppName', appState.appName || 'SLK BUY GROUP');
@@ -8150,7 +8408,7 @@
       renderApp();
     }
 
-    // --- Weekly Leaderboard UI & Modal ---
+    // --- Weekly Leaderboard UI & Modal (100% Real Users & Dynamic Prizes) ---
     function openLeaderboardModal() {
       playSound('click');
       renderLeaderboardUI();
@@ -8164,45 +8422,114 @@
       if (modal) modal.classList.add('hidden');
     }
 
+    function adminSaveLeaderboardPrizes() {
+      playSound('click');
+      if (!appState.leaderboardPrizes) appState.leaderboardPrizes = {};
+      
+      const p1 = (document.getElementById('adminInPrize1')?.value || '').trim() || '৳১,০০০ ক্যাশ + মেগা VIP গ্রুপ';
+      const p2 = (document.getElementById('adminInPrize2')?.value || '').trim() || '৳৫০০ ক্যাশ';
+      const p3 = (document.getElementById('adminInPrize3')?.value || '').trim() || '৳২০০ ক্যাশ';
+      const note = (document.getElementById('adminInPrizeNote')?.value || '').trim() || 'প্রতি শুক্রবার রাত ১০টায় শীর্ষ ৩ জনকে এডমিন সরাসরি ইনবক্সে নগদ প্রাইজ প্রদান করবে।';
+
+      appState.leaderboardPrizes = {
+        first: p1,
+        second: p2,
+        third: p3,
+        note: note,
+        updatedAt: Date.now()
+      };
+
+      saveState();
+      syncConfigToFirebase();
+      renderLeaderboardUI();
+      playSound('chime');
+      alert("🎉 লিডারবোর্ড প্রাইজ সেটিংস সফলভাবে সেভ হয়েছে!\n১ম, ২য় ও ৩য় স্থানের নতুন প্রাইজ লিডারবোর্ড মোডালে লাইভ আপডেট হয়েছে।");
+    }
+
     function renderLeaderboardUI() {
       const modalList = document.getElementById('modalLeaderboardList');
       const tabList = document.getElementById('tabLeaderboardList');
 
-      // Aggregate top referrers
-      const users = getAllAggregatedUsers();
-      users.sort((a, b) => (b.referralCount || 0) - (a.referralCount || 0));
+      // 1. Dynamic Prizes from Admin or Defaults
+      const prizes = appState.leaderboardPrizes || {
+        first: '৳১,০০০ ক্যাশ + VIP গ্রুপ',
+        second: '৳৫০০ ক্যাশ',
+        third: '৳২০০ ক্যাশ',
+        note: 'প্রতি শুক্রবার রাত ১০টায় শীর্ষ ৩ জনকে এডমিন সরাসরি ইনবক্সে নগদ প্রাইজ প্রদান করবে।'
+      };
 
-      const topUsers = users.filter(u => (u.referralCount || 0) > 0);
-      const defaultLeaderboard = [
-        { name: 'Tanvir Hossain', username: '@tanvir_pro', photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100', referralCount: 38, reward: '৳১,০০০ ক্যাশ + মেগা VIP গ্রুপ' },
-        { name: 'Rahim Khan', username: '@rahim_bd', photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100', referralCount: 29, reward: '৳৫০০ ক্যাশ' },
-        { name: 'Sabbir Ahmed', username: '@sabbir_77', photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100', referralCount: 22, reward: '৳২০০ ক্যাশ' },
-        { name: 'Mehedi Hasan', username: '@mehedi_vip', photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100', referralCount: 18, reward: 'মেগা ডিসকাউন্ট' },
-        { name: 'Ashikur Rahman', username: '@ashik_99', photo: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=100', referralCount: 14, reward: 'মেগা ডিসকাউন্ট' }
-      ];
+      safeSetText('dispPodiumPrize1', prizes.first || '৳১,০০০ + VIP');
+      safeSetText('dispPodiumPrize2', prizes.second || '৳৫০০ ক্যাশ');
+      safeSetText('dispPodiumPrize3', prizes.third || '৳২০০ ক্যাশ');
+      safeSetText('dispLeaderboardPrizeNote', `📢 ${prizes.note || 'শীর্ষ ৩ জনকে নগদ রিওয়ার্ড দেওয়া হবে।'}`);
 
-      const listToDisplay = topUsers.length >= 3 ? topUsers : defaultLeaderboard;
+      // Set in admin inputs if present
+      safeSetValue('adminInPrize1', prizes.first || '');
+      safeSetValue('adminInPrize2', prizes.second || '');
+      safeSetValue('adminInPrize3', prizes.third || '');
+      safeSetValue('adminInPrizeNote', prizes.note || '');
 
-      const html = listToDisplay.map((u, idx) => {
+      // 2. Aggregate REAL users only (No fake names)
+      const allUsers = getAllAggregatedUsers();
+      
+      // Sort purely by referralCount descending
+      allUsers.sort((a, b) => (Number(b.referralCount) || 0) - (Number(a.referralCount) || 0));
+
+      // Find current user's real live position
+      const myId = String(tgUser.id || '');
+      const myIndex = allUsers.findIndex(u => String(u.userId) === myId);
+      const myRank = myIndex !== -1 ? (myIndex + 1) : 1;
+      const myCount = Number(appState.referralCount) || (myIndex !== -1 ? (allUsers[myIndex].referralCount || 0) : 0);
+
+      safeSetText('myLeaderboardRankTitle', `${myRank === 1 ? '🥇 ১ম স্থান' : myRank === 2 ? '🥈 ২য় স্থান' : myRank === 3 ? '🥉 ৩য় স্থান' : myRank + 'ম স্থান'} (${myCount} রেফারেল)`);
+      if (tgUser.photo_url) safeSetSrc('myLeaderboardAvatar', tgUser.photo_url);
+
+      if (allUsers.length === 0) {
+        const emptyHtml = `
+          <div class="p-6 rounded-2xl bg-midnight-surface border border-white/5 text-center text-xs text-slate-400 space-y-2">
+            <i data-lucide="trophy" class="w-8 h-8 mx-auto text-luxury-gold animate-bounce"></i>
+            <p class="font-bold text-white">আপনিই প্রথম হতে পারেন!</p>
+            <p class="text-[11px] text-slate-400">বন্ধুদের রেফারেল লিংক পাঠিয়ে শীর্ষ স্থান ও মেগা নগদ প্রাইজ জিতে নিন।</p>
+          </div>
+        `;
+        if (modalList) modalList.innerHTML = emptyHtml;
+        if (tabList) tabList.innerHTML = emptyHtml;
+        lucide.createIcons();
+        return;
+      }
+
+      const html = allUsers.map((u, idx) => {
         const rank = idx + 1;
         const rankBadge = rank === 1 ? '🥇 ১ম' : rank === 2 ? '🥈 ২য়' : rank === 3 ? '🥉 ৩য়' : `#${rank}`;
-        const rankBorder = rank === 1 ? 'border-luxury-gold bg-gradient-to-r from-amber-500/20 via-midnight-card to-midnight-card' : rank === 2 ? 'border-slate-400 bg-gradient-to-r from-slate-600/20 via-midnight-card to-midnight-card' : rank === 3 ? 'border-amber-700 bg-gradient-to-r from-amber-800/20 via-midnight-card to-midnight-card' : 'border-midnight-border bg-midnight-card';
+        const rankBorder = rank === 1 
+          ? 'border-luxury-gold bg-gradient-to-r from-amber-500/20 via-midnight-card to-midnight-card shadow-lg shadow-amber-500/10' 
+          : rank === 2 
+          ? 'border-slate-400 bg-gradient-to-r from-slate-600/20 via-midnight-card to-midnight-card' 
+          : rank === 3 
+          ? 'border-amber-700 bg-gradient-to-r from-amber-800/20 via-midnight-card to-midnight-card' 
+          : 'border-midnight-border bg-midnight-card';
         
+        const prizeLabel = rank === 1 ? prizes.first : rank === 2 ? prizes.second : rank === 3 ? prizes.third : '';
+        const isMe = String(u.userId) === myId;
+
         return `
-          <div class="p-3 rounded-2xl ${rankBorder} border flex items-center justify-between shadow-md">
+          <div class="p-3 rounded-2xl ${rankBorder} border flex items-center justify-between shadow-md transition ${isMe ? 'ring-2 ring-luxury-gold/50' : ''}">
             <div class="flex items-center gap-2.5">
-              <span class="text-xs font-black px-2 py-0.5 rounded-lg bg-black/60 text-amber-300 border border-white/10 font-mono">${rankBadge}</span>
+              <span class="text-xs font-black px-2 py-0.5 rounded-lg bg-black/70 text-amber-300 border border-white/10 font-mono">${rankBadge}</span>
               <div class="w-9 h-9 rounded-full border border-luxury-gold/50 overflow-hidden bg-slate-900 flex-shrink-0">
                 <img src="${u.photo || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'" />
               </div>
-              <div class="truncate">
-                <h4 class="text-xs font-black text-white truncate">${u.name || 'টেলিগ্রাম মেম্বার'}</h4>
-                <p class="text-[10px] text-sky-400 font-bold">${u.username || '@user'}</p>
+              <div class="truncate max-w-[150px]">
+                <h4 class="text-xs font-black text-white truncate flex items-center gap-1">
+                  <span>${u.name || 'টেলিগ্রাম মেম্বার'}</span>
+                  ${isMe ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-luxury-gold font-bold">আপনি</span>' : ''}
+                </h4>
+                <p class="text-[10px] text-sky-400 font-bold truncate">${u.username || ('ID:' + u.userId)}</p>
               </div>
             </div>
             <div class="text-right flex-shrink-0">
-              <span class="text-xs font-black text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-lg border border-emerald-500/30">${u.referralCount || 0} রেফারেল</span>
-              ${u.reward ? `<p class="text-[9px] text-amber-300 font-semibold mt-0.5">${u.reward}</p>` : ''}
+              <span class="text-xs font-black text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-lg border border-emerald-500/30 font-mono">${u.referralCount || 0} রেফারেল</span>
+              ${prizeLabel ? `<p class="text-[9px] text-amber-300 font-bold mt-0.5 truncate max-w-[110px]">${prizeLabel}</p>` : ''}
             </div>
           </div>
         `;
@@ -8473,7 +8800,7 @@
         screenshotUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600',
         inviteLink: combo.inviteLink || 'https://t.me/ItsSaddam9'
       };
-      openCheckout(selectedGroupForCheckout.id);
+      openCheckout(selectedGroupForCheckout);
     }
 
     function adminSaveCombo() {
@@ -9148,8 +9475,253 @@
       safeSetValue('adminInBotChatId', tgConf.chatId || '8701368956');
     }
 
-    // --- Dismiss Splash Screen Safely ---
-    function dismissSplashScreen() {
+    // =========================================================================
+    // FEATURE 6: ZERO-COMMAND INTERACTIVE TELEGRAM BOT ENGINE
+    // =========================================================================
+
+    function openTelegramBotModal() {
+      playSound('click');
+      const fullName = `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim() || 'টেলিগ্রাম মেম্বার';
+      safeSetText('botDispUserName', fullName);
+      safeSetText('botDispBalance', `৳${appState.wallet?.balance || 0}`);
+      safeSetText('botDispRefs', `${appState.referralCount || 0} জন`);
+
+      // Show/Hide Admin Button based on true authorization
+      const adminBtnBlock = document.getElementById('botAdminAccessBtnBlock');
+      if (adminBtnBlock) {
+        if (isUserAuthorizedAdmin()) {
+          adminBtnBlock.classList.remove('hidden');
+        } else {
+          adminBtnBlock.classList.add('hidden');
+        }
+      }
+
+      const modal = document.getElementById('telegramBotModal');
+      if (modal) modal.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeTelegramBotModal() {
+      const modal = document.getElementById('telegramBotModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function appendBotMessage(userTitle, botReplyHtml) {
+      const area = document.getElementById('botChatMessagesArea');
+      if (!area) return;
+
+      const timeStr = new Date().toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' });
+      
+      const userBubble = `
+        <div class="flex justify-end pr-1">
+          <div class="p-2.5 rounded-2xl rounded-tr-none bg-[#2b5278] text-white text-xs max-w-[80%] shadow">
+            <p class="font-bold">${userTitle}</p>
+            <span class="text-[9px] text-sky-200 block text-right mt-0.5">${timeStr}</span>
+          </div>
+        </div>
+      `;
+
+      const botBubble = `
+        <div class="flex items-start gap-2 max-w-[95%]">
+          <div class="w-7 h-7 rounded-full bg-sky-500 text-white flex items-center justify-center font-bold flex-shrink-0 text-[10px]">BOT</div>
+          <div class="p-3.5 rounded-2xl rounded-tl-none bg-[#182533] border border-[#2b3a4a] space-y-2.5 shadow-md w-full">
+            ${botReplyHtml}
+            <span class="text-[9px] text-slate-400 block text-right">${timeStr}</span>
+          </div>
+        </div>
+      `;
+
+      area.insertAdjacentHTML('beforeend', userBubble + botBubble);
+      area.scrollTop = area.scrollHeight;
+      lucide.createIcons();
+    }
+
+    function botAction(actionKey, param = null) {
+      playSound('click');
+
+      if (actionKey === 'GROUPS') {
+        const groups = appState.groups || [];
+        let listHtml = `<p class="font-bold text-white text-xs">🛍️ <b>সকল প্রিমিয়াম টেলিগ্রাম গ্রুপ তালিকা:</b></p><div class="space-y-2 mt-1">`;
+        groups.forEach(g => {
+          listHtml += `
+            <div class="p-2.5 rounded-xl bg-[#0e1621] border border-[#2b3a4a] flex items-center justify-between gap-2">
+              <div>
+                <h4 class="font-bold text-white text-xs">${g.title}</h4>
+                <p class="text-[10px] text-luxury-gold font-bold">মূল্য: ৳${g.price} BDT <span class="line-through text-slate-500 text-[9px]">৳${g.originalPrice}</span></p>
+              </div>
+              <button onclick="closeTelegramBotModal(); openCheckout(${g.id});" class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark font-black text-xs btn-bounce shadow">
+                কিনুন
+              </button>
+            </div>
+          `;
+        });
+        listHtml += `</div>`;
+        appendBotMessage("🛍️ গ্রুপ মার্কেট তালিকা দেখুন", listHtml);
+
+      } else if (actionKey === 'COMBOS') {
+        const combos = appState.comboBundles || [{ id: 'combo_1', title: '🔥 ৩-ইন-১ মেগা ভিআইপি কম্বো', price: 650, originalPrice: 1100 }];
+        let comboHtml = `<p class="font-bold text-white text-xs">🎁 <b>মেগা কম্বো বান্ডেল অফার:</b></p><div class="space-y-2 mt-1">`;
+        combos.forEach(c => {
+          comboHtml += `
+            <div class="p-2.5 rounded-xl bg-gradient-to-br from-[#1e293b] to-[#0e1621] border border-luxury-gold/40 space-y-1.5">
+              <h4 class="font-black text-amber-300 text-xs">${c.title}</h4>
+              <p class="text-[10px] text-slate-300">${c.subtitle || c.description || '৩টি প্রিমিয়াম গ্রুপ একসাথে মেগা ডিসকাউন্টে পান'}</p>
+              <div class="flex items-center justify-between pt-1 border-t border-white/10">
+                <span class="text-xs font-black text-luxury-gold">অফার মূল্য: ৳${c.price}</span>
+                <button onclick="closeTelegramBotModal(); buyComboBundle('${c.id}');" class="px-3 py-1 rounded-lg bg-luxury-gold text-midnight-dark font-black text-xs btn-bounce shadow">
+                  কম্বো কিনুন
+                </button>
+              </div>
+            </div>
+          `;
+        });
+        comboHtml += `</div>`;
+        appendBotMessage("🎁 মেগা কম্বো প্যাকেজ", comboHtml);
+
+      } else if (actionKey === 'DEPOSIT') {
+        const pgConf = appState.paymentGateways || {};
+        const bkashNum = pgConf.bkash?.number || '01789-567890';
+        const nagadNum = pgConf.nagad?.number || '01812-345678';
+        const binanceId = pgConf.binance?.number || '8701368956 (Pay ID)';
+
+        const depHtml = `
+          <p class="font-bold text-white text-xs">💳 <b>ওয়ালেট ইনস্ট্যান্ট ডিপোজিট / টাকা অ্যাড:</b></p>
+          <p class="text-[11px] text-slate-300">নিচের যেকোনো একাউন্টে টাকা পাঠিয়ে সরাসরি ডিপোজিট ফর্ম পূরণ করুন:</p>
+          <div class="space-y-1.5 mt-1 text-[11px]">
+            <div class="p-2 rounded-lg bg-[#0e1621] border border-pink-500/30 flex justify-between items-center">
+              <span>🌸 বিকাশ: <strong>${bkashNum}</strong></span>
+              <button onclick="copyText('${bkashNum}')" class="px-2 py-0.5 rounded bg-pink-500/20 text-pink-300 font-bold">কপি</button>
+            </div>
+            <div class="p-2 rounded-lg bg-[#0e1621] border border-orange-500/30 flex justify-between items-center">
+              <span>🔥 নগদ: <strong>${nagadNum}</strong></span>
+              <button onclick="copyText('${nagadNum}')" class="px-2 py-0.5 rounded bg-orange-500/20 text-orange-300 font-bold">কপি</button>
+            </div>
+            <div class="p-2 rounded-lg bg-[#0e1621] border border-amber-500/30 flex justify-between items-center">
+              <span>🟡 Binance: <strong>${binanceId}</strong></span>
+              <button onclick="copyText('${binanceId}')" class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold">কপি</button>
+            </div>
+          </div>
+          <button onclick="closeTelegramBotModal(); openDepositModal();" class="w-full mt-2 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-midnight-dark font-black text-xs btn-bounce shadow">
+            📝 ডিপোজিট সাবমিট ফর্ম ওপেন করুন
+          </button>
+        `;
+        appendBotMessage("💳 টাকা ডিপোজিট / রিচার্জ", depHtml);
+
+      } else if (actionKey === 'WITHDRAW') {
+        const bal = appState.wallet?.balance || 0;
+        const withHtml = `
+          <p class="font-bold text-white text-xs">📥 <b>টাকা উত্তোলন / উইথড্র:</b></p>
+          <p class="text-[11px] text-slate-300">আপনার বর্তমান ব্যালেন্স: <strong class="text-emerald-400 font-black text-xs">৳${bal}</strong></p>
+          <p class="text-[10px] text-slate-400">সর্বনিম্ন উইথড্র: ৳${appState.minWithdraw || 100} (বিকাশ, নগদ, রকেট, Binance)</p>
+          <button onclick="closeTelegramBotModal(); switchTab('wallet');" class="w-full mt-2 py-2 rounded-xl bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark font-black text-xs btn-bounce shadow">
+            🏧 ওয়ালেট ও উইথড্র পেজে যান
+          </button>
+        `;
+        appendBotMessage("📥 টাকা উইথড্র করুন", withHtml);
+
+      } else if (actionKey === 'SPIN') {
+        closeTelegramBotModal();
+        openSpinWheelModal();
+
+      } else if (actionKey === 'LEADERBOARD') {
+        closeTelegramBotModal();
+        openLeaderboardModal();
+
+      } else if (actionKey === 'SELL_GMAIL') {
+        const gRates = appState.gmailRates || { new: 15, old: 25, aged: 40 };
+        const gHtml = `
+          <p class="font-bold text-white text-xs">📧 <b>জিমেইল একাউন্ট বিক্রয়:</b></p>
+          <div class="space-y-1 text-[11px] text-slate-300">
+            <p>• নতুন জিমেইল: <strong class="text-emerald-400">৳${gRates.new}</strong> প্রতি পিস</p>
+            <p>• পুরাতন জিমেইল (১+ বছর): <strong class="text-emerald-400">৳${gRates.old}</strong> প্রতি পিস</p>
+            <p>• পুরনো ভেরিফাইড জিমেইল: <strong class="text-emerald-400">৳${gRates.aged}</strong> প্রতি পিস</p>
+          </div>
+          <button onclick="closeTelegramBotModal(); switchTab('sell'); selectSellCategory('GMAIL');" class="w-full mt-2 py-2 rounded-xl bg-gradient-to-r from-rose-500 to-red-600 text-white font-black text-xs btn-bounce shadow">
+            📧 জিমেইল সাবমিট ফর্ম ওপেন করুন
+          </button>
+        `;
+        appendBotMessage("📧 জিমেইল বিক্রি করুন", gHtml);
+
+      } else if (actionKey === 'SELL_FB') {
+        const fbRates = appState.fbRates || { new: 20, old: 60, aged: 110 };
+        const fbHtml = `
+          <p class="font-bold text-white text-xs">👤 <b>ফেসবুক আইডি বিক্রয়:</b></p>
+          <div class="space-y-1 text-[11px] text-slate-300">
+            <p>• নতুন ফেসবুক আইডি: <strong class="text-blue-400">৳${fbRates.new}</strong></p>
+            <p>• পুরাতন আইডি (২০২০-২০২২): <strong class="text-blue-400">৳${fbRates.old}</strong></p>
+            <p>• রিয়েল ফ্রেন্ডস আইডি: <strong class="text-blue-400">৳${fbRates.aged}</strong></p>
+          </div>
+          <button onclick="closeTelegramBotModal(); switchTab('sell'); selectSellCategory('FACEBOOK');" class="w-full mt-2 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black text-xs btn-bounce shadow">
+            👤 ফেসবুক আইডি সাবমিট করুন
+          </button>
+        `;
+        appendBotMessage("👤 ফেসবুক আইডি বিক্রি", fbHtml);
+
+      } else if (actionKey === 'PROMO') {
+        const promoHtml = `
+          <p class="font-bold text-white text-xs">🎟️ <b>প্রোমো কোড রিডিম:</b></p>
+          <p class="text-[11px] text-slate-300">নিচের ১-ক্লিক কোডে চাপ দিয়ে ইনস্ট্যান্ট বোনাস টাকা নিন:</p>
+          <div class="grid grid-cols-2 gap-1.5 mt-1">
+            <button onclick="executePromoRedemption('BONUS10');" class="p-2 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold btn-bounce">
+              🎁 BONUS10 (৳১০)
+            </button>
+            <button onclick="executePromoRedemption('SADDAM50');" class="p-2 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold btn-bounce">
+              👑 SADDAM50 (৳৫০)
+            </button>
+          </div>
+          <button onclick="closeTelegramBotModal(); openPromoCodeModal();" class="w-full mt-2 py-1.5 rounded-lg bg-midnight-dark text-slate-300 border border-slate-700 text-xs font-bold btn-bounce">
+            অন্যান্য প্রোমো কোড লিখুন
+          </button>
+        `;
+        appendBotMessage("🎟️ প্রোমো কোড রিডিম", promoHtml);
+
+      } else if (actionKey === 'MY_PURCHASES') {
+        closeTelegramBotModal();
+        openMyPurchasesModal();
+
+      } else if (actionKey === 'ADMIN') {
+        if (!isUserAuthorizedAdmin()) {
+          promptAdminLogin();
+          return;
+        }
+
+        const pendingOrders = (appState.orders || []).filter(o => o.status === 'PENDING').length;
+        const pendingDeposits = (appState.deposits || []).filter(d => d.status === 'PENDING').length;
+        const pendingSubs = (appState.submissions || []).filter(s => s.status === 'PENDING').length;
+        const pendingWithdraws = (appState.withdrawals || []).filter(w => w.status === 'PENDING').length;
+
+        const adminBotHtml = `
+          <p class="font-bold text-amber-300 text-xs">👑 <b>এডমিন কন্ট্রোল ড্যাশবোর্ড (বট মোড):</b></p>
+          <div class="p-2 rounded-xl bg-[#0e1621] border border-amber-500/30 space-y-1 text-[11px]">
+            <p>📦 পেন্ডিং অর্ডার: <strong class="text-amber-400">${pendingOrders}টি</strong></p>
+            <p>💳 পেন্ডিং ডিপোজিট: <strong class="text-emerald-400">${pendingDeposits}টি</strong></p>
+            <p>📧 পেন্ডিং জিমেইল/এফবি: <strong class="text-sky-400">${pendingSubs}টি</strong></p>
+            <p>💸 পেন্ডিং উইথড্র: <strong class="text-rose-400">${pendingWithdraws}টি</strong></p>
+          </div>
+          <div class="grid grid-cols-2 gap-1.5 mt-2">
+            <button onclick="closeTelegramBotModal(); switchTab('admin'); switchAdminTab('orders');" class="p-2 rounded-xl bg-[#2b5278] text-white font-bold text-xs btn-bounce">
+              📦 অর্ডার অনুমোদন
+            </button>
+            <button onclick="closeTelegramBotModal(); switchTab('admin'); switchAdminTab('deposits');" class="p-2 rounded-xl bg-[#1e4d38] text-emerald-300 font-bold text-xs btn-bounce">
+              💳 ডিপোজিট চেক
+            </button>
+            <button onclick="closeTelegramBotModal(); switchTab('admin'); switchAdminTab('sell-req');" class="p-2 rounded-xl bg-[#2b5278] text-white font-bold text-xs btn-bounce">
+              📧 একাউন্ট অনুমোদন
+            </button>
+            <button onclick="closeTelegramBotModal(); switchTab('admin'); switchAdminTab('withdrawals');" class="p-2 rounded-xl bg-[#4d1e2b] text-rose-300 font-bold text-xs btn-bounce">
+              💸 উইথড্র অনুমোদন
+            </button>
+            <button onclick="closeTelegramBotModal(); switchTab('admin'); switchAdminTab('leaderboard-prizes');" class="p-2 rounded-xl bg-[#593922] text-amber-300 font-bold text-xs btn-bounce">
+              🏆 লিডারবোর্ড প্রাইজ
+            </button>
+            <button onclick="closeTelegramBotModal(); switchTab('admin'); switchAdminTab('users-mgmt');" class="p-2 rounded-xl bg-[#242f3d] text-slate-200 font-bold text-xs btn-bounce">
+              👥 ইউজার ব্যালেন্স
+            </button>
+          </div>
+        `;
+        appendBotMessage("👑 এডমিন প্যানেল বট কন্ট্রোল", adminBotHtml);
+      }
+    }
       const splash = document.getElementById('splashScreen');
       if (splash && splash.style.display !== 'none') {
         splash.style.transition = 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1)';

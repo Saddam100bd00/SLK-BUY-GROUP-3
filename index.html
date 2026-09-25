@@ -2101,43 +2101,78 @@
         </div>
       </div>
 
-      <!-- Admin Sub Tab: Telegram Bot Instant Alert & Zero-Command Bot Engine -->
+      <!-- Admin Sub Tab: Telegram Bot Instant Alert & Full Interactive Commands Engine -->
       <div id="admin-view-bot-alerts" class="space-y-4 hidden">
-        <div class="p-4 rounded-2xl bg-midnight-card border border-sky-500/40 space-y-3">
-          <div class="flex items-center gap-2 text-sky-400">
-            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .37z"/></svg>
-            <h3 class="text-xs font-bold">টেলিগ্রাম ইনস্ট্যান্ট এলার্ট ও বাটন চালিত বট</h3>
+        <div class="p-4 rounded-2xl bg-midnight-card border border-sky-500/40 space-y-3.5">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2 text-sky-400">
+              <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .37z"/></svg>
+              <h3 class="text-xs font-bold">টেলিগ্রাম লাইভ বট ও সরাসরি কমান্ড ইঞ্জিন</h3>
+            </div>
+            <span id="botEngineLiveBadge" class="text-[10px] px-2.5 py-0.5 rounded-full font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              <span>কমান্ড ইঞ্জিন সক্রিয়</span>
+            </span>
           </div>
+
           <p class="text-[11px] text-slate-300 leading-relaxed">
-            কোনো ইউজার নতুন গ্রুপ অর্ডার, ব্যালেন্স ডিপোজিট, জিমেইল/ফেসবুক বিক্রি বা উইথড্র দিলে সাথে সাথে আপনার টেলিগ্রাম ইনবক্সে বটের মাধ্যমে মেসেজ আসবে। এছাড়া ইউজাররা সরাসরি বটে বাটন টিপে সব কাজ করতে পারবে।
+            এখন ইউজাররা আপনার টেলিগ্রাম বটে <strong>/start</strong>, <strong>/groups</strong>, <strong>/balance</strong>, <strong>/deposit</strong>, <strong>/withdraw</strong>, <strong>/sell</strong> ইত্যাদি পাঠালে বট স্বয়ংক্রিয়ভাবে সরাসরি উত্তর দেবে এবং মিনি অ্যাপ ও বাটন প্রদান করবে।
           </p>
 
           <div class="space-y-2">
             <div>
-              <label class="text-[11px] text-slate-300 block mb-0.5 font-medium">টেলিগ্রাম বট টোকেন (Bot Token from @BotFather)</label>
-              <input id="adminInBotToken" type="text" placeholder="যেমন: 7483920194:AAHF-xxxxxxxxx" class="w-full bg-midnight-dark border border-sky-500/30 rounded-xl px-3 py-2 text-xs text-white font-mono" />
+              <label class="text-[11px] text-slate-300 block mb-0.5 font-medium">টেলিগ্রাম বট টোকেন (Bot Token from @BotFather) *</label>
+              <input id="adminInBotToken" type="text" placeholder="যেমন: 7483920194:AAHF-xxxxxxxxx" class="w-full bg-midnight-dark border border-sky-500/30 rounded-xl px-3 py-2 text-xs text-white font-mono placeholder-slate-600 focus:outline-none focus:border-sky-400" />
             </div>
             <div>
               <label class="text-[11px] text-slate-300 block mb-0.5 font-medium">এডমিন টেলিগ্রাম চ্যাট আইডি (Chat ID) *</label>
-              <input id="adminInBotChatId" type="text" placeholder="8701368956" value="8701368956" class="w-full bg-midnight-dark border border-sky-500/30 rounded-xl px-3 py-2 text-xs text-white font-mono" />
+              <input id="adminInBotChatId" type="text" placeholder="8701368956" value="8701368956" class="w-full bg-midnight-dark border border-sky-500/30 rounded-xl px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-sky-400" />
             </div>
           </div>
 
-          <div class="flex items-center gap-2 pt-1">
-            <button onclick="adminSaveBotAlertConfig()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-black text-xs btn-bounce shadow">
-              বট সেটিংস সেভ করুন
+          <!-- Action Buttons Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+            <button onclick="adminSaveBotAlertConfig()" class="py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-black text-xs btn-bounce shadow flex items-center justify-center gap-1.5">
+              <i data-lucide="save" class="w-3.5 h-3.5"></i>
+              <span>বট টোকেন সেভ ও চালু করুন</span>
             </button>
-            <button onclick="adminTestBotAlert()" class="px-3.5 py-2.5 rounded-xl bg-midnight-surface border border-slate-700 text-amber-300 font-bold text-xs btn-bounce flex items-center gap-1">
+            <button onclick="adminSyncTelegramBotCommands()" class="py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-midnight-dark font-black text-xs btn-bounce shadow flex items-center justify-center gap-1.5">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+              <span>টেলিগ্রাম কমান্ড ও মেনু সিঙ্ক</span>
+            </button>
+            <button onclick="adminSetTelegramWebAppButton()" class="py-2.5 rounded-xl bg-gradient-to-r from-luxury-gold to-yellow-500 text-midnight-dark font-black text-xs btn-bounce shadow flex items-center justify-center gap-1.5">
+              <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
+              <span>বটে 'Mini App' বাটন সেট করুন</span>
+            </button>
+            <button onclick="adminTestBotAlert()" class="py-2.5 rounded-xl bg-midnight-surface border border-slate-700 text-amber-300 font-bold text-xs btn-bounce flex items-center justify-center gap-1.5">
               <i data-lucide="send" class="w-3.5 h-3.5"></i>
-              <span>টেস্ট এলার্ট পাঠান</span>
+              <span>টেস্ট নোটিফিকেশন পাঠান</span>
             </button>
           </div>
 
+          <!-- Command Cheat Sheet Box -->
+          <div class="p-3 bg-midnight-dark/90 rounded-xl border border-white/5 space-y-1.5 text-[11px]">
+            <h4 class="font-bold text-amber-300 flex items-center gap-1">
+              <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
+              <span>বটে যেসব কমান্ড লাইভ কাজ করবে:</span>
+            </h4>
+            <div class="grid grid-cols-2 gap-1 text-[10px] font-mono text-slate-300">
+              <div class="p-1 rounded bg-white/5"><code>/start</code> - ওপেন অ্যাপ ও বাটন</div>
+              <div class="p-1 rounded bg-white/5"><code>/groups</code> - গ্রুপ তালিকা ও দাম</div>
+              <div class="p-1 rounded bg-white/5"><code>/balance</code> - ওয়ালেট ব্যালেন্স চেক</div>
+              <div class="p-1 rounded bg-white/5"><code>/deposit</code> - টাকা রিচার্জ নিয়ম</div>
+              <div class="p-1 rounded bg-white/5"><code>/withdraw</code> - টাকা উত্তোলন লিংক</div>
+              <div class="p-1 rounded bg-white/5"><code>/sell</code> - জিমেইল বিক্রির রেট</div>
+              <div class="p-1 rounded bg-white/5"><code>/combo</code> - মেগা কম্বো অফার</div>
+              <div class="p-1 rounded bg-white/5"><code>/help</code> - সাপোর্ট হেল্পলাইন</div>
+            </div>
+          </div>
+
           <!-- Open Interactive Bot Mode inside App -->
-          <div class="pt-2 border-t border-white/10">
+          <div class="pt-1">
             <button onclick="openTelegramBotModal()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-sky-600 text-white font-black text-xs btn-bounce shadow flex items-center justify-center gap-1.5">
               <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .37z"/></svg>
-              <span>লাইভ টেলিগ্রাম বাটন বট ভিউ ওপেন করুন</span>
+              <span>বট সিমুলেটর ও লাইভ চ্যাট ভিউ</span>
             </button>
           </div>
         </div>
@@ -9400,13 +9435,29 @@
     }
 
     // =========================================================================
-    // FEATURE 5: TELEGRAM BOT ALERTS & ANTI-CHEAT SECURITY ENGINE
+    // FEATURE 5: REAL-TIME TELEGRAM BOT ENGINE (POLLER, COMMANDS, MINI APP & ALERTS)
     // =========================================================================
+
+    let tgBotPollerActive = false;
+    let tgBotPollerTimeout = null;
+    let tgLastUpdateId = 0;
+
+    function getAppLiveUrl() {
+      try {
+        let url = window.location.href.split('#')[0].split('?')[0];
+        if (!url.startsWith('http')) {
+          url = 'https://ais-pre-x7vbvluvmvrtgq6lewbh2w-475005245439.asia-southeast1.run.app';
+        }
+        return url;
+      } catch(e) {
+        return 'https://ais-pre-x7vbvluvmvrtgq6lewbh2w-475005245439.asia-southeast1.run.app';
+      }
+    }
 
     function sendAdminTelegramAlert(messageText) {
       try {
-        const botToken = appState.adminTelegram?.botToken || '7483920194:AAHF-demo';
-        const chatId = appState.adminTelegram?.chatId || '8701368956';
+        const botToken = (appState.adminTelegram?.botToken || '').trim() || '7483920194:AAHF-demo';
+        const chatId = (appState.adminTelegram?.chatId || '').trim() || '8701368956';
         const enabled = appState.adminTelegram?.enabled !== false;
 
         if (!botToken || !chatId || !enabled) return;
@@ -9426,50 +9477,539 @@
       }
     }
 
+    // --- Start Real-time Bot Command Polling Engine ---
+    function startTelegramBotPollingEngine() {
+      const token = (appState.adminTelegram?.botToken || '').trim();
+      if (!token) {
+        console.log("Telegram Bot Engine waiting for Bot Token in Admin Panel...");
+        return;
+      }
+
+      if (tgBotPollerActive) return;
+      tgBotPollerActive = true;
+      console.log("🚀 Telegram Bot Live Polling Engine started with token:", token.slice(0, 10) + '...');
+      pollTelegramBotUpdates();
+    }
+
+    async function pollTelegramBotUpdates() {
+      const token = (appState.adminTelegram?.botToken || '').trim();
+      if (!token || !tgBotPollerActive) {
+        tgBotPollerActive = false;
+        return;
+      }
+
+      try {
+        const fetchUrl = `https://api.telegram.org/bot${token}/getUpdates?offset=${tgLastUpdateId}&timeout=10`;
+        const res = await fetch(fetchUrl);
+        const data = await res.json();
+
+        if (data.ok && Array.isArray(data.result)) {
+          for (const update of data.result) {
+            tgLastUpdateId = update.update_id + 1;
+            await processIncomingTelegramBotUpdate(update, token);
+          }
+        }
+      } catch (err) {
+        // network or CORS error
+      }
+
+      if (tgBotPollerActive) {
+        tgBotPollerTimeout = setTimeout(pollTelegramBotUpdates, 2000);
+      }
+    }
+
+    // --- Process Updates from Telegram Users (/start, /groups, etc.) ---
+    async function processIncomingTelegramBotUpdate(update, token) {
+      try {
+        const appUrl = getAppLiveUrl();
+
+        // 1. Handle Messages / Commands
+        if (update.message) {
+          const msg = update.message;
+          const chatId = msg.chat?.id;
+          const senderName = `${msg.from?.first_name || ''} ${msg.from?.last_name || ''}`.trim() || 'মেম্বার';
+          const senderHandle = msg.from?.username ? `@${msg.from.username}` : (msg.from?.id ? `ID:${msg.from.id}` : '@user');
+          const senderId = String(msg.from?.id || chatId);
+          const rawText = (msg.text || '').trim();
+          const lowerText = rawText.toLowerCase();
+
+          if (!chatId) return;
+
+          // Process /start with optional referral (e.g. /start ref_8701368956)
+          if (lowerText.startsWith('/start') || lowerText === 'start' || lowerText === 'শুরু') {
+            let refId = '';
+            if (rawText.includes('ref_')) {
+              refId = rawText.split('ref_')[1].split(' ')[0].trim();
+              if (refId && refId !== senderId) {
+                handleReferralJoin(refId, {
+                  id: senderId,
+                  first_name: msg.from?.first_name || 'টেলিগ্রাম মেম্বার',
+                  last_name: msg.from?.last_name || '',
+                  username: msg.from?.username || '',
+                  photo_url: ''
+                });
+              }
+            }
+
+            const welcomeReply = `👋 আসসালামু আলাইকুম <b>${senderName}</b>!
+
+🔥 <b>${appState.appName || 'SLK BUY GROUP'} মার্কেটপ্লেসে স্বাগতম!</b>
+
+আপনার বিশ্বস্ত প্রিমিয়াম প্ল্যাটফর্ম। এখান থেকে সরাসরি:
+🛍️ <b>টেলিগ্রাম প্রিমিয়াম ভিআইপি গ্রুপ</b> কিনতে পারবেন
+📧 <b>পুরাতন ও নতুন জিমেইল</b> বিক্রি করে টাকা নিতে পারবেন
+👤 <b>ফেসবুক আইডি</b> বিক্রি করে বিকাশ/নগদে ক্যাশ নিতে পারবেন
+🎁 <b>২০ জন ফ্রেন্ড রেফার</b> করে ফ্রি প্রিমিয়াম গ্রুপ আনলক করতে পারবেন
+💳 <b>বিকাশ, নগদ ও Binance</b> দিয়ে ডিপোজিট ও ইনস্ট্যান্ট উইথড্র করতে পারবেন
+
+👇 <b>নিচের বোতামে চাপ দিয়ে সরাসরি অ্যাপ ওপেন করুন অথবা অপশন বেছে নিন:</b>`;
+
+            const replyMarkup = {
+              inline_keyboard: [
+                [
+                  {
+                    text: "📱 ওপেন করুন অ্যাপ (Mini App)",
+                    web_app: { url: appUrl }
+                  }
+                ],
+                [
+                  { text: "🛍️ গ্রুপ মার্কেট", callback_data: "cmd_groups" },
+                  { text: "📧 জিমেইল বিক্রি", callback_data: "cmd_sell" }
+                ],
+                [
+                  { text: "💳 টাকা ডিপোজিট", callback_data: "cmd_deposit" },
+                  { text: "📥 টাকা উত্তোলন", callback_data: "cmd_withdraw" }
+                ],
+                [
+                  { text: "🎁 মেগা কম্বো", callback_data: "cmd_combos" },
+                  { text: "💰 আমার ব্যালেন্স", callback_data: "cmd_balance" }
+                ],
+                [
+                  { text: "👥 রেফারেল বোনাস", callback_data: "cmd_ref" },
+                  { text: "📞 হেল্পলাইন ও সাপোর্ট", url: appState.supportLink || "https://t.me/ItsSaddam9" }
+                ]
+              ]
+            };
+
+            await sendTelegramBotCustomMessage(token, chatId, welcomeReply, replyMarkup);
+            return;
+          }
+
+          // /groups command
+          if (lowerText.startsWith('/groups') || lowerText.startsWith('/shop') || lowerText === 'group' || lowerText === 'গ্রুপ') {
+            const groups = appState.groups || [];
+            let listText = `🛍️ <b>সকল প্রিমিয়াম টেলিগ্রাম ভিআইপি গ্রুপ তালিকা:</b>\n\n`;
+            groups.forEach((g, idx) => {
+              listText += `${idx + 1}. <b>${g.title}</b>\n   💵 মূল্য: ৳${g.price} BDT (<s>৳${g.originalPrice}</s>)\n   👥 সদস্য: ${g.membersCount}\n   🏷️ ক্যাটাগরি: ${g.category}\n\n`;
+            });
+            listText += `👇 <i>গ্রুপ কিনতে সরাসরি নিচের Mini App ওপেন করুন:</i>`;
+
+            const replyMarkup = {
+              inline_keyboard: [
+                [{ text: "🛒 গ্রুপ কিনুন (Mini App)", web_app: { url: appUrl } }],
+                [{ text: "🎁 মেগা কম্বো অফার", callback_data: "cmd_combos" }]
+              ]
+            };
+            await sendTelegramBotCustomMessage(token, chatId, listText, replyMarkup);
+            return;
+          }
+
+          // /balance command
+          if (lowerText.startsWith('/balance') || lowerText.startsWith('/wallet') || lowerText === 'ব্যালেন্স') {
+            let userBal = 0;
+            let refCount = 0;
+            // Attempt to fetch from central registry
+            const foundUser = (appState.allRegisteredUsers || []).find(u => String(u.userId || u.id) === senderId);
+            if (foundUser) {
+              userBal = foundUser.balance || 0;
+              refCount = foundUser.referralCount || 0;
+            }
+
+            const balText = `💰 <b>আপনার ওয়ালেট তথ্য (${senderName}):</b>
+
+💵 বর্তমান ব্যালেন্স: <b>৳${userBal} BDT</b>
+🎁 মোট রেফারেল: <b>${refCount} জন</b>
+💳 ডিপোজিট ও উইথড্র স্টেটাস: সক্রিয়
+
+👇 <i>টাকা জমা দিতে বা তুলতে নিচের বাটনে চাপ দিন:</i>`;
+
+            const replyMarkup = {
+              inline_keyboard: [
+                [
+                  { text: "💳 টাকা ডিপোজিট", callback_data: "cmd_deposit" },
+                  { text: "📥 টাকা উত্তোলন", callback_data: "cmd_withdraw" }
+                ],
+                [
+                  { text: "📱 ফুল ওয়ালেট ওপেন করুন", web_app: { url: appUrl } }
+                ]
+              ]
+            };
+            await sendTelegramBotCustomMessage(token, chatId, balText, replyMarkup);
+            return;
+          }
+
+          // /deposit command
+          if (lowerText.startsWith('/deposit') || lowerText.startsWith('/addmoney') || lowerText === 'ডিপোজিট') {
+            const pgConf = appState.paymentGateways || {};
+            const bkashNum = pgConf.bkash?.number || '01789-567890';
+            const nagadNum = pgConf.nagad?.number || '01812-345678';
+            const binanceId = pgConf.binance?.number || '8701368956 (Pay ID)';
+
+            const depText = `💳 <b>ওয়ালেট ব্যালেন্স ডিপোজিট / টাকা অ্যাড:</b>
+
+🌸 বিকাশ (Personal): <code>${bkashNum}</code>
+🔥 নগদ (Personal): <code>${nagadNum}</code>
+🟡 Binance Pay ID: <code>${binanceId}</code>
+
+📌 <b>নিয়মাবলী:</b>
+১. উপরের নাম্বারে সেন্ড মানি করুন।
+২. মিনি অ্যাপে প্রবেশ করে ট্রানজেকশন আইডি (TrxID) সাবমিট করুন।
+৩. এডমিন যাচাই করে ৫ মিনিটের মধ্যে আপনার ওয়ালেটে টাকা যোগ করে দেবে।`;
+
+            const replyMarkup = {
+              inline_keyboard: [
+                [{ text: "📝 ডিপোজিট ফর্ম পূরণ করুন", web_app: { url: appUrl } }]
+              ]
+            };
+            await sendTelegramBotCustomMessage(token, chatId, depText, replyMarkup);
+            return;
+          }
+
+          // /withdraw command
+          if (lowerText.startsWith('/withdraw') || lowerText.startsWith('/cashout') || lowerText === 'উইথড্র') {
+            const minW = appState.minWithdraw || 100;
+            const withText = `📥 <b>টাকা উত্তোলন / উইথড্র নির্দেশিকা:</b>
+
+💵 সর্বনিম্ন উত্তোলন: <b>৳${minW} BDT</b>
+🏦 মেথড: বিকাশ, নগদ, রকেট ও Binance
+⚡ পেমেন্ট সময়: ইনস্ট্যান্ট (১০-৩০ মিনিটের মধ্যে)
+
+👇 <i>উইথড্র রিকোয়েস্ট পাঠাতে নিচের বাটনে চাপ দিন:</i>`;
+
+            const replyMarkup = {
+              inline_keyboard: [
+                [{ text: "🏧 উইথড্র রিকোয়েস্ট পেজ", web_app: { url: appUrl } }]
+              ]
+            };
+            await sendTelegramBotCustomMessage(token, chatId, withText, replyMarkup);
+            return;
+          }
+
+          // /sell command
+          if (lowerText.startsWith('/sell') || lowerText.startsWith('/gmail') || lowerText === 'জিমেইল') {
+            const gRates = appState.gmailRates || { new: 15, old: 25, aged: 40 };
+            const fbRates = appState.fbRates || { new: 20, old: 60, aged: 110 };
+
+            const sellText = `📧 <b>জিমেইল ও ফেসবুক বিক্রি রেট চার্ট:</b>
+
+📧 <b>জিমেইল একাউন্ট:</b>
+• নতুন জিমেইল: <b>৳${gRates.new}</b> প্রতি পিস
+• পুরাতন জিমেইল (১+ বছর): <b>৳${gRates.old}</b> প্রতি পিস
+• ভেরিফাইড পুরনো জিমেইল: <b>৳${gRates.aged}</b> প্রতি পিস
+
+👤 <b>ফেসবুক আইডি:</b>
+• নতুন আইডি: <b>৳${fbRates.new}</b>
+• পুরাতন আইডি: <b>৳${fbRates.old}</b>
+• ফ্রেন্ডস সহ আইডি: <b>৳${fbRates.aged}</b>
+
+👇 <i>একাউন্ট সাবমিট করতে নিচের বাটনে চাপ দিন:</i>`;
+
+            const replyMarkup = {
+              inline_keyboard: [
+                [{ text: "📤 একাউন্ট সাবমিট ফর্ম", web_app: { url: appUrl } }]
+              ]
+            };
+            await sendTelegramBotCustomMessage(token, chatId, sellText, replyMarkup);
+            return;
+          }
+
+          // /combo command
+          if (lowerText.startsWith('/combo') || lowerText === 'কম্বো') {
+            const combos = appState.comboBundles || [];
+            let comboText = `🎁 <b>মেগা কম্বো বান্ডেল অফার:</b>\n\n`;
+            combos.forEach((c, idx) => {
+              comboText += `${idx + 1}. <b>${c.title}</b>\n   💵 অফার মূল্য: <b>৳${c.price}</b> (<s>৳${c.originalPrice}</s>)\n   ✨ বিবরণ: ${c.subtitle || c.description}\n\n`;
+            });
+
+            const replyMarkup = {
+              inline_keyboard: [
+                [{ text: "🎁 কম্বো কিনুন (Mini App)", web_app: { url: appUrl } }]
+              ]
+            };
+            await sendTelegramBotCustomMessage(token, chatId, comboText, replyMarkup);
+            return;
+          }
+
+          // /help command
+          if (lowerText.startsWith('/help') || lowerText === 'help' || lowerText === 'সহায়তা') {
+            const helpText = `📞 <b>২৪/৭ কাস্টমার সাপোর্ট ও হেল্পলাইন:</b>
+
+যে কোনো প্রশ্ন, পেমেন্ট হেল্প বা কাস্টম অর্ডারের জন্য আমাদের অফিশিয়াল এডমিনের সাথে সরাসরি কথা বলুন।
+
+👤 সুপার ওনার: সাদ্দাম ভাই
+💬 সরাসরি ইনবক্স: @ItsSaddam9
+📢 অফিসিয়াল চ্যানেল: ${appState.officialChannelName || 'SLK BUY GROUP Official'}`;
+
+            const replyMarkup = {
+              inline_keyboard: [
+                [{ text: "💬 এডমিন ইনবক্সে কথা বলুন", url: appState.supportLink || "https://t.me/ItsSaddam9" }],
+                [{ text: "📱 অ্যাপ ওপেন করুন", web_app: { url: appUrl } }]
+              ]
+            };
+            await sendTelegramBotCustomMessage(token, chatId, helpText, replyMarkup);
+            return;
+          }
+
+          // /admin command
+          if (lowerText.startsWith('/admin') || lowerText === 'admin' || lowerText === 'এডমিন') {
+            const isOwner = (senderId === '8701368956' || senderHandle.toLowerCase() === '@itssaddam9');
+            if (!isOwner) {
+              await sendTelegramBotCustomMessage(token, chatId, "⚠️ আপনি এই বট এর এডমিন নন। শুধুমাত্র অনুমোদিত এডমিন এই কমান্ড ব্যবহার করতে পারবেন।");
+              return;
+            }
+
+            const pOrders = (appState.orders || []).filter(o => o.status === 'PENDING').length;
+            const pDeposits = (appState.deposits || []).filter(d => d.status === 'PENDING').length;
+            const pSubs = (appState.submissions || []).filter(s => s.status === 'PENDING').length;
+            const pWithdraws = (appState.withdrawals || []).filter(w => w.status === 'PENDING').length;
+
+            const adminText = `👑 <b>এডমিন কন্ট্রোল ড্যাশবোর্ড:</b>
+
+📦 পেন্ডিং অর্ডার: <b>${pOrders}টি</b>
+💳 পেন্ডিং ডিপোজিট: <b>${pDeposits}টি</b>
+📧 পেন্ডিং জিমেইল/এফবি: <b>${pSubs}টি</b>
+💸 পেন্ডিং উইথড্র: <b>${pWithdraws}টি</b>
+
+👇 <i>এডমিন প্যানেল ফুল ওপেন করুন:</i>`;
+
+            const replyMarkup = {
+              inline_keyboard: [
+                [{ text: "👑 এডমিন প্যানেল ওপেন করুন", web_app: { url: appUrl } }]
+              ]
+            };
+            await sendTelegramBotCustomMessage(token, chatId, adminText, replyMarkup);
+            return;
+          }
+        }
+
+        // 2. Handle Inline Keyboard Callback Queries (Button Clicks in Telegram)
+        if (update.callback_query) {
+          const cb = update.callback_query;
+          const cbId = cb.id;
+          const chatId = cb.message?.chat?.id;
+          const data = cb.data;
+
+          // Answer callback to remove loading state in Telegram
+          fetch(`https://api.telegram.org/bot${token}/answerCallbackQuery`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ callback_query_id: cbId })
+          }).catch(e => console.warn(e));
+
+          if (!chatId) return;
+
+          if (data === 'cmd_groups') {
+            const groups = appState.groups || [];
+            let listText = `🛍️ <b>সকল প্রিমিয়াম টেলিগ্রাম ভিআইপি গ্রুপ:</b>\n\n`;
+            groups.forEach((g, idx) => {
+              listText += `${idx + 1}. <b>${g.title}</b> — ৳${g.price} BDT\n`;
+            });
+            await sendTelegramBotCustomMessage(token, chatId, listText, {
+              inline_keyboard: [[{ text: "🛒 কিনতে ওপেন করুন", web_app: { url: appUrl } }]]
+            });
+          } else if (data === 'cmd_sell') {
+            const gRates = appState.gmailRates || { new: 15, old: 25, aged: 40 };
+            const sellText = `📧 <b>জিমেইল বিক্রি রেট:</b>\n• নতুন: ৳${gRates.new}\n• পুরাতন: ৳${gRates.old}\n• ভেরিফাইড: ৳${gRates.aged}\n\nসরাসরি ফর্ম সাবমিট করুন:`;
+            await sendTelegramBotCustomMessage(token, chatId, sellText, {
+              inline_keyboard: [[{ text: "📝 জিমেইল সাবমিট ফর্ম", web_app: { url: appUrl } }]]
+            });
+          } else if (data === 'cmd_deposit') {
+            const pgConf = appState.paymentGateways || {};
+            const depText = `💳 <b>টাকা ডিপোজিট নাম্বার:</b>\n🌸 বিকাশ: <code>${pgConf.bkash?.number || '01789-567890'}</code>\n🔥 নগদ: <code>${pgConf.nagad?.number || '01812-345678'}</code>\n\nটাকা পাঠিয়ে TrxID সাবমিট করুন।`;
+            await sendTelegramBotCustomMessage(token, chatId, depText, {
+              inline_keyboard: [[{ text: "📝 ডিপোজিট সাবমিট করুন", web_app: { url: appUrl } }]]
+            });
+          } else if (data === 'cmd_withdraw') {
+            const withText = `📥 <b>টাকা উত্তোলন:</b>\nসর্বনিম্ন উইথড্র ৳${appState.minWithdraw || 100} BDT (বিকাশ ও নগদ)`;
+            await sendTelegramBotCustomMessage(token, chatId, withText, {
+              inline_keyboard: [[{ text: "🏧 উইথড্র পেজে যান", web_app: { url: appUrl } }]]
+            });
+          } else if (data === 'cmd_combos') {
+            const combos = appState.comboBundles || [];
+            let comboText = `🎁 <b>মেগা কম্বো অফার:</b>\n\n`;
+            combos.forEach(c => {
+              comboText += `• <b>${c.title}</b> — ৳${c.price} BDT\n`;
+            });
+            await sendTelegramBotCustomMessage(token, chatId, comboText, {
+              inline_keyboard: [[{ text: "🎁 কম্বো কিনুন", web_app: { url: appUrl } }]]
+            });
+          } else if (data === 'cmd_balance') {
+            await sendTelegramBotCustomMessage(token, chatId, `💰 আপনার ওয়ালেট ব্যালেন্স দেখতে নিচের বাটনে ক্লিক করে অ্যাপ ওপেন করুন:`, {
+              inline_keyboard: [[{ text: "💰 ওয়ালেট ব্যালেন্স দেখুন", web_app: { url: appUrl } }]]
+            });
+          } else if (data === 'cmd_ref') {
+            const tpl = appState.referralLinkTemplate || 'https://t.me/PREMIUM_GROUP_BUY_BOT?startapp=ref_{USER_ID}';
+            const userRefLink = tpl.replace('{USER_ID}', String(chatId));
+            const refText = `🎁 <b>আপনার রেফারেল লিংক:</b>\n<code>${userRefLink}</code>\n\n২০ জন বন্ধুকে রেফার করলে যেকোনো প্রিমিয়াম গ্রুপ সম্পূর্ণ ফ্রিতে পাবেন!`;
+            await sendTelegramBotCustomMessage(token, chatId, refText, {
+              inline_keyboard: [[{ text: "📱 রেফারেল ড্যাশবোর্ড", web_app: { url: appUrl } }]]
+            });
+          }
+        }
+      } catch (e) {
+        console.warn("processIncomingTelegramBotUpdate error:", e);
+      }
+    }
+
+    async function sendTelegramBotCustomMessage(token, chatId, text, replyMarkup = null) {
+      const url = `https://api.telegram.org/bot${token}/sendMessage`;
+      const payload = {
+        chat_id: chatId,
+        text: text,
+        parse_mode: 'HTML'
+      };
+      if (replyMarkup) {
+        payload.reply_markup = replyMarkup;
+      }
+      return fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).then(r => r.json()).catch(e => console.warn(e));
+    }
+
+    // --- Admin Action: Save Bot Config and Start Engine ---
     function adminSaveBotAlertConfig() {
       playSound('click');
       if (!appState.adminTelegram) appState.adminTelegram = {};
-      appState.adminTelegram.botToken = (document.getElementById('adminInBotToken')?.value || '').trim();
-      appState.adminTelegram.chatId = (document.getElementById('adminInBotChatId')?.value || '').trim() || '8701368956';
+      const token = (document.getElementById('adminInBotToken')?.value || '').trim();
+      const chatId = (document.getElementById('adminInBotChatId')?.value || '').trim() || '8701368956';
+
+      appState.adminTelegram.botToken = token;
+      appState.adminTelegram.chatId = chatId;
       appState.adminTelegram.enabled = true;
 
       saveState();
       syncConfigToFirebase();
+      
+      // Sync commands with Telegram immediately
+      if (token) {
+        adminSyncTelegramBotCommands(true);
+        startTelegramBotPollingEngine();
+      }
+
       playSound('chime');
-      alert("🎉 টেলিগ্রাম ইনস্ট্যান্ট এলার্ট বট সেটিংস সফলভাবে সেভ হয়েছে!");
+      alert("🎉 টেলিগ্রাম বট টোকেন সেভ হয়েছে এবং কমান্ড ইঞ্জিন লাইভ চালু করা হয়েছে!\nএখন যেকোনো মেম্বার বটে /start পাঠালে সরাসরি মেনু এবং বাটন চলে আসবে।");
     }
 
     function saveTelegramBotSettings() {
       adminSaveBotAlertConfig();
     }
 
+    // --- Admin Action: Register Telegram Commands List (/start, /groups, etc.) ---
+    async function adminSyncTelegramBotCommands(isSilent = false) {
+      if (!isSilent) playSound('click');
+      const token = (document.getElementById('adminInBotToken')?.value || '').trim() || appState.adminTelegram?.botToken;
+
+      if (!token) {
+        alert("দয়া করে আগে টেলিগ্রাম বট টোকেন দিন!");
+        return;
+      }
+
+      const commandsList = [
+        { command: "start", description: "শুরু করুন ও ইন্টারেক্টিভ বাটন কিবোর্ড" },
+        { command: "groups", description: "সকল প্রিমিয়াম গ্রুপের তালিকা ও মূল্য" },
+        { command: "balance", description: "আপনার ওয়ালেট ব্যালেন্স চেক" },
+        { command: "deposit", description: "টাকা রিচার্জ / ডিপোজিট নিয়ম" },
+        { command: "withdraw", description: "টাকা উত্তোলন / উইথড্র" },
+        { command: "sell", description: "জিমেইল ও ফেসবুক বিক্রি রেট" },
+        { command: "combo", description: "মেগা কম্বো বান্ডেল অফার" },
+        { command: "help", description: "হেল্পলাইন ও সাপোর্ট" },
+        { command: "admin", description: "এডমিন কন্ট্রোল ড্যাশবোর্ড" }
+      ];
+
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${token}/setMyCommands`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ commands: commandsList })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          if (!isSilent) {
+            playSound('chime');
+            alert("✓ টেলিগ্রাম অফিশিয়াল কমান্ড লিস্ট সফলভাবে সেভ হয়েছে!\nএখন ইউজাররা টেলিগ্রামে '/' টাইপ করলেই সব কমান্ড সাজেশন দেখতে পাবে।");
+          }
+        } else {
+          if (!isSilent) alert(`❌ ব্যর্থ হয়েছে: ${data.description || 'ইনভ্যালিড টোকেন'}`);
+        }
+      } catch (err) {
+        if (!isSilent) alert("❌ নেটওয়ার্ক এরর বা টেলিগ্রাম এপিআই সমস্যা!");
+      }
+    }
+
+    // --- Admin Action: Set Persistent Mini App Menu Button in Bot ---
+    async function adminSetTelegramWebAppButton() {
+      playSound('click');
+      const token = (document.getElementById('adminInBotToken')?.value || '').trim() || appState.adminTelegram?.botToken;
+      const appUrl = getAppLiveUrl();
+
+      if (!token) {
+        alert("দয়া করে আগে টেলিগ্রাম বট টোকেন দিন!");
+        return;
+      }
+
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${token}/setChatMenuButton`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            menu_button: {
+              type: "web_app",
+              text: "📱 Open App",
+              web_app: { url: appUrl }
+            }
+          })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          playSound('chime');
+          alert(`🎉 অভিনন্দন!\nটেলিগ্রাম বটে পার্মানেন্ট 'Mini App' বাটন সক্রিয় হয়েছে!\n\nইউজাররা বটে প্রবেশ করলেই চ্যাটবারের নিচে '📱 Open App' বোতাম দেখতে পাবে।\nঅ্যাপ URL: ${appUrl}`);
+        } else {
+          alert(`❌ ব্যর্থ হয়েছে: ${data.description || 'টোকেন ভুল'}`);
+        }
+      } catch (err) {
+        alert("❌ নেটওয়ার্ক এরর!");
+      }
+    }
+
+    // --- Admin Action: Send Test Notification & /start simulation ---
     function adminTestBotAlert() {
       playSound('click');
       const botToken = (document.getElementById('adminInBotToken')?.value || '').trim() || appState.adminTelegram?.botToken;
       const chatId = (document.getElementById('adminInBotChatId')?.value || '').trim() || appState.adminTelegram?.chatId || '8701368956';
+      const appUrl = getAppLiveUrl();
 
       if (!botToken || !chatId) {
-        alert("দয়া করে টেলিগ্রাম বট টোকেন দিন!\n(@BotFather থেকে বট টোকেন তৈরি করুন)");
+        alert("দয়া করে টেলিগ্রাম বট টোকেন ও চ্যাট আইডি দিন!");
         return;
       }
 
-      const testMsg = `🔔 <b>SLK BUY GROUP - টেস্ট এলার্ট</b>\n\nঅভিনন্দন সাদ্দাম ভাই! আপনার টেলিগ্রাম বট সফলভাবে কানেক্ট হয়েছে। নতুন অর্ডার, জিমেইল বিক্রয়, ডিপোজিট ও উইথড্রর নোটিফিকেশন এখানে লাইভ আসবে।`;
+      const testMsg = `🔔 <b>SLK BUY GROUP - লাইভ টেস্ট ও রেসপন্স চেক</b>\n\nঅভিনন্দন সাদ্দাম ভাই! আপনার টেলিগ্রাম বট সফলভাবে কানেক্ট হয়েছে এবং কমান্ড ইঞ্জিন লাইভ কাজ করছে।\n\nইউজাররা <b>/start</b>, <b>/groups</b>, <b>/balance</b>, <b>/deposit</b> ইত্যাদি পাঠালে তাৎক্ষণিকভাবে স্বয়ংক্রিয় উত্তর চলে আসবে।`;
       
-      const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-      fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text: testMsg,
-          parse_mode: 'HTML'
-        })
-      }).then(res => res.json()).then(data => {
-        if (data.ok) {
+      const replyMarkup = {
+        inline_keyboard: [
+          [{ text: "📱 ওপেন করুন অ্যাপ (Mini App)", web_app: { url: appUrl } }],
+          [{ text: "🛍️ গ্রুপ মার্কেট", callback_data: "cmd_groups" }, { text: "📧 জিমেইল বিক্রি", callback_data: "cmd_sell" }]
+        ]
+      };
+
+      sendTelegramBotCustomMessage(botToken, chatId, testMsg, replyMarkup).then(data => {
+        if (data && data.ok) {
           playSound('chime');
-          alert("✓ টেস্ট মেসেজ সফলভাবে আপনার টেলিগ্রামে পাঠানো হয়েছে!");
+          alert("✓ টেস্ট মেসেজ ও বাটন সফলভাবে আপনার টেলিগ্রামে পাঠানো হয়েছে! টেলিগ্রাম চেক করুন।");
         } else {
-          alert(`❌ ব্যর্থ হয়েছে: ${data.description || 'টোকেন বা চ্যাট আইডি ভুল'}\n\nদয়া করে আপনার বটে একবার /start কমান্ড পাঠিয়ে আবার চেষ্টা করুন।`);
+          alert(`❌ ব্যর্থ হয়েছে: ${(data && data.description) || 'টোকেন বা চ্যাট আইডি ভুল'}\n\nদয়া করে আপনার বটে একবার /start কমান্ড পাঠিয়ে আবার চেষ্টা করুন।`);
         }
       }).catch(err => {
         alert("❌ নেটওয়ার্ক এরর অথবা ইনভ্যালিড বট কনফিগ!");
@@ -9777,6 +10317,12 @@
         renderApp();
       } catch (e) {
         console.error("renderApp error:", e);
+      }
+
+      try {
+        startTelegramBotPollingEngine();
+      } catch (e) {
+        console.warn("startTelegramBotPollingEngine error:", e);
       }
 
       try {
